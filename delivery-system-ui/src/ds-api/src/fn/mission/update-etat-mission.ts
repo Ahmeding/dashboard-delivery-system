@@ -1,0 +1,33 @@
+/* tslint:disable */
+/* eslint-disable */
+import { HttpClient, HttpContext, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { StrictHttpResponse } from '../../strict-http-response';
+import { RequestBuilder } from '../../request-builder';
+
+import { MissionDto } from '../../models/mission-dto';
+
+export interface UpdateEtatMission$Params {
+  id: number;
+  etatMission: 'EN_COURS' | 'ACCOMPLI' | 'ANNULEE' | 'TERMINIEE';
+}
+
+export function updateEtatMission(http: HttpClient, rootUrl: string, params: UpdateEtatMission$Params, context?: HttpContext): Observable<StrictHttpResponse<MissionDto>> {
+  const rb = new RequestBuilder(rootUrl, updateEtatMission.PATH, 'patch');
+  if (params) {
+    rb.path('id', params.id, {});
+    rb.path('etatMission', params.etatMission, {});
+  }
+
+  return http.request(
+    rb.build({ responseType: 'json', accept: 'application/json', context })
+  ).pipe(
+    filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
+    map((r: HttpResponse<any>) => {
+      return r as StrictHttpResponse<MissionDto>;
+    })
+  );
+}
+
+updateEtatMission.PATH = '/missions/update/{id}/{etatMission}';

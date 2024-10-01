@@ -1,0 +1,127 @@
+<div class="container-fluid px-4">
+  <h1 class="mt-4">Ajouter une Mission</h1>
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a  [routerLink]="['/overview']">Dashboard</a></li>
+    <li class="breadcrumb-item "><a [routerLink]="['/missions']">Missions</a></li>
+    <li class="breadcrumb-item active">Nouvelle Mission</li>
+  </ol>
+  <div class="card mb-4 bg-light">
+    <div class="card-body">
+
+      <form>
+        <!-- ligne 1-->
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <div class="form-floating mb-3 mb-md-0">
+              <input name="titre" class="form-control" id="inputTitre" type="text" placeholder="Titre" />
+              <label for="inputTitre">Titre</label>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-floating mb-3 mb-md-0">
+              <input name="volume" class="form-control" id="inputVolume" type="text" placeholder="Volume" />
+              <label for="inputVolume">Volume</label>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-floating mb-3 mb-md-0">
+              <input name="datedebut" class="form-control" id="inputdateDebut" type="text" placeholder="Date de Debut" />
+              <label for="inputdateDebut">Date de Debut</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- ligne 2-->
+        <div class="row mb-3">
+          <div class="col-md-3">
+            <div class="form-floating mb-3 mb-md-0">
+              <input name="prixHT" class="form-control" id="inputPrixHT" type="text" placeholder="Prix HT" />
+              <label for="inputPrixHT">Prix HT</label>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-floating mb-3">
+              <input name="tva" class="form-control" id="inputTva" type="text" placeholder="Tva" />
+              <label for="inputTva">Tva</label>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-floating mb-3 mb-md-0">
+              <input name="PrixTTC" class="form-control" id="inputPrixTTC" type="text" placeholder="Prix TTC" />
+              <label for="inputPrixTTC">Prix TTC</label>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-floating mb-3 mb-md-0">
+              <input name="fraisChauffeur" class="form-control" id="inputfraisChauffeur" type="text" placeholder="Frais Chauffeur" />
+              <label for="inputfraisChauffeur">Frais Chauffeur</label>
+            </div>
+          </div>
+        </div>
+        <!-- ligne 4-->
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <div class="form-floating mb-3 mb-md-0">
+              <input name="Vehicule" class="form-control" id="inputVehicule" type="text" placeholder="Vehicule" />
+              <label for="inputVehicule">Vehicule</label>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-floating mb-3 mb-md-0">
+              <input name="chauffeur"   class="form-control" id="inputChauffeur" type="password" placeholder="Chauffeur" />
+              <label for="inputChauffeur">Chauffeur</label>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-floating mb-3 mb-md-0">
+              <input name="etatmission" class="form-control" id="inputEtatMission" type="text" placeholder="Etat mission" />
+              <label for="inputEtatMission">Etat de Mission</label>
+            </div>
+          </div>
+        </div>
+        <!-- ligne 6-->
+
+        <!-- ligne 2-->
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <div class="form-floating mb-3 mb-md-0">
+              <input name="KilometrageInit" class="form-control" id="inputKilometrageInit" type="text" placeholder="Kilometrage Debut" />
+              <label for="inputKilometrageInit">Kilometrage Debut</label>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-floating mb-3 mb-md-0">
+              <input name="Kilometragefin" class="form-control" id="inputKilometragefin" type="text" placeholder="Kilometrage Fin" />
+              <label for="inputKilometragefin">Kilometrage Fin</label>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-8">
+            <table class="table bg-white">
+              <thead class="small">
+              <th> <input class="form-control" name="depart" type="text" placeholder="Depart" /></th>
+              <th><input class="form-control" name="destination" type="text" placeholder="Destination" /></th>
+              <th><input class="form-control" name="destination" type="text" placeholder="Destination" /></th>
+              <th><button class="btn btn-info">Ajouter Etape</button></th>
+              </thead>
+              <tbody>
+              <tr><td>Paris</td><td>Vienne</td><td>12/05/2024 7h00</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ligne 7-->
+        <div class="mt-4 mb-0 align-content-center">
+          <div class="col-md-3 ">
+            <a class="btn btn-primary btn-block" >Enregistrer</a></div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+</div>

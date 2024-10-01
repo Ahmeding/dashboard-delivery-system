@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/delivery_db?createDatabaseIfNotExist=true&userSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database   : MYSQL
+    show-sql: false
+    hibernate:
+      ddl:-auto: update
+      dialect: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      hibernate:
+        session_factory:
+          statement_inspector: com.hitecart.deliverysystem.interceptor.Interceptor
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1/
+flickr:
+  apiKey: 9a28a3fd0fbcbfaa8df1b065cbc1308c
+  apiSecret: 44cb0abb59042a17
+  appKey: 72157720904761931-ed09cbdb9cd327d0
+  appSecret: e4d84547efa4c530

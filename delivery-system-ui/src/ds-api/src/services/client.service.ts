@@ -1,0 +1,175 @@
+/* tslint:disable */
+/* eslint-disable */
+import { HttpClient, HttpContext } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { BaseService } from '../base-service';
+import { ApiConfiguration } from '../api-configuration';
+import { StrictHttpResponse } from '../strict-http-response';
+
+import { ClientDto } from '../models/client-dto';
+import { delete10 } from '../fn/client/delete-10';
+import { Delete10$Params } from '../fn/client/delete-10';
+import { findAll10 } from '../fn/client/find-all-10';
+import { FindAll10$Params } from '../fn/client/find-all-10';
+import { findByEmail1 } from '../fn/client/find-by-email-1';
+import { FindByEmail1$Params } from '../fn/client/find-by-email-1';
+import { findById10 } from '../fn/client/find-by-id-10';
+import { FindById10$Params } from '../fn/client/find-by-id-10';
+import { save10 } from '../fn/client/save-10';
+import { Save10$Params } from '../fn/client/save-10';
+
+@Injectable({ providedIn: 'root' })
+export class ClientService extends BaseService {
+  constructor(config: ApiConfiguration, http: HttpClient) {
+    super(config, http);
+  }
+
+  /** Path part for operation `save10()` */
+  static readonly Save10Path = '/clients/create';
+
+  /**
+   * Ajouter/Modifier un client, cette methode permet d'enregistrer ou modifier un client
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `save10()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  save10$Response(params: Save10$Params, context?: HttpContext): Observable<StrictHttpResponse<ClientDto>> {
+    return save10(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Ajouter/Modifier un client, cette methode permet d'enregistrer ou modifier un client
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `save10$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  save10(params: Save10$Params, context?: HttpContext): Observable<ClientDto> {
+    return this.save10$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ClientDto>): ClientDto => r.body)
+    );
+  }
+
+  /** Path part for operation `findById10()` */
+  static readonly FindById10Path = '/clients/client/{id}';
+
+  /**
+   * Rechercher un Client par ID! Cette methode permet de chercher un client par son ID
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findById10()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findById10$Response(params: FindById10$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findById10(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Rechercher un Client par ID! Cette methode permet de chercher un client par son ID
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findById10$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findById10(params: FindById10$Params, context?: HttpContext): Observable<any> {
+    return this.findById10$Response(params, context).pipe(
+      map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `findByEmail1()` */
+  static readonly FindByEmail1Path = '/clients/client/{email}';
+
+  /**
+   * Rechercher un Client par son email ID! Cette methode permet de chercher un client par son email
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findByEmail1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findByEmail1$Response(params: FindByEmail1$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findByEmail1(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Rechercher un Client par son email ID! Cette methode permet de chercher un client par son email
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findByEmail1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findByEmail1(params: FindByEmail1$Params, context?: HttpContext): Observable<any> {
+    return this.findByEmail1$Response(params, context).pipe(
+      map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `findAll10()` */
+  static readonly FindAll10Path = '/clients/all';
+
+  /**
+   * Rechercher tout les Client! Cette methode permet de retouner tous les clients
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAll10()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAll10$Response(params?: FindAll10$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findAll10(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Rechercher tout les Client! Cette methode permet de retouner tous les clients
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAll10$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAll10(params?: FindAll10$Params, context?: HttpContext): Observable<any> {
+    return this.findAll10$Response(params, context).pipe(
+      map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `delete10()` */
+  static readonly Delete10Path = '/clients/delete/{id}';
+
+  /**
+   * Supprimer un Client par ID! Cette methode permet de suprimmer un client par son ID
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `delete10()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete10$Response(params: Delete10$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return delete10(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Supprimer un Client par ID! Cette methode permet de suprimmer un client par son ID
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `delete10$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete10(params: Delete10$Params, context?: HttpContext): Observable<any> {
+    return this.delete10$Response(params, context).pipe(
+      map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+}

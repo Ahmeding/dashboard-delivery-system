@@ -1,0 +1,38 @@
+package com.hitecart.deliverysystem.model;
+
+import com.hitecart.deliverysystem.model.enums.TypeReparation;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper=true)
+@Entity
+@Table(name = "reparation")
+public class Reparation extends AbstractEntity{
+
+    @Column(name = "type")
+    private TypeReparation type;
+    @Column(name = "commentaire")
+    private String commentaire;
+    @Column(name = "datedebut")
+    private LocalDateTime dateDebut;
+    @Column(name = "datefin")
+    private LocalDateTime dateFin;
+    @Column(name = "dateprochainRep")
+    private LocalDateTime dateProchainRep;
+    @Column(name = "cout")
+    private BigDecimal cout;
+    @OneToMany(mappedBy = "reparation")
+    private List<PieceRechange> pieceRechanges;
+    @ManyToOne
+    @JoinColumn(name = "idvehicule")
+    private Vehicule vehicule;
+}

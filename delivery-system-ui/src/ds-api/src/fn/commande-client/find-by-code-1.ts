@@ -1,0 +1,30 @@
+/* tslint:disable */
+/* eslint-disable */
+import { HttpClient, HttpContext, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { StrictHttpResponse } from '../../strict-http-response';
+import { RequestBuilder } from '../../request-builder';
+
+
+export interface FindByCode1$Params {
+  code: string;
+}
+
+export function findByCode1(http: HttpClient, rootUrl: string, params: FindByCode1$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  const rb = new RequestBuilder(rootUrl, findByCode1.PATH, 'get');
+  if (params) {
+    rb.path('code', params.code, {});
+  }
+
+  return http.request(
+    rb.build({ responseType: 'json', accept: 'application/json', context })
+  ).pipe(
+    filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
+    map((r: HttpResponse<any>) => {
+      return r as StrictHttpResponse<any>;
+    })
+  );
+}
+
+findByCode1.PATH = '/cmdclients/cmdclient/{code}';

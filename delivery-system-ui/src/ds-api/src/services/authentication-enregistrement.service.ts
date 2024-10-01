@@ -1,0 +1,114 @@
+/* tslint:disable */
+/* eslint-disable */
+import { HttpClient, HttpContext } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { BaseService } from '../base-service';
+import { ApiConfiguration } from '../api-configuration';
+import { StrictHttpResponse } from '../strict-http-response';
+
+import { JwtAuthenticationResponse } from '../models/jwt-authentication-response';
+import { refreshToken } from '../fn/authentication-enregistrement/refresh-token';
+import { RefreshToken$Params } from '../fn/authentication-enregistrement/refresh-token';
+import { signin } from '../fn/authentication-enregistrement/signin';
+import { Signin$Params } from '../fn/authentication-enregistrement/signin';
+import { signup } from '../fn/authentication-enregistrement/signup';
+import { Signup$Params } from '../fn/authentication-enregistrement/signup';
+import { UtilisateurDto } from '../models/utilisateur-dto';
+
+@Injectable({ providedIn: 'root' })
+export class AuthenticationEnregistrementService extends BaseService {
+  constructor(config: ApiConfiguration, http: HttpClient) {
+    super(config, http);
+  }
+
+  /** Path part for operation `signup()` */
+  static readonly SignupPath = '/auth/signup';
+
+  /**
+   * Permet à un utilisateur à s'enregitrer
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `signup()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  signup$Response(params: Signup$Params, context?: HttpContext): Observable<StrictHttpResponse<UtilisateurDto>> {
+    return signup(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Permet à un utilisateur à s'enregitrer
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `signup$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  signup(params: Signup$Params, context?: HttpContext): Observable<UtilisateurDto> {
+    return this.signup$Response(params, context).pipe(
+      map((r: StrictHttpResponse<UtilisateurDto>): UtilisateurDto => r.body)
+    );
+  }
+
+  /** Path part for operation `signin()` */
+  static readonly SigninPath = '/auth/signin';
+
+  /**
+   * Permet à un utilisateur de se connecter
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `signin()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  signin$Response(params: Signin$Params, context?: HttpContext): Observable<StrictHttpResponse<JwtAuthenticationResponse>> {
+    return signin(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Permet à un utilisateur de se connecter
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `signin$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  signin(params: Signin$Params, context?: HttpContext): Observable<JwtAuthenticationResponse> {
+    return this.signin$Response(params, context).pipe(
+      map((r: StrictHttpResponse<JwtAuthenticationResponse>): JwtAuthenticationResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `refreshToken()` */
+  static readonly RefreshTokenPath = '/auth/refreshtoken';
+
+  /**
+   * Permet de créer un refresh token
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `refreshToken()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  refreshToken$Response(params: RefreshToken$Params, context?: HttpContext): Observable<StrictHttpResponse<JwtAuthenticationResponse>> {
+    return refreshToken(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Permet de créer un refresh token
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `refreshToken$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  refreshToken(params: RefreshToken$Params, context?: HttpContext): Observable<JwtAuthenticationResponse> {
+    return this.refreshToken$Response(params, context).pipe(
+      map((r: StrictHttpResponse<JwtAuthenticationResponse>): JwtAuthenticationResponse => r.body)
+    );
+  }
+
+}

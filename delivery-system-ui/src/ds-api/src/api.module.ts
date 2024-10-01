@@ -1,0 +1,74 @@
+/* tslint:disable */
+/* eslint-disable */
+import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
+
+import { VehiculeService } from './services/vehicule.service';
+import { UtilisateurService } from './services/utilisateur.service';
+import { ReparationService } from './services/reparation.service';
+import { PiecesDeRechangeService } from './services/pieces-de-rechange.service';
+import { MissionService } from './services/mission.service';
+import { FraisDeMissionService } from './services/frais-de-mission.service';
+import { EntrepriseControllerService } from './services/entreprise-controller.service';
+import { DevisService } from './services/devis.service';
+import { ContratService } from './services/contrat.service';
+import { CommandeClientService } from './services/commande-client.service';
+import { ClientService } from './services/client.service';
+import { ChauffeurService } from './services/chauffeur.service';
+import { AuthenticationEnregistrementService } from './services/authentication-enregistrement.service';
+import { UserControllerService } from './services/user-controller.service';
+import { AdminControllerService } from './services/admin-controller.service';
+
+/**
+ * Module that provides all services and configuration.
+ */
+@NgModule({
+  imports: [],
+  exports: [],
+  declarations: [],
+  providers: [
+    VehiculeService,
+    UtilisateurService,
+    ReparationService,
+    PiecesDeRechangeService,
+    MissionService,
+    FraisDeMissionService,
+    EntrepriseControllerService,
+    DevisService,
+    ContratService,
+    CommandeClientService,
+    ClientService,
+    ChauffeurService,
+    AuthenticationEnregistrementService,
+    UserControllerService,
+    AdminControllerService,
+    ApiConfiguration
+  ],
+})
+export class ApiModule {
+  static forRoot(params: ApiConfigurationParams): ModuleWithProviders<ApiModule> {
+    return {
+      ngModule: ApiModule,
+      providers: [
+        {
+          provide: ApiConfiguration,
+          useValue: params
+        }
+      ]
+    }
+  }
+
+  constructor( 
+    @Optional() @SkipSelf() parentModule: ApiModule,
+    @Optional() http: HttpClient
+  ) {
+    if (parentModule) {
+      throw new Error('ApiModule is already loaded. Import in your base AppModule only.');
+    }
+    if (!http) {
+      throw new Error('You need to import the HttpClientModule in your AppModule! \n' +
+      'See also https://github.com/angular/angular/issues/20575');
+    }
+  }
+}
