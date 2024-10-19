@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.controllers;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.UtilisateurApi;
 import com.hitecart.deliverysystem.dto.UtilisateurDto;
 import com.hitecart.deliverysystem.services.UtilisateurService;
@@ -40,5 +41,10 @@ public class UtilisateurController implements UtilisateurApi {
     @Override
     public void delete(Integer id) {
         utilisateurService.delete(id);
+    }
+
+    @Override
+    public ResponseEntity<PageResponse<UtilisateurDto>> findAllUtilisateurs(int page, int size) {
+        return ResponseEntity.ok(utilisateurService.findAllUsers(page,size));
     }
 }

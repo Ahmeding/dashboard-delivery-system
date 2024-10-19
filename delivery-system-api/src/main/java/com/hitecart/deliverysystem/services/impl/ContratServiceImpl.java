@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.services.impl;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.ContratDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
@@ -9,6 +10,10 @@ import com.hitecart.deliverysystem.repository.ContratRepository;
 import com.hitecart.deliverysystem.services.ContratService;
 import com.hitecart.deliverysystem.validator.ContratValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -85,6 +90,24 @@ public class ContratServiceImpl implements ContratService {
 
         contratRepository.deleteById(id);
     }
+
+    @Override
+    public PageResponse<ContratDto> findAllContracts(int page, int size) {
+        Pageable pageable
+                = PageRequest.of(page,size, Sort.by("createdAt").descending());
+        Page<Contrat> contrats = contratRepository.findAllContracts(pageable);
+        List<ContratDto> contratDtos = contrats.stream().map(ContratDto::fromEntity).toList();
+        return new PageResponse<>(
+                contratDtos,
+                contrats.getNumber(),
+                contrats.getSize(),
+                contrats.getTotalElements(),
+                contrats.getTotalPages(),
+                contrats.isFirst(),
+                contrats.isLast()
+        );
+    }
+
     private void checkDto(ContratDto dto, String msgLog, String msgException, ErrorCodes errorCodes) {
         List<String> errors = ContratValidator.validate(dto);
         if(!errors.isEmpty()){

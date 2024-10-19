@@ -113,7 +113,4 @@ export class AuthenticationEnregistrementService extends BaseService {
     );
   }
 
-  logout() {
-    localStorage.clear();
-  }
 }

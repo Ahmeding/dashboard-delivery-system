@@ -18,8 +18,11 @@ import { findAll8 } from '../fn/contrat/find-all-8';
 import { FindAll8$Params } from '../fn/contrat/find-all-8';
 import { findAllByIdChauffeur } from '../fn/contrat/find-all-by-id-chauffeur';
 import { FindAllByIdChauffeur$Params } from '../fn/contrat/find-all-by-id-chauffeur';
+import { findAllContrats } from '../fn/contrat/find-all-contrats';
+import { FindAllContrats$Params } from '../fn/contrat/find-all-contrats';
 import { findById8 } from '../fn/contrat/find-by-id-8';
 import { FindById8$Params } from '../fn/contrat/find-by-id-8';
+import { PageResponseContratDto } from '../models/page-response-contrat-dto';
 import { save8 } from '../fn/contrat/save-8';
 import { Save8$Params } from '../fn/contrat/save-8';
 
@@ -142,6 +145,31 @@ export class ContratService extends BaseService {
   findAll8(params?: FindAll8$Params, context?: HttpContext): Observable<any> {
     return this.findAll8$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `findAllContrats()` */
+  static readonly FindAllContratsPath = '/contrats/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllContrats()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllContrats$Response(params?: FindAllContrats$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseContratDto>> {
+    return findAllContrats(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllContrats$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllContrats(params?: FindAllContrats$Params, context?: HttpContext): Observable<PageResponseContratDto> {
+    return this.findAllContrats$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseContratDto>): PageResponseContratDto => r.body)
     );
   }
 

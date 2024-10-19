@@ -6,16 +6,27 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-@Data
-@Builder
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@SuperBuilder
 public class EntrepriseDto {
-    private Integer id;
+
     private String raisonSocial;
     private String numFiscla;
     private String numtel;
     private String adresseEmail;
     private AdresseDto adresseDto;
+    private Integer id;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Integer createdBy;
+    private Integer lastModifiedBy;
 
     public static EntrepriseDto fromEntity(Entreprise entreprise) {
         if(entreprise == null){
@@ -28,6 +39,11 @@ public class EntrepriseDto {
                 .numtel(entreprise.getNumtel())
                 .adresseEmail(entreprise.getAdresseEmail())
                 .adresseDto(AdresseDto.fromEntity(entreprise.getAdresse()))
+
+                .createdAt(entreprise.getCreatedAt())
+                .updatedAt(entreprise.getUpdatedAt())
+                .createdBy(entreprise.getCreatedBy())
+                .lastModifiedBy(entreprise.getLastModifiedBy())
                 .build();
     }
 
@@ -42,6 +58,11 @@ public class EntrepriseDto {
         entreprise.setNumtel(dto.getNumtel());
         entreprise.setAdresseEmail(dto.getAdresseEmail());
         entreprise.setAdresse(AdresseDto.toEntity(dto.getAdresseDto()));
+
+        entreprise.setCreatedAt(dto.getCreatedAt());
+        entreprise.setUpdatedAt(dto.getUpdatedAt());
+        entreprise.setCreatedBy(dto.getCreatedBy());
+        entreprise.setLastModifiedBy(dto.getLastModifiedBy());
         return entreprise;
     }
 }

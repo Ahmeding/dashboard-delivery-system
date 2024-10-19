@@ -16,17 +16,47 @@ import { delete10 } from '../fn/client/delete-10';
 import { Delete10$Params } from '../fn/client/delete-10';
 import { findAll10 } from '../fn/client/find-all-10';
 import { FindAll10$Params } from '../fn/client/find-all-10';
+import { findAllClients } from '../fn/client/find-all-clients';
+import { FindAllClients$Params } from '../fn/client/find-all-clients';
 import { findByEmail1 } from '../fn/client/find-by-email-1';
 import { FindByEmail1$Params } from '../fn/client/find-by-email-1';
 import { findById10 } from '../fn/client/find-by-id-10';
 import { FindById10$Params } from '../fn/client/find-by-id-10';
+import { PageResponseClientDto } from '../models/page-response-client-dto';
 import { save10 } from '../fn/client/save-10';
 import { Save10$Params } from '../fn/client/save-10';
+import { updateIsActive1 } from '../fn/client/update-is-active-1';
+import { UpdateIsActive1$Params } from '../fn/client/update-is-active-1';
 
 @Injectable({ providedIn: 'root' })
 export class ClientService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `updateIsActive1()` */
+  static readonly UpdateIsActive1Path = '/clients/is-active/{id}/{isactive}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateIsActive1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  updateIsActive1$Response(params: UpdateIsActive1$Params, context?: HttpContext): Observable<StrictHttpResponse<ClientDto>> {
+    return updateIsActive1(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateIsActive1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  updateIsActive1(params: UpdateIsActive1$Params, context?: HttpContext): Observable<ClientDto> {
+    return this.updateIsActive1$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ClientDto>): ClientDto => r.body)
+    );
   }
 
   /** Path part for operation `save10()` */
@@ -59,7 +89,7 @@ export class ClientService extends BaseService {
   }
 
   /** Path part for operation `findById10()` */
-  static readonly FindById10Path = '/clients/client/{id}';
+  static readonly FindById10Path = '/clients/client/by-id/{id}';
 
   /**
    * Rechercher un Client par ID! Cette methode permet de chercher un client par son ID
@@ -88,7 +118,7 @@ export class ClientService extends BaseService {
   }
 
   /** Path part for operation `findByEmail1()` */
-  static readonly FindByEmail1Path = '/clients/client/{email}';
+  static readonly FindByEmail1Path = '/clients/client/by-email/{email}';
 
   /**
    * Rechercher un Client par son email ID! Cette methode permet de chercher un client par son email
@@ -142,6 +172,31 @@ export class ClientService extends BaseService {
   findAll10(params?: FindAll10$Params, context?: HttpContext): Observable<any> {
     return this.findAll10$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `findAllClients()` */
+  static readonly FindAllClientsPath = '/clients/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllClients()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllClients$Response(params?: FindAllClients$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseClientDto>> {
+    return findAllClients(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllClients$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllClients(params?: FindAllClients$Params, context?: HttpContext): Observable<PageResponseClientDto> {
+    return this.findAllClients$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseClientDto>): PageResponseClientDto => r.body)
     );
   }
 

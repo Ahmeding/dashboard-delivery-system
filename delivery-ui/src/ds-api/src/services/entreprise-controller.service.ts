@@ -16,10 +16,13 @@ import { Delete6$Params } from '../fn/entreprise-controller/delete-6';
 import { EntrepriseDto } from '../models/entreprise-dto';
 import { findAll6 } from '../fn/entreprise-controller/find-all-6';
 import { FindAll6$Params } from '../fn/entreprise-controller/find-all-6';
+import { findAllEntreprises } from '../fn/entreprise-controller/find-all-entreprises';
+import { FindAllEntreprises$Params } from '../fn/entreprise-controller/find-all-entreprises';
 import { findById6 } from '../fn/entreprise-controller/find-by-id-6';
 import { FindById6$Params } from '../fn/entreprise-controller/find-by-id-6';
 import { findByRaisonSocial } from '../fn/entreprise-controller/find-by-raison-social';
 import { FindByRaisonSocial$Params } from '../fn/entreprise-controller/find-by-raison-social';
+import { PageResponseEntrepriseDto } from '../models/page-response-entreprise-dto';
 import { save6 } from '../fn/entreprise-controller/save-6';
 import { Save6$Params } from '../fn/entreprise-controller/save-6';
 
@@ -59,7 +62,7 @@ export class EntrepriseControllerService extends BaseService {
   }
 
   /** Path part for operation `findByRaisonSocial()` */
-  static readonly FindByRaisonSocialPath = '/entreprises/entreprise/{rsocial}';
+  static readonly FindByRaisonSocialPath = '/entreprises/entreprise/by-rsocial/{rsocial}';
 
   /**
    * Rechercher une Entreprise par nom! Cette methode permet de chercher une entreprise par son nom
@@ -88,7 +91,7 @@ export class EntrepriseControllerService extends BaseService {
   }
 
   /** Path part for operation `findById6()` */
-  static readonly FindById6Path = '/entreprises/entreprise/{id}';
+  static readonly FindById6Path = '/entreprises/entreprise/by-id/{id}';
 
   /**
    * Rechercher une Entreprise par ID! Cette methode permet de chercher une entreprise par son ID
@@ -142,6 +145,31 @@ export class EntrepriseControllerService extends BaseService {
   findAll6(params?: FindAll6$Params, context?: HttpContext): Observable<any> {
     return this.findAll6$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `findAllEntreprises()` */
+  static readonly FindAllEntreprisesPath = '/entreprises/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllEntreprises()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllEntreprises$Response(params?: FindAllEntreprises$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseEntrepriseDto>> {
+    return findAllEntreprises(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllEntreprises$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllEntreprises(params?: FindAllEntreprises$Params, context?: HttpContext): Observable<PageResponseEntrepriseDto> {
+    return this.findAllEntreprises$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseEntrepriseDto>): PageResponseEntrepriseDto => r.body)
     );
   }
 

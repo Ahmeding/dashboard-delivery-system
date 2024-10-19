@@ -1,0 +1,8 @@
+@import "../new-driver/new-driver.component";
+.is-invalid {
+  border: 1px solid red; /* Add red border */
+}
+
+.text-danger {
+  font-size: 0.875rem; /* Smaller font size for the error message */
+}

@@ -3,13 +3,15 @@ package com.hitecart.deliverysystem.model;
 import com.hitecart.deliverysystem.model.enums.TypeEnergie;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -26,7 +28,7 @@ public class Vehicule extends AbstractEntity{
     @Column(name = "numVin")
     private String numVin;
     @Column(name = "datepmc")
-    private LocalDateTime datePMC;
+    private LocalDate datePMC;
     @Column(name = "kilometrage")
     private BigDecimal kilometrage;
     @Column(name = "typecarburant")
@@ -34,8 +36,9 @@ public class Vehicule extends AbstractEntity{
     @Column(name = "volume")
     private BigDecimal volume;
     @Column(name = "dateexpctrltech")
-    private LocalDateTime dateExpCtrlTec;
-
+    private LocalDate dateExpCtrlTec;
+    @Column(name="is_active")
+    private Boolean isActive;
     @OneToMany(mappedBy = "vehicule")
     private List<Reparation> reparations;
 }

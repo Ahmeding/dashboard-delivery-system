@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -25,9 +26,9 @@ public class Etape extends AbstractEntity{
     @Column(name = "heurelivreel")
     private LocalDateTime heureLivReel;
     @Column(name = "datedepart")
-    private LocalDateTime dateDepart;
+    private LocalDate dateDepart;
     @Column(name = "datearrivee")
-    private LocalDateTime dateArrivee;
+    private LocalDate dateArrivee;
     @Column(name = "lieudepart")
     private String lieuDepart;
     @Column(name = "lieuarrivee")

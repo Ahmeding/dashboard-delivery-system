@@ -14,12 +14,13 @@ import java.math.BigDecimal;
 
 @Data
 @Builder
-public class LigneDevisDto {
+public class  LigneDevisDto {
     private Integer id;
     private BigDecimal quantite;
     private BigDecimal prixUnitaire;
-    private MissionDto missionDto;
-    private DevisDto devisDto;
+    private BigDecimal prixTTC;
+    private BigDecimal tva;
+    private Integer devisId;
 
     public static LigneDevisDto fromEntity(LigneDevis ligneDevis) {
         if(ligneDevis == null){
@@ -29,8 +30,9 @@ public class LigneDevisDto {
                 .id(ligneDevis.getId())
                 .quantite(ligneDevis.getQuantite())
                 .prixUnitaire(ligneDevis.getPrixUnitaire())
-                .missionDto(MissionDto.fromEntity(ligneDevis.getMission()))
-                .devisDto(DevisDto.fromEntity(ligneDevis.getDevis()))
+                .prixTTC(ligneDevis.getPrixTTC())
+                .tva(ligneDevis.getTva())
+                .devisId(ligneDevis.getDevis()!=null?ligneDevis.getDevis().getId():null)
                 .build();
     }
 
@@ -42,8 +44,9 @@ public class LigneDevisDto {
         ligneDevis.setId(dto.getId());
         ligneDevis.setQuantite(dto.getQuantite());
         ligneDevis.setPrixUnitaire(dto.getPrixUnitaire());
-        ligneDevis.setMission(MissionDto.toEntity(dto.getMissionDto()));
-        ligneDevis.setDevis(DevisDto.toEntity(dto.getDevisDto()));
+        ligneDevis.setPrixTTC(dto.getPrixTTC());
+        ligneDevis.setTva(dto.getTva());
+        /*ligneDevis.setDevis(DevisDto.toEntity(dto.getDevisDto()));*/
 
         return ligneDevis;
     }

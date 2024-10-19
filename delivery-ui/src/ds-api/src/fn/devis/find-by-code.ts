@@ -8,12 +8,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { DevisDtoResponse } from '../../models/devis-dto-response';
 
 export interface FindByCode$Params {
   code: string;
 }
 
-export function findByCode(http: HttpClient, rootUrl: string, params: FindByCode$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+export function findByCode(http: HttpClient, rootUrl: string, params: FindByCode$Params, context?: HttpContext): Observable<StrictHttpResponse<DevisDtoResponse>> {
   const rb = new RequestBuilder(rootUrl, findByCode.PATH, 'get');
   if (params) {
     rb.path('code', params.code, {});
@@ -24,9 +25,9 @@ export function findByCode(http: HttpClient, rootUrl: string, params: FindByCode
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<any>;
+      return r as StrictHttpResponse<DevisDtoResponse>;
     })
   );
 }
 
-findByCode.PATH = '/devis/devis/{code}';
+findByCode.PATH = '/devis/devis/by-code/{code}';

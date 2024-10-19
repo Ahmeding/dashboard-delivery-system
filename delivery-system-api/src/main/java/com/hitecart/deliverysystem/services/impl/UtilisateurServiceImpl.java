@@ -1,15 +1,22 @@
 package com.hitecart.deliverysystem.services.impl;
 
+import com.hitecart.deliverysystem.common.PageResponse;
+import com.hitecart.deliverysystem.dto.DevisDto;
 import com.hitecart.deliverysystem.dto.UtilisateurDto;
 import com.hitecart.deliverysystem.dto.UtilisateurDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
+import com.hitecart.deliverysystem.model.Devis;
 import com.hitecart.deliverysystem.model.Utilisateur;
 import com.hitecart.deliverysystem.repository.UtilisateurRepository;
 import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.validator.UtilisateurValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -80,6 +87,23 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         CheckParmasUtil.checkID(id,"l'ID Utilisateur  à supprimer est null",
                 "Impossible de supprimer un frais de Mission  avec un ID null",ErrorCodes.COMMANDECLIENT_NOT_VALID_OPERATION);
         utilisateurRepository.deleteById(id);
+    }
+
+    @Override
+    public PageResponse<UtilisateurDto> findAllUsers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<Utilisateur> utilisateurs= utilisateurRepository.findAllUsers(pageable);
+        List<UtilisateurDto> utilisateurDtos = utilisateurs.stream().map(UtilisateurDto::fromEntity).toList();
+
+        return new PageResponse<>(
+                utilisateurDtos,
+                utilisateurs.getNumber(),
+                utilisateurs.getSize(),
+                utilisateurs.getTotalElements(),
+                utilisateurs.getTotalPages(),
+                utilisateurs.isFirst(),
+                utilisateurs.isLast()
+        );
     }
 
     private void checkDto(UtilisateurDto dto, String msgLog, String msgException, ErrorCodes errorCodes) {

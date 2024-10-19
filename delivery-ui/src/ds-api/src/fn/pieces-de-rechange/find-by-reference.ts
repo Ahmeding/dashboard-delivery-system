@@ -29,4 +29,4 @@ export function findByReference(http: HttpClient, rootUrl: string, params: FindB
   );
 }
 
-findByReference.PATH = '/piecerenchanges/piecerenchange/{ref}';
+findByReference.PATH = '/piecerenchanges/piecerenchange/by-ref/{ref}';

@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.controllers;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.ReparationApi;
 import com.hitecart.deliverysystem.dto.ReparationDto;
 import com.hitecart.deliverysystem.services.ReparationService;
@@ -44,5 +45,10 @@ public class ReparationController implements ReparationApi {
     @Override
     public void delete(Integer id) {
         reparationService.delete(id);
+    }
+
+    @Override
+    public ResponseEntity<PageResponse<ReparationDto>> findAllReparations(int page, int size) {
+        return ResponseEntity.ok(reparationService.findAllRepairs(page,size));
     }
 }

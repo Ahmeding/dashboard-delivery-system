@@ -5,12 +5,17 @@ import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.exception.InvalidOperationException;
 import com.hitecart.deliverysystem.exception.RequiredFieldException;
+import com.hitecart.deliverysystem.model.Token;
 import com.hitecart.deliverysystem.model.Utilisateur;
+import com.hitecart.deliverysystem.repository.RoleRepository;
+import com.hitecart.deliverysystem.repository.TokenRepository;
 import com.hitecart.deliverysystem.repository.UtilisateurRepository;
 import com.hitecart.deliverysystem.validator.ChauffeurValidator;
 import com.hitecart.deliverysystem.validator.LoginValidator;
 import com.hitecart.deliverysystem.validator.SignupRequestValidator;
 import com.hitecart.deliverysystem.validator.UtilisateurValidator;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,85 +26,72 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class AuthentificationServiceImpl implements AuthentificationService{
 
     private final UtilisateurRepository utilisateurRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final RoleRepository roleRepository;
+    private final AuthenticationManager authenticationManager;
+    private final TokenRepository tokenRepository;
 
-    @Autowired
-    public AuthentificationServiceImpl(UtilisateurRepository utilisateurRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService) {
-        this.utilisateurRepository = utilisateurRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
-    }
 
-    private void checkDto(SignupRequest signupRequest, String logMsg,String exceptionMsg ) {
-        List<String> errors = SignupRequestValidator.validate(signupRequest);
-        if (!errors.isEmpty()) {
-            log.error(logMsg, signupRequest);
-            throw new InvalidEntityException(exceptionMsg, ErrorCodes.UTILISATEUR_NOT_VALID, errors);
-
-        }
-    }
     @Override
-    public UtilisateurDto signup(SignupRequest signupRequest) {
-        checkDto(signupRequest,"Utilisateur n'est valid","l'utilisateur n'est pas valid");
+    public UtilisateurDto signup(SignupRequest request) {
+        var userRole = roleRepository.findByName("USER")
+                .orElseThrow(()->new IllegalStateException("ROLE USER was not initialized"));
+        checkDto(request,
+                "Utilisateur n'est valid",
+                "l'utilisateur n'est pas valid");
 
-        var user = utilisateurRepository.findByEmail(signupRequest.getEmail());
-//                .orElseThrow(() -> new IllegalArgumentException("Adresse email ou mot de passe invalide"));
-//
-        List<String> errors = new ArrayList<>();
-
-        if(user.isEmpty()) {
-            Utilisateur utilisateur = new Utilisateur();
-            utilisateur.setNom(signupRequest.getLastName());
-            utilisateur.setPrenom(signupRequest.getFirstName());
-            utilisateur.setEmail(signupRequest.getEmail());
-            utilisateur.setMotDePasse(passwordEncoder.encode(signupRequest.getPassword()));
-            utilisateur.setRole(signupRequest.getRole());
-            return UtilisateurDto.fromEntity(utilisateurRepository.save(utilisateur));
-        }else {
-            errors.add("L'adresse mail est deja utilisée");
-            System.out.println(errors.get(0));
-            throw new InvalidOperationException("L'adresse mail... est deja utilisée",ErrorCodes.UTILISATEUR_NOT_VALID_OPERATION,errors);
-        }
+        var userToRegister = Utilisateur.builder()
+                .nom(request.getLastName())
+                .prenom(request.getFirstName())
+                .email(request.getEmail())
+                .motDePasse(passwordEncoder.encode(request.getPassword()))
+                .accountLocked(false)
+                .enabled(true)
+                .roles(List.of(userRole))
+                .build();
+        return UtilisateurDto.fromEntity(utilisateurRepository.save(userToRegister));
     }
 
     @Override
     public JwtAuthenticationResponse signin(SigninRequest signinRequest) {
-        List<String> errors =LoginValidator.validate(signinRequest);
-        log.error("------------- LoginValidator.validate(signinRequest) -----------------"  + errors.size());
-        if(!errors.isEmpty()) {
+        // List<String> errors =LoginValidator.validate(signinRequest);
+        /* if(!errors.isEmpty()) {
             throw new RequiredFieldException("Veuillez rensiegner les le login et le mode passe!",ErrorCodes.BAD_CREDENTIALS, errors);
-        }
-
+        }*/
+        /*
         var user = utilisateurRepository.findByEmail(signinRequest.getEmail())
                 .orElseThrow(() -> new BadCredentialsException("Adresse email ou mot de passe invalide"));
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        signinRequest.getEmail(),
-                        signinRequest.getPassword()
-                )
+*/
+        var auth = authenticationManager.authenticate(
+          new UsernamePasswordAuthenticationToken(
+                  signinRequest.getEmail(),
+                  signinRequest.getPassword())
         );
-
+        var claims = new HashMap<String, Object>();
+        var user=(Utilisateur) auth.getPrincipal();
+        claims.put("fullName", user.fullName());
         JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
 
-        // TODO in case the role is empty gives error!!
-        var jwt = jwtService.generateToken(user);
+        var jwt = jwtService.generateToken(claims,user);
         var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
+        jwtAuthenticationResponse.setUser(UtilisateurDto.fromEntity(user));
         jwtAuthenticationResponse.setToken(jwt);
         jwtAuthenticationResponse.setRefreshToken(refreshToken);
+
 
         return jwtAuthenticationResponse;
     }
@@ -109,15 +101,46 @@ public class AuthentificationServiceImpl implements AuthentificationService{
 
         String userEmail= jwtService.extractUsername(refreshTokenRequest.getToken());
         Utilisateur utilisateur = utilisateurRepository.findByEmail(userEmail).orElseThrow();
+        var claims = new HashMap<String, Object>();
+
         if(jwtService.isTokenValid(refreshTokenRequest.getToken(),utilisateur)){
-            var jwt= jwtService.generateToken(utilisateur);
+            claims.put("fullName", utilisateur.fullName());
+            var jwt= jwtService.generateToken(claims,utilisateur);
             JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
             jwtAuthenticationResponse.setToken(jwt);
             jwtAuthenticationResponse.setRefreshToken(refreshTokenRequest.getToken());
-
             return jwtAuthenticationResponse;
         }
-
         return null;
+    }
+
+/*    @Transactional
+    public void activateAcount(String token) {
+        Token savedToken = tokenRepository.findByToken(token)
+                .orElseThrow(()-> new RuntimeException("Invalid token"));
+        if(LocalDateTime.now().isAfter(savedToken.getExpiresAt()));{
+            //sendValidationEmail(savedToken.getUser);
+            System.out.println("ok expired");
+            throw new RuntimeException("Activation Token has expired, A new token has been sent");
+        }
+
+        var user = utilisateurRepository.findById(savedToken.getUser().getId())
+                .orElseThrow( ()-> new UsernameNotFoundException("Invalid user") );
+
+        user.setEnabled(true);
+        utilisateurRepository.save(user);
+        savedToken.setValidatedAt(LocalDateTime.now());
+        tokenRepository.save(savedToken);
+
+
+    }*/
+
+    private void checkDto(SignupRequest signupRequest, String logMsg,String exceptionMsg ) {
+        List<String> errors = SignupRequestValidator.validate(signupRequest);
+        if (!errors.isEmpty()) {
+            log.error(logMsg, signupRequest);
+            throw new InvalidEntityException(exceptionMsg, ErrorCodes.UTILISATEUR_NOT_VALID, errors);
+
+        }
     }
 }

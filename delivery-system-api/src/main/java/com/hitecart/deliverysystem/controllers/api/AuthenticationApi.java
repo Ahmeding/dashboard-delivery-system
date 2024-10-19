@@ -4,6 +4,7 @@ import com.hitecart.deliverysystem.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public interface AuthenticationApi {
                     @ApiResponse(responseCode = "400",
                             description = "Email ou Mot de passe  invalide , la connexion à été echouée")
             })
-        ResponseEntity<JwtAuthenticationResponse> signin(@RequestBody SigninRequest signinRequest);
+        ResponseEntity<JwtAuthenticationResponse> signin(@Valid @RequestBody SigninRequest signinRequest);
 
 
     @PostMapping(value = "/refreshtoken", consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)

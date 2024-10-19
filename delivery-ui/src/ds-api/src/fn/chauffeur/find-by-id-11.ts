@@ -29,4 +29,4 @@ export function findById11(http: HttpClient, rootUrl: string, params: FindById11
   );
 }
 
-findById11.PATH = '/chauffeurs/chauffeur/{id}';
+findById11.PATH = '/chauffeurs/chauffeur/by-id/{id}';

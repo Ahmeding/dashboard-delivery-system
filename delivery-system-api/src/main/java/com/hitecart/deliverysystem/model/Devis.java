@@ -1,16 +1,18 @@
 package com.hitecart.deliverysystem.model;
 
+import com.hitecart.deliverysystem.model.enums.QuoteStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=true)
@@ -22,10 +24,17 @@ public class Devis extends AbstractEntity{
     private String code;
     @Column(name = "dateDevis")
     private LocalDateTime dateDevis;
+    @Column(name = "montant_total_ht")
+    private BigDecimal montantTotalHT;
+    @Column(name = "montant_total_ttc")
+    private BigDecimal montantTotalTTC;
     @ManyToOne
     @JoinColumn(name = "idclient")
     private Client client;
     @OneToMany(mappedBy = "devis")
     private List<LigneDevis> ligneDevis;
+    @Column(name = "etat_devis")
+    @Enumerated(EnumType.STRING)
+    private QuoteStatus etatDevis;
 
 }

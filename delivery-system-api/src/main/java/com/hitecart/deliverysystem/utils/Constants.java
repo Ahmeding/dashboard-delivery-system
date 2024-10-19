@@ -6,24 +6,29 @@ public interface Constants {
 
     String CHAUFFEUR_ENDPOINT= "/chauffeurs";
     String CREATE_CHAUFFEUR_ENDPOINT= "/create";
-    String FIND_CHAUFFEUR_BY_ID_ENDPOINT= "/chauffeur/{id}";
-    String FIND_CHAUFFEUR_BY_EMAIL_ENDPOINT= "/chauffeur/{email}";
+    String FIND_CHAUFFEUR_BY_ID_ENDPOINT= "/chauffeur/by-id/{id}";
+    String FIND_CHAUFFEUR_BY_EMAIL_ENDPOINT= "/chauffeur/by-email/{email}";
     String FIND_ALL_CHAUFFEUR_ENDPOINT= "/all";
+    String FIND_ALL_DRIVERS_PAGEABLE_ENDPOINT= "/all/drivers";
+    String FIND_ALL_BY_ISACTIVE_CHAUFFEUR_ENDPOINT= "/all/{isactive}";
     String DELETE_CHAUFFEUR_ENDPOINT= "/delete/{id}";
+    String UPDATE_ISACTIVE_CHAUFFEUR_ENDPOINT= "/is-active/{id}/{isactive}";
 /////////////////////////////////////////////////////////////////////////
 
 
     String CLIENT_ENDPOINT= "/clients";
     String CREATE_CLIENT_ENDPOINT= "/create";
-    String FIND_CLIENT_BY_ID_ENDPOINT= "/client/{id}";
-    String FIND_CLIENT_BY_EMAIL_ENDPOINT= "/client/{email}";
+    String FIND_CLIENT_BY_ID_ENDPOINT= "/client/by-id/{id}";
+    String FIND_CLIENT_BY_EMAIL_ENDPOINT= "/client/by-email/{email}";
     String FIND_ALL_CLIENT_ENDPOINT= "/all";
+    String FIND_ALL_CLIENT_PAGEABLE_ENDPOINT= "/";
     String DELETE_CLIENT_ENDPOINT= "/delete/{id}";
+    String UPDATE_ISACTIVE_CLIENT_ENDPOINT= "/is-active/{id}/{isactive}";
 /////////////////////////////////////////////////////////////////////////
     String COMMANDE_CLI_ENDPOINT= "/cmdclients";
     String CREATE_COMMANDE_CLI_ENDPOINT= "/create";
-    String FIND_COMMANDE_CLI_BY_ID_ENDPOINT= "/cmdclient/{id}";
-    String FIND_COMMANDE_CLI_BY_CODE_ENDPOINT= "/cmdclient/{code}";
+    String FIND_COMMANDE_CLI_BY_ID_ENDPOINT= "/cmdclient/by-id/{id}";
+    String FIND_COMMANDE_CLI_BY_CODE_ENDPOINT= "/cmdclient/by-code/{code}";
     String FIND_ALL_COMMANDE_CLI_ENDPOINT= "/all";
     String DELETE_COMMANDE_CLI_ENDPOINT= "/delete/{id}";
 /////////////////////////////////////////////////////////////////////////
@@ -47,15 +52,15 @@ public interface Constants {
 /////////////////////////////////////////////////////////////////////////
     String DEVIS_ENDPOINT= "/devis";
     String CREATE_DEVIS_ENDPOINT= "/create";
-    String FIND_DEVIS_BY_ID_ENDPOINT= "/devis/{id}";
-    String FIND_DEVIS_BY_CODE_ENDPOINT= "/devis/{code}";
+    String FIND_DEVIS_BY_ID_ENDPOINT= "/devis/by-id/{id}";
+    String FIND_DEVIS_BY_CODE_ENDPOINT= "/devis/by-code/{code}";
     String FIND_ALL_DEVIS_ENDPOINT= "/all";
     String DELETE_DEVIS_ENDPOINT= "/delete/{id}";
 /////////////////////////////////////////////////////////////////////////
 String ENTREPRISE_ENDPOINT= "/entreprises";
     String CREATE_ENTREPRISE_ENDPOINT= "/create";
-    String FIND_ENTREPRISE_BY_ID_ENDPOINT= "/entreprise/{id}";
-    String FIND_ENTREPRISE_BY_RSOCIAL_ENDPOINT= "/entreprise/{rsocial}";
+    String FIND_ENTREPRISE_BY_ID_ENDPOINT= "/entreprise/by-id/{id}";
+    String FIND_ENTREPRISE_BY_RSOCIAL_ENDPOINT= "/entreprise/by-rsocial/{rsocial}";
     String FIND_ALL_ENTREPRISE_ENDPOINT= "/all";
     String DELETE_ENTREPRISE_ENDPOINT= "/delete/{id}";
 /////////////////////////////////////////////////////////////////////////
@@ -70,8 +75,8 @@ String MISSION_ENDPOINT= "/missions";
 /////////////////////////////////////////////////////////////////////////
 String PIECE_RECHANGE_ENDPOINT= "/piecerenchanges";
     String CREATE_PIECE_RECHANGE_ENDPOINT= "/create";
-    String FIND_PIECE_RECHANGE_BY_ID_ENDPOINT= "/piecerenchange/{id}";
-    String FIND_PIECE_RECHANGE_BY_REF_ENDPOINT= "/piecerenchange/{ref}";
+    String FIND_PIECE_RECHANGE_BY_ID_ENDPOINT= "/piecerenchange/by-id/{id}";
+    String FIND_PIECE_RECHANGE_BY_REF_ENDPOINT= "/piecerenchange/by-ref/{ref}";
     String FIND_ALL_PIECE_RECHANGE_ENDPOINT= "/all";
     String DELETE_PIECE_RECHANGE_ENDPOINT= "/delete/{id}";
 /////////////////////////////////////////////////////////////////////////
@@ -86,21 +91,33 @@ String PIECE_RECHANGE_ENDPOINT= "/piecerenchanges";
 
     String UTILISATEUR_ENDPOINT= "/utilisateurs";
     String CREATE_UTILISATEUR_ENDPOINT= "/create";
-    String FIND_UTILISATEUR_BY_ID_ENDPOINT= "/findbyid/{id}";
-    String FIND_UTILISATEUR_BY_EMAIL_ENDPOINT= "/findbyemail/{email}";
+    String FIND_UTILISATEUR_BY_ID_ENDPOINT= "/user/by-id/{id}";
+    String FIND_UTILISATEUR_BY_EMAIL_ENDPOINT= "/user/by-email/{email}";
     String FIND_ALL_UTILISATEUR_ENDPOINT= "/all";
+    String FIND_ALL_UTILISATEUR_PAGEABLE_ENDPOINT ="/" ;
     String DELETE_UTILISATEUR_ENDPOINT= "/delete/{id}";
 /////////////////////////////////////////////////////////////////////////
 
 
     String VEHICULE_ENDPOINT= "/vehicules";
     String CREATE_VEHICULE_ENDPOINT= "/create";
-    String FIND_VEHICULE_BY_ID_ENDPOINT= "/vehicule/{id}";
-    String FIND_VEHICULE_BY_IMMAT_ENDPOINT= "/vehicule/{immat}";
+    String FIND_VEHICULE_BY_ID_ENDPOINT= "/vehicule/by-id/{id}";
+    String FIND_VEHICULE_BY_IMMAT_ENDPOINT= "/vehicule/by-immat/{immat}";
     String FIND_ALL_VEHICULE_ENDPOINT= "/all";
+    String FIND_ALL_VEHICULE_PAGEABLE_ENDPOINT ="/";
     String DELETE_VEHICULE_ENDPOINT= "/delete/{id}";
+    String UPDATE_ISACTIVE_VEHICULE_ENDPOINT= "/is-active/{id}/{isactive}";
 /////////////////////////////////////////////////////////////////////////
   String DELETE_FLAG= "DELETE";
   String ADD_FLAG= "ADD";
 
+
+    String FIND_ALL_REPARATION_PAGEABLE_ENDPOINT = "/";
+    String FIND_ALL_PIECERECHANGE_PAGEABLE_ENDPOINT = "/";
+    String FIND_ALL_MISSION_PAGEABLE_ENDPOINT = "/";
+    String FIND_ALL_FRAISMISSION_PAGEABLE_ENDPOINT = "/";
+    String FIND_ALL_ENTREPRISE_PAGEABLE_ENDPOINT = "/";
+    String FIND_ALL_DEVIS_PAGEABLE_ENDPOINT = "/";
+    String FIND_ALL_CONTRAT_PAGEABLE_ENDPOINT = "/";
+    String FIND_ALL_COMMANDECLIENT_PAGEABLE_ENDPOINT = "/";
 }

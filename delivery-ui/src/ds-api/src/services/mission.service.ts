@@ -17,9 +17,12 @@ import { findAll4 } from '../fn/mission/find-all-4';
 import { FindAll4$Params } from '../fn/mission/find-all-4';
 import { findAllByDate } from '../fn/mission/find-all-by-date';
 import { FindAllByDate$Params } from '../fn/mission/find-all-by-date';
+import { findAllMissions } from '../fn/mission/find-all-missions';
+import { FindAllMissions$Params } from '../fn/mission/find-all-missions';
 import { findById4 } from '../fn/mission/find-by-id-4';
 import { FindById4$Params } from '../fn/mission/find-by-id-4';
 import { MissionDto } from '../models/mission-dto';
+import { PageResponseMissionDto } from '../models/page-response-mission-dto';
 import { save4 } from '../fn/mission/save-4';
 import { Save4$Params } from '../fn/mission/save-4';
 import { updateEtatMission } from '../fn/mission/update-etat-mission';
@@ -204,6 +207,31 @@ export class MissionService extends BaseService {
   findAll4(params?: FindAll4$Params, context?: HttpContext): Observable<any> {
     return this.findAll4$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `findAllMissions()` */
+  static readonly FindAllMissionsPath = '/missions/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllMissions()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllMissions$Response(params?: FindAllMissions$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseMissionDto>> {
+    return findAllMissions(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllMissions$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllMissions(params?: FindAllMissions$Params, context?: HttpContext): Observable<PageResponseMissionDto> {
+    return this.findAllMissions$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseMissionDto>): PageResponseMissionDto => r.body)
     );
   }
 

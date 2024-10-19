@@ -1,13 +1,13 @@
 package com.hitecart.deliverysystem.services.impl;
 
-import com.hitecart.deliverysystem.dto.PieceRechangeDto;
+import com.hitecart.deliverysystem.common.PageResponse;
+import com.hitecart.deliverysystem.dto.*;
 import com.hitecart.deliverysystem.dto.ReparationDto;
-import com.hitecart.deliverysystem.dto.ReparationDto;
-import com.hitecart.deliverysystem.dto.VehiculeDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.exception.InvalidOperationException;
+import com.hitecart.deliverysystem.model.Devis;
 import com.hitecart.deliverysystem.model.PieceRechange;
 import com.hitecart.deliverysystem.model.Reparation;
 import com.hitecart.deliverysystem.repository.PieceRechangeRepository;
@@ -18,6 +18,10 @@ import com.hitecart.deliverysystem.utils.Constants;
 import com.hitecart.deliverysystem.validator.ReparationValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -125,6 +129,23 @@ public class ReparationServiceImpl implements ReparationService {
                      ErrorCodes.REPARATION_NOT_VALID_OPERATION);
          }
         reparationRepository.deleteById(id);
+    }
+
+    @Override
+    public PageResponse<ReparationDto> findAllRepairs(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<Reparation> reparations= reparationRepository.findAllRepairs(pageable);
+        List<ReparationDto> reparationDtos = reparations.stream().map(ReparationDto::fromEntity).toList();
+
+        return new PageResponse<>(
+                reparationDtos,
+                reparations.getNumber(),
+                reparations.getSize(),
+                reparations.getTotalElements(),
+                reparations.getTotalPages(),
+                reparations.isFirst(),
+                reparations.isLast()
+        );
     }
 
     private void checkDto(ReparationDto dto, String msgLog, String msgException, ErrorCodes errorCodes) {

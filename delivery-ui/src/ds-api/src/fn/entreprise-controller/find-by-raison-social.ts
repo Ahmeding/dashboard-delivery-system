@@ -29,4 +29,4 @@ export function findByRaisonSocial(http: HttpClient, rootUrl: string, params: Fi
   );
 }
 
-findByRaisonSocial.PATH = '/entreprises/entreprise/{rsocial}';
+findByRaisonSocial.PATH = '/entreprises/entreprise/by-rsocial/{rsocial}';

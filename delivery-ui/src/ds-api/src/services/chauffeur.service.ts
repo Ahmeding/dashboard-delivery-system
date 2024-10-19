@@ -16,17 +16,49 @@ import { delete11 } from '../fn/chauffeur/delete-11';
 import { Delete11$Params } from '../fn/chauffeur/delete-11';
 import { findAll11 } from '../fn/chauffeur/find-all-11';
 import { FindAll11$Params } from '../fn/chauffeur/find-all-11';
+import { findAllDrivers } from '../fn/chauffeur/find-all-drivers';
+import { FindAllDrivers$Params } from '../fn/chauffeur/find-all-drivers';
+import { findAllIsActive } from '../fn/chauffeur/find-all-is-active';
+import { FindAllIsActive$Params } from '../fn/chauffeur/find-all-is-active';
 import { findByEmail2 } from '../fn/chauffeur/find-by-email-2';
 import { FindByEmail2$Params } from '../fn/chauffeur/find-by-email-2';
 import { findById11 } from '../fn/chauffeur/find-by-id-11';
 import { FindById11$Params } from '../fn/chauffeur/find-by-id-11';
+import { PageResponseChauffeurDto } from '../models/page-response-chauffeur-dto';
 import { save11 } from '../fn/chauffeur/save-11';
 import { Save11$Params } from '../fn/chauffeur/save-11';
+import { updateIsActive2 } from '../fn/chauffeur/update-is-active-2';
+import { UpdateIsActive2$Params } from '../fn/chauffeur/update-is-active-2';
 
 @Injectable({ providedIn: 'root' })
 export class ChauffeurService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `updateIsActive2()` */
+  static readonly UpdateIsActive2Path = '/chauffeurs/is-active/{id}/{isactive}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateIsActive2()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  updateIsActive2$Response(params: UpdateIsActive2$Params, context?: HttpContext): Observable<StrictHttpResponse<ChauffeurDto>> {
+    return updateIsActive2(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateIsActive2$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  updateIsActive2(params: UpdateIsActive2$Params, context?: HttpContext): Observable<ChauffeurDto> {
+    return this.updateIsActive2$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ChauffeurDto>): ChauffeurDto => r.body)
+    );
   }
 
   /** Path part for operation `save11()` */
@@ -59,7 +91,7 @@ export class ChauffeurService extends BaseService {
   }
 
   /** Path part for operation `findById11()` */
-  static readonly FindById11Path = '/chauffeurs/chauffeur/{id}';
+  static readonly FindById11Path = '/chauffeurs/chauffeur/by-id/{id}';
 
   /**
    * Rechercher un Chauffeur par ID! Cette methode permet de chercher un chauffeur par son ID
@@ -88,7 +120,7 @@ export class ChauffeurService extends BaseService {
   }
 
   /** Path part for operation `findByEmail2()` */
-  static readonly FindByEmail2Path = '/chauffeurs/chauffeur/{email}';
+  static readonly FindByEmail2Path = '/chauffeurs/chauffeur/by-email/{email}';
 
   /**
    * Rechercher un Chauffeur par son email ID! Cette methode permet de chercher un chauffeur par son email
@@ -142,6 +174,56 @@ export class ChauffeurService extends BaseService {
   findAll11(params?: FindAll11$Params, context?: HttpContext): Observable<any> {
     return this.findAll11$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `findAllIsActive()` */
+  static readonly FindAllIsActivePath = '/chauffeurs/all/{isactive}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllIsActive()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllIsActive$Response(params: FindAllIsActive$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ChauffeurDto>>> {
+    return findAllIsActive(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllIsActive$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllIsActive(params: FindAllIsActive$Params, context?: HttpContext): Observable<Array<ChauffeurDto>> {
+    return this.findAllIsActive$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<ChauffeurDto>>): Array<ChauffeurDto> => r.body)
+    );
+  }
+
+  /** Path part for operation `findAllDrivers()` */
+  static readonly FindAllDriversPath = '/chauffeurs/all/drivers';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllDrivers()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllDrivers$Response(params?: FindAllDrivers$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseChauffeurDto>> {
+    return findAllDrivers(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllDrivers$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllDrivers(params?: FindAllDrivers$Params, context?: HttpContext): Observable<PageResponseChauffeurDto> {
+    return this.findAllDrivers$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseChauffeurDto>): PageResponseChauffeurDto => r.body)
     );
   }
 

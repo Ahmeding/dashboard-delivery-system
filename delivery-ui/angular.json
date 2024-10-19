@@ -42,6 +42,7 @@
               "./src/assets/vendor/bootstrap/js/bootstrap.bundle.min.js",
               "./src/assets/vendor/jquery-easing/jquery.easing.min.js",
               "./src/script.js"
+
             ]
           },
           "configurations": {

@@ -1,7 +1,9 @@
 package com.hitecart.deliverysystem.controllers.api;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.ClientDto;
 import com.hitecart.deliverysystem.dto.ClientDto;
+import com.hitecart.deliverysystem.dto.VehiculeDto;
 import com.hitecart.deliverysystem.utils.Constants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -111,6 +113,10 @@ public interface ClientApi {
             }
     )
     ResponseEntity<List<ClientDto>> findAll();
+
+    @PutMapping(value = UPDATE_ISACTIVE_CLIENT_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<ClientDto> updateIsActive(@PathVariable("id") Integer id, @PathVariable("isactive") Boolean isActive);
+
     @DeleteMapping(value = DELETE_CLIENT_ENDPOINT)
     @Operation(
             description = "Supprimer un Client par ID! Cette methode permet de suprimmer un client par son ID",
@@ -132,4 +138,11 @@ public interface ClientApi {
             }
     )
     void delete(@PathVariable("id") Integer id);
+
+    @GetMapping(value =FIND_ALL_CLIENT_PAGEABLE_ENDPOINT,
+            produces =MediaType.APPLICATION_JSON_VALUE  )
+    ResponseEntity<PageResponse<ClientDto>> findAllClients(
+      @RequestParam(name = "page",defaultValue = "1", required = false) int page,
+      @RequestParam(name = "size",defaultValue = "10", required = false) int size
+    );
 }

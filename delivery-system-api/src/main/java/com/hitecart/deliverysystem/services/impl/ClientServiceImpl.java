@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.services.impl;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.ClientDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
@@ -14,6 +15,10 @@ import com.hitecart.deliverysystem.repository.DevisRepository;
 import com.hitecart.deliverysystem.services.ClientService;
 import com.hitecart.deliverysystem.validator.ClientValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -95,6 +100,41 @@ public class ClientServiceImpl implements ClientService {
         }
 
         clientRepository.deleteById(id);
+    }
+
+    @Override
+    public ClientDto updateIsActive(Integer id, Boolean isActive) {
+        CheckParmasUtil.checkID(id,"Le parametre ID chauffeur est null",
+                "Impossible de trouver un client avec un ID null",ErrorCodes.CLIENT_NOT_VALID_OPERATION);
+
+        Client clientOp = clientRepository.findById(id).orElseThrow(
+                ()->new EntityNotFoundException("Opps! Aucun client avec l'id :"
+                          + id + "n'a ete trouvé dans la base deonnée",
+                  ErrorCodes.CLIENT_NOT_FOUND)
+        );
+        clientOp.setIsActive(isActive);
+        return ClientDto.fromEntity(clientRepository.save(clientOp));
+    }
+
+    @Override
+    public PageResponse<ClientDto> findAllClients(int page, int size) {
+
+        Pageable pageable = PageRequest.of(page,size, Sort.by("createdAt").descending());
+        Page<Client> clients = clientRepository.findAllClients(pageable);
+
+        List<ClientDto> clientsDto = clients.stream()
+                .map(ClientDto::fromEntity)
+                .toList();
+
+        return new PageResponse<>(
+                clientsDto,
+                clients.getNumber(),
+                clients.getSize(),
+                clients.getTotalElements(),
+                clients.getTotalPages(),
+                clients.isFirst(),
+                clients.isLast()
+        );
     }
 
     private void checkDto(ClientDto dto, String msgLog, String msgException) {

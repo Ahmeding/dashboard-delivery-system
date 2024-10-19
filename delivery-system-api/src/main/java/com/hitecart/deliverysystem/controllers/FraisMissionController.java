@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.controllers;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.FraisMissionApi;
 import com.hitecart.deliverysystem.dto.FraisMissionDto;
 import com.hitecart.deliverysystem.dto.LigneFraisMissionDto;
@@ -63,5 +64,10 @@ public class FraisMissionController implements FraisMissionApi {
     @Override
     public void delete(Integer id) {
             fraisMissionService.delete(id);
+    }
+
+    @Override
+    public ResponseEntity<PageResponse<FraisMissionDto>> findAllFraisMissions(int page, int size) {
+        return ResponseEntity.ok(fraisMissionService.findAllFraisMission(page,size));
     }
 }

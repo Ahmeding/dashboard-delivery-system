@@ -4,11 +4,22 @@ import com.hitecart.deliverysystem.model.Utilisateur;
 import com.hitecart.deliverysystem.model.enums.RoleUtilisateur;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-@Data
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
 @Builder
 public class UtilisateurDto {
+
     private Integer id;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Integer createdBy;
+    private Integer lastModifiedBy;
     private String nom;
     private String prenom;
     private String numTel;
@@ -32,6 +43,8 @@ public class UtilisateurDto {
                 .role(utilisateur.getRole())
                 .adresseDto(AdresseDto.fromEntity(utilisateur.getAdresse()))
 
+                .createdAt(utilisateur.getCreatedAt())
+                .updatedAt(utilisateur.getUpdatedAt())
                 .build();
     }
 
@@ -48,6 +61,10 @@ public class UtilisateurDto {
         utilisateur.setMotDePasse(dto.getMotDePasse());
         utilisateur.setRole(dto.getRole());
         utilisateur.setAdresse(AdresseDto.toEntity(dto.getAdresseDto()));
+
+        utilisateur.setCreatedAt(dto.getCreatedAt());
+        utilisateur.setUpdatedAt(dto.getUpdatedAt());
+
         return utilisateur;
     }
 }

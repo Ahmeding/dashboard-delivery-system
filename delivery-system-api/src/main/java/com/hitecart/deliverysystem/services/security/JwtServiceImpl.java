@@ -42,8 +42,8 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
+    public String generateToken(Map<String, Object> claims,UserDetails userDetails) {
+
         return createToken(claims, userDetails);
     }
 

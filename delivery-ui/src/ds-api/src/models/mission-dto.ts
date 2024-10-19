@@ -6,19 +6,19 @@ import { EtapeDto } from '../models/etape-dto';
 import { MissionVehicleDto } from '../models/mission-vehicle-dto';
 export interface MissionDto {
   commentaire?: string;
+  createdAt?: string;
+  createdBy?: number;
   dateDebut?: string;
   dateFin?: string;
   etapeDtos?: Array<EtapeDto>;
   etatMission?: 'EN_COURS' | 'ACCOMPLI' | 'ANNULEE' | 'TERMINIEE';
-  fraisChauffeur?: number;
   id?: number;
   kmDebut?: number;
   kmFin?: number;
+  lastModifiedBy?: number;
   missionAccomplished?: boolean;
   missionVehiclesDtos?: Array<MissionVehicleDto>;
-  prixHt?: number;
-  prixTTC?: number;
   titre?: string;
-  tva?: number;
+  updatedAt?: string;
   volume?: number;
 }

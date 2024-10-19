@@ -1,7 +1,7 @@
 package com.hitecart.deliverysystem.services;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.MissionDto;
-import com.hitecart.deliverysystem.dto.MissionToSaveRequest;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
 
 import java.time.Instant;
@@ -21,4 +21,6 @@ public interface MissionService {
     List<MissionDto> findAllByDate(Instant dateMission);
     List<MissionDto> findAll();
     void delete(Integer id);
+
+    PageResponse<MissionDto> findAllMissions(int page, int size);
 }

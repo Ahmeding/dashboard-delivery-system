@@ -29,4 +29,4 @@ export function findByImmatriculation(http: HttpClient, rootUrl: string, params:
   );
 }
 
-findByImmatriculation.PATH = '/vehicules/vehicule/{immat}';
+findByImmatriculation.PATH = '/vehicules/vehicule/by-immat/{immat}';

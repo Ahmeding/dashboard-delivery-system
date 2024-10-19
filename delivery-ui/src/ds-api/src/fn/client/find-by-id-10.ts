@@ -29,4 +29,4 @@ export function findById10(http: HttpClient, rootUrl: string, params: FindById10
   );
 }
 
-findById10.PATH = '/clients/client/{id}';
+findById10.PATH = '/clients/client/by-id/{id}';

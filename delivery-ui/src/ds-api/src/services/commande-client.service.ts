@@ -12,14 +12,18 @@ import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
 import { CommandeClientDto } from '../models/commande-client-dto';
+import { CommandeClientResponse } from '../models/commande-client-response';
 import { delete9 } from '../fn/commande-client/delete-9';
 import { Delete9$Params } from '../fn/commande-client/delete-9';
 import { findAll9 } from '../fn/commande-client/find-all-9';
 import { FindAll9$Params } from '../fn/commande-client/find-all-9';
+import { findAllCommandeClients } from '../fn/commande-client/find-all-commande-clients';
+import { FindAllCommandeClients$Params } from '../fn/commande-client/find-all-commande-clients';
 import { findByCode1 } from '../fn/commande-client/find-by-code-1';
 import { FindByCode1$Params } from '../fn/commande-client/find-by-code-1';
 import { findById9 } from '../fn/commande-client/find-by-id-9';
 import { FindById9$Params } from '../fn/commande-client/find-by-id-9';
+import { PageResponseCommandeClientResponse } from '../models/page-response-commande-client-response';
 import { save9 } from '../fn/commande-client/save-9';
 import { Save9$Params } from '../fn/commande-client/save-9';
 
@@ -59,7 +63,7 @@ export class CommandeClientService extends BaseService {
   }
 
   /** Path part for operation `findById9()` */
-  static readonly FindById9Path = '/cmdclients/cmdclient/{id}';
+  static readonly FindById9Path = '/cmdclients/cmdclient/by-id/{id}';
 
   /**
    * Rechercher un CommandeClient  par ID! Cette methode permet de chercher un commande client  par son ID
@@ -69,7 +73,7 @@ export class CommandeClientService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findById9$Response(params: FindById9$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  findById9$Response(params: FindById9$Params, context?: HttpContext): Observable<StrictHttpResponse<CommandeClientResponse>> {
     return findById9(this.http, this.rootUrl, params, context);
   }
 
@@ -81,14 +85,14 @@ export class CommandeClientService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findById9(params: FindById9$Params, context?: HttpContext): Observable<any> {
+  findById9(params: FindById9$Params, context?: HttpContext): Observable<CommandeClientResponse> {
     return this.findById9$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
+      map((r: StrictHttpResponse<CommandeClientResponse>): CommandeClientResponse => r.body)
     );
   }
 
   /** Path part for operation `findByCode1()` */
-  static readonly FindByCode1Path = '/cmdclients/cmdclient/{code}';
+  static readonly FindByCode1Path = '/cmdclients/cmdclient/by-code/{code}';
 
   /**
    * Rechercher un Commande Client  par CODE ! Cette methode permet de chercher une commande client  par son code
@@ -98,7 +102,7 @@ export class CommandeClientService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findByCode1$Response(params: FindByCode1$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  findByCode1$Response(params: FindByCode1$Params, context?: HttpContext): Observable<StrictHttpResponse<CommandeClientResponse>> {
     return findByCode1(this.http, this.rootUrl, params, context);
   }
 
@@ -110,9 +114,9 @@ export class CommandeClientService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findByCode1(params: FindByCode1$Params, context?: HttpContext): Observable<any> {
+  findByCode1(params: FindByCode1$Params, context?: HttpContext): Observable<CommandeClientResponse> {
     return this.findByCode1$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
+      map((r: StrictHttpResponse<CommandeClientResponse>): CommandeClientResponse => r.body)
     );
   }
 
@@ -127,7 +131,7 @@ export class CommandeClientService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findAll9$Response(params?: FindAll9$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  findAll9$Response(params?: FindAll9$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CommandeClientResponse>>> {
     return findAll9(this.http, this.rootUrl, params, context);
   }
 
@@ -139,9 +143,34 @@ export class CommandeClientService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findAll9(params?: FindAll9$Params, context?: HttpContext): Observable<any> {
+  findAll9(params?: FindAll9$Params, context?: HttpContext): Observable<Array<CommandeClientResponse>> {
     return this.findAll9$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
+      map((r: StrictHttpResponse<Array<CommandeClientResponse>>): Array<CommandeClientResponse> => r.body)
+    );
+  }
+
+  /** Path part for operation `findAllCommandeClients()` */
+  static readonly FindAllCommandeClientsPath = '/cmdclients/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllCommandeClients()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllCommandeClients$Response(params?: FindAllCommandeClients$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseCommandeClientResponse>> {
+    return findAllCommandeClients(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllCommandeClients$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllCommandeClients(params?: FindAllCommandeClients$Params, context?: HttpContext): Observable<PageResponseCommandeClientResponse> {
+    return this.findAllCommandeClients$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseCommandeClientResponse>): PageResponseCommandeClientResponse => r.body)
     );
   }
 

@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.services.impl;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.*;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
@@ -15,6 +16,10 @@ import com.hitecart.deliverysystem.validator.MissionValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.View;
 
@@ -213,6 +218,27 @@ public class MissionServiceImpl implements MissionService {
         }
         missionVehicleRepository.deleteByMissionId(id);
         missionRepository.deleteById(id);
+    }
+
+    @Override
+    public PageResponse<MissionDto> findAllMissions(int page, int size) {
+
+        Pageable pageable = PageRequest.of(page,size, Sort.by("createdAt").descending());
+        Page<Mission> missions = missionRepository.findAllMissions(pageable);
+
+        List<MissionDto> missionsDto = missions.stream()
+                .map(MissionDto::fromEntity)
+                .toList();
+
+        return new PageResponse<>(
+                missionsDto,
+                missions.getNumber(),
+                missions.getSize(),
+                missions.getTotalElements(),
+                missions.getTotalPages(),
+                missions.isFirst(),
+                missions.isLast()
+        );
     }
 
     private void checkDto(MissionDto dto, String msgLog, String msgException, ErrorCodes errorCodes) {

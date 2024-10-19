@@ -1,20 +1,17 @@
 package com.hitecart.deliverysystem.config;
 
-import com.hitecart.deliverysystem.services.UtilisateurService;
-import com.hitecart.deliverysystem.services.security.ApplicationUserDetailsService;
 import com.hitecart.deliverysystem.services.security.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -26,22 +23,24 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthentificationFilter extends OncePerRequestFilter {
 
-        private JwtService jwtService;
-        private ApplicationUserDetailsService utilisateurService;
+        private final JwtService jwtService;
+        private final UserDetailsService userDetailsService;
 
-
-    @Autowired
-    public JwtAuthentificationFilter(JwtService jwtService, ApplicationUserDetailsService utilisateurService) {
-        this.jwtService = jwtService;
-        this.utilisateurService = utilisateurService;
-    }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+           @NonNull HttpServletRequest request,
+           @NonNull HttpServletResponse response,
+           @NonNull FilterChain filterChain
+    ) throws ServletException, IOException {
 
-        final String authHeader = request.getHeader("Authorization");
-        String jwt ;
-        String userEmail ;
+        if(request.getServletPath().contains("/api/v1/auth")){
+            filterChain.doFilter(request, response);
+            return;
+        }
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String jwt ;
+        final String userEmail ;
 
         if(!StringUtils.hasLength(authHeader) || !authHeader.startsWith("Bearer ")){
             filterChain.doFilter(request, response);
@@ -53,18 +52,19 @@ public class JwtAuthentificationFilter extends OncePerRequestFilter {
 
         if(StringUtils.hasLength(userEmail) &&
                 SecurityContextHolder.getContext().getAuthentication()== null){
-            UserDetails userDetails = utilisateurService.userDetailsService().loadUserByUsername(userEmail);
-
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
             if(jwtService.isTokenValid(jwt,userDetails)){
-                SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+                //SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                    userDetails,null,userDetails.getAuthorities()
+                    userDetails,
+                        null,
+                        userDetails.getAuthorities()
                 );
                 token.setDetails( new WebAuthenticationDetailsSource()
                         .buildDetails(request));
-
-                securityContext.setAuthentication(token);
-                SecurityContextHolder.setContext(securityContext);
+                /*securityContext.setAuthentication(token);
+                SecurityContextHolder.setContext(securityContext);*/
+                SecurityContextHolder.getContext().setAuthentication(token);
 
             }
         }
@@ -74,6 +74,7 @@ public class JwtAuthentificationFilter extends OncePerRequestFilter {
         res.setHeader("Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE,PUT,OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "*");
         res.setHeader("Access-Control-Max-Age", "86400");
+
         filterChain.doFilter(request,res);
     }
 }

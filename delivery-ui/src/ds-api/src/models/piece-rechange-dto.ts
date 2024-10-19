@@ -4,9 +4,13 @@
 
 import { ReparationDto } from '../models/reparation-dto';
 export interface PieceRechangeDto {
+  createdAt?: string;
+  createdBy?: number;
   id?: number;
+  lastModifiedBy?: number;
   nom?: string;
   prix?: number;
   reference?: string;
   reparationDto?: ReparationDto;
+  updatedAt?: string;
 }

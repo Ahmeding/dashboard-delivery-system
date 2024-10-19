@@ -1,9 +1,11 @@
 package com.hitecart.deliverysystem.controllers.api;
 
-import com.hitecart.deliverysystem.dto.DevisDto;
+import com.hitecart.deliverysystem.common.PageResponse;
+import com.hitecart.deliverysystem.dto.*;
 import com.hitecart.deliverysystem.dto.DevisDto;
 import com.hitecart.deliverysystem.utils.Constants;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -46,7 +48,8 @@ public interface DevisApi {
                             responseCode = "200",
                             description = "Le devis a été trouvé dans la BBD",
                             content = @Content(
-                                    mediaType = "application/json"
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = DevisDtoResponse.class))
                             )
                     ),
 
@@ -59,7 +62,7 @@ public interface DevisApi {
                     )
             }
     )
-    ResponseEntity<DevisDto> findById(@PathVariable("id") Integer id);
+    ResponseEntity<DevisDtoResponse> findById(@PathVariable("id") Integer id);
     @GetMapping(value = FIND_DEVIS_BY_CODE_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             description = "Rechercher un Devis par code! Cette methode permet de chercher un devis par son code",
@@ -68,7 +71,8 @@ public interface DevisApi {
                             responseCode = "200",
                             description = "Le devis a été trouvé dans la BBD",
                             content = @Content(
-                                    mediaType = "application/json"
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = DevisDtoResponse.class)
                             )
                     ),
 
@@ -81,7 +85,7 @@ public interface DevisApi {
                     )
             }
     )
-    ResponseEntity<DevisDto> findByCode(@PathVariable("code") String code);
+    ResponseEntity<DevisDtoResponse> findByCode(@PathVariable("code") String code);
     @GetMapping(value = FIND_ALL_DEVIS_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             description = "Rechercher tout les Devis! Cette methode permet de retouner tous les devis",
@@ -90,12 +94,13 @@ public interface DevisApi {
                             responseCode = "200",
                             description = "Deviss retrouvés ",
                             content = @Content(
-                                    mediaType = "application/json"
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = DevisDtoResponse.class)
                             )
                     )
             }
     )
-    ResponseEntity<List<DevisDto>> findAll();
+    ResponseEntity<List<DevisDtoResponse>> findAll();
     @DeleteMapping(value = DELETE_DEVIS_ENDPOINT)
     @Operation(
             description = "Supprimer un Devis par ID! Cette methode permet de suprimmer un devis par son ID",
@@ -117,4 +122,11 @@ public interface DevisApi {
             }
     )
     void delete(@PathVariable("id") Integer id);
+
+    @GetMapping(value =FIND_ALL_DEVIS_PAGEABLE_ENDPOINT,
+            produces =MediaType.APPLICATION_JSON_VALUE  )
+    ResponseEntity<PageResponse<DevisDtoResponse>> findAllDevis(
+            @RequestParam(name = "page",defaultValue = "1", required = false) int page,
+            @RequestParam(name = "size",defaultValue = "10", required = false) int size
+    );
 }

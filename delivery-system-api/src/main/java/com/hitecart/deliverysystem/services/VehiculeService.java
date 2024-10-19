@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.services;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.VehiculeDto;
 
 import java.util.List;
@@ -10,4 +11,7 @@ public interface VehiculeService {
     VehiculeDto findByImmatriculation(String immat);
     List<VehiculeDto> findAll();
     void delete(Integer id);
+    VehiculeDto updateIsActive(Integer id, Boolean isActive);
+
+    PageResponse<VehiculeDto> findAllVehicles(int page, int size);
 }

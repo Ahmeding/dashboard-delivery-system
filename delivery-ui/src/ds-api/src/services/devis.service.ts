@@ -14,12 +14,16 @@ import { StrictHttpResponse } from '../strict-http-response';
 import { delete7 } from '../fn/devis/delete-7';
 import { Delete7$Params } from '../fn/devis/delete-7';
 import { DevisDto } from '../models/devis-dto';
+import { DevisDtoResponse } from '../models/devis-dto-response';
 import { findAll7 } from '../fn/devis/find-all-7';
 import { FindAll7$Params } from '../fn/devis/find-all-7';
+import { findAllDevis } from '../fn/devis/find-all-devis';
+import { FindAllDevis$Params } from '../fn/devis/find-all-devis';
 import { findByCode } from '../fn/devis/find-by-code';
 import { FindByCode$Params } from '../fn/devis/find-by-code';
 import { findById7 } from '../fn/devis/find-by-id-7';
 import { FindById7$Params } from '../fn/devis/find-by-id-7';
+import { PageResponseDevisDtoResponse } from '../models/page-response-devis-dto-response';
 import { save7 } from '../fn/devis/save-7';
 import { Save7$Params } from '../fn/devis/save-7';
 
@@ -59,7 +63,7 @@ export class DevisService extends BaseService {
   }
 
   /** Path part for operation `findById7()` */
-  static readonly FindById7Path = '/devis/devis/{id}';
+  static readonly FindById7Path = '/devis/devis/by-id/{id}';
 
   /**
    * Rechercher un Devis par ID! Cette methode permet de chercher un devis par son ID
@@ -69,7 +73,7 @@ export class DevisService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findById7$Response(params: FindById7$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  findById7$Response(params: FindById7$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DevisDtoResponse>>> {
     return findById7(this.http, this.rootUrl, params, context);
   }
 
@@ -81,14 +85,14 @@ export class DevisService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findById7(params: FindById7$Params, context?: HttpContext): Observable<any> {
+  findById7(params: FindById7$Params, context?: HttpContext): Observable<Array<DevisDtoResponse>> {
     return this.findById7$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
+      map((r: StrictHttpResponse<Array<DevisDtoResponse>>): Array<DevisDtoResponse> => r.body)
     );
   }
 
   /** Path part for operation `findByCode()` */
-  static readonly FindByCodePath = '/devis/devis/{code}';
+  static readonly FindByCodePath = '/devis/devis/by-code/{code}';
 
   /**
    * Rechercher un Devis par code! Cette methode permet de chercher un devis par son code
@@ -98,7 +102,7 @@ export class DevisService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findByCode$Response(params: FindByCode$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  findByCode$Response(params: FindByCode$Params, context?: HttpContext): Observable<StrictHttpResponse<DevisDtoResponse>> {
     return findByCode(this.http, this.rootUrl, params, context);
   }
 
@@ -110,9 +114,9 @@ export class DevisService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findByCode(params: FindByCode$Params, context?: HttpContext): Observable<any> {
+  findByCode(params: FindByCode$Params, context?: HttpContext): Observable<DevisDtoResponse> {
     return this.findByCode$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
+      map((r: StrictHttpResponse<DevisDtoResponse>): DevisDtoResponse => r.body)
     );
   }
 
@@ -127,7 +131,7 @@ export class DevisService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findAll7$Response(params?: FindAll7$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+  findAll7$Response(params?: FindAll7$Params, context?: HttpContext): Observable<StrictHttpResponse<DevisDtoResponse>> {
     return findAll7(this.http, this.rootUrl, params, context);
   }
 
@@ -139,9 +143,34 @@ export class DevisService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findAll7(params?: FindAll7$Params, context?: HttpContext): Observable<any> {
+  findAll7(params?: FindAll7$Params, context?: HttpContext): Observable<DevisDtoResponse> {
     return this.findAll7$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
+      map((r: StrictHttpResponse<DevisDtoResponse>): DevisDtoResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `findAllDevis()` */
+  static readonly FindAllDevisPath = '/devis/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllDevis()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllDevis$Response(params?: FindAllDevis$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseDevisDtoResponse>> {
+    return findAllDevis(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllDevis$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllDevis(params?: FindAllDevis$Params, context?: HttpContext): Observable<PageResponseDevisDtoResponse> {
+    return this.findAllDevis$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseDevisDtoResponse>): PageResponseDevisDtoResponse => r.body)
     );
   }
 

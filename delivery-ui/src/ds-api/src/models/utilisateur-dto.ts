@@ -5,11 +5,15 @@
 import { AdresseDto } from '../models/adresse-dto';
 export interface UtilisateurDto {
   adresseDto?: AdresseDto;
+  createdAt?: string;
+  createdBy?: number;
   email?: string;
   id?: number;
+  lastModifiedBy?: number;
   motDePasse?: string;
   nom?: string;
   numTel?: string;
   prenom?: string;
   role?: 'ADMIN' | 'USER';
+  updatedAt?: string;
 }

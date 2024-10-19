@@ -5,26 +5,36 @@ import com.hitecart.deliverysystem.model.*;
 import com.hitecart.deliverysystem.model.enums.TypeReparation;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Builder
-public class ReparationDto {
+public class ReparationDto{
 
-    private Integer id;
+
     private TypeReparation type;
     private String commentaire;
-    private LocalDateTime dateDebut;
-    private LocalDateTime dateFin;
-    private LocalDateTime dateProchainRep;
+    private LocalDate dateDebut;
+    private LocalDate dateFin;
+    private LocalDate dateProchainRep;
     private BigDecimal cout;
     @JsonIgnore
     private List<PieceRechangeDto> pieceRechangesDtos;
 
     private VehiculeDto vehiculeDto;
+    private Integer id;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Integer createdBy;
+    private Integer lastModifiedBy;
 
     public static ReparationDto fromEntity(Reparation reparation) {
         if(reparation == null){
@@ -40,6 +50,12 @@ public class ReparationDto {
                 .dateFin(reparation.getDateFin())
                 .dateProchainRep(reparation.getDateProchainRep())
                 .cout(reparation.getCout())
+
+                .createdAt(reparation.getCreatedAt())
+                .updatedAt(reparation.getUpdatedAt())
+                .createdBy(reparation.getCreatedBy())
+                .lastModifiedBy(reparation.getLastModifiedBy())
+
 
                 .vehiculeDto(VehiculeDto.fromEntity(reparation.getVehicule()))
                 .build();
@@ -59,6 +75,11 @@ public class ReparationDto {
                     reparation.setDateProchainRep(dto.getDateProchainRep());
                     reparation.setCout(dto.getCout());
                     reparation.setVehicule(VehiculeDto.toEntity(dto.getVehiculeDto()));
+
+        reparation.setCreatedAt(dto.getCreatedAt());
+        reparation.setUpdatedAt(dto.getUpdatedAt());
+        reparation.setCreatedBy(dto.getCreatedBy());
+        reparation.setLastModifiedBy(dto.getLastModifiedBy());
                     return reparation;
 
     }

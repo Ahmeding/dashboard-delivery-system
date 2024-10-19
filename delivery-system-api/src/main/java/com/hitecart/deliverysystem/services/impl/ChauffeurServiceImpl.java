@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.services.impl;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.ChauffeurDto;
 import com.hitecart.deliverysystem.dto.ContratDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
@@ -16,6 +17,10 @@ import com.hitecart.deliverysystem.services.ChauffeurService;
 import com.hitecart.deliverysystem.validator.ChauffeurValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -89,6 +94,31 @@ public class  ChauffeurServiceImpl implements ChauffeurService {
     }
 
     @Override
+    public List<ChauffeurDto> findAllIsActive(Boolean isActive) {
+        return chauffeurRepository.findAllByIsActive(isActive).stream()
+                .map(ChauffeurDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public PageResponse<ChauffeurDto> findAllDrivers(int page, int size) {
+        Pageable pageable = PageRequest.of(page,size, Sort.by("createdAt").descending());
+        Page<Chauffeur> drivers = chauffeurRepository.findAllChauffeurs(pageable);
+        List<ChauffeurDto> chauffeurDtos = drivers.stream()
+                .map(ChauffeurDto::fromEntity)
+                .toList();
+        return new PageResponse<>(
+                chauffeurDtos,
+                drivers.getNumber(),
+                drivers.getSize(),
+                drivers.getTotalElements(),
+                drivers.getTotalPages(),
+                drivers.isFirst(),
+                drivers.isLast()
+        );
+    }
+
+    @Override
     public void delete(Integer id) {
         checkID(id,"l'ID du chauffeur à supprimer est null","Impossible de supprimer un chauffeur avec un ID null");
 
@@ -101,6 +131,18 @@ public class  ChauffeurServiceImpl implements ChauffeurService {
         }
         chauffeurRepository.deleteById(id);
     }
+
+    @Override
+    public ChauffeurDto updateIsActive(Integer id, Boolean isActive) {
+        checkID(id,"l'ID du chauffeur à supprimer est null","Impossible de supprimer un chauffeur avec un ID null");
+        Chauffeur chauffeurOp= chauffeurRepository.findById(id).orElseThrow(
+                                ()-> new EntityNotFoundException("Opps! Aucun chauffeur avec l'id :"
+                                   + id + "n'a ete trouvé dans la base donnée",
+                           ErrorCodes.CHAUFFEUR_NOT_FOUND));
+               chauffeurOp.setIsActive(isActive);
+        return  ChauffeurDto.fromEntity(chauffeurRepository.save(chauffeurOp));
+    }
+
     private void checkID(Integer id, String msgLog, String msgException) {
         if (id == null) {
             log.error(msgLog);

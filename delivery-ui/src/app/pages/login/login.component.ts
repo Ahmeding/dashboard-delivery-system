@@ -23,13 +23,14 @@ export class LoginComponent {
 
     login(){
       this.isLoading = true;
-      this.authServices.logout();
+      this.tokenService.logout();
       this.errorsMsg=[];
       this.authServices.signin({
         body: this.authRequest
       }).subscribe({
         next:(res)=>{
           this.tokenService.token =res.token as string;
+          this.tokenService.saveLoggedUser(res.token as string);
           this.isLoading = false;
           this.router.navigate(['/']);
         },

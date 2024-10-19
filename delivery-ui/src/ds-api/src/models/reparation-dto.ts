@@ -6,10 +6,14 @@ import { VehiculeDto } from '../models/vehicule-dto';
 export interface ReparationDto {
   commentaire?: string;
   cout?: number;
+  createdAt?: string;
+  createdBy?: number;
   dateDebut?: string;
   dateFin?: string;
   dateProchainRep?: string;
   id?: number;
+  lastModifiedBy?: number;
   type?: 'MECANIQUE' | 'ELECTRIQUE' | 'CARROSSERIE' | 'VIDANGE_COMPLET';
+  updatedAt?: string;
   vehiculeDto?: VehiculeDto;
 }

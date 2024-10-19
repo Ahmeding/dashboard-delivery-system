@@ -3,6 +3,7 @@ package com.hitecart.deliverysystem.model;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=true)
@@ -28,20 +29,9 @@ public class Mission extends AbstractEntity {
     private LocalDateTime dateDebut;
     @Column(name = "date_fin")
     private LocalDateTime dateFin;
-    @Column(name = "prix_ht")
-    private BigDecimal prixHt;
-    @Column(name = "tva")
-    private BigDecimal tva;
-    @Column(name = "prix_ttc")
-    private BigDecimal prixTTC;
-    @Column(name = "frais_chauffeur")
-    private BigDecimal fraisChauffeur;
 
     @OneToMany(mappedBy = "mission")
     private List<Etape> etapes;
-
-/*    @OneToMany(mappedBy = "mission")
-    private List<MissionChauffeur> missionChauffeurs;*/
 
     @OneToMany(mappedBy = "mission")
     private List<MissionVehicle> missionVehicules;

@@ -1,5 +1,7 @@
 package com.hitecart.deliverysystem.controllers.api;
 
+import com.hitecart.deliverysystem.common.PageResponse;
+import com.hitecart.deliverysystem.dto.ClientDto;
 import com.hitecart.deliverysystem.dto.ReparationDto;
 import com.hitecart.deliverysystem.dto.ReparationDto;
 import com.hitecart.deliverysystem.utils.Constants;
@@ -123,4 +125,11 @@ public interface ReparationApi {
             }
     )
     void delete(@PathVariable("id") Integer id);
+
+    @GetMapping(value =FIND_ALL_REPARATION_PAGEABLE_ENDPOINT,
+            produces =MediaType.APPLICATION_JSON_VALUE  )
+    ResponseEntity<PageResponse<ReparationDto>> findAllReparations(
+            @RequestParam(name = "page",defaultValue = "1", required = false) int page,
+            @RequestParam(name = "size",defaultValue = "10", required = false) int size
+    );
 }

@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.controllers.api;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.ChauffeurDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -88,6 +89,10 @@ public interface ChauffeurApi {
     )
     ResponseEntity<ChauffeurDto> findByEmail(@PathVariable("email") String email);
     @GetMapping(
+            value = FIND_ALL_BY_ISACTIVE_CHAUFFEUR_ENDPOINT,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<List<ChauffeurDto>> findAllIsActive(@PathVariable("isactive") Boolean isActive);
+    @GetMapping(
             value = FIND_ALL_CHAUFFEUR_ENDPOINT,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
@@ -103,6 +108,17 @@ public interface ChauffeurApi {
             }
     )
     ResponseEntity<List<ChauffeurDto>> findAll();
+
+    @PutMapping(value = UPDATE_ISACTIVE_CHAUFFEUR_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<ChauffeurDto> updateIsActive(@PathVariable("id") Integer id, @PathVariable("isactive") Boolean isActive);
+
+    @GetMapping(value = FIND_ALL_DRIVERS_PAGEABLE_ENDPOINT
+            ,produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    ResponseEntity<PageResponse<ChauffeurDto>> findAllDrivers(
+            @RequestParam(name = "page", defaultValue = "0", required = false)int page,
+            @RequestParam(name = "size", defaultValue = "10", required = false) int size
+    );
     @DeleteMapping(value = DELETE_CHAUFFEUR_ENDPOINT)
     @Operation(
             description = "Supprimer un Chauffeur par ID! Cette methode permet de suprimmer un chauffeur par son ID",

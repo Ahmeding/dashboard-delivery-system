@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.services;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.FraisMissionDto;
 import com.hitecart.deliverysystem.dto.LigneFraisMissionDto;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,4 +19,6 @@ public interface FraisMissionService {
 
     FraisMissionDto deleteLigneFraisMission(Integer idFraisMission, Integer idLigneFraisMission);
     void delete(Integer id);
+
+    PageResponse<FraisMissionDto> findAllFraisMission(int page, int size);
 }

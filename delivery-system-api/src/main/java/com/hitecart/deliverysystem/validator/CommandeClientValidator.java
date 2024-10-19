@@ -18,7 +18,7 @@ public class CommandeClientValidator {
        if(!StringUtils.hasLength(dto.getCode())){
            errors.add("Veuillez renseigner le code de la commandeClient !");
        }
-       if(dto.getClientDto()==null){
+       if(dto.getClientId()==null){
            errors.add("Veuillez renseigner le client de la commandeClient !");
        }
        if(dto.getDateCommnde()==null){

@@ -1,15 +1,20 @@
 package com.hitecart.deliverysystem.controllers.api;
 
+import com.hitecart.deliverysystem.common.PageResponse;
+import com.hitecart.deliverysystem.dto.ClientDto;
 import com.hitecart.deliverysystem.dto.CommandeClientDto;
 import com.hitecart.deliverysystem.dto.CommandeClientDto;
+import com.hitecart.deliverysystem.dto.CommandeClientResponse;
 import com.hitecart.deliverysystem.utils.Constants;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,7 +42,9 @@ public interface CommandeClientApi {
                             description = "L'objet CommandeClient  n'est pas valide",
                             content = @Content(mediaType = "application/json"))
             })
-    ResponseEntity<CommandeClientDto> save(@RequestBody CommandeClientDto dto);
+    ResponseEntity<CommandeClientDto> save(
+            @RequestBody CommandeClientDto dto
+    );
     @GetMapping(value = FIND_COMMANDE_CLI_BY_ID_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
 
     @Operation(
@@ -47,7 +54,8 @@ public interface CommandeClientApi {
                             responseCode = "200",
                             description = "La commande client  a été trouvée dans la BBD",
                             content = @Content(
-                                    mediaType = "application/json"
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = CommandeClientResponse.class)
                             )
                     ),
 
@@ -60,7 +68,7 @@ public interface CommandeClientApi {
                     )
             }
     )
-    ResponseEntity<CommandeClientDto> findById(@PathVariable("id") Integer id);
+    ResponseEntity<CommandeClientResponse> findById(@PathVariable("id") Integer id);
     @GetMapping(value = FIND_COMMANDE_CLI_BY_CODE_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             description = "Rechercher un Commande Client  par CODE ! Cette methode permet de chercher une commande client  par son code",
@@ -69,7 +77,8 @@ public interface CommandeClientApi {
                             responseCode = "200",
                             description = "La commande client  a été trouvé dans la BBD",
                             content = @Content(
-                                    mediaType = "application/json"
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = CommandeClientResponse.class)
                             )
                     ),
 
@@ -82,7 +91,7 @@ public interface CommandeClientApi {
                     )
             }
     )
-    ResponseEntity<CommandeClientDto> findByCode(@PathVariable("code") String code);
+    ResponseEntity<CommandeClientResponse> findByCode(@PathVariable("code") String code);
     @GetMapping(value = FIND_ALL_COMMANDE_CLI_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             description = "Rechercher tout les CommandeClient ! Cette methode permet de retouner toutes les commandes clients",
@@ -91,12 +100,13 @@ public interface CommandeClientApi {
                             responseCode = "200",
                             description = "CommandeClients retrouvées ",
                             content = @Content(
-                                    mediaType = "application/json"
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = CommandeClientResponse.class))
                             )
                     )
             }
     )
-    ResponseEntity<List<CommandeClientDto>> findAll();
+    ResponseEntity<List<CommandeClientResponse>> findAll();
     @DeleteMapping(value = DELETE_COMMANDE_CLI_ENDPOINT)
     @Operation(
             description = "Supprimer un CommandeClient  par ID! Cette methode permet de suprimmer un commande client  par son ID",
@@ -118,4 +128,11 @@ public interface CommandeClientApi {
             }
     )
     void delete(@PathVariable("id") Integer id);
+
+    @GetMapping(value =FIND_ALL_COMMANDECLIENT_PAGEABLE_ENDPOINT ,
+            produces =MediaType.APPLICATION_JSON_VALUE )
+    ResponseEntity<PageResponse<CommandeClientResponse>> findAllCommandeClients(
+            @RequestParam(name = "page",defaultValue = "1", required = false) int page,
+            @RequestParam(name = "size",defaultValue = "10", required = false) int size
+    );
 }

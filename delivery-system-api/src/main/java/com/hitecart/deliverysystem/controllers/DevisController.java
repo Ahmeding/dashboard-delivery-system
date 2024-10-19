@@ -1,7 +1,9 @@
 package com.hitecart.deliverysystem.controllers;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.DevisApi;
 import com.hitecart.deliverysystem.dto.DevisDto;
+import com.hitecart.deliverysystem.dto.DevisDtoResponse;
 import com.hitecart.deliverysystem.services.DevisService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,22 +25,27 @@ public class DevisController implements DevisApi {
     }
 
     @Override
-    public ResponseEntity<DevisDto> findById(Integer id) {
+    public ResponseEntity<DevisDtoResponse> findById(Integer id) {
         return ResponseEntity.ok(devisService.findById(id));
     }
 
     @Override
-    public ResponseEntity<DevisDto> findByCode(String code) {
+    public ResponseEntity<DevisDtoResponse> findByCode(String code) {
         return ResponseEntity.ok(devisService.findByCode(code));
     }
 
     @Override
-    public ResponseEntity<List<DevisDto>> findAll() {
+    public ResponseEntity<List<DevisDtoResponse>> findAll() {
         return ResponseEntity.ok(devisService.findAll());
     }
 
     @Override
     public void delete(Integer id) {
             devisService.delete(id);
+    }
+
+    @Override
+    public ResponseEntity<PageResponse<DevisDtoResponse>> findAllDevis(int page, int size) {
+        return ResponseEntity.ok(devisService.findAllDevis(page,size));
     }
 }

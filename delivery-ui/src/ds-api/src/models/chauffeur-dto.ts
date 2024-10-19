@@ -6,8 +6,13 @@ import { AdresseDto } from '../models/adresse-dto';
 export interface ChauffeurDto {
   adresseDto?: AdresseDto;
   adresseEmail?: string;
+  createdAt?: string;
+  createdBy?: number;
   dateNaissance?: string;
+  drivinglicenseNbr?: string;
   id?: number;
+  isActive?: boolean;
+  lastModifiedBy?: number;
   motDePasse?: string;
   nom?: string;
   numSecu?: string;
@@ -15,4 +20,5 @@ export interface ChauffeurDto {
   prenom?: string;
   rib?: string;
   typePermi?: string;
+  updatedAt?: string;
 }

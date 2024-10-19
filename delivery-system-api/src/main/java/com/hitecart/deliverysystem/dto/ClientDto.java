@@ -6,15 +6,23 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
+@Getter
+@Setter
 @Builder
 public class ClientDto {
-
     private Integer id;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Integer createdBy;
+    private Integer lastModifiedBy;
     private String nom;
     private String prenom;
     private String description;
@@ -25,6 +33,7 @@ public class ClientDto {
     private String siren;
     private List<CommandeClientDto> commandeClientsDtos;
     private List<DevisDto> devisDtos;
+    private Boolean isActive;
 
     public static ClientDto fromEntity(Client client) {
         if(client==null){
@@ -42,6 +51,7 @@ public class ClientDto {
                 .adresseDto(AdresseDto.fromEntity(client.getAdresse()))
                 .siret(client.getSiret())
                 .siren(client.getSiren())
+                .isActive(client.getIsActive())
                 .commandeClientsDtos(
                         client.getCommandeClients()!=null?
                                 client.getCommandeClients().stream()
@@ -55,6 +65,11 @@ public class ClientDto {
                                         .collect(Collectors.toList()):null
                 )
 
+
+                .createdAt(client.getCreatedAt())
+                .updatedAt(client.getUpdatedAt())
+                .createdBy(client.getCreatedBy())
+                .lastModifiedBy(client.getLastModifiedBy())
                 .build();
     }
 
@@ -72,6 +87,7 @@ public class ClientDto {
         client.setSiren(dto.getSiren());
         client.setSiret(dto.getSiret());
         client.setAdresse(AdresseDto.toEntity(dto.getAdresseDto()));
+        client.setIsActive(dto.isActive);
         //Cmd client
         client.setCommandeClients(
                 dto.getCommandeClientsDtos()!=null?
@@ -86,6 +102,11 @@ public class ClientDto {
                         .map(DevisDto::toEntity)
                         .collect(Collectors.toList()):null
                 );
+
+        client.setCreatedAt(dto.getCreatedAt());
+        client.setUpdatedAt(dto.getUpdatedAt());
+        client.setCreatedBy(dto.getCreatedBy());
+        client.setLastModifiedBy(dto.getLastModifiedBy());
         return client;
     }
 

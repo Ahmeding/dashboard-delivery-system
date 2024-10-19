@@ -1,8 +1,8 @@
 package com.hitecart.deliverysystem.controllers;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.MissionApi;
 import com.hitecart.deliverysystem.dto.MissionDto;
-import com.hitecart.deliverysystem.dto.MissionToSaveRequest;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
 import com.hitecart.deliverysystem.services.MissionService;
 import lombok.RequiredArgsConstructor;
@@ -57,5 +57,10 @@ public class MissionController implements MissionApi {
     @Override
     public void delete(Integer id) {
         missionService.delete(id);
+    }
+
+    @Override
+    public ResponseEntity<PageResponse<MissionDto>> findAllMissions(int page, int size) {
+        return ResponseEntity.ok(missionService.findAllMissions(page,size));
     }
 }

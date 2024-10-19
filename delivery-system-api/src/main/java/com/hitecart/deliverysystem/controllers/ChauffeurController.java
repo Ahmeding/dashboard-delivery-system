@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.controllers;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.ChauffeurApi;
 import com.hitecart.deliverysystem.dto.ChauffeurDto;
 import com.hitecart.deliverysystem.services.ChauffeurService;
@@ -35,8 +36,24 @@ public class ChauffeurController implements ChauffeurApi {
     }
 
     @Override
+    public ResponseEntity<List<ChauffeurDto>> findAllIsActive(Boolean isActive) {
+        return ResponseEntity.ok(chauffeurService.findAllIsActive(isActive));
+    }
+
+
+    @Override
     public ResponseEntity<List<ChauffeurDto>> findAll() {
         return ResponseEntity.ok(chauffeurService.findAll());
+    }
+
+    @Override
+    public ResponseEntity<ChauffeurDto> updateIsActive(Integer id, Boolean isActive) {
+        return ResponseEntity.ok(chauffeurService.updateIsActive(id,isActive));
+    }
+
+    @Override
+    public ResponseEntity<PageResponse<ChauffeurDto>> findAllDrivers(int page, int size) {
+        return ResponseEntity.ok(chauffeurService.findAllDrivers(page, size));
     }
 
     @Override

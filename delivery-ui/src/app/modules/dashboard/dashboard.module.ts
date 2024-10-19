@@ -30,6 +30,8 @@ import {DriversComponent} from "./pages/drivers/drivers/drivers/drivers.componen
 import {NewDriverComponent} from "./pages/drivers/drivers/new-driver/new-driver.component";
 import {NgxPaginationModule} from "ngx-pagination";
 import {MissionDetailsComponent} from "./pages/missions/missions/mission-details/mission-details.component";
+import { AddMissionComponent } from './pages/missions/missions/add-mission/add-mission.component';
+import {MultiStepFormComponent} from "./components/multi-step-form/multi-step-form.component";
 
 
 @NgModule({
@@ -61,6 +63,8 @@ import {MissionDetailsComponent} from "./pages/missions/missions/mission-details
     NewQuoteComponent,
     NewExpenseComponent,
     MissionDetailsComponent,
+    AddMissionComponent,
+    MultiStepFormComponent,
   ],
     imports: [
         CommonModule,

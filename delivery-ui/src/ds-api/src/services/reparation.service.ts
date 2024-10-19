@@ -15,10 +15,13 @@ import { delete2 } from '../fn/reparation/delete-2';
 import { Delete2$Params } from '../fn/reparation/delete-2';
 import { findAll2 } from '../fn/reparation/find-all-2';
 import { FindAll2$Params } from '../fn/reparation/find-all-2';
+import { findAllReparations } from '../fn/reparation/find-all-reparations';
+import { FindAllReparations$Params } from '../fn/reparation/find-all-reparations';
 import { findByDate } from '../fn/reparation/find-by-date';
 import { FindByDate$Params } from '../fn/reparation/find-by-date';
 import { findById2 } from '../fn/reparation/find-by-id-2';
 import { FindById2$Params } from '../fn/reparation/find-by-id-2';
+import { PageResponseReparationDto } from '../models/page-response-reparation-dto';
 import { ReparationDto } from '../models/reparation-dto';
 import { save2 } from '../fn/reparation/save-2';
 import { Save2$Params } from '../fn/reparation/save-2';
@@ -142,6 +145,31 @@ export class ReparationService extends BaseService {
   findAll2(params?: FindAll2$Params, context?: HttpContext): Observable<any> {
     return this.findAll2$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `findAllReparations()` */
+  static readonly FindAllReparationsPath = '/reparations/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllReparations()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllReparations$Response(params?: FindAllReparations$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseReparationDto>> {
+    return findAllReparations(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllReparations$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllReparations(params?: FindAllReparations$Params, context?: HttpContext): Observable<PageResponseReparationDto> {
+    return this.findAllReparations$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseReparationDto>): PageResponseReparationDto => r.body)
     );
   }
 

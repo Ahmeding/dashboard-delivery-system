@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import {HttpTokenInterceptor} from "./services/interceptor/http-token.interceptor";
 import {ToastrModule} from "ngx-toastr";
@@ -23,6 +23,7 @@ import {NgChartsModule} from "ng2-charts";
         BrowserModule,
         AppRoutingModule,
         FormsModule,
+      ReactiveFormsModule,
       HttpClientModule,
       NgxPaginationModule,
       NgChartsModule,
@@ -34,7 +35,7 @@ import {NgChartsModule} from "ng2-charts";
         closeButton:true,
         newestOnTop:true,
         tapToDismiss:true,
-        positionClass:'toast-bottom-right',
+        positionClass:'toast-top-right',
         timeOut:8000
       })
     ],

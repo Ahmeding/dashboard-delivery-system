@@ -1,28 +1,40 @@
 package com.hitecart.deliverysystem.model;
 
 import com.hitecart.deliverysystem.model.enums.RoleUtilisateur;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "utilisateur")
-@Data
+@Getter
+@Setter
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper=true)
-public class Utilisateur extends AbstractEntity implements UserDetails {
-
+@EntityListeners(AuditingEntityListener.class)
+public class Utilisateur implements UserDetails, Principal {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+    @CreatedDate
+    @Column(name = "createdat", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+    @LastModifiedDate
+    @Column(name = "updatedat")
+    private LocalDateTime updatedAt;
     @Column(name = "nom")
     private String nom;
     @Column(name = "prenom")
@@ -37,11 +49,19 @@ public class Utilisateur extends AbstractEntity implements UserDetails {
     private Adresse adresse;
     @Column(name = "role")
     private RoleUtilisateur role;
+    private boolean accountLocked;
+    private boolean enabled;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Role> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        //return List.of(new SimpleGrantedAuthority(role.name()));
+        return this.roles
+                .stream()
+                .map(r-> new SimpleGrantedAuthority(r.getName()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -72,5 +92,13 @@ public class Utilisateur extends AbstractEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return email;
+    }
+    public String fullName(){
+        return this.nom + " " + this.prenom;
     }
 }

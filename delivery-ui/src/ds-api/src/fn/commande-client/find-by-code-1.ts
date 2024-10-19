@@ -8,12 +8,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { CommandeClientResponse } from '../../models/commande-client-response';
 
 export interface FindByCode1$Params {
   code: string;
 }
 
-export function findByCode1(http: HttpClient, rootUrl: string, params: FindByCode1$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+export function findByCode1(http: HttpClient, rootUrl: string, params: FindByCode1$Params, context?: HttpContext): Observable<StrictHttpResponse<CommandeClientResponse>> {
   const rb = new RequestBuilder(rootUrl, findByCode1.PATH, 'get');
   if (params) {
     rb.path('code', params.code, {});
@@ -24,9 +25,9 @@ export function findByCode1(http: HttpClient, rootUrl: string, params: FindByCod
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<any>;
+      return r as StrictHttpResponse<CommandeClientResponse>;
     })
   );
 }
 
-findByCode1.PATH = '/cmdclients/cmdclient/{code}';
+findByCode1.PATH = '/cmdclients/cmdclient/by-code/{code}';

@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.services;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.ChauffeurDto;
 
 import java.util.List;
@@ -10,4 +11,8 @@ public interface ChauffeurService {
     ChauffeurDto findByEmail(String email);
     List<ChauffeurDto> findAll();
     void delete(Integer id);
+    ChauffeurDto updateIsActive(Integer id, Boolean isActive);
+    List<ChauffeurDto> findAllIsActive(Boolean isActive);
+
+    PageResponse<ChauffeurDto> findAllDrivers(int page, int size);
 }

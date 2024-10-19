@@ -1,18 +1,27 @@
 package com.hitecart.deliverysystem.services.impl;
 
+import com.hitecart.deliverysystem.common.PageResponse;
+import com.hitecart.deliverysystem.dto.DevisDto;
 import com.hitecart.deliverysystem.dto.FraisMissionDto;
 import com.hitecart.deliverysystem.dto.LigneFraisMissionDto;
+import com.hitecart.deliverysystem.dto.MissionDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.exception.InvalidOperationException;
+import com.hitecart.deliverysystem.model.Devis;
 import com.hitecart.deliverysystem.model.FraisMission;
 import com.hitecart.deliverysystem.model.LigneFraisMission;
+import com.hitecart.deliverysystem.model.Mission;
 import com.hitecart.deliverysystem.repository.FraisMissionRepository;
 import com.hitecart.deliverysystem.repository.LigneFraisMissionRepository;
 import com.hitecart.deliverysystem.services.FraisMissionService;
 import com.hitecart.deliverysystem.validator.FraisMissionValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -186,6 +195,26 @@ public class FraisMissionServiceImpl implements FraisMissionService {
         }
 
         fraisMissionRepository.deleteById(id);
+    }
+
+    @Override
+    public PageResponse<FraisMissionDto> findAllFraisMission(int page, int size) {
+        Pageable pageable = PageRequest.of(page,size, Sort.by("createdAt").descending());
+        Page<FraisMission> fraisMissions = fraisMissionRepository.findAllFraisMission(pageable);
+
+        List<FraisMissionDto> fraisMissionsDto = fraisMissions.stream()
+                .map(FraisMissionDto::fromEntity)
+                .toList();
+
+        return new PageResponse<>(
+                fraisMissionsDto,
+                fraisMissions.getNumber(),
+                fraisMissions.getSize(),
+                fraisMissions.getTotalElements(),
+                fraisMissions.getTotalPages(),
+                fraisMissions.isFirst(),
+                fraisMissions.isLast()
+        );
     }
 
     private void checkDto(FraisMissionDto dto, String msgLog, String msgException, ErrorCodes errorCodes) {

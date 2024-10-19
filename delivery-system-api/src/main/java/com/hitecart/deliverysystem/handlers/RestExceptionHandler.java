@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.sql.SQLException;
 import java.util.Collections;
 
 
@@ -16,12 +17,21 @@ import java.util.Collections;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 
+    @ExceptionHandler(SQLHandlerException.class)
+    public ResponseEntity<ErrorDto> handleException(SQLException exception,WebRequest request) {
+
+        final HttpStatus sqlException = HttpStatus.INTERNAL_SERVER_ERROR;
+        final ErrorDto errorDto = ErrorDto.builder()
+                .errorCodes(ErrorCodes.DB_CONNECTION_ISSUES)
+                .msg(exception.getMessage())
+                .httpCode(sqlException.value())
+                .build();
+        return new ResponseEntity<>(errorDto, sqlException);
+    }
+
 
     @ExceptionHandler(EntityNotFoundException.class)
- public ResponseEntity<ErrorDto> handleException(
-         EntityNotFoundException exception,
-         WebRequest webRequest
- ){
+ public ResponseEntity<ErrorDto> handleException(EntityNotFoundException exception,WebRequest webRequest){
         final HttpStatus notFound = HttpStatus.NOT_FOUND;
          final ErrorDto errorDto= ErrorDto.builder()
              .errorCodes(exception.getErrorCodes())

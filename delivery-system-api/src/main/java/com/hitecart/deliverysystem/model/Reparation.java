@@ -3,14 +3,16 @@ package com.hitecart.deliverysystem.model;
 import com.hitecart.deliverysystem.model.enums.TypeReparation;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=true)
@@ -23,11 +25,11 @@ public class Reparation extends AbstractEntity{
     @Column(name = "commentaire")
     private String commentaire;
     @Column(name = "datedebut")
-    private LocalDateTime dateDebut;
+    private LocalDate dateDebut;
     @Column(name = "datefin")
-    private LocalDateTime dateFin;
+    private LocalDate dateFin;
     @Column(name = "dateprochainRep")
-    private LocalDateTime dateProchainRep;
+    private LocalDate dateProchainRep;
     @Column(name = "cout")
     private BigDecimal cout;
     @OneToMany(mappedBy = "reparation")

@@ -29,4 +29,4 @@ export function findByEmail2(http: HttpClient, rootUrl: string, params: FindByEm
   );
 }
 
-findByEmail2.PATH = '/chauffeurs/chauffeur/{email}';
+findByEmail2.PATH = '/chauffeurs/chauffeur/by-email/{email}';

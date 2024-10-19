@@ -17,6 +17,8 @@ import { deleteLigneFraisMission } from '../fn/frais-de-mission/delete-ligne-fra
 import { DeleteLigneFraisMission$Params } from '../fn/frais-de-mission/delete-ligne-frais-mission';
 import { findAll5 } from '../fn/frais-de-mission/find-all-5';
 import { FindAll5$Params } from '../fn/frais-de-mission/find-all-5';
+import { findAllFraisMissions } from '../fn/frais-de-mission/find-all-frais-missions';
+import { FindAllFraisMissions$Params } from '../fn/frais-de-mission/find-all-frais-missions';
 import { findAllLignesFraisMissionByFraisMissionId } from '../fn/frais-de-mission/find-all-lignes-frais-mission-by-frais-mission-id';
 import { FindAllLignesFraisMissionByFraisMissionId$Params } from '../fn/frais-de-mission/find-all-lignes-frais-mission-by-frais-mission-id';
 import { findById5 } from '../fn/frais-de-mission/find-by-id-5';
@@ -24,6 +26,7 @@ import { FindById5$Params } from '../fn/frais-de-mission/find-by-id-5';
 import { findByIdMission } from '../fn/frais-de-mission/find-by-id-mission';
 import { FindByIdMission$Params } from '../fn/frais-de-mission/find-by-id-mission';
 import { FraisMissionDto } from '../models/frais-mission-dto';
+import { PageResponseFraisMissionDto } from '../models/page-response-frais-mission-dto';
 import { save5 } from '../fn/frais-de-mission/save-5';
 import { Save5$Params } from '../fn/frais-de-mission/save-5';
 import { updateFraisMission } from '../fn/frais-de-mission/update-frais-mission';
@@ -237,6 +240,31 @@ export class FraisDeMissionService extends BaseService {
   findAll5(params?: FindAll5$Params, context?: HttpContext): Observable<any> {
     return this.findAll5$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `findAllFraisMissions()` */
+  static readonly FindAllFraisMissionsPath = '/fraismissions/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllFraisMissions()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllFraisMissions$Response(params?: FindAllFraisMissions$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseFraisMissionDto>> {
+    return findAllFraisMissions(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllFraisMissions$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllFraisMissions(params?: FindAllFraisMissions$Params, context?: HttpContext): Observable<PageResponseFraisMissionDto> {
+    return this.findAllFraisMissions$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseFraisMissionDto>): PageResponseFraisMissionDto => r.body)
     );
   }
 
