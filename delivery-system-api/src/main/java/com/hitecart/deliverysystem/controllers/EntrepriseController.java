@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.controllers;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.EntrepriseApi;
 import com.hitecart.deliverysystem.dto.EntrepriseDto;
 import com.hitecart.deliverysystem.services.EntrepriseService;
@@ -40,5 +41,10 @@ public class EntrepriseController implements EntrepriseApi {
     @Override
     public void delete(Integer id) {
             entrepriseService.delete(id);
+    }
+
+    @Override
+    public ResponseEntity<PageResponse<EntrepriseDto>> findAllEntreprises(int page, int size) {
+        return ResponseEntity.ok(entrepriseService.findAllEntreprises(page,size));
     }
 }

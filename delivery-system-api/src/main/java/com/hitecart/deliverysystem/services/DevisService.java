@@ -1,13 +1,17 @@
 package com.hitecart.deliverysystem.services;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.DevisDto;
+import com.hitecart.deliverysystem.dto.DevisDtoResponse;
 
 import java.util.List;
 
 public interface DevisService {
     DevisDto save(DevisDto dto);
-    DevisDto findById(Integer id);
-    DevisDto findByCode(String code);
-    List<DevisDto> findAll();
+    DevisDtoResponse findById(Integer id);
+    DevisDtoResponse findByCode(String code);
+    List<DevisDtoResponse> findAll();
     void delete(Integer id);
+
+    PageResponse<DevisDtoResponse> findAllDevis(int page, int size);
 }

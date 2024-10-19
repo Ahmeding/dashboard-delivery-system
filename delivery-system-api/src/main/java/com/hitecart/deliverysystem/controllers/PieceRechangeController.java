@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.controllers;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.PieceRechangeApi;
 import com.hitecart.deliverysystem.dto.PieceRechangeDto;
 import com.hitecart.deliverysystem.services.PieceRechangeService;
@@ -42,5 +43,10 @@ public class PieceRechangeController implements PieceRechangeApi {
     @Override
     public void delete(Integer id) {
         pieceRechangeService.delete(id);
+    }
+
+    @Override
+    public ResponseEntity<PageResponse<PieceRechangeDto>> findAllPieceRechanges(int page, int size) {
+        return ResponseEntity.ok(pieceRechangeService.findAllPiecesRechanges(page,size));
     }
 }

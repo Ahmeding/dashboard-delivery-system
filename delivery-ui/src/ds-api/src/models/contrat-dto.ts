@@ -5,8 +5,12 @@
 import { ChauffeurDto } from '../models/chauffeur-dto';
 export interface ContratDto {
   chauffeurDto?: ChauffeurDto;
+  createdAt?: string;
+  createdBy?: number;
   dateDebut?: string;
   dateFin?: string;
   id?: number;
+  lastModifiedBy?: number;
   typeContrat?: 'CDD' | 'CDI';
+  updatedAt?: string;
 }

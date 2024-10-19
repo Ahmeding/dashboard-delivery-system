@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.controllers;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.VehiculeApi;
 import com.hitecart.deliverysystem.dto.VehiculeDto;
 import com.hitecart.deliverysystem.services.VehiculeService;
@@ -42,7 +43,17 @@ public class VehiculeController implements VehiculeApi {
     }
 
     @Override
+    public ResponseEntity<VehiculeDto> updateIsActive(Integer id, Boolean isActive) {
+        return ResponseEntity.ok(vehiculeService.updateIsActive(id,isActive));
+    }
+
+    @Override
     public void delete(Integer id) {
         vehiculeService.delete(id);
+    }
+
+    @Override
+    public ResponseEntity<PageResponse<VehiculeDto>> findAllVehicules(int page, int size) {
+        return ResponseEntity.ok(vehiculeService.findAllVehicles(page,size));
     }
 }

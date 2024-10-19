@@ -3,6 +3,7 @@ package com.hitecart.deliverysystem.controllers;
 import com.hitecart.deliverysystem.controllers.api.AuthenticationApi;
 import com.hitecart.deliverysystem.dto.*;
 import com.hitecart.deliverysystem.services.security.AuthentificationService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,19 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @Slf4j
 public class AuthenticationController implements AuthenticationApi {
 
 
     private final AuthentificationService authentificationService;
-
-    private final AuthenticationManager authenticationManager;
-
-    @Autowired
-    public AuthenticationController(AuthentificationService authentificationService, AuthenticationManager authenticationManager) {
-        this.authentificationService = authentificationService;
-        this.authenticationManager = authenticationManager;
-    }
 
     @Override
     public ResponseEntity<UtilisateurDto> signup(SignupRequest signupRequest) {

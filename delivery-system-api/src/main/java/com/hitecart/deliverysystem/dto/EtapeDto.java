@@ -11,21 +11,22 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 @Builder
 public class EtapeDto {
+
     private Integer id;
     private String titre;
     private String commentaire;
     private LocalDateTime heureLivPrevu;
     private LocalDateTime heureLivReel;
-    private LocalDateTime dateDepart;
-    private LocalDateTime dateArrivee;
+    private LocalDate dateDepart;
+    private LocalDate dateArrivee;
     private String lieuDepart;
     private String lieuArrivee;
-    //private MissionDto missionDto;
     private Integer missionId;
 
     public static EtapeDto fromEntity(Etape etape) {
@@ -61,7 +62,6 @@ public class EtapeDto {
                 etape.setLieuDepart(dto.getLieuDepart());
                 etape.setLieuArrivee(dto.getLieuArrivee());
                 //etape.setMission(MissionDto.toEntity(dto.getMissionDto()));
-
         return etape;
     }
 

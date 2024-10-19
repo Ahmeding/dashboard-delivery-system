@@ -8,11 +8,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { DevisDtoResponse } from '../../models/devis-dto-response';
 
 export interface FindAll7$Params {
 }
 
-export function findAll7(http: HttpClient, rootUrl: string, params?: FindAll7$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+export function findAll7(http: HttpClient, rootUrl: string, params?: FindAll7$Params, context?: HttpContext): Observable<StrictHttpResponse<DevisDtoResponse>> {
   const rb = new RequestBuilder(rootUrl, findAll7.PATH, 'get');
   if (params) {
   }
@@ -22,7 +23,7 @@ export function findAll7(http: HttpClient, rootUrl: string, params?: FindAll7$Pa
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<any>;
+      return r as StrictHttpResponse<DevisDtoResponse>;
     })
   );
 }

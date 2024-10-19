@@ -1,0 +1,56 @@
+@import "../../../missions/missions/new-mission/new-mission.component";
+.is-invalid {
+  border: 1px solid red; /* Add red border */
+}
+
+.text-danger {
+  font-size: 0.875rem; /* Smaller font size for the error message */
+}
+
+.td-immat{
+  width: 100px; // Fixed width for columns
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+
+  @media (max-width: 1200px) {
+    font-size: 12px;
+  }
+
+  @media (max-width: 992px) {
+    font-size: 11px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 10px;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 8px;
+  }
+}
+.license-plate-container {
+  position: relative;
+  width: 150px; /* Adjust according to your image size */
+
+}
+
+.license-plate-bg {
+  margin-top: 5px;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.registration-number {
+  position: absolute;
+  top: 50%; /* Adjust according to the exact position you want */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 15px; /* Adjust the size to match the plate */
+  color: #000; /* Change the color to match the registration style */
+  font-weight: bold;
+  letter-spacing: 2px;
+  font-family: 'Arial', sans-serif; /* You can adjust the font if needed */
+}

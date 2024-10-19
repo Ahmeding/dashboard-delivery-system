@@ -2,21 +2,26 @@ package com.hitecart.deliverysystem.dto;
 
 import com.hitecart.deliverysystem.model.Contrat;
 import com.hitecart.deliverysystem.model.enums.TypeContrat;
-import lombok.Builder;
-import lombok.Data;
-
-import java.time.Instant;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Data
-@Builder
-public class ContratDto {
+@Getter
+@Setter
+@SuperBuilder
+public class ContratDto{
 
-    private Integer id;
     private TypeContrat typeContrat;
-    private LocalDateTime dateDebut;
-    private LocalDateTime dateFin;
+    private LocalDate dateDebut;
+    private LocalDate dateFin;
     private ChauffeurDto chauffeurDto;
+    private Integer id;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Integer createdBy;
+    private Integer lastModifiedBy;
 
     public static ContratDto fromEntity(Contrat contrat) {
         if(contrat ==null){
@@ -28,6 +33,11 @@ public class ContratDto {
                 .dateDebut(contrat.getDateDebut())
                 .dateFin(contrat.getDateFin())
                 .chauffeurDto(ChauffeurDto.fromEntity(contrat.getChauffeur()))
+
+                .createdAt(contrat.getCreatedAt())
+                .updatedAt(contrat.getUpdatedAt())
+                .createdBy(contrat.getCreatedBy())
+                .lastModifiedBy(contrat.getLastModifiedBy())
                 .build();
     }
 
@@ -41,6 +51,11 @@ public class ContratDto {
         contrat.setDateDebut(dto.getDateDebut());
         contrat.setDateFin(dto.getDateFin());
         contrat.setChauffeur(ChauffeurDto.toEntity(dto.getChauffeurDto()));
+
+        contrat.setCreatedAt(dto.getCreatedAt());
+        contrat.setUpdatedAt(dto.getUpdatedAt());
+        contrat.setCreatedBy(dto.getCreatedBy());
+        contrat.setLastModifiedBy(dto.getLastModifiedBy());
         return contrat;
     }
 }

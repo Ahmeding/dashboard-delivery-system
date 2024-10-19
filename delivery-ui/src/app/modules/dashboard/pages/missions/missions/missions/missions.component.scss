@@ -26,7 +26,6 @@ table {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    border: 1px solid #ddd;
     font-size: 16px;
     color: #000;
   }
@@ -55,3 +54,27 @@ td{
   }
 }
 
+.license-plate-container {
+  position: relative;
+  width: 150px; /* Adjust according to your image size */
+
+}
+
+.license-plate-bg {
+  margin-top: 5px;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.registration-number {
+  position: absolute;
+  top: 50%; /* Adjust according to the exact position you want */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 15px; /* Adjust the size to match the plate */
+  color: #000; /* Change the color to match the registration style */
+  font-weight: bold;
+  letter-spacing: 2px;
+  font-family: 'Arial', sans-serif; /* You can adjust the font if needed */
+}

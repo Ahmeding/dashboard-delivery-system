@@ -22,6 +22,7 @@ import {DriversComponent} from "./pages/drivers/drivers/drivers/drivers.componen
 import {NewDriverComponent} from "./pages/drivers/drivers/new-driver/new-driver.component";
 import {authGuard} from "../../services/guard/auth.guard";
 import {MissionDetailsComponent} from "./pages/missions/missions/mission-details/mission-details.component";
+import {AddMissionComponent} from "./pages/missions/missions/add-mission/add-mission.component";
 
 const routes: Routes = [
   {
@@ -34,6 +35,10 @@ const routes: Routes = [
         component: MainContentComponent,
         canActivate: [authGuard]
       }, {
+        path: 'add-mission',
+        component: AddMissionComponent,
+        canActivate: [authGuard]
+      },{
         path: 'new-mission',
         component: NewMissionComponent,
         canActivate: [authGuard]

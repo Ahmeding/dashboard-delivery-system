@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -45,8 +46,8 @@ class ContratDtoTest {
         contrat.setChauffeur(null);
         contrat.setTypeContrat(TypeContrat.CDI);
         contrat.setId(1);
-        contrat.setDateDebut(LocalDateTime.now());
-        contrat.setDateFin(LocalDateTime.now());
+        contrat.setDateDebut(LocalDate.now());
+        contrat.setDateFin(LocalDate.now());
 
         ContratDto expectedContratDto = ContratDto.fromEntity(contrat);
 
@@ -64,8 +65,8 @@ class ContratDtoTest {
                 .id(1)
                 .chauffeurDto(null)
                 .typeContrat(TypeContrat.CDI)
-                .dateDebut(LocalDateTime.now())
-                .dateFin(LocalDateTime.now())
+                .dateDebut(LocalDate.now())
+                .dateFin(LocalDate.now())
                 .build();
         Contrat expectedContrat = ContratDto.toEntity(contratDto);
 

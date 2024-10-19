@@ -1,6 +1,7 @@
 package com.hitecart.deliverysystem.dto;
 
 import com.hitecart.deliverysystem.model.LigneCommandeClient;
+import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,9 +14,10 @@ public class LigneCommandeClientDto {
     private Integer id;
     private BigDecimal quantite;
     private BigDecimal prixUnitaire;
-    private MissionDto missionDto;
-    private CommandeClientDto commandeClientDto;
-
+    private BigDecimal prixTTC;
+    private BigDecimal tva;
+    /*private CommandeClientDto commandeClientDto;*/
+    private Integer cmdClientId;
     public static LigneCommandeClientDto fromEntity(LigneCommandeClient ligneCommandeClient) {
         if(ligneCommandeClient == null){
             return null;
@@ -24,8 +26,9 @@ public class LigneCommandeClientDto {
                 .id(ligneCommandeClient.getId())
                 .quantite(ligneCommandeClient.getQuantite())
                 .prixUnitaire(ligneCommandeClient.getPrixUnitaire())
-                .missionDto(MissionDto.fromEntity(ligneCommandeClient.getMission()))
-                .commandeClientDto(CommandeClientDto.fromEntity(ligneCommandeClient.getComamndeClient()))
+                .prixTTC(ligneCommandeClient.getPrixTTC())
+                .tva(ligneCommandeClient.getTva())
+                .cmdClientId(ligneCommandeClient.getComamndeClient()!=null?ligneCommandeClient.getComamndeClient().getId():null)
                 .build();
     }
 
@@ -37,8 +40,9 @@ public class LigneCommandeClientDto {
         ligneCommandeClient.setId(dto.getId());
         ligneCommandeClient.setQuantite(dto.getQuantite());
         ligneCommandeClient.setPrixUnitaire(dto.getPrixUnitaire());
-        ligneCommandeClient.setMission(MissionDto.toEntity(dto.getMissionDto()));
-        ligneCommandeClient.setComamndeClient(CommandeClientDto.toEntity(dto.getCommandeClientDto()));
+        ligneCommandeClient.setPrixTTC(dto.getPrixTTC());
+        ligneCommandeClient.setTva(dto.getTva());
+       /* ligneCommandeClient.setComamndeClient(CommandeClientDto.toEntity(dto.getCommandeClientDto()));*/
 
         return ligneCommandeClient;
     }

@@ -18,7 +18,7 @@ public class DevisValidator {
         if(!StringUtils.hasLength(dto.getCode())){
             errors.add("Veuillez renseigner le code du Devis !");
         }
-        if(dto.getClientDto()==null){
+        if(dto.getClientId()==null){
             errors.add("Veuillez renseigner le client du Devis !");
         }
         if(dto.getDateDevis()==null){

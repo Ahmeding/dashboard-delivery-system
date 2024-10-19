@@ -3,9 +3,8 @@ package com.hitecart.deliverysystem.dto;
 import com.hitecart.deliverysystem.model.MissionVehicle;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
 import com.hitecart.deliverysystem.model.Mission;
-import lombok.Builder;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -13,27 +12,26 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
+@Getter
+@Setter
 @Builder
 @ToString
 public class MissionDto {
 
-    private Integer id;
+
     private String titre;
     private String commentaire;
     private BigDecimal volume;
     private LocalDateTime dateDebut;
     private LocalDateTime dateFin;
-    private BigDecimal prixHt;
-    private BigDecimal tva;
-    private BigDecimal prixTTC;
-    private BigDecimal fraisChauffeur;
     private EtatMission etatMission;
-
     private List<EtapeDto> etapeDtos;
-
-    /*private List<MissionChauffeurDto> missionChauffeurDtos;*/
     private List<MissionVehicleDto> missionVehiclesDtos;
+    private Integer id;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Integer createdBy;
+    private Integer lastModifiedBy;
 
     private double kmDebut;
     private double kmFin;
@@ -50,10 +48,6 @@ public class MissionDto {
                 .volume(mission.getVolume())
                 .dateDebut(mission.getDateDebut())
                 .dateFin(mission.getDateFin())
-                .prixHt(mission.getPrixHt())
-                .tva(mission.getTva())
-                .prixTTC(mission.getPrixTTC())
-                .fraisChauffeur(mission.getFraisChauffeur())
                 .etatMission(mission.getEtatMission())
                 .kmDebut(mission.getKmDebut())
                 .kmFin(mission.getKmFin())
@@ -70,6 +64,11 @@ public class MissionDto {
                                         .map(MissionVehicleDto::fromEntity)
                                         .collect(Collectors.toList()):null
                 )
+
+                .createdAt(mission.getCreatedAt())
+                .updatedAt(mission.getUpdatedAt())
+                .createdBy(mission.getCreatedBy())
+                .lastModifiedBy(mission.getLastModifiedBy())
         .build();
 
     }
@@ -86,10 +85,6 @@ public class MissionDto {
         mission.setVolume(dto.getVolume());
         mission.setDateDebut(dto.getDateDebut());
         mission.setDateFin(dto.getDateFin());
-        mission.setPrixHt(dto.getPrixHt());
-        mission.setTva(dto.getTva());
-        mission.setPrixTTC(dto.getPrixTTC());
-        mission.setFraisChauffeur(dto.getFraisChauffeur());
         mission.setEtatMission(dto.getEtatMission());
         mission.setKmDebut(dto.getKmDebut());
         mission.setKmFin(dto.getKmFin());
@@ -98,15 +93,18 @@ public class MissionDto {
                         dto.getEtapeDtos().stream()
                                 .map(EtapeDto::toEntity)
                                 .collect(Collectors.toList()):null
-        );
-
-                mission.setMissionVehicules(
+                                );
+        mission.setMissionVehicules(
                         dto.getMissionVehiclesDtos() != null?
                                 dto.getMissionVehiclesDtos().stream()
                                         .map(MissionVehicleDto::toEntity)
                                         .collect(Collectors.toList()):null
-                );
+                                        );
 
+        mission.setCreatedAt(dto.getCreatedAt());
+        mission.setUpdatedAt(dto.getUpdatedAt());
+        mission.setCreatedBy(dto.getCreatedBy());
+        mission.setLastModifiedBy(dto.getLastModifiedBy());
         return mission;
 
     }

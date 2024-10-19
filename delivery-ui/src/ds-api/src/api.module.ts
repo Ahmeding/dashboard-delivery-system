@@ -7,6 +7,8 @@ import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { VehiculeService } from './services/vehicule.service';
+import { ClientService } from './services/client.service';
+import { ChauffeurService } from './services/chauffeur.service';
 import { UtilisateurService } from './services/utilisateur.service';
 import { ReparationService } from './services/reparation.service';
 import { PiecesDeRechangeService } from './services/pieces-de-rechange.service';
@@ -16,8 +18,6 @@ import { EntrepriseControllerService } from './services/entreprise-controller.se
 import { DevisService } from './services/devis.service';
 import { ContratService } from './services/contrat.service';
 import { CommandeClientService } from './services/commande-client.service';
-import { ClientService } from './services/client.service';
-import { ChauffeurService } from './services/chauffeur.service';
 import { AuthenticationEnregistrementService } from './services/authentication-enregistrement.service';
 import { UserControllerService } from './services/user-controller.service';
 import { AdminControllerService } from './services/admin-controller.service';
@@ -31,6 +31,8 @@ import { AdminControllerService } from './services/admin-controller.service';
   declarations: [],
   providers: [
     VehiculeService,
+    ClientService,
+    ChauffeurService,
     UtilisateurService,
     ReparationService,
     PiecesDeRechangeService,
@@ -40,8 +42,6 @@ import { AdminControllerService } from './services/admin-controller.service';
     DevisService,
     ContratService,
     CommandeClientService,
-    ClientService,
-    ChauffeurService,
     AuthenticationEnregistrementService,
     UserControllerService,
     AdminControllerService,

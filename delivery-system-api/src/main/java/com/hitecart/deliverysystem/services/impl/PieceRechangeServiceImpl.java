@@ -1,11 +1,14 @@
 package com.hitecart.deliverysystem.services.impl;
 
+import com.hitecart.deliverysystem.common.PageResponse;
+import com.hitecart.deliverysystem.dto.MissionDto;
 import com.hitecart.deliverysystem.dto.PieceRechangeDto;
 import com.hitecart.deliverysystem.dto.PieceRechangeDto;
 import com.hitecart.deliverysystem.dto.ReparationDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
+import com.hitecart.deliverysystem.model.Mission;
 import com.hitecart.deliverysystem.model.PieceRechange;
 import com.hitecart.deliverysystem.repository.PieceRechangeRepository;
 import com.hitecart.deliverysystem.services.PieceRechangeService;
@@ -13,6 +16,10 @@ import com.hitecart.deliverysystem.services.ReparationService;
 import com.hitecart.deliverysystem.utils.Constants;
 import com.hitecart.deliverysystem.validator.PieceRechangeValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -92,6 +99,26 @@ public class PieceRechangeServiceImpl implements PieceRechangeService {
 
         reparationService.updateCoutReparation( DELETE_FLAG,reparationDto,PieceRechangeDto.fromEntity(pieceRechange.get()));
         pieceRechangeRepository.deleteById(id);
+    }
+
+    @Override
+    public PageResponse<PieceRechangeDto> findAllPiecesRechanges(int page, int size) {
+        Pageable pageable = PageRequest.of(page,size, Sort.by("createdAt").descending());
+        Page<PieceRechange> pieceRechanges = pieceRechangeRepository.findAllPieceRechanges(pageable);
+
+        List<PieceRechangeDto> pieceRechangesDto = pieceRechanges.stream()
+                .map(PieceRechangeDto::fromEntity)
+                .toList();
+
+        return new PageResponse<>(
+                pieceRechangesDto,
+                pieceRechanges.getNumber(),
+                pieceRechanges.getSize(),
+                pieceRechanges.getTotalElements(),
+                pieceRechanges.getTotalPages(),
+                pieceRechanges.isFirst(),
+                pieceRechanges.isLast()
+        );
     }
 
     private void checkDto(PieceRechangeDto dto, String msgLog, String msgException, ErrorCodes errorCodes) {

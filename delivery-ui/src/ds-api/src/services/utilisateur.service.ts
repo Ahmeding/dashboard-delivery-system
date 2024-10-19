@@ -16,10 +16,13 @@ import { delete1 } from '../fn/utilisateur/delete-1';
 import { Delete1$Params } from '../fn/utilisateur/delete-1';
 import { findAll1 } from '../fn/utilisateur/find-all-1';
 import { FindAll1$Params } from '../fn/utilisateur/find-all-1';
+import { findAllUtilisateurs } from '../fn/utilisateur/find-all-utilisateurs';
+import { FindAllUtilisateurs$Params } from '../fn/utilisateur/find-all-utilisateurs';
 import { findByEmail } from '../fn/utilisateur/find-by-email';
 import { FindByEmail$Params } from '../fn/utilisateur/find-by-email';
 import { findById1 } from '../fn/utilisateur/find-by-id-1';
 import { FindById1$Params } from '../fn/utilisateur/find-by-id-1';
+import { PageResponseUtilisateurDto } from '../models/page-response-utilisateur-dto';
 import { save1 } from '../fn/utilisateur/save-1';
 import { Save1$Params } from '../fn/utilisateur/save-1';
 
@@ -59,7 +62,7 @@ export class UtilisateurService extends BaseService {
   }
 
   /** Path part for operation `findById1()` */
-  static readonly FindById1Path = '/utilisateurs/findbyid/{id}';
+  static readonly FindById1Path = '/utilisateurs/user/by-id/{id}';
 
   /**
    * Rechercher un Utilisateur par ID! Cette methode permet de chercher un utilisateur par son ID
@@ -88,7 +91,7 @@ export class UtilisateurService extends BaseService {
   }
 
   /** Path part for operation `findByEmail()` */
-  static readonly FindByEmailPath = '/utilisateurs/findbyemail/{email}';
+  static readonly FindByEmailPath = '/utilisateurs/user/by-email/{email}';
 
   /**
    * Rechercher un Utilisateur par son email ! Cette methode permet de chercher un utilisateur par son email
@@ -142,6 +145,31 @@ export class UtilisateurService extends BaseService {
   findAll1(params?: FindAll1$Params, context?: HttpContext): Observable<any> {
     return this.findAll1$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `findAllUtilisateurs()` */
+  static readonly FindAllUtilisateursPath = '/utilisateurs/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllUtilisateurs()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllUtilisateurs$Response(params?: FindAllUtilisateurs$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseUtilisateurDto>> {
+    return findAllUtilisateurs(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllUtilisateurs$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllUtilisateurs(params?: FindAllUtilisateurs$Params, context?: HttpContext): Observable<PageResponseUtilisateurDto> {
+    return this.findAllUtilisateurs$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseUtilisateurDto>): PageResponseUtilisateurDto => r.body)
     );
   }
 

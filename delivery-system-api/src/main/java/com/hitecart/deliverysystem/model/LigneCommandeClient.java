@@ -20,6 +20,10 @@ public class LigneCommandeClient extends  AbstractEntity{
     private BigDecimal quantite;
     @Column(name = "prixunitaire")
     private BigDecimal prixUnitaire;
+    @Column(name = "prixTTC")
+    private BigDecimal prixTTC;
+    @Column(name = "tva")
+    private BigDecimal tva;
     @ManyToOne
     @JoinColumn(name = "idmission")
     private Mission mission;

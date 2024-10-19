@@ -1,15 +1,24 @@
 package com.hitecart.deliverysystem.services.impl;
 
+import com.hitecart.deliverysystem.common.PageResponse;
+import com.hitecart.deliverysystem.dto.DevisDto;
 import com.hitecart.deliverysystem.dto.EntrepriseDto;
 import com.hitecart.deliverysystem.dto.EntrepriseDto;
+import com.hitecart.deliverysystem.dto.MissionDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
+import com.hitecart.deliverysystem.model.Devis;
 import com.hitecart.deliverysystem.model.Entreprise;
+import com.hitecart.deliverysystem.model.Mission;
 import com.hitecart.deliverysystem.repository.EntrepriseRepository;
 import com.hitecart.deliverysystem.services.EntrepriseService;
 import com.hitecart.deliverysystem.validator.EntrepriseValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -88,6 +97,27 @@ public class EntrepriseServiceImpl implements EntrepriseService {
 
         entrepriseRepository.deleteById(id);
     }
+
+    @Override
+    public PageResponse<EntrepriseDto> findAllEntreprises(int page, int size) {
+        Pageable pageable = PageRequest.of(page,size, Sort.by("createdAt").descending());
+        Page<Entreprise> entreprises = entrepriseRepository.findAllEntreprises(pageable);
+
+        List<EntrepriseDto> entreprisesDto = entreprises.stream()
+                .map(EntrepriseDto::fromEntity)
+                .toList();
+
+        return new PageResponse<>(
+                entreprisesDto,
+                entreprises.getNumber(),
+                entreprises.getSize(),
+                entreprises.getTotalElements(),
+                entreprises.getTotalPages(),
+                entreprises.isFirst(),
+                entreprises.isLast()
+        );
+    }
+
     private void checkDto(EntrepriseDto dto, String msgLog, String msgException, ErrorCodes errorCodes) {
         List<String> errors = EntrepriseValidator.validate(dto);
         if(!errors.isEmpty()){

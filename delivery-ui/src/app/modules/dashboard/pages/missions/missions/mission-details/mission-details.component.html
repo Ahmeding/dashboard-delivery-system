@@ -25,7 +25,7 @@
                   <span class="text-primary">Title</span><span class="ml-auto">{{ mission.titre }}</span>
                 </div>
                 <div class="p-1 d-flex justify-content-between  bg-light">
-                  <span>Volume(m<sup>3</sup>)</span> : {{ mission.volume }}
+                  <span>Volume(m<sup>3</sup>)</span>{{ mission.volume }}
                 </div>
                 <div class="p-1 d-flex justify-content-between">
                   <span class="text-primary">Start Date</span><span class="ml-auto">{{ formatingDateTime(mission.dateDebut!) | date: 'dd/MM/yyyy' }}</span>
@@ -65,7 +65,7 @@
                   <span class="text-primary">Number of Vehicles</span><span class="ml-auto">{{mission.missionVehiclesDtos?.length}}</span>
                 </div>
                 <div class="p-1 d-flex justify-content-between bg-light">
-                  <span class="text-primary">Expenses</span><span class="ml-auto">{{ mission.fraisChauffeur }}</span>
+                  <span class="text-primary">Expenses</span><span class="ml-auto">520.0 €</span>
                 </div>
               </div>
             </div>

@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.controllers;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.ChauffeurApi;
 import com.hitecart.deliverysystem.controllers.api.ContratApi;
 import com.hitecart.deliverysystem.dto.ContratDto;
@@ -42,5 +43,10 @@ public class ContratController implements ContratApi {
     @Override
     public void delete(Integer id) {
         contratService.delete(id);
+    }
+
+    @Override
+    public ResponseEntity<PageResponse<ContratDto>> findAllContrats(int page, int size) {
+        return ResponseEntity.ok(contratService.findAllContracts(page,size));
     }
 }

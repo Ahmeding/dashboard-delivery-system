@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.controllers;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.ClientApi;
 import com.hitecart.deliverysystem.dto.ClientDto;
 import com.hitecart.deliverysystem.services.ClientService;
@@ -40,7 +41,17 @@ public class ClientController implements ClientApi {
     }
 
     @Override
+    public ResponseEntity<ClientDto> updateIsActive(Integer id, Boolean isActive) {
+        return ResponseEntity.ok(clientService.updateIsActive(id,isActive));
+    }
+
+    @Override
     public void delete(Integer id){
         clientService.delete(id);
+    }
+
+    @Override
+    public ResponseEntity<PageResponse<ClientDto>> findAllClients(int page, int size) {
+        return ResponseEntity.ok(clientService.findAllClients(page,size));
     }
 }

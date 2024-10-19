@@ -1,3 +1,55 @@
+
+
+.table-hover tr.selected {
+  background-color: #e0f7fa;
+}
+.disabled-div {
+  opacity: 0.5;            /* Make it look disabled */
+  pointer-events: none;     /* Disable interaction */
+  background-color: #f8f9fa;  /* Optional: Make the background lighter */
+}
+.scrollable-div {
+  height: 200px; /* Fixed height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  border: 1px solid #ddd; /* Optional: Add a border for clarity */
+  padding: 5px; /* Optional: Add padding inside the div */
+}
+.vehicle-text {
+  font-size: 0.7rem; /* Adjust this value for smaller text */
+  line-height: 1.2; /* Adjust line height for spacing */
+}
+
+/* Optional: Add styling for the entire table */
+
+th, td {
+  padding: 8px; /* Add padding for spacing */
+  text-align: left; /* Align text to the left */
+}
+.license-plate-container {
+  position: relative;
+  width: 160px; /* Adjust according to your image size */
+}
+
+.license-plate-bg {
+  margin-top: 5px;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.registration-number {
+  position: absolute;
+  top: 50%; /* Adjust according to the exact position you want */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px; /* Adjust the size to match the plate */
+  color: #000; /* Change the color to match the registration style */
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-family: 'Arial', sans-serif; /* You can adjust the font if needed */
+}
+
+
 .form-label {
   margin-bottom: 0.5rem;
 }
@@ -463,6 +515,11 @@ textarea.form-control-lg {
   height: calc(3.5rem + 2px);
   line-height: 1.25;
 }
+form-floating-comment{
+  height: calc(4.5rem + 2px);
+  line-height: 1.25;
+}
+
 .form-floating > label {
   position: absolute;
   top: 0;
@@ -634,4 +691,24 @@ textarea.form-control-lg {
 .input-group > .form-floating:not(:first-child) > .datatable-selector {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+}
+// Modal Input Styles
+.modal {
+  .input-error {
+    border-color: #dc3545; /* Red border for error */
+    + label {
+      color: #dc3545; /* Red label for error */
+    }
+  }
+  }
+@media (max-width: 768px) {
+  .license-plate-container {
+    text-align: center;
+  }
+  .row {
+    padding: 15px;
+  }
+  .btn {
+    width: 100%;
+  }
 }

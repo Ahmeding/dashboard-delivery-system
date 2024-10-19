@@ -15,18 +15,48 @@ import { delete$ } from '../fn/vehicule/delete';
 import { Delete$Params } from '../fn/vehicule/delete';
 import { findAll } from '../fn/vehicule/find-all';
 import { FindAll$Params } from '../fn/vehicule/find-all';
+import { findAllVehicules } from '../fn/vehicule/find-all-vehicules';
+import { FindAllVehicules$Params } from '../fn/vehicule/find-all-vehicules';
 import { findById } from '../fn/vehicule/find-by-id';
 import { FindById$Params } from '../fn/vehicule/find-by-id';
 import { findByImmatriculation } from '../fn/vehicule/find-by-immatriculation';
 import { FindByImmatriculation$Params } from '../fn/vehicule/find-by-immatriculation';
+import { PageResponseVehiculeDto } from '../models/page-response-vehicule-dto';
 import { save } from '../fn/vehicule/save';
 import { Save$Params } from '../fn/vehicule/save';
+import { updateIsActive } from '../fn/vehicule/update-is-active';
+import { UpdateIsActive$Params } from '../fn/vehicule/update-is-active';
 import { VehiculeDto } from '../models/vehicule-dto';
 
 @Injectable({ providedIn: 'root' })
 export class VehiculeService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `updateIsActive()` */
+  static readonly UpdateIsActivePath = '/vehicules/is-active/{id}/{isactive}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateIsActive()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  updateIsActive$Response(params: UpdateIsActive$Params, context?: HttpContext): Observable<StrictHttpResponse<VehiculeDto>> {
+    return updateIsActive(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateIsActive$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  updateIsActive(params: UpdateIsActive$Params, context?: HttpContext): Observable<VehiculeDto> {
+    return this.updateIsActive$Response(params, context).pipe(
+      map((r: StrictHttpResponse<VehiculeDto>): VehiculeDto => r.body)
+    );
   }
 
   /** Path part for operation `save()` */
@@ -59,7 +89,7 @@ export class VehiculeService extends BaseService {
   }
 
   /** Path part for operation `findByImmatriculation()` */
-  static readonly FindByImmatriculationPath = '/vehicules/vehicule/{immat}';
+  static readonly FindByImmatriculationPath = '/vehicules/vehicule/by-immat/{immat}';
 
   /**
    * Rechercher un Vehicule par son email ID! Cette methode permet de chercher un vehicule par son email
@@ -88,7 +118,7 @@ export class VehiculeService extends BaseService {
   }
 
   /** Path part for operation `findById()` */
-  static readonly FindByIdPath = '/vehicules/vehicule/{id}';
+  static readonly FindByIdPath = '/vehicules/vehicule/by-id/{id}';
 
   /**
    * Rechercher un Vehicule par ID! Cette methode permet de chercher un vehicule par son ID
@@ -142,6 +172,31 @@ export class VehiculeService extends BaseService {
   findAll(params?: FindAll$Params, context?: HttpContext): Observable<any> {
     return this.findAll$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `findAllVehicules()` */
+  static readonly FindAllVehiculesPath = '/vehicules/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllVehicules()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllVehicules$Response(params?: FindAllVehicules$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseVehiculeDto>> {
+    return findAllVehicules(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllVehicules$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllVehicules(params?: FindAllVehicules$Params, context?: HttpContext): Observable<PageResponseVehiculeDto> {
+    return this.findAllVehicules$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseVehiculeDto>): PageResponseVehiculeDto => r.body)
     );
   }
 

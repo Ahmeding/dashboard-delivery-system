@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=true)
 @Entity
-@Builder
+@SuperBuilder
 @Table(name="chauffeur")
 public class Chauffeur extends AbstractEntity{
 
@@ -24,11 +25,12 @@ public class Chauffeur extends AbstractEntity{
     @Column(name="adresseemail")
     private String adresseEmail;
     @Column(name="motdepasse")
+
     private String motDePasse;
     @Column(name="numtel")
     private String numTel;
     @Column(name="date_naissance")
-    private LocalDateTime dateNaissance;
+    private LocalDate dateNaissance;
     @Column(name="typepermis")
     private String typePermi;
     @Column(name="num_secu")
@@ -37,6 +39,11 @@ public class Chauffeur extends AbstractEntity{
     private String rib;
     @Embedded
     private Adresse adresse;
+    @Column(name = "driving_license_nbr",nullable = false,unique = true)
+    private String drivinglicenseNbr;
+
+    @Column(name="is_active")
+    private Boolean isActive;
 
     @OneToMany(mappedBy = "chauffeur")
     private List<Contrat> contrats;

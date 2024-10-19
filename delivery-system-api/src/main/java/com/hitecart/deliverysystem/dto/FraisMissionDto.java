@@ -3,19 +3,29 @@ package com.hitecart.deliverysystem.dto;
 import com.hitecart.deliverysystem.model.FraisMission;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
-@Builder
-public class FraisMissionDto {
+@Getter
+@Setter
+@SuperBuilder
+public class FraisMissionDto{
 
-    private Integer id;
+
     private String nom;
     private String commentaire;
     private MissionDto missionDto;
     private List<LigneFraisMissionDto> lignesFraisMissionDto;
+    private Integer id;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Integer createdBy;
+    private Integer lastModifiedBy;
 
     public static FraisMissionDto fromEntity(FraisMission fraisMission){
         if(fraisMission ==null){
@@ -32,6 +42,11 @@ public class FraisMissionDto {
                                         map(LigneFraisMissionDto::fromEntity)
                                         .collect(Collectors.toList()) : null
                 )
+
+                .createdAt(fraisMission.getCreatedAt())
+                .updatedAt(fraisMission.getUpdatedAt())
+                .createdBy(fraisMission.getCreatedBy())
+                .lastModifiedBy(fraisMission.getLastModifiedBy())
                 .build();
     }
 
@@ -48,6 +63,11 @@ public class FraisMissionDto {
                         dto.getLignesFraisMissionDto().stream()
                                 .map(LigneFraisMissionDto::toEntity)
                                 .collect(Collectors.toList()) : null);
+
+        fraisMission.setCreatedAt(dto.getCreatedAt());
+        fraisMission.setUpdatedAt(dto.getUpdatedAt());
+        fraisMission.setCreatedBy(dto.getCreatedBy());
+        fraisMission.setLastModifiedBy(dto.getLastModifiedBy());
          return fraisMission;
     }
 }

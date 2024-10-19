@@ -25,10 +25,20 @@ export class TokenService {
     const jwtHelper = new JwtHelperService();
     //checkexpiredDate
     const isTokenExpired = jwtHelper.isTokenExpired(token);
+    console.log("TOKEN--> : "+isTokenExpired);
     if(isTokenExpired){
       localStorage.clear();
       return false;
     }
     return true;
+  }
+
+  saveLoggedUser(token : string){
+    const jwtHelper = new JwtHelperService();
+    const loggedUser = jwtHelper.decodeToken(token);
+    localStorage.setItem('user',loggedUser?.fullName );
+  }
+  logout(){
+    localStorage.clear();
   }
 }

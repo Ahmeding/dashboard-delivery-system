@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.services;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.PieceRechangeDto;
 import com.hitecart.deliverysystem.dto.ReparationDto;
 
@@ -14,4 +15,6 @@ public interface ReparationService {
 
     void updateCoutReparation(String flag, ReparationDto dto, PieceRechangeDto pieceRechangeDto);
       void delete(Integer id);
+
+    PageResponse<ReparationDto> findAllRepairs(int page, int size);
 }

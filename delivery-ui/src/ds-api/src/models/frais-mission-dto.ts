@@ -6,8 +6,12 @@ import { LigneFraisMissionDto } from '../models/ligne-frais-mission-dto';
 import { MissionDto } from '../models/mission-dto';
 export interface FraisMissionDto {
   commentaire?: string;
+  createdAt?: string;
+  createdBy?: number;
   id?: number;
+  lastModifiedBy?: number;
   lignesFraisMissionDto?: Array<LigneFraisMissionDto>;
   missionDto?: MissionDto;
   nom?: string;
+  updatedAt?: string;
 }

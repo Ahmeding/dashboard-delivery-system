@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@SuperBuilder
 @Table(name = "client")
 public class Client extends AbstractEntity{
 
@@ -37,6 +39,7 @@ public class Client extends AbstractEntity{
     private List<CommandeClient> commandeClients;
     @OneToMany(mappedBy = "client")
     private List<Devis> devis;
-
+    @Column(name="is_active")
+    private Boolean isActive;
 
 }

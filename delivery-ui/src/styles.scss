@@ -3,3 +3,37 @@
 @import "assets/vendor/fontawesome-free/css/all.min.css";
 @import "ngx-toastr/toastr";
 @import "node_modules/@costlydeveloper/ngx-awesome-popup/styles/theme";
+
+.waiting {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.disabled {
+  pointer-events: none;  /* Prevents any interaction */
+  opacity: 0.5;          /* Makes the link look disabled */
+}
+
+.page-link.active {
+  background-color: #007bff;    /* Bootstrap primary color */
+  color: #fff !important;       /* Ensure the text is white */
+  border-color: #007bff;        /* Matching border color */
+  font-weight: bold;            /* Make the font bold */
+
+  /* Add a nice shadow effect */
+  box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.5);
+
+  /* Smooth transition on hover/focus */
+  transition: all 0.3s ease;
+
+  /* Rounded corners for a smoother look */
+  border-radius: 0;
+
+  &:hover,
+  &:focus {
+    background-color: #0056b3; /* Darken on hover */
+    border-color: #0056b3;
+    box-shadow: 0px 6px 12px rgba(0, 86, 179, 0.5); /* Enhance shadow */
+  }
+}

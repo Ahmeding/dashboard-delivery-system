@@ -15,10 +15,13 @@ import { delete3 } from '../fn/pieces-de-rechange/delete-3';
 import { Delete3$Params } from '../fn/pieces-de-rechange/delete-3';
 import { findAll3 } from '../fn/pieces-de-rechange/find-all-3';
 import { FindAll3$Params } from '../fn/pieces-de-rechange/find-all-3';
+import { findAllPieceRechanges } from '../fn/pieces-de-rechange/find-all-piece-rechanges';
+import { FindAllPieceRechanges$Params } from '../fn/pieces-de-rechange/find-all-piece-rechanges';
 import { findById3 } from '../fn/pieces-de-rechange/find-by-id-3';
 import { FindById3$Params } from '../fn/pieces-de-rechange/find-by-id-3';
 import { findByReference } from '../fn/pieces-de-rechange/find-by-reference';
 import { FindByReference$Params } from '../fn/pieces-de-rechange/find-by-reference';
+import { PageResponsePieceRechangeDto } from '../models/page-response-piece-rechange-dto';
 import { PieceRechangeDto } from '../models/piece-rechange-dto';
 import { save3 } from '../fn/pieces-de-rechange/save-3';
 import { Save3$Params } from '../fn/pieces-de-rechange/save-3';
@@ -59,7 +62,7 @@ export class PiecesDeRechangeService extends BaseService {
   }
 
   /** Path part for operation `findByReference()` */
-  static readonly FindByReferencePath = '/piecerenchanges/piecerenchange/{ref}';
+  static readonly FindByReferencePath = '/piecerenchanges/piecerenchange/by-ref/{ref}';
 
   /**
    * Rechercher une PieceRechange par reference ! Cette methode permet de chercher une piece de rechange par sa reference
@@ -88,7 +91,7 @@ export class PiecesDeRechangeService extends BaseService {
   }
 
   /** Path part for operation `findById3()` */
-  static readonly FindById3Path = '/piecerenchanges/piecerenchange/{id}';
+  static readonly FindById3Path = '/piecerenchanges/piecerenchange/by-id/{id}';
 
   /**
    * Rechercher une PieceRechange par ID! Cette methode permet de chercher une piece de rechange par son ID
@@ -142,6 +145,31 @@ export class PiecesDeRechangeService extends BaseService {
   findAll3(params?: FindAll3$Params, context?: HttpContext): Observable<any> {
     return this.findAll3$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `findAllPieceRechanges()` */
+  static readonly FindAllPieceRechangesPath = '/piecerenchanges/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllPieceRechanges()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllPieceRechanges$Response(params?: FindAllPieceRechanges$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponsePieceRechangeDto>> {
+    return findAllPieceRechanges(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllPieceRechanges$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllPieceRechanges(params?: FindAllPieceRechanges$Params, context?: HttpContext): Observable<PageResponsePieceRechangeDto> {
+    return this.findAllPieceRechanges$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponsePieceRechangeDto>): PageResponsePieceRechangeDto => r.body)
     );
   }
 

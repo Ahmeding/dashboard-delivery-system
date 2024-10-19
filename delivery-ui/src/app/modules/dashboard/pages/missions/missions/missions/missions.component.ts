@@ -6,6 +6,8 @@ import {FormControl, FormGroup} from "@angular/forms";
 import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
 import {AlertService} from "../../../../../../services/alert/alert.service";
 import {ToastrService} from "ngx-toastr";
+import {ChauffeurDto} from "../../../../../../../ds-api/src/models/chauffeur-dto";
+import {PageResponseMissionDto} from "../../../../../../../ds-api/src/models/page-response-mission-dto";
 
 
 
@@ -16,10 +18,15 @@ import {ToastrService} from "ngx-toastr";
 })
 export class MissionsComponent implements OnInit{
 
-
-  private _mission:MissionDto={}
-
+  //for filter
+  filterForm!: FormGroup;
+  isLoading!: boolean;
   missions:Array<MissionDto>=[]
+  drivers:Array<ChauffeurDto>=[]
+  allMissionsResponse: PageResponseMissionDto={};
+  page: number = 0;
+  size: number = 5;
+
   constructor(
     private router:Router,
     private alertService:AlertService,
@@ -35,10 +42,15 @@ export class MissionsComponent implements OnInit{
 
 
   getAllMission(){
-    this.missionService.findAll4().subscribe({
-      next:(res)=>{
-        console.log(res.length);
-        this.missions=res;
+    this.isLoading=true;
+    this.missionService.findAllMissions({
+      page:this.page,
+      size:this.size
+    }).subscribe({
+      next:(ms)=>{
+        console.log(ms);
+        this.allMissionsResponse=ms;
+        this.isLoading=false;
       },
       error:(err)=>{
         console.log(err);
@@ -57,7 +69,7 @@ export class MissionsComponent implements OnInit{
       this.alertService.alertError('Mission ID is missing. Unable to delete mission.');
       return;
     }
-    this.confirmBoxService.customFour('Are you sure you want to delete this theme?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
+    this.confirmBoxService.customFour('Are you sure you want to delete this mission?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
           this.missionService.delete4({id:mission_id}).subscribe(() => {
@@ -77,7 +89,6 @@ export class MissionsComponent implements OnInit{
       this.router.navigate([`details/${id}`]);
   }
   //for pagination
-  page: number = 1;
   position: number = 1;
   handlePageChange(event: number) {
     this.page  = event
@@ -86,15 +97,40 @@ export class MissionsComponent implements OnInit{
     this.page = parseInt(page, 10) || 1;
 
   }
-
-  //for filter
-  filterForm!: FormGroup;
-
-
-
   private innitForm() {
     this.filterForm = new FormGroup({
       filter: new FormControl(5)
     });
+  }
+
+
+
+  goToFirstPage() {
+    this.page=0;
+    this.getAllMission();
+  }
+
+  goToPreviousPage() {
+    this.page--;
+    this.getAllMission();
+  }
+
+  goToPage(pageIndex: number) {
+    this.page=pageIndex;
+    this.getAllMission();
+  }
+
+  goToNextPage() {
+    this.page++;
+    this.getAllMission();
+  }
+
+
+  get  isLastPage():boolean{
+    return this.page == this.allMissionsResponse.totalPages as number -1;
+  }
+
+  goToLastPage() {
+    this.page=this.allMissionsResponse.totalPages as number -1;
   }
 }

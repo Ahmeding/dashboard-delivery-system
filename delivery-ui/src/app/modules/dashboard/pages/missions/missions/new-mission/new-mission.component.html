@@ -1,127 +1,323 @@
+
 <div class="container-fluid px-4">
+
   <h1 class="mt-4">Ajouter une Mission</h1>
+
   <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item"><a  [routerLink]="['/overview']">Dashboard</a></li>
     <li class="breadcrumb-item "><a [routerLink]="['/missions']">Missions</a></li>
     <li class="breadcrumb-item active">Nouvelle Mission</li>
   </ol>
-  <div class="card mb-4 bg-light">
-    <div class="card-body">
+  <div class="row">
 
-      <form>
-        <!-- ligne 1-->
-        <div class="row mb-3">
-          <div class="col-md-4">
-            <div class="form-floating mb-3 mb-md-0">
-              <input name="titre" class="form-control" id="inputTitre" type="text" placeholder="Titre" />
-              <label for="inputTitre">Titre</label>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-floating mb-3 mb-md-0">
-              <input name="volume" class="form-control" id="inputVolume" type="text" placeholder="Volume" />
-              <label for="inputVolume">Volume</label>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-floating mb-3 mb-md-0">
-              <input name="datedebut" class="form-control" id="inputdateDebut" type="text" placeholder="Date de Debut" />
-              <label for="inputdateDebut">Date de Debut</label>
-            </div>
-          </div>
+    <!-- Area Chart -->
+    <div class="col-xl-8 col-lg-7">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div
+          class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Mission Details</h6>
         </div>
+        <!-- Card Body -->
+        <div class="card-body">
+          <form>
+            <!-- ligne 1-->
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <div class="form-floating mb-3 mb-md-0">
+                  <input [(ngModel)]="missionToSave.titre" name="titre" class="form-control" id="inputTitre" type="text" placeholder="Title" />
+                  <label for="inputTitre">Title<sup class="text-danger">*</sup></label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-floating mb-3 mb-md-0">
+                  <input [(ngModel)]="missionToSave.volume" name="volume" class="form-control" id="inputVolume" type="number" placeholder="volume" />
+                  <label for="inputVolume">Volume(m<sup>3</sup>)<sup class="text-danger">*</sup></label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-floating mb-3 mb-md-0">
+                  <input [(ngModel)]="missionToSave.dateDebut" name="datedebut" class="form-control" id="inputdateDebut" type="datetime-local" placeholder="Date de Debut" />
+                  <label for="inputdateDebut">Date de Debut<sup class="text-danger">*</sup></label>
+                </div>
+              </div>
+            </div>
+            <!-- ligne 2
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <div class="form-floating mb-3 mb-md-0">
+                  <input name="prixHT" class="form-control" id="inputPrixHT" type="text" placeholder="Prix HT" />
+                  <label for="inputPrixHT">Prix HT</label>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-floating mb-3">
+                  <input name="tva" class="form-control" id="inputTva" type="text" placeholder="Tva" />
+                  <label for="inputTva">Tva</label>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-floating mb-3 mb-md-0">
+                  <input name="PrixTTC" class="form-control" id="inputPrixTTC" type="text" placeholder="Prix TTC" />
+                  <label for="inputPrixTTC">Prix TTC</label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-floating mb-3 mb-md-0">
+                  <input name="fraisChauffeur" class="form-control" id="inputfraisChauffeur" type="text" placeholder="Frais Chauffeur" />
+                  <label for="inputfraisChauffeur">Frais Chauffeur</label>
+                </div>
+              </div>
+            </div>
+            -->
+            <div class="row mb-1">
+              <div class="col"><h5 class="form-label text-primary">Add Stage(s)<sup class="text-danger">*</sup></h5></div>
+            </div>
 
-        <!-- ligne 2-->
-        <div class="row mb-3">
-          <div class="col-md-3">
-            <div class="form-floating mb-3 mb-md-0">
-              <input name="prixHT" class="form-control" id="inputPrixHT" type="text" placeholder="Prix HT" />
-              <label for="inputPrixHT">Prix HT</label>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <div class="form-floating mb-3">
-              <input name="tva" class="form-control" id="inputTva" type="text" placeholder="Tva" />
-              <label for="inputTva">Tva</label>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-floating mb-3 mb-md-0">
-              <input name="PrixTTC" class="form-control" id="inputPrixTTC" type="text" placeholder="Prix TTC" />
-              <label for="inputPrixTTC">Prix TTC</label>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-floating mb-3 mb-md-0">
-              <input name="fraisChauffeur" class="form-control" id="inputfraisChauffeur" type="text" placeholder="Frais Chauffeur" />
-              <label for="inputfraisChauffeur">Frais Chauffeur</label>
-            </div>
-          </div>
-        </div>
-        <!-- ligne 4-->
-        <div class="row mb-3">
-          <div class="col-md-4">
-            <div class="form-floating mb-3 mb-md-0">
-              <input name="Vehicule" class="form-control" id="inputVehicule" type="text" placeholder="Vehicule" />
-              <label for="inputVehicule">Vehicule</label>
-            </div>
-          </div>
+            <!-- ligne 2-->
+            <form [formGroup]="etapeForm">
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <div class="form-floating mb-3 mb-md-0">
+                  <input formControlName="lieuDepart" name ="" class="form-control" id="inputLieuDepart" type="text" placeholder="Departure" required/>
+                  <label for="inputLieuDepart">Departure<sup class="text-danger">*</sup></label>
+                </div>
+              </div>
 
-          <div class="col-md-4">
-            <div class="form-floating mb-3 mb-md-0">
-              <input name="chauffeur"   class="form-control" id="inputChauffeur" type="password" placeholder="Chauffeur" />
-              <label for="inputChauffeur">Chauffeur</label>
+              <div class="col-md-4">
+                <div class="form-floating mb-3 mb-md-0">
+                  <input formControlName="lieuArrivee" name="" class="form-control" id="inputLieuArrivee" type="text" placeholder="Destination" required />
+                  <label for="inputLieuArrivee">Destination<sup class="text-danger">*</sup></label>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-floating mb-3 mb-md-0">
+                  <input formControlName="dateDepart" name="" class="form-control" id="inputdateDepart" type="datetime-local" placeholder="start date" required />
+                  <label for="inputdateDepart">>Departure Date<sup class="text-danger">*</sup></label>
+                </div>
+              </div>
+              <div class="col-md-1">
+                <button class="btn btn-info" [disabled]="etapeForm.invalid || isFormEtapeLoading" (click)="addEtape()">
+                  <i class="fas fa-plus btn-success"></i></button>
+              </div>
             </div>
-          </div>
+            <div class="row mb-2 bg-gray-200" *ngFor="let etape of etapeDtos; let i = index">
+                <div class="col-md-3">{{etape.lieuDepart}}</div>
+                <div class="col-md-3">{{etape.lieuArrivee}}</div>
+                <div class="col-md-3">{{etape.dateDepart}}</div>
+                <div class="col-md-3"><i class="fas fa fa-trash text-danger" (click)="deleteEtape(i)"></i></div>
+            </div>
+            </form>
+            <!-- ligne 4-->
+            <form (ngSubmit)="onsubmitmit()">
+              <div class="row g-3 mb-3">
+                <!-- Vehicle Select Column -->
+                <div class=" col-12 col-md-4">
+                  <label for="vehicleSelect" class="form-label text-primary">Select Vehicle<sup class="text-danger">*</sup></label>
+                  <select id="vehicleSelect" [(ngModel)]="selectedVehicle" name="vehicle" class="form-select">
+                    <option [ngValue]="undefined" disabled>Choose a vehicle</option>
+                    <option *ngFor="let vehicle of availableVehicles" [ngValue]="vehicle">
+                      {{ vehicle.immatriculation }} {{ vehicle.marque }} / {{ vehicle.volume }}
+                    </option>
+                  </select>
+                </div>
 
-          <div class="col-md-4">
-            <div class="form-floating mb-3 mb-md-0">
-              <input name="etatmission" class="form-control" id="inputEtatMission" type="text" placeholder="Etat mission" />
-              <label for="inputEtatMission">Etat de Mission</label>
-            </div>
-          </div>
-        </div>
-        <!-- ligne 6-->
+                <!-- Driver Select Column -->
+                <div class="col-12 col-md-4">
+                  <label class="form-label text-primary">Select Drivers (max 2)<sup class="text-danger">*</sup></label>
+                  <select [(ngModel)]="selectedDrivers" name="drivers" class="form-select" multiple size="2">
+                    <option *ngFor="let driver of availableDrivers" [ngValue]="driver">
+                      {{ driver.nom }} {{ driver.prenom }}
+                    </option>
+                  </select>
+                </div>
 
-        <!-- ligne 2-->
-        <div class="row mb-3">
-          <div class="col-md-4">
-            <div class="form-floating mb-3 mb-md-0">
-              <input name="KilometrageInit" class="form-control" id="inputKilometrageInit" type="text" placeholder="Kilometrage Debut" />
-              <label for="inputKilometrageInit">Kilometrage Debut</label>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-floating mb-3 mb-md-0">
-              <input name="Kilometragefin" class="form-control" id="inputKilometragefin" type="text" placeholder="Kilometrage Fin" />
-              <label for="inputKilometragefin">Kilometrage Fin</label>
-            </div>
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-8">
-            <table class="table bg-white">
-              <thead class="small">
-              <th> <input class="form-control" name="depart" type="text" placeholder="Depart" /></th>
-              <th><input class="form-control" name="destination" type="text" placeholder="Destination" /></th>
-              <th><input class="form-control" name="destination" type="text" placeholder="Destination" /></th>
-              <th><button class="btn btn-info">Ajouter Etape</button></th>
-              </thead>
-              <tbody>
-              <tr><td>Paris</td><td>Vienne</td><td>12/05/2024 7h00</td><td></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+                <!-- Add Vehicle Button Column -->
+                <div class="col-12 col-md-4 d-flex align-items-center">
+                  <button type="button" class="btn btn-primary w-100" (click)="addVehicle()">Add Vehicle</button>
+                </div>
+              </div>
 
-        <!-- ligne 7-->
-        <div class="mt-4 mb-0 align-content-center">
-          <div class="col-md-3 ">
-            <a class="btn btn-primary btn-block" >Enregistrer</a></div>
+              <!-- Selected Vehicles and Drivers -->
+              <div class="mt-3">
+                <h5 class="text-primary">Selected Vehicles and Drivers</h5>
+                <div *ngFor="let v of selectedVehicles; let i = index" class="row mb-3 bg-gray-200 p-3 justify-content-center">
+                  <!-- Vehicle Column -->
+                  <div class="col-12 col-md-4 d-flex justify-content-center">
+                    <div class="license-plate-container text-center">
+                      <img src="assets/images/immat.png" alt="License Plate" class="license-plate-bg img-fluid">
+                      <div class="registration-number">
+                        {{v.vehicleDto.immatriculation}}
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Drivers Column -->
+                  <div class="col-12 col-md-6 d-flex justify-content-center">
+                    <div class="d-flex justify-content-around flex-wrap">
+                      <div class="d-flex align-items-center mr-3" *ngFor="let selectedD of v.chauffeursVehicleDto">
+                        <img src="assets/images/undraw_profile.svg" alt="Profile" width="40" class="img-fluid me-2"> <!-- Add margin end -->
+                        <div class="text-center">
+                          {{ selectedD.chauffeurDto?.nom}} {{ selectedD.chauffeurDto?.prenom }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Remove Vehicle Icon Column -->
+                  <div class="col-12 col-md-2 d-flex justify-content-center align-items-center">
+                    <span (click)="removeVehicle(i)">
+                      <i class="fas fa-trash text-danger"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+
+            <div class="row mb-3">
+              <div class="col-md-12">
+                <div class="form-floating-comment mb-3 mb-md-0">
+                  <textarea [(ngModel)]="missionToSave.commentaire" name="commentaire" class="form-control" id="inputComment" placeholder="Comment" rows="5"></textarea>
+                </div>
+              </div>
+            </div>
+            <!-- ligne 7-->
+            <div class="mt-4 mb-0 align-content-center">
+              <div class="col-md-3 ">
+                <a class="btn btn-primary btn-block" (click)="saveMission()" >Enregistrer</a></div>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
+    </div>
+
+    <!-- Pie Chart -->
+    <div class="col-xl-4 col-lg-5">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div
+          class="card-header py-1 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Vehicules & Drivers</h6>
+
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+          <table class="table table-hover">
+            <thead>
+            <th>Departure</th>
+            <th>Destination</th>
+            <th>Date</th>
+            </thead>
+            <tbody>
+            <tr *ngFor="let e of etapeDtos">
+              <td>{{e.lieuDepart}}</td>
+              <td>{{e.lieuArrivee}}</td>
+              <td>{{e.dateDepart}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
+</div>
+<!-- Modal Etape -->
+<div class="modal fade" id="etapeModal" tabindex="-1" aria-labelledby="etapeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="etapeModalLabel">Add Stage</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
 
+        <!--<form [formGroup]="etapeForm">
+          <table class="table bg-white">
+            <thead class="small">
+            <th>
+              <div class="form-floating mb-3 mb-md-0" [ngClass]="{'input-error': isDepartureInvalid}">
+                <input  formControlName="departure" name ="" class="form-control" id="inputDeparture" type="text" placeholder="Departure" required/>
+                <label for="inputDeparture">Departure</label>
+              </div>
+            </th>
+            <th>
+              <div class="form-floating mb-3 mb-md-0"  [ngClass]="{'input-error': isDestinationInvalid}">
+                <input  formControlName="destination" name="destination" class="form-control" id="inputDestination" type="text" placeholder="Destination" required />
+                <label for="inputDestination">Destination</label>
+              </div>
+            </th>
+            <th>
+              <div class="form-floating mb-3 mb-md-0"  [ngClass]="{'input-error': isDateInvalid}">
+                <input  formControlName="dateDeparture" name="date" class="form-control" id="inputDateTime" type="datetime-local" placeholder="date" required />
+              </div>
+            </th>
+            <th><button class="btn btn-info" [disabled]="etapeForm.invalid || isFormEtapeLoading" (click)="addEtape()">
+              <i class="fas fa-plus btn-success"></i></button></th>
+            </thead>
+            <tbody>
+            <tr *ngFor="let etape of etapeDtos; let i = index">
+              <td>{{ etape.lieuDepart }}</td>
+              <td>{{ etape.lieuArrivee }}</td>
+              <td>{{ etape.dateDepart | date:'short' }}</td>
+              <td><i class="fas fa fa-trash text-danger" (click)="deleteEtape(i)"></i></td>
+            </tr>
+            </tbody>
+          </table>
 
+        </form>-->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Driver-->
+<div class="modal fade" id="driverModal" tabindex="-1" aria-labelledby="vehicleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="vehicleModalLabel">Add Drivers for the Vehicle</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+<!--
+        <form>
+          <table class="table table-hover">
+            <thead>
+            <th colspan="2">
+              <div class="mb-3 mb-md-0">
+              <select [(ngModel)]="selectedDriverVehicule" (change)="onDriverSelect($event)" name="selectDriver">
+                <option disabled>Select a Driver</option>
+                <option *ngFor="let d of availableDrivers" [ngValue]="d">{{d.nom}} {{d.prenom}}</option>
+              </select>
+              </div>
+            </th>
+            <th><button class="btn btn-info" (click)="addDriver()">
+              <i class="fas fa-plus btn-success"></i></button>
+            </th>
+            </thead>
+            <tbody>
+            <tr *ngFor="let selectedDriverTemp of selectedDriversTemp; let i = index">
+              <td>{{ selectedDriverTemp.nom }}</td>
+              <td>{{ selectedDriverTemp.prenom }}</td>
+              <td><i class="fas fa fa-trash text-danger" (click)="deleteDriversFromTemp(i)"></i></td>
+            </tr>
+            </tbody>
+          </table>
+
+        </form>-->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>

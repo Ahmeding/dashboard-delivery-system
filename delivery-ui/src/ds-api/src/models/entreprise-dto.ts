@@ -6,8 +6,12 @@ import { AdresseDto } from '../models/adresse-dto';
 export interface EntrepriseDto {
   adresseDto?: AdresseDto;
   adresseEmail?: string;
+  createdAt?: string;
+  createdBy?: number;
   id?: number;
+  lastModifiedBy?: number;
   numFiscla?: string;
   numtel?: string;
   raisonSocial?: string;
+  updatedAt?: string;
 }

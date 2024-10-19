@@ -9,12 +9,17 @@ export interface ClientDto {
   adresseDto?: AdresseDto;
   adresseEmail?: string;
   commandeClientsDtos?: Array<CommandeClientDto>;
+  createdAt?: string;
+  createdBy?: number;
   description?: string;
   devisDtos?: Array<DevisDto>;
   id?: number;
+  isActive?: boolean;
+  lastModifiedBy?: number;
   nom?: string;
   numTel?: string;
   prenom?: string;
   siren?: string;
   siret?: string;
+  updatedAt?: string;
 }

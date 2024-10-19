@@ -1,6 +1,8 @@
 package com.hitecart.deliverysystem.controllers.api;
 
+import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.ChauffeurDto;
+import com.hitecart.deliverysystem.dto.ClientDto;
 import com.hitecart.deliverysystem.dto.UtilisateurDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -121,4 +123,11 @@ public interface UtilisateurApi {
             }
     )
     void delete(@PathVariable("id") Integer id);
+
+    @GetMapping(value =FIND_ALL_UTILISATEUR_PAGEABLE_ENDPOINT,
+            produces =MediaType.APPLICATION_JSON_VALUE  )
+    ResponseEntity<PageResponse<UtilisateurDto>> findAllUtilisateurs(
+            @RequestParam(name = "page",defaultValue = "1", required = false) int page,
+            @RequestParam(name = "size",defaultValue = "10", required = false) int size
+    );
 }

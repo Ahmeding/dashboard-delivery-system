@@ -24,9 +24,13 @@ public class ChauffeurValidator {
             errors.add("Veuillez renseigner le RIB du chauffeur !");
             errors.add("Veuillez renseigner le Type de permis du chauffeur !");
             errors.add("Veuillez renseigner la date de naissance du chauffeur !");
+            errors.add("Veuillez renseigner le numero de permis de conduire du chauffeur !");
             errors.addAll(AdresseValidator.validate(null));
             return errors;
         }
+       if(!StringUtils.hasLength(dto.getDrivinglicenseNbr())){
+           errors.add("Veuillez renseigner le numero de permis de conduire du chauffeur !");
+       }
        if(!StringUtils.hasLength(dto.getNom())){
            errors.add("Veuillez renseigner le nom du chauffeur !");
        }
