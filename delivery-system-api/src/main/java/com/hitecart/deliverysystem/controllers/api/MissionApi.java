@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -166,4 +167,12 @@ public interface MissionApi {
             @RequestParam(name = "page",defaultValue = "1", required = false) int page,
             @RequestParam(name = "size",defaultValue = "10", required = false) int size
     );
+
+    @GetMapping(value =FIND_ALL_MISSION_PAGEABLE_BY_DRIVERID_ENDPOINT ,
+            produces =MediaType.APPLICATION_JSON_VALUE )
+    ResponseEntity<PageResponse<MissionDto>> findAllMissionsByDriverId(
+       @RequestParam(name = "page",defaultValue = "1",required = false)int page,
+       @RequestParam(name = "size",defaultValue = "10",required = false)int size,
+       Authentication connectedUser
+    ) ;
 }

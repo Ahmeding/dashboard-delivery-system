@@ -1,0 +1,23 @@
+<div class="stat-card" [ngClass]="'card-' + data.type">
+  <div class="stat-content">
+    <div class="stat-header">
+      <h6 class="stat-title">{{data.title}}</h6>
+      <div class="stat-icon">
+        <i [class]="'bi ' + data.icon"></i>
+      </div>
+    </div>
+
+    <div class="stat-body">
+      <h3 class="stat-value">{{data.value}}</h3>
+      <div class="stat-trend" [ngClass]="{'positive': isTrendPositive(), 'negative': !isTrendPositive()}">
+        <i [class]="'bi ' + (isTrendPositive() ? 'bi-arrow-up' : 'bi-arrow-down')"></i>
+        <span>{{data.trend}}</span>
+        <span class="trend-label">vs last month</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-background">
+    <i [class]="'bi ' + data.icon"></i>
+  </div>
+</div>

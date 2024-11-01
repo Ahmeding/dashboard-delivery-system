@@ -8,14 +8,18 @@ import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.exception.InvalidOperationException;
 import com.hitecart.deliverysystem.model.Devis;
+import com.hitecart.deliverysystem.model.Mission;
 import com.hitecart.deliverysystem.model.PieceRechange;
 import com.hitecart.deliverysystem.model.Reparation;
 import com.hitecart.deliverysystem.repository.PieceRechangeRepository;
 import com.hitecart.deliverysystem.repository.ReparationRepository;
+import com.hitecart.deliverysystem.services.ChauffeurService;
 import com.hitecart.deliverysystem.services.ReparationService;
+import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.services.VehiculeService;
 import com.hitecart.deliverysystem.utils.Constants;
 import com.hitecart.deliverysystem.validator.ReparationValidator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,6 +39,7 @@ import static com.hitecart.deliverysystem.utils.Constants.*;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ReparationServiceImpl implements ReparationService {
 
 
@@ -42,14 +47,7 @@ public class ReparationServiceImpl implements ReparationService {
 
     private final VehiculeService vehiculeService;
     private final PieceRechangeRepository pieceRechangeRepository;
-
-
-    @Autowired
-    public ReparationServiceImpl(PieceRechangeRepository pieceRechangeRepository, ReparationRepository reparationRepository, VehiculeService vehiculeService) {
-        this.pieceRechangeRepository = pieceRechangeRepository;
-        this.reparationRepository = reparationRepository;
-        this.vehiculeService = vehiculeService;
-    }
+    private final UtilisateurService utilisateurServiceImpl;
 
     @Override
     public ReparationDto save(ReparationDto reparationDto) {
@@ -86,11 +84,14 @@ public class ReparationServiceImpl implements ReparationService {
                 ErrorCodes.REPARATION_NOT_VALID_OPERATION);
         Optional<Reparation> reparationOp = reparationRepository.findById(id);
 
-        return Optional.of(ReparationDto.fromEntity(reparationOp.get()))
+        ReparationDto reparationDto = Optional.of(ReparationDto.fromEntity(reparationOp.get()))
                 .orElseThrow(
                         ()->new EntityNotFoundException("Aucune Reparation avec l'id :"
                                 + id +"n'a ete trouvé dans la base deonnée",ErrorCodes.REPARATION_NOT_FOUND)
                 );
+
+        setCreatedByUser(reparationDto);
+        return reparationDto;
     }
 
     @Override
@@ -103,14 +104,15 @@ public class ReparationServiceImpl implements ReparationService {
         List<Reparation> reparations = reparationRepository.findByDateDebut(dateRep);
 
         return reparations.stream()
-                .map(ReparationDto::fromEntity)
+                .map(this::updatedResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<ReparationDto> findAll() {
         return reparationRepository.findAll().stream()
-                .map(ReparationDto::fromEntity)
+                //.map(ReparationDto::fromEntity)
+                .map(this::updatedResponse)
                 .collect(Collectors.toList());
     }
 
@@ -135,7 +137,10 @@ public class ReparationServiceImpl implements ReparationService {
     public PageResponse<ReparationDto> findAllRepairs(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<Reparation> reparations= reparationRepository.findAllRepairs(pageable);
-        List<ReparationDto> reparationDtos = reparations.stream().map(ReparationDto::fromEntity).toList();
+        List<ReparationDto> reparationDtos = reparations.stream()
+               // .map(ReparationDto::fromEntity)
+                .map(this::updatedResponse)
+                .toList();
 
         return new PageResponse<>(
                 reparationDtos,
@@ -156,4 +161,16 @@ public class ReparationServiceImpl implements ReparationService {
         }
     }
 
+    private UtilisateurDto getCreatedBy(Integer userid) {
+        return utilisateurServiceImpl.findById(userid);
+    }
+    private void setCreatedByUser(ReparationDto response){
+        UtilisateurDto uDto = getCreatedBy(response.getCreatedBy());
+        response.setCreatedByUser(CreatedByUserDto.builder().id(uDto.getId()).fullname(uDto.getFullname()).build());
+    }
+    private ReparationDto updatedResponse(Reparation reparation) {
+        ReparationDto reparationDto=ReparationDto.fromEntity(reparation);
+        setCreatedByUser(reparationDto);
+        return reparationDto;
+    }
 }

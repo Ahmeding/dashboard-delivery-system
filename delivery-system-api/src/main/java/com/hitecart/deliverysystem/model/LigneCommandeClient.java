@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 @Table(name = "lignecommandeclient")
 public class LigneCommandeClient extends  AbstractEntity{
 
+
     @Column(name = "quantite")
     private BigDecimal quantite;
     @Column(name = "prixunitaire")
@@ -25,8 +26,8 @@ public class LigneCommandeClient extends  AbstractEntity{
     @Column(name = "tva")
     private BigDecimal tva;
     @ManyToOne
-    @JoinColumn(name = "idmission")
-    private Mission mission;
+    @JoinColumn(name = "servdelivery_id")
+    private ServiceDelivery serviceDelivery;
     @ManyToOne
     @JoinColumn(name = "idcommandeclient")
     private CommandeClient comamndeClient;

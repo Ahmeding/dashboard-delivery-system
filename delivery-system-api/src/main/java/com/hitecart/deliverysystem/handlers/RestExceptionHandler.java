@@ -17,12 +17,24 @@ import java.util.Collections;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 
+    @ExceptionHandler(DuplicateDrivingLicenseException.class)
+    public ResponseEntity<ErrorDto> handleException(DuplicateDrivingLicenseException exception,WebRequest request) {
+        final HttpStatus DuplicateDLException = HttpStatus.CONFLICT;
+        final ErrorDto errorDto = ErrorDto.builder()
+                .errorCodes(ErrorCodes.DUPLICATE_DRIVING_LICENSE_EXCEPTION)
+                .msg(exception.getMessage())
+                .errors(Collections.singletonList(exception.getMessage()))
+                .httpCode(DuplicateDLException.value())
+                .build();
+        return new ResponseEntity<>(errorDto, DuplicateDLException);
+    }
+
     @ExceptionHandler(SQLHandlerException.class)
     public ResponseEntity<ErrorDto> handleException(SQLException exception,WebRequest request) {
 
         final HttpStatus sqlException = HttpStatus.INTERNAL_SERVER_ERROR;
         final ErrorDto errorDto = ErrorDto.builder()
-                .errorCodes(ErrorCodes.DB_CONNECTION_ISSUES)
+                .errorCodes(ErrorCodes.DUPLICATE_DRIVING_LICENSE_EXCEPTION)
                 .msg(exception.getMessage())
                 .httpCode(sqlException.value())
                 .build();

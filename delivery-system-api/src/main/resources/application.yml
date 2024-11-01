@@ -6,17 +6,24 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database   : MYSQL
-    show-sql: false
+    show-sql: true
     hibernate:
       ddl:-auto: update
-      dialect: org.hibernate.dialect.MySQL8Dialect
     properties:
+      dialect: org.hibernate.dialect.MySQL8Dialect
       hibernate:
         session_factory:
           statement_inspector: com.hitecart.deliverysystem.interceptor.Interceptor
   jackson:
     serialization.write-date-keys-as-timestamps: false
 
+#  flyway:
+#    baseline-on-migrate: true
+#    enabled: true
+#    user: root
+#    password:
+#    baseline-description: "init"
+#    baseline-version: 0
 server:
   port: 8080
   servlet:
@@ -26,5 +33,3 @@ flickr:
   apiSecret: 44cb0abb59042a17
   appKey: 72157720904761931-ed09cbdb9cd327d0
   appSecret: e4d84547efa4c530
-
-

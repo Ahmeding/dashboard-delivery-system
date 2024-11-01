@@ -26,6 +26,8 @@ public class FraisMissionDto{
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;
+    private CreatedByUserDto createdByUser;
+
 
     public static FraisMissionDto fromEntity(FraisMission fraisMission){
         if(fraisMission ==null){

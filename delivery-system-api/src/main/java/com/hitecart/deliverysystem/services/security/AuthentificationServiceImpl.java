@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.services.security;
 
+import com.flickr4java.flickr.auth.Auth;
 import com.hitecart.deliverysystem.dto.*;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
@@ -53,14 +54,21 @@ public class AuthentificationServiceImpl implements AuthentificationService{
                 "Utilisateur n'est valid",
                 "l'utilisateur n'est pas valid");
 
+            Integer createdBy=-1;
+        if(utilisateurRepository.findAll().isEmpty()){
+            createdBy=0;
+        }
+
+
         var userToRegister = Utilisateur.builder()
-                .nom(request.getLastName())
-                .prenom(request.getFirstName())
+                .lastname(request.getLastName())
+                .firstname(request.getFirstName())
                 .email(request.getEmail())
-                .motDePasse(passwordEncoder.encode(request.getPassword()))
+                .password(passwordEncoder.encode(request.getPassword()))
                 .accountLocked(false)
                 .enabled(true)
                 .roles(List.of(userRole))
+                .createdBy(createdBy)
                 .build();
         return UtilisateurDto.fromEntity(utilisateurRepository.save(userToRegister));
     }

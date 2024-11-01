@@ -15,8 +15,10 @@ import com.hitecart.deliverysystem.repository.DevisRepository;
 import com.hitecart.deliverysystem.repository.LigneDevisRepository;
 import com.hitecart.deliverysystem.services.ClientService;
 import com.hitecart.deliverysystem.services.DevisService;
+import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.utils.CalculeTva;
 import com.hitecart.deliverysystem.validator.DevisValidator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,17 +33,14 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class DevisServiceImpl implements DevisService {
 
-    private DevisRepository devisRepository;
-    private LigneDevisRepository ligneDevisRepository;
-    private ClientService clientService;
+    private final DevisRepository devisRepository;
+    private final LigneDevisRepository ligneDevisRepository;
+    private final ClientService clientService;
+    private final UtilisateurService utilisateurServiceImpl;
 
-    public DevisServiceImpl(DevisRepository devisRepository, LigneDevisRepository ligneDevisRepository,ClientService clientService) {
-        this.devisRepository = devisRepository;
-        this.ligneDevisRepository = ligneDevisRepository;
-        this.clientService = clientService;
-    }
 
     @Override
     public DevisDto save(DevisDto dto) {
@@ -93,10 +92,12 @@ public class DevisServiceImpl implements DevisService {
                 "Le parametre ID Commande Client est null",
                 "Impossible de trouver un devis avec un ID null",ErrorCodes.COMMANDECLIENT_NOT_VALID_OPERATION);
         Optional<Devis> devisOp= devisRepository.findById(id);
-        return Optional.of(DevisDtoResponse.fromEntity(devisOp.get()))
+        DevisDtoResponse devisDtoResponse = Optional.of(DevisDtoResponse.fromEntity(devisOp.get()))
                 .orElseThrow(()->new EntityNotFoundException( "Opps! Aucune Commande Client  avec l'id :"
                         + id +"n'a ete trouvé dans la base deonnée"
                         ,ErrorCodes.COMMANDECLIENT_NOT_FOUND));
+        setCreatedByUser(devisDtoResponse);
+        return devisDtoResponse;
     }
 
     @Override
@@ -107,12 +108,13 @@ public class DevisServiceImpl implements DevisService {
 
         Optional<Devis> devisOp= devisRepository.findDevisByCode(code);
 
-        return Optional.of(DevisDtoResponse.fromEntity(devisOp.get()))
+        DevisDtoResponse devisDtoResponse = Optional.of(DevisDtoResponse.fromEntity(devisOp.get()))
                 .orElseThrow(()->new EntityNotFoundException( "Opps! Aucune Commande Client  avec l'id :"
                         + code +"n'a ete trouvé dans la base deonnée"
                         ,ErrorCodes.DEVIS_NOT_FOUND));
 
-
+        setCreatedByUser(devisDtoResponse);
+        return devisDtoResponse;
     }
 
     @Override
@@ -120,7 +122,7 @@ public class DevisServiceImpl implements DevisService {
 
 
         return devisRepository.findAll().stream()
-                .map(DevisDtoResponse::fromEntity)
+                .map(this::updatedResponse)
                 .collect(Collectors.toList());
     }
 
@@ -141,7 +143,10 @@ public class DevisServiceImpl implements DevisService {
     public PageResponse<DevisDtoResponse> findAllDevis(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<Devis> devis= devisRepository.findAllDevis(pageable);
-        List<DevisDtoResponse> devisDtos = devis.stream().map(DevisDtoResponse::fromEntity).toList();
+        List<DevisDtoResponse> devisDtos = devis.stream()
+                //.map(DevisDtoResponse::fromEntity)
+                .map(this::updatedResponse)
+                .toList();
 
         return new PageResponse<>(
                 devisDtos,
@@ -161,4 +166,20 @@ public class DevisServiceImpl implements DevisService {
             throw new InvalidEntityException(msgException, ErrorCodes.CHAUFFEUR_NOT_VALID,errors);
         }
     }
+
+
+    private UtilisateurDto getCreatedBy(Integer userid) {
+        return utilisateurServiceImpl.findById(userid);
+    }
+    private void setCreatedByUser(DevisDtoResponse response){
+        UtilisateurDto uDto = getCreatedBy(response.getCreatedBy());
+        response.setCreatedByUser(CreatedByUserDto.builder().id(uDto.getId()).fullname(uDto.getFullname()).build());
+    }
+
+    private DevisDtoResponse updatedResponse(Devis devis) {
+        DevisDtoResponse devisDto=DevisDtoResponse.fromEntity(devis);
+        setCreatedByUser(devisDto);
+        return devisDto;
+    }
+
 }

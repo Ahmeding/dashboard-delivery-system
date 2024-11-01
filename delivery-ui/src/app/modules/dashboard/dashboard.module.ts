@@ -32,6 +32,9 @@ import {NgxPaginationModule} from "ngx-pagination";
 import {MissionDetailsComponent} from "./pages/missions/missions/mission-details/mission-details.component";
 import { AddMissionComponent } from './pages/missions/missions/add-mission/add-mission.component';
 import {MultiStepFormComponent} from "./components/multi-step-form/multi-step-form.component";
+import { DriverSpaceComponent } from './pages/drivers/driver-space/driver-space.component';
+import { FcalendarComponent } from './components/fcalendar/fcalendar.component';
+import {FullCalendarModule} from "@fullcalendar/angular";
 
 
 @NgModule({
@@ -65,21 +68,24 @@ import {MultiStepFormComponent} from "./components/multi-step-form/multi-step-fo
     MissionDetailsComponent,
     AddMissionComponent,
     MultiStepFormComponent,
+    DriverSpaceComponent,
+    FcalendarComponent,
   ],
-    imports: [
-        CommonModule,
-        DashboardRoutingModule,
-        FormsModule,
-        ReactiveFormsModule,
-        FormsModule,
-        ReactiveFormsModule,
-        FormsModule,
-        NgForOf,
-        NgIf,
-        ReactiveFormsModule,
-        FormsModule,
-        ReactiveFormsModule,
-        NgxPaginationModule
-    ]
+  imports: [
+    CommonModule,
+    DashboardRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FormsModule,
+    NgForOf,
+    NgIf,
+    ReactiveFormsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxPaginationModule,
+    FullCalendarModule
+  ]
 })
 export class DashboardModule { }

@@ -15,20 +15,20 @@ import { delete5 } from '../fn/frais-de-mission/delete-5';
 import { Delete5$Params } from '../fn/frais-de-mission/delete-5';
 import { deleteLigneFraisMission } from '../fn/frais-de-mission/delete-ligne-frais-mission';
 import { DeleteLigneFraisMission$Params } from '../fn/frais-de-mission/delete-ligne-frais-mission';
-import { findAll5 } from '../fn/frais-de-mission/find-all-5';
-import { FindAll5$Params } from '../fn/frais-de-mission/find-all-5';
+import { findAll6 } from '../fn/frais-de-mission/find-all-6';
+import { FindAll6$Params } from '../fn/frais-de-mission/find-all-6';
 import { findAllFraisMissions } from '../fn/frais-de-mission/find-all-frais-missions';
 import { FindAllFraisMissions$Params } from '../fn/frais-de-mission/find-all-frais-missions';
 import { findAllLignesFraisMissionByFraisMissionId } from '../fn/frais-de-mission/find-all-lignes-frais-mission-by-frais-mission-id';
 import { FindAllLignesFraisMissionByFraisMissionId$Params } from '../fn/frais-de-mission/find-all-lignes-frais-mission-by-frais-mission-id';
-import { findById5 } from '../fn/frais-de-mission/find-by-id-5';
-import { FindById5$Params } from '../fn/frais-de-mission/find-by-id-5';
+import { findById6 } from '../fn/frais-de-mission/find-by-id-6';
+import { FindById6$Params } from '../fn/frais-de-mission/find-by-id-6';
 import { findByIdMission } from '../fn/frais-de-mission/find-by-id-mission';
 import { FindByIdMission$Params } from '../fn/frais-de-mission/find-by-id-mission';
 import { FraisMissionDto } from '../models/frais-mission-dto';
 import { PageResponseFraisMissionDto } from '../models/page-response-frais-mission-dto';
-import { save5 } from '../fn/frais-de-mission/save-5';
-import { Save5$Params } from '../fn/frais-de-mission/save-5';
+import { save6 } from '../fn/frais-de-mission/save-6';
+import { Save6$Params } from '../fn/frais-de-mission/save-6';
 import { updateFraisMission } from '../fn/frais-de-mission/update-frais-mission';
 import { UpdateFraisMission$Params } from '../fn/frais-de-mission/update-frais-mission';
 import { updateQuantite } from '../fn/frais-de-mission/update-quantite';
@@ -40,31 +40,31 @@ export class FraisDeMissionService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `save5()` */
-  static readonly Save5Path = '/fraismissions/create';
+  /** Path part for operation `save6()` */
+  static readonly Save6Path = '/fraismissions/create';
 
   /**
    * Ajouter/Modifier un fraisMission, cette methode permet d'enregistrer ou modifier un fraisMission
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save5()` instead.
+   * To access only the response body, use `save6()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save5$Response(params: Save5$Params, context?: HttpContext): Observable<StrictHttpResponse<FraisMissionDto>> {
-    return save5(this.http, this.rootUrl, params, context);
+  save6$Response(params: Save6$Params, context?: HttpContext): Observable<StrictHttpResponse<FraisMissionDto>> {
+    return save6(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier un fraisMission, cette methode permet d'enregistrer ou modifier un fraisMission
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save5$Response()` instead.
+   * To access the full response (for headers, for example), `save6$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save5(params: Save5$Params, context?: HttpContext): Observable<FraisMissionDto> {
-    return this.save5$Response(params, context).pipe(
+  save6(params: Save6$Params, context?: HttpContext): Observable<FraisMissionDto> {
+    return this.save6$Response(params, context).pipe(
       map((r: StrictHttpResponse<FraisMissionDto>): FraisMissionDto => r.body)
     );
   }
@@ -185,60 +185,60 @@ export class FraisDeMissionService extends BaseService {
     );
   }
 
-  /** Path part for operation `findById5()` */
-  static readonly FindById5Path = '/fraismissions/fraisMission/{id}';
+  /** Path part for operation `findById6()` */
+  static readonly FindById6Path = '/fraismissions/fraisMission/{id}';
 
   /**
    * Rechercher un FraisMission par ID! Cette methode permet de chercher un fraisMission par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById5()` instead.
+   * To access only the response body, use `findById6()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById5$Response(params: FindById5$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findById5(this.http, this.rootUrl, params, context);
+  findById6$Response(params: FindById6$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findById6(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher un FraisMission par ID! Cette methode permet de chercher un fraisMission par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById5$Response()` instead.
+   * To access the full response (for headers, for example), `findById6$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById5(params: FindById5$Params, context?: HttpContext): Observable<any> {
-    return this.findById5$Response(params, context).pipe(
+  findById6(params: FindById6$Params, context?: HttpContext): Observable<any> {
+    return this.findById6$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
 
-  /** Path part for operation `findAll5()` */
-  static readonly FindAll5Path = '/fraismissions/all';
+  /** Path part for operation `findAll6()` */
+  static readonly FindAll6Path = '/fraismissions/all';
 
   /**
    * Rechercher tout les FraisMission! Cette methode permet de retouner tous les fraisMissions
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll5()` instead.
+   * To access only the response body, use `findAll6()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll5$Response(params?: FindAll5$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findAll5(this.http, this.rootUrl, params, context);
+  findAll6$Response(params?: FindAll6$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findAll6(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les FraisMission! Cette methode permet de retouner tous les fraisMissions
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll5$Response()` instead.
+   * To access the full response (for headers, for example), `findAll6$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll5(params?: FindAll5$Params, context?: HttpContext): Observable<any> {
-    return this.findAll5$Response(params, context).pipe(
+  findAll6(params?: FindAll6$Params, context?: HttpContext): Observable<any> {
+    return this.findAll6$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

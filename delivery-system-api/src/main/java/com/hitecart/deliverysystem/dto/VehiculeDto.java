@@ -37,6 +37,7 @@ public class VehiculeDto {
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;
+    private CreatedByUserDto createdByUser;
 
     public static VehiculeDto fromEntity(Vehicule vehicule) {
         if(vehicule==null){

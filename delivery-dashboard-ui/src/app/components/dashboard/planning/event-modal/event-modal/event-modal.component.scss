@@ -1,0 +1,126 @@
+/*
+.modal-header {
+  background-color: var(--primary-color);
+  color: white;
+
+  .btn-close {
+    filter: brightness(0) invert(1);
+  }
+}
+
+.form-control-color {
+  width: 100px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+*/
+.modal-header {
+  background-color: var(--primary-color);
+  color: white;
+  border-bottom: 1px solid var(--border-color);
+
+  .btn-close {
+    filter: brightness(0) invert(1);
+  }
+}
+
+.modal-body {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+
+  .form-label {
+    color: var(--text-color);
+  }
+
+  .form-control {
+    background-color: var(--bg-color);
+    border-color: var(--border-color);
+    color: var(--text-color);
+
+    &:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb), 0.25);
+    }
+
+    &::placeholder {
+      color: var(--text-muted);
+    }
+
+    // Custom styling for date inputs
+    &[type="datetime-local"] {
+      padding: 0.375rem 0.75rem;
+
+      &::-webkit-calendar-picker-indicator {
+        filter: invert(var(--calendar-icon-invert));
+        cursor: pointer;
+      }
+    }
+  }
+
+  .form-control-color {
+    width: 100px;
+    padding: 0.375rem;
+
+    &::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    &::-webkit-color-swatch {
+      border-radius: 4px;
+      border: none;
+    }
+  }
+}
+
+.modal-footer {
+  background-color: var(--bg-color);
+  border-top: 1px solid var(--border-color);
+
+  .btn {
+    padding: 0.5rem 1.5rem;
+
+    &-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+
+      &:hover {
+        background-color: darken(#3498db, 10%);
+        border-color: darken(#3498db, 10%);
+      }
+
+      &:disabled {
+        background-color: rgba(var(--primary-rgb), 0.65);
+        border-color: rgba(var(--primary-rgb), 0.65);
+      }
+    }
+
+    &-danger {
+      background-color: var(--danger-color);
+      border-color: var(--danger-color);
+
+      &:hover {
+        background-color: darken(#e74c3c, 10%);
+        border-color: darken(#e74c3c, 10%);
+      }
+    }
+
+    &-secondary {
+      background-color: transparent;
+      border-color: var(--border-color);
+      color: var(--text-color);
+
+      &:hover {
+        background-color: var(--bg-color);
+        border-color: var(--text-muted);
+      }
+    }
+  }
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}

@@ -8,10 +8,14 @@ import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.exception.InvalidOperationException;
 import com.hitecart.deliverysystem.model.*;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
+import com.hitecart.deliverysystem.model.enums.NotificationStatus;
 import com.hitecart.deliverysystem.repository.*;
 import com.hitecart.deliverysystem.services.IMissionVehicleService;
+import com.hitecart.deliverysystem.services.INotificationService;
 import com.hitecart.deliverysystem.services.MissionService;
+import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.services.security.IChauffeurVehicleService;
+import com.hitecart.deliverysystem.specification.MissionSpecification;
 import com.hitecart.deliverysystem.validator.MissionValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.View;
 
@@ -41,9 +46,11 @@ public class MissionServiceImpl implements MissionService {
     private final MissionVehicleRepository missionVehicleRepository;
     private final MissionRepository missionRepository;
     private final EtapeRepository etapeRepository;
+    private final INotificationService notificationService;
     private final ChauffeurRepository chauffeurRepository;
     private final VehiculeRepository vehiculeRepository;
     private final View error;
+    private final UtilisateurService utilisateurServiceImpl;
 
 
     @Override
@@ -93,7 +100,15 @@ public class MissionServiceImpl implements MissionService {
                     chauffeurVehicleToSave.setChauffeur(ChauffeurDto.toEntity(chauffeurByVehicleDto.getChauffeurDto()));
                     chauffeurVehicleToSave.setMissionVehicle(savedMissionVehicle);
                     chauffeurVehicleToSave.setAssignedAt(LocalDateTime.now());
-                   chauffeurVehicleRepository.save(chauffeurVehicleToSave);
+                    notificationService.sendNotification(
+                            chauffeurVehicleToSave.getChauffeur().getId(),
+                            Notification.builder()
+                                    .title("new mission")
+                                    .message("new mission message")
+                                    .status(NotificationStatus.SEND)
+                                    .build());
+                    chauffeurVehicleRepository.save(chauffeurVehicleToSave);
+
                 }
             }
         }
@@ -169,11 +184,14 @@ public class MissionServiceImpl implements MissionService {
                 ErrorCodes.MISSION_NOT_VALID_OPERATION);
         Optional<Mission> missionOp = missionRepository.findById(id);
 
-        return Optional.of(MissionDto.fromEntity(missionOp.get()))
+        MissionDto missionDto= Optional.of(MissionDto.fromEntity(missionOp.get()))
                 .orElseThrow(
                         () -> new EntityNotFoundException("Aucune Mission avec l'id :"
                                 + id + "n'a ete trouvé dans la base deonnée", ErrorCodes.MISSION_NOT_FOUND)
                 );
+
+        setCreatedByUser(missionDto);
+        return missionDto;
     }
 
     @Override
@@ -185,14 +203,16 @@ public class MissionServiceImpl implements MissionService {
 
 
         return missionRepository.findAllByDateDebut(dateMission).stream()
-                .map(MissionDto::fromEntity)
+                //.map(MissionDto::fromEntity)
+                .map(this::updatedResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<MissionDto> findAll() {
         return missionRepository.findAll().stream()
-                .map(MissionDto::fromEntity)
+                //.map(MissionDto::fromEntity)
+                .map(this::updatedResponse)
                 .collect(Collectors.toList());
     }
 
@@ -227,7 +247,30 @@ public class MissionServiceImpl implements MissionService {
         Page<Mission> missions = missionRepository.findAllMissions(pageable);
 
         List<MissionDto> missionsDto = missions.stream()
-                .map(MissionDto::fromEntity)
+                //.map(MissionDto::fromEntity)
+                .map(this::updatedResponse)
+                .toList();
+
+        return new PageResponse<>(
+                missionsDto,
+                missions.getNumber(),
+                missions.getSize(),
+                missions.getTotalElements(),
+                missions.getTotalPages(),
+                missions.isFirst(),
+                missions.isLast()
+        );
+    }
+
+    @Override
+    public PageResponse<MissionDto> findAllMissionsByDriverId(int page, int size, Authentication connectedUser) {
+            Utilisateur user = ((Utilisateur) connectedUser.getPrincipal());
+            Pageable pageable = PageRequest.of(page,size,Sort.by("createdAt").descending());
+            Page<Mission> missions = missionRepository.findAll(MissionSpecification.withChauffeurId(user.getId()),pageable);
+
+        List<MissionDto> missionsDto = missions.stream()
+                //.map(MissionDto::fromEntity)
+                .map(this::updatedResponse)
                 .toList();
 
         return new PageResponse<>(
@@ -247,5 +290,20 @@ public class MissionServiceImpl implements MissionService {
             log.error(msgLog, dto);
             throw new InvalidEntityException(msgException, errorCodes, errors);
         }
+    }
+
+
+    private UtilisateurDto getCreatedBy(Integer userid) {
+        return utilisateurServiceImpl.findById(userid);
+    }
+    private void setCreatedByUser(MissionDto response){
+        UtilisateurDto uDto = getCreatedBy(response.getCreatedBy());
+        response.setCreatedByUser(CreatedByUserDto.builder().id(uDto.getId()).fullname(uDto.getFullname()).build());
+    }
+
+    private MissionDto updatedResponse(Mission mission) {
+        MissionDto mDto=MissionDto.fromEntity(mission);
+        setCreatedByUser(mDto);
+        return mDto;
     }
 }

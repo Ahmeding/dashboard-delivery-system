@@ -1,0 +1,53 @@
+.navbar {
+  height: 60px;
+  padding: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 250px;
+  z-index: 1030;
+  background-color: var(--card-bg);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  &.sidebar-collapsed {
+    left: 70px;
+  }
+
+  @media (max-width: 991.98px) {
+    left: 0;
+    width: 100%;
+  }
+
+  .sidebar-toggle {
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    color: var(--text-color);
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      color: var(--primary-color);
+    }
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  .container-fluid {
+    padding: 0 1rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+// Remove dropdown arrows
+::ng-deep .dropdown-toggle::after {
+  display: none !important;
+}

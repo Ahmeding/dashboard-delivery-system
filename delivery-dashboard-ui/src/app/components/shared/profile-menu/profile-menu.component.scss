@@ -1,0 +1,80 @@
+.profile-menu {
+  .btn-link {
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 0.5rem;
+
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .user-name {
+    font-size: 0.875rem;
+    color: var(--text-color);
+  }
+
+  .dropdown-menu {
+    width: 240px;
+    padding: 0;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  }
+
+  .dropdown-header {
+    padding: 1rem;
+    background-color: var(--bg-color);
+    border-bottom: 1px solid var(--border-color);
+
+    .user-info {
+      h6 {
+        color: var(--text-color);
+      }
+
+      small {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+      }
+    }
+  }
+
+  .dropdown-item {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    color: var(--text-color);
+
+    i {
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    &:hover {
+      background-color: var(--bg-color);
+
+      i {
+        color: var(--primary-color);
+      }
+    }
+
+    &.text-danger {
+      color: var(--danger-color);
+
+      &:hover {
+        background-color: rgba(var(--danger-rgb), 0.1);
+
+        i {
+          color: var(--danger-color);
+        }
+      }
+    }
+  }
+}

@@ -32,6 +32,7 @@ public class MissionDto {
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;
+    private CreatedByUserDto createdByUser;
 
     private double kmDebut;
     private double kmFin;

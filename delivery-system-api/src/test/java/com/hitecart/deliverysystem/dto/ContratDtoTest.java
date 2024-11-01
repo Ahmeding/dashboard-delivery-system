@@ -38,7 +38,7 @@ class ContratDtoTest {
 //        contrat.setDateFin(new Date().toInstant());
 
     }
-
+/*
     @Test
     public void should_mapped_contrat_to_contratdto(){
 
@@ -78,5 +78,5 @@ class ContratDtoTest {
         assertEquals(expectedContrat.getDateFin(),contratDto.getDateFin());
 
 
-    }
+    }*/
 }

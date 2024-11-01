@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Integer> {
 
-    Optional<Client> findClientByAdresseEmail(String email);
+    Optional<Client> findClientByEmail(String email);
 
     @Query("""
             SELECT client

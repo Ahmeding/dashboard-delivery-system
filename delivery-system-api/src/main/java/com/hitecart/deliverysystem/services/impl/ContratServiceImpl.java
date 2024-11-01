@@ -1,14 +1,17 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.ContratDto;
+import com.hitecart.deliverysystem.dto.*;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
+import com.hitecart.deliverysystem.model.Client;
 import com.hitecart.deliverysystem.model.Contrat;
 import com.hitecart.deliverysystem.repository.ContratRepository;
 import com.hitecart.deliverysystem.services.ContratService;
+import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.validator.ContratValidator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,13 +25,11 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ContratServiceImpl implements ContratService {
     
     private final ContratRepository contratRepository;
-
-    public ContratServiceImpl(ContratRepository contratRepository) {
-        this.contratRepository = contratRepository;
-    }
+    private final UtilisateurService utilisateurServiceImpl;
 
     @Override
     public ContratDto save(ContratDto dto) {
@@ -52,12 +53,15 @@ public class ContratServiceImpl implements ContratService {
 
         Optional<Contrat> contratOp = contratRepository.findById(id);
 
-        return Optional.of(ContratDto.fromEntity(contratOp.get()))
+        ContratDto contratDto =  Optional.of(ContratDto.fromEntity(contratOp.get()))
                 .orElseThrow(
                         ()->new EntityNotFoundException(
                                 "Aucun Contrat avec L'ID "+id+"n'a ete trouvé dans la base des données",
                                 ErrorCodes.CONTRAT_NOT_FOUND)
                 );
+
+        setCreatedByUser(contratDto);
+        return contratDto;
     }
 
     @Override
@@ -70,7 +74,8 @@ public class ContratServiceImpl implements ContratService {
         List<Contrat> contrats = contratRepository.findAllByChauffeur_Id(idChauffeur);
 
         return contrats.stream()
-                .map(ContratDto::fromEntity)
+                //.map(ContratDto::fromEntity)
+                .map(this::updatedResponse)
                 .collect(Collectors.toList());
 
     }
@@ -79,7 +84,8 @@ public class ContratServiceImpl implements ContratService {
     public List<ContratDto> findAll() {
 
         return contratRepository.findAll().stream()
-                .map(ContratDto::fromEntity)
+                //.map(ContratDto::fromEntity)
+                .map(this::updatedResponse)
                 .collect(Collectors.toList());
     }
 
@@ -96,7 +102,10 @@ public class ContratServiceImpl implements ContratService {
         Pageable pageable
                 = PageRequest.of(page,size, Sort.by("createdAt").descending());
         Page<Contrat> contrats = contratRepository.findAllContracts(pageable);
-        List<ContratDto> contratDtos = contrats.stream().map(ContratDto::fromEntity).toList();
+        List<ContratDto> contratDtos = contrats.stream()
+                //.map(ContratDto::fromEntity)
+                .map(this::updatedResponse)
+                .toList();
         return new PageResponse<>(
                 contratDtos,
                 contrats.getNumber(),
@@ -115,4 +124,20 @@ public class ContratServiceImpl implements ContratService {
             throw new InvalidEntityException(msgException, errorCodes,errors);
         }
     }
+
+
+    private UtilisateurDto getCreatedBy(Integer userid) {
+        return utilisateurServiceImpl.findById(userid);
+    }
+    private void setCreatedByUser(ContratDto response){
+        UtilisateurDto uDto = getCreatedBy(response.getCreatedBy());
+        response.setCreatedByUser(CreatedByUserDto.builder().id(uDto.getId()).fullname(uDto.getFullname()).build());
+    }
+
+    private ContratDto updatedResponse(Contrat contrat) {
+        ContratDto contratDto=ContratDto.fromEntity(contrat);
+        setCreatedByUser(contratDto);
+        return contratDto;
+    }
+
 }

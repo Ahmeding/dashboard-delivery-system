@@ -30,6 +30,7 @@ public class DevisDtoResponse{
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;
+    private CreatedByUserDto createdByUser;
 
     public static DevisDtoResponse fromEntity(Devis devis){
         if(devis==null){

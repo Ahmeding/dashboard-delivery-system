@@ -1,21 +1,19 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.DevisDto;
-import com.hitecart.deliverysystem.dto.VehiculeDto;
+import com.hitecart.deliverysystem.dto.*;
 import com.hitecart.deliverysystem.dto.VehiculeDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.exception.InvalidOperationException;
-import com.hitecart.deliverysystem.model.Devis;
-import com.hitecart.deliverysystem.model.PieceRechange;
-import com.hitecart.deliverysystem.model.Reparation;
-import com.hitecart.deliverysystem.model.Vehicule;
+import com.hitecart.deliverysystem.model.*;
 import com.hitecart.deliverysystem.repository.ReparationRepository;
 import com.hitecart.deliverysystem.repository.VehiculeRepository;
+import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.services.VehiculeService;
 import com.hitecart.deliverysystem.validator.VehiculeValidator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,15 +27,13 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class VehiculeServiceImpl implements VehiculeService {
 
     private final VehiculeRepository vehiculeRepository;
     private final ReparationRepository reparationRepository;
+    private final UtilisateurService utilisateurServiceImpl;
 
-    public VehiculeServiceImpl(VehiculeRepository vehiculeRepository, ReparationRepository reparationRepository) {
-        this.vehiculeRepository = vehiculeRepository;
-        this.reparationRepository = reparationRepository;
-    }
 
     @Override
     public VehiculeDto save(VehiculeDto dto) {
@@ -55,11 +51,13 @@ public class VehiculeServiceImpl implements VehiculeService {
                 ErrorCodes.VEHICULE_NOT_VALID_OPERATION);
         Optional<Vehicule> vehiculeOp = vehiculeRepository.findById(id);
 
-        return Optional.of(VehiculeDto.fromEntity(vehiculeOp.get()))
+        VehiculeDto vehiculeDto = Optional.of(VehiculeDto.fromEntity(vehiculeOp.get()))
                 .orElseThrow(
                         ()->new EntityNotFoundException("Aucune Vehicule avec l'id :"
                                 + id +"n'a ete trouvé dans la base deonnée",ErrorCodes.VEHICULE_NOT_FOUND)
                 );
+        setCreatedByUser(vehiculeDto);
+        return vehiculeDto;
     }
 
     @Override
@@ -71,19 +69,21 @@ public class VehiculeServiceImpl implements VehiculeService {
 
         Optional<Vehicule> vehiculeOp = vehiculeRepository.findByImmatriculation(immatriculation);
 
-        return Optional.of(VehiculeDto.fromEntity(vehiculeOp.get()))
+        VehiculeDto vehiculeDto = Optional.of(VehiculeDto.fromEntity(vehiculeOp.get()))
                 .orElseThrow(
                         ()-> new EntityNotFoundException(
                                 "Aucun Vehicule avec l'adresse email <<"+immatriculation+">> n'a ete trouver dans la base de donnée",
                                 ErrorCodes.VEHICULE_NOT_FOUND
                         )
                 );
+        setCreatedByUser(vehiculeDto);
+        return vehiculeDto;
     }
 
     @Override
     public List<VehiculeDto> findAll() {
         return vehiculeRepository.findAll().stream()
-                .map(VehiculeDto::fromEntity)
+                .map(this::updatedResponse)
                 .collect(Collectors.toList());
     }
 
@@ -121,7 +121,9 @@ public class VehiculeServiceImpl implements VehiculeService {
     public PageResponse<VehiculeDto> findAllVehicles(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<Vehicule> vehicules= vehiculeRepository.findAllVehicles(pageable);
-        List<VehiculeDto> vehiculeDtos = vehicules.stream().map(VehiculeDto::fromEntity).toList();
+        List<VehiculeDto> vehiculeDtos = vehicules.stream()
+                .map(this::updatedResponse)
+                .toList();
 
         return new PageResponse<>(
                 vehiculeDtos,
@@ -140,6 +142,20 @@ public class VehiculeServiceImpl implements VehiculeService {
             log.error(msgLog,dto);
             throw new InvalidEntityException(msgException, errorCodes,errors);
         }
+    }
+
+
+    private UtilisateurDto getCreatedBy(Integer userid) {
+        return utilisateurServiceImpl.findById(userid);
+    }
+    private void setCreatedByUser(VehiculeDto response){
+        UtilisateurDto uDto = getCreatedBy(response.getCreatedBy());
+        response.setCreatedByUser(CreatedByUserDto.builder().id(uDto.getId()).fullname(uDto.getFullname()).build());
+    }
+    private VehiculeDto updatedResponse(Vehicule car) {
+        VehiculeDto carDto=VehiculeDto.fromEntity(car);
+        setCreatedByUser(carDto);
+        return carDto;
     }
 }
 

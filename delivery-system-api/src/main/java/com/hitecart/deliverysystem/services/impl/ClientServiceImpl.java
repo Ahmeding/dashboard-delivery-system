@@ -1,7 +1,10 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
+import com.hitecart.deliverysystem.dto.ChauffeurDto;
 import com.hitecart.deliverysystem.dto.ClientDto;
+import com.hitecart.deliverysystem.dto.CreatedByUserDto;
+import com.hitecart.deliverysystem.dto.UtilisateurDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
@@ -12,8 +15,11 @@ import com.hitecart.deliverysystem.model.Devis;
 import com.hitecart.deliverysystem.repository.ClientRepository;
 import com.hitecart.deliverysystem.repository.CommandeClientRepository;
 import com.hitecart.deliverysystem.repository.DevisRepository;
+import com.hitecart.deliverysystem.repository.UtilisateurRepository;
 import com.hitecart.deliverysystem.services.ClientService;
+import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.validator.ClientValidator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,17 +33,14 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
 
-    private ClientRepository clientRepository;
-    private CommandeClientRepository commandeClientRepository;
-    private DevisRepository devisRepository;
+    private final ClientRepository clientRepository;
+    private final CommandeClientRepository commandeClientRepository;
+    private final DevisRepository devisRepository;
+    private final UtilisateurService utilisateurService;
 
-    public ClientServiceImpl(ClientRepository clientRepository, CommandeClientRepository commandeClientRepository, DevisRepository devisRepository) {
-        this.clientRepository = clientRepository;
-        this.commandeClientRepository = commandeClientRepository;
-        this.devisRepository = devisRepository;
-    }
 
     @Override
     public ClientDto save(ClientDto dto) {
@@ -51,7 +54,7 @@ public class ClientServiceImpl implements ClientService {
                 "Impossible de trouver un client avec un ID null",ErrorCodes.CLIENT_NOT_VALID_OPERATION);
 
         Optional<Client> clientOp = clientRepository.findById(id);
-        return Optional.of(
+        ClientDto clientDto = Optional.of(
                 ClientDto.fromEntity(clientOp.get()))
                 .orElseThrow(
                         ()->new EntityNotFoundException(
@@ -59,14 +62,18 @@ public class ClientServiceImpl implements ClientService {
                         + id +"n'a ete trouvé dans la base deonnée",
                         ErrorCodes.CLIENT_NOT_FOUND
                         ));
+
+        setCreatedByUser(clientDto);
+        return clientDto;
     }
 
     @Override
     public ClientDto findByEmail(String email) {
-        CheckParmasUtil.checkStringParma(email,"","",ErrorCodes.CHAUFFEUR_NOT_VALID_OPERATION);
-        Optional<Client> clientOp= clientRepository.findClientByAdresseEmail(email);
+        CheckParmasUtil.checkStringParma(email,"","",ErrorCodes.CLIENT_NOT_VALID_OPERATION);
+        Optional<Client> clientOp= clientRepository.findClientByEmail(email);
 
-        return Optional.of(ClientDto.fromEntity(clientOp.get()))
+
+        ClientDto clientDto =Optional.of(ClientDto.fromEntity(clientOp.get()))
                 .orElseThrow(
                         ()->new EntityNotFoundException(
                                 "Opps! Aucun client avec l'email :"
@@ -74,12 +81,16 @@ public class ClientServiceImpl implements ClientService {
                                 ErrorCodes.CLIENT_NOT_FOUND
                         )
                 );
+
+        setCreatedByUser(clientDto);
+        return clientDto;
     }
 
     @Override
     public List<ClientDto> findAll() {
         return clientRepository.findAll().stream()
-                        .map(ClientDto::fromEntity)
+                        //.map(ClientDto::fromEntity)
+                        .map(this::updatedResponse)
                         .collect(Collectors.toList());
     }
 
@@ -103,7 +114,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientDto updateIsActive(Integer id, Boolean isActive) {
+    public ClientDto updateIsActive(Integer id, Boolean enabled) {
         CheckParmasUtil.checkID(id,"Le parametre ID chauffeur est null",
                 "Impossible de trouver un client avec un ID null",ErrorCodes.CLIENT_NOT_VALID_OPERATION);
 
@@ -112,8 +123,11 @@ public class ClientServiceImpl implements ClientService {
                           + id + "n'a ete trouvé dans la base deonnée",
                   ErrorCodes.CLIENT_NOT_FOUND)
         );
-        clientOp.setIsActive(isActive);
-        return ClientDto.fromEntity(clientRepository.save(clientOp));
+        clientOp.setEnabled(enabled);
+
+        ClientDto clientDto = ClientDto.fromEntity(clientRepository.save(clientOp));
+        setCreatedByUser(clientDto);
+        return clientDto ;
     }
 
     @Override
@@ -123,7 +137,8 @@ public class ClientServiceImpl implements ClientService {
         Page<Client> clients = clientRepository.findAllClients(pageable);
 
         List<ClientDto> clientsDto = clients.stream()
-                .map(ClientDto::fromEntity)
+                //.map(ClientDto::fromEntity)
+                .map(this::updatedResponse)
                 .toList();
 
         return new PageResponse<>(
@@ -137,6 +152,7 @@ public class ClientServiceImpl implements ClientService {
         );
     }
 
+
     private void checkDto(ClientDto dto, String msgLog, String msgException) {
         List<String> errors = ClientValidator.validate(dto);
         if(!errors.isEmpty()){
@@ -144,4 +160,19 @@ public class ClientServiceImpl implements ClientService {
             throw new InvalidEntityException(msgException, ErrorCodes.CHAUFFEUR_NOT_VALID,errors);
         }
     }
+
+    private UtilisateurDto getCreatedBy(Integer userid) {
+        return utilisateurService.findById(userid);
+    }
+    private void setCreatedByUser(ClientDto response){
+        UtilisateurDto uDto = getCreatedBy(response.getCreatedBy());
+        response.setCreatedByUser(CreatedByUserDto.builder().id(uDto.getId()).fullname(uDto.getFullname()).build());
+    }
+
+    private ClientDto updatedResponse(Client client) {
+        ClientDto clientDto=ClientDto.fromEntity(client);
+        setCreatedByUser(clientDto);
+        return clientDto;
+    }
+
 }

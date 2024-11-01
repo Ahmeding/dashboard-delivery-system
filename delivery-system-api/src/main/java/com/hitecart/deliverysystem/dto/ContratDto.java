@@ -22,6 +22,7 @@ public class ContratDto{
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;
+    private CreatedByUserDto createdByUser;
 
     public static ContratDto fromEntity(Contrat contrat) {
         if(contrat ==null){

@@ -1,13 +1,14 @@
 package com.hitecart.deliverysystem.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hitecart.deliverysystem.model.Adresse;
-import com.hitecart.deliverysystem.model.Chauffeur;
-import com.hitecart.deliverysystem.model.Contrat;
-import com.hitecart.deliverysystem.model.Mission;
+import com.hitecart.deliverysystem.model.*;
+import com.hitecart.deliverysystem.model.enums.DrivingLicenseType;
+import com.hitecart.deliverysystem.model.enums.RoleUtilisateur;
 import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -15,29 +16,34 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
+@Getter
+@Setter
 @Builder
 public class ChauffeurDto {
-
     private Integer id;
-    private String nom;
-    private String prenom;
-    private String adresseEmail;
-    private String motDePasse;
-    private String numTel;
-    private LocalDate dateNaissance;
-    private String typePermi;
+    private String firstname;
+    private String lastname;
+    private String phoneNum;
+    private String email;
+    private String password;
+    private AdresseDto address;
+    private LocalDate dateOfBirth;
+    private RoleUtilisateur role;
+    private boolean accountLocked;
+    private boolean enabled;
+    private String drivinglicenseNbr;
+    private DrivingLicenseType drivingLicenseType;
     private String numSecu;
     private String rib;
-    private AdresseDto adresseDto;
-    private String drivinglicenseNbr;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;
     @JsonIgnore
     private List<ContratDto> contratDtos;
-    private Boolean isActive;
+    @JsonIgnore
+    private List<RoleDto> roles;
+    private CreatedByUserDto createdByUser;
 
     public static ChauffeurDto fromEntity(Chauffeur chauffeur) {
         if(chauffeur==null) {
@@ -45,25 +51,35 @@ public class ChauffeurDto {
         }
         return ChauffeurDto.builder()
                 .id(chauffeur.getId())
-                .nom(chauffeur.getNom())
-                .prenom(chauffeur.getPrenom())
-                .adresseEmail(chauffeur.getAdresseEmail())
-                .motDePasse(chauffeur.getMotDePasse())
-                .numTel(chauffeur.getNumTel())
-                .dateNaissance(chauffeur.getDateNaissance())
-                .typePermi(chauffeur.getTypePermi())
+                .firstname(chauffeur.getFirstname())
+                .lastname(chauffeur.getLastname())
+                .email(chauffeur.getEmail())
+                .password(chauffeur.getPassword())
+                .phoneNum(chauffeur.getPhoneNum())
+                .dateOfBirth(chauffeur.getDateOfBirth())
+                .drivinglicenseNbr(chauffeur.getDrivinglicenseNbr())
+                .drivingLicenseType(chauffeur.getDrivinglicenseType())
                 .numSecu(chauffeur.getNumSecu())
                 .rib(chauffeur.getRib())
-                .adresseDto(AdresseDto.fromEntity(chauffeur.getAdresse()))
-                .isActive(chauffeur.getIsActive())
-                .drivinglicenseNbr(chauffeur.getDrivinglicenseNbr())
+                .address(AdresseDto.fromEntity(chauffeur.getAddress()))
+                .enabled(chauffeur.isEnabled())
+                .accountLocked(chauffeur.isAccountLocked())
+                .roles(chauffeur.getRoles()!=null?
+                        chauffeur.getRoles().stream()
+                                .map(RoleDto::fromEntiy)
+                                .collect(Collectors.toList()):null)
+                .createdBy(chauffeur.getCreatedBy())
+                .createdAt(chauffeur.getCreatedAt())
+                .lastModifiedBy(chauffeur.getLastModifiedBy())
+                .updatedAt(chauffeur.getUpdatedAt())
+            .build();
 //                .contratDtos(
 //                        chauffeur.getContrats()!= null?
 //                                chauffeur.getContrats().stream()
 //                                        .map(ContratDto::fromEntity)
 //                                        .collect(Collectors.toList()):null
 //                )
-               .build();
+
     }
 
 
@@ -75,19 +91,23 @@ public class ChauffeurDto {
 
         Chauffeur  chauffeur = new Chauffeur();
                 chauffeur.setId(dto.getId());
-                chauffeur.setNom(dto.getNom());
-                chauffeur.setPrenom(dto.getPrenom());
-                chauffeur.setAdresseEmail(dto.getAdresseEmail());
-                chauffeur.setMotDePasse(dto.getMotDePasse());
-                chauffeur.setNumTel(dto.getNumTel());
-                chauffeur.setDateNaissance(dto.getDateNaissance());
-                chauffeur.setTypePermi(dto.getTypePermi());
+                chauffeur.setFirstname(dto.getFirstname());
+                chauffeur.setLastname(dto.getLastname());
+                chauffeur.setEmail(dto.getEmail());
+                chauffeur.setPassword(dto.getPassword());
+                chauffeur.setPhoneNum(dto.getPhoneNum());
+                chauffeur.setDateOfBirth(dto.getDateOfBirth());
+                chauffeur.setDrivinglicenseNbr(dto.getDrivinglicenseNbr());
+                chauffeur.setDrivinglicenseType(dto.getDrivingLicenseType());
                 chauffeur.setNumSecu(dto.getNumSecu());
                 chauffeur.setRib(dto.getRib());
-                chauffeur.setAdresse(AdresseDto.toEntity(dto.getAdresseDto()));
-                chauffeur.setIsActive(dto.isActive);
-                chauffeur.setDrivinglicenseNbr(dto.getDrivinglicenseNbr());
-        chauffeur.setContrats(
+                chauffeur.setAddress(AdresseDto.toEntity(dto.getAddress()));
+                chauffeur.setEnabled(dto.isEnabled());
+                chauffeur.setAccountLocked(dto.isAccountLocked());
+                chauffeur.setRoles(dto.roles!=null?
+                        dto.roles.stream()
+                        .map(RoleDto::toEntiy).collect(Collectors.toList()):null);
+                chauffeur.setContrats(
                         dto.getContratDtos()!= null?
                                 dto.getContratDtos().stream()
                                         .map(ContratDto::toEntity)

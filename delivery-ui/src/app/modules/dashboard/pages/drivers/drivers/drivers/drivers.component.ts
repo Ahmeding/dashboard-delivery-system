@@ -97,10 +97,10 @@ export class DriversComponent implements OnInit{
     this.isAddNewFormSubmitted = true;
     if(form.valid){
     if(this.driver.id!==null){
-      this.driver.adresseDto=this.address;
-      this.driver.isActive=false;
-      console.log(this.driver.dateNaissance);
-      this.chauffeurService.save11$Response({
+      this.driver.address=this.address;
+      this.driver.enabled=false;
+      console.log(this.driver.dateOfBirth);
+      this.chauffeurService.save12({
         body:this.driver
       }) .subscribe({
         next:()=>{
@@ -114,7 +114,7 @@ export class DriversComponent implements OnInit{
         }
       })
     }else{
-      this.chauffeurService.save11$Response({
+      this.chauffeurService.save12({
         body:this.driver
       }) .subscribe({
         next:()=>{
@@ -137,7 +137,7 @@ export class DriversComponent implements OnInit{
     editForm.form.markAllAsTouched();
 
     if(editForm.valid){
-      this.chauffeurService.save11({
+      this.chauffeurService.save12({
         body:driver
       }).subscribe({
         next:(res)=>{
@@ -160,14 +160,14 @@ export class DriversComponent implements OnInit{
   }
 
   driverEdit(id: number | undefined) {
-    this.chauffeurService.findById11({
+    this.chauffeurService.findById12({
       id:id as number
     }).subscribe({
       next:(res)=>{
         this.selectedDriver=res;
-        const dateString =  JSON.stringify(this.selectedDriver.dateNaissance);
-        this.selectedDriver.dateNaissance=this.convertDate(JSON.parse(dateString))
-        this.selectedAddress=this.selectedDriver.adresseDto
+        const dateString =  JSON.stringify(this.selectedDriver.dateOfBirth);
+        this.selectedDriver.dateOfBirth=this.convertDate(JSON.parse(dateString))
+        this.selectedAddress=this.selectedDriver.address
       },
       error:(err)=>{
         this.alertService.alertError("error no driver with this id : " + id)

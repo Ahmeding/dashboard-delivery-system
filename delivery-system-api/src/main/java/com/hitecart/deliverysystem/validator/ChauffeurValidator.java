@@ -31,19 +31,19 @@ public class ChauffeurValidator {
        if(!StringUtils.hasLength(dto.getDrivinglicenseNbr())){
            errors.add("Veuillez renseigner le numero de permis de conduire du chauffeur !");
        }
-       if(!StringUtils.hasLength(dto.getNom())){
+       if(!StringUtils.hasLength(dto.getLastname())){
            errors.add("Veuillez renseigner le nom du chauffeur !");
        }
-       if(!StringUtils.hasLength(dto.getPrenom())){
+       if(!StringUtils.hasLength(dto.getFirstname())){
            errors.add("Veuillez renseigner le prenom du chauffeur !");
        }
-       if(!StringUtils.hasLength(dto.getNumTel())){
+       if(!StringUtils.hasLength(dto.getPhoneNum())){
            errors.add("Veuillez renseigner le numreo du telephone  du chauffeur !");
        }
-       if(!StringUtils.hasLength(dto.getAdresseEmail())){
+       if(!StringUtils.hasLength(dto.getEmail())){
            errors.add("Veuillez renseigner l'adresse email du chauffeur !");
        }
-       if(!StringUtils.hasLength(dto.getMotDePasse())){
+       if(!StringUtils.hasLength(dto.getPassword())){
            errors.add("Veuillez renseigner le mot de passe du chauffeur !");
        }
        if(!StringUtils.hasLength(dto.getNumSecu())){
@@ -52,10 +52,13 @@ public class ChauffeurValidator {
        if(!StringUtils.hasLength(dto.getRib())){
            errors.add("Veuillez renseigner le RIB du chauffeur !");
        }
-        if(!StringUtils.hasLength(dto.getTypePermi())){
+        if(dto.getDrivingLicenseType()==null){
             errors.add("Veuillez renseigner le Type de permis du chauffeur !");
         }
-        if(dto.getDateNaissance() == null){
+        if(!StringUtils.hasLength(dto.getDrivinglicenseNbr())){
+            errors.add("Veuillez renseigner le numero de permis du chauffeur !");
+        }
+        if(dto.getDateOfBirth() == null){
             errors.add("Veuillez renseigner la date de naissance du chauffeur !");
         }
 

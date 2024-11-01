@@ -16,11 +16,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChauffeurRepository extends JpaRepository<Chauffeur,Integer> {
 
-   Optional<Chauffeur> findChauffeurByAdresseEmail(String email);
-   List<Chauffeur> findAllByIsActive(Boolean isActive);
+   Optional<Chauffeur> findChauffeurByEmail(String email);
+   List<Chauffeur> findAllByEnabled(Boolean isActive);
    @Query("""
             SELECT chauffeur
             FROM Chauffeur chauffeur
           """)
     Page<Chauffeur> findAllChauffeurs(Pageable pageable);
+
+    Chauffeur save(Chauffeur requestChauffeur);
 }

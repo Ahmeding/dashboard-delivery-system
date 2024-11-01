@@ -24,7 +24,9 @@ import static com.hitecart.deliverysystem.utils.Constants.*;
 @RequestMapping(COMMANDE_CLI_ENDPOINT)
 @Tag(name = "Commande client")
 public interface CommandeClientApi {
-    @PostMapping(value = CREATE_COMMANDE_CLI_ENDPOINT,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = CREATE_COMMANDE_CLI_ENDPOINT,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
 
     @Operation(
             description = "Ajouter/Modifier un commande client , cette methode permet " +
@@ -45,8 +47,8 @@ public interface CommandeClientApi {
     ResponseEntity<CommandeClientDto> save(
             @RequestBody CommandeClientDto dto
     );
-    @GetMapping(value = FIND_COMMANDE_CLI_BY_ID_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
-
+    @GetMapping(value = FIND_COMMANDE_CLI_BY_ID_ENDPOINT,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             description = "Rechercher un CommandeClient  par ID! Cette methode permet de chercher un commande client  par son ID",
             responses = {
@@ -92,6 +94,8 @@ public interface CommandeClientApi {
             }
     )
     ResponseEntity<CommandeClientResponse> findByCode(@PathVariable("code") String code);
+
+
     @GetMapping(value = FIND_ALL_COMMANDE_CLI_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             description = "Rechercher tout les CommandeClient ! Cette methode permet de retouner toutes les commandes clients",
@@ -131,6 +135,20 @@ public interface CommandeClientApi {
 
     @GetMapping(value =FIND_ALL_COMMANDECLIENT_PAGEABLE_ENDPOINT ,
             produces =MediaType.APPLICATION_JSON_VALUE )
+
+/*    @Operation(
+            description = "Rechercher tout les CommandeClient ! Cette methode permet de retouner toutes les commandes clients",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "CommandeClients retrouvées ",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = CommandeClientResponse.class))
+                            )
+                    )
+            }
+    )*/
     ResponseEntity<PageResponse<CommandeClientResponse>> findAllCommandeClients(
             @RequestParam(name = "page",defaultValue = "1", required = false) int page,
             @RequestParam(name = "size",defaultValue = "10", required = false) int size

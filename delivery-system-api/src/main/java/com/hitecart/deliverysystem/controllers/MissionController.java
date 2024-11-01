@@ -7,6 +7,7 @@ import com.hitecart.deliverysystem.model.enums.EtatMission;
 import com.hitecart.deliverysystem.services.MissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
@@ -62,5 +63,10 @@ public class MissionController implements MissionApi {
     @Override
     public ResponseEntity<PageResponse<MissionDto>> findAllMissions(int page, int size) {
         return ResponseEntity.ok(missionService.findAllMissions(page,size));
+    }
+
+    @Override
+    public ResponseEntity<PageResponse<MissionDto>> findAllMissionsByDriverId(int page, int size, Authentication connectedUser) {
+        return ResponseEntity.ok(missionService.findAllMissionsByDriverId(page,size,connectedUser));
     }
 }

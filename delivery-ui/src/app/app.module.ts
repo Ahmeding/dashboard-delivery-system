@@ -12,6 +12,7 @@ import {ToastrModule} from "ngx-toastr";
 import {NgxPaginationModule} from "ngx-pagination";
 import {ConfirmBoxConfigModule, NgxAwesomePopupModule} from "@costlydeveloper/ngx-awesome-popup";
 import {NgChartsModule} from "ng2-charts";
+import {FullCalendarModule} from "@fullcalendar/angular";
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import {NgChartsModule} from "ng2-charts";
       NgChartsModule,
       NgxAwesomePopupModule.forRoot(), // Essential, mandatory main module.
       ConfirmBoxConfigModule.forRoot(),
-
+      FullCalendarModule,
       ToastrModule.forRoot({
         progressBar:true,
         closeButton:true,

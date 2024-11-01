@@ -1,0 +1,3 @@
+<button class="theme-toggle" (click)="toggleTheme()">
+  <i class="bi" [ngClass]="(themeService.isDarkTheme$ | async) ? 'bi-moon-fill' : 'bi-sun-fill'"></i>
+</button>

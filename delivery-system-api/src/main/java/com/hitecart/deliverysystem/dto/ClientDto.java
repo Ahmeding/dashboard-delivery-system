@@ -18,23 +18,25 @@ import java.util.stream.Collectors;
 @Setter
 @Builder
 public class ClientDto {
+
     private Integer id;
+    private String firstname;
+    private String lastname;
+    private String phoneNum;
+    private String email;
+    private AdresseDto address;;
+    private boolean accountLocked;
+    private boolean enabled;
+    private String siret;
+    private String siren;
+    private String description;
+    private List<CommandeClientDto> commandeClientsDtos;
+    private List<DevisDto> devisDtos;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;
-    private String nom;
-    private String prenom;
-    private String description;
-    private String numTel;
-    private String adresseEmail;
-    private AdresseDto adresseDto;
-    private String siret;
-    private String siren;
-    private List<CommandeClientDto> commandeClientsDtos;
-    private List<DevisDto> devisDtos;
-    private Boolean isActive;
-
+    private CreatedByUserDto createdByUser;
     public static ClientDto fromEntity(Client client) {
         if(client==null){
 
@@ -43,15 +45,16 @@ public class ClientDto {
         return ClientDto.builder()
 
                 .id(client.getId())
-                .nom(client.getNom())
-                .prenom(client.getPrenom())
+                .firstname(client.getFirstname())
+                .lastname(client.getLastname())
                 .description(client.getDescription())
-                .numTel(client.getNumTel())
-                .adresseEmail(client.getAdresseEmail())
-                .adresseDto(AdresseDto.fromEntity(client.getAdresse()))
+                .phoneNum(client.getPhoneNum())
+                .email(client.getEmail())
+                .address(AdresseDto.fromEntity(client.getAddress()))
                 .siret(client.getSiret())
                 .siren(client.getSiren())
-                .isActive(client.getIsActive())
+                .enabled(client.isEnabled())
+                .accountLocked(client.isAccountLocked())
                 .commandeClientsDtos(
                         client.getCommandeClients()!=null?
                                 client.getCommandeClients().stream()
@@ -79,15 +82,16 @@ public class ClientDto {
         }
         Client client = new Client();
         client.setId(dto.getId());
-        client.setNom(dto.getNom());
-        client.setPrenom(dto.getPrenom());
-        client.setNumTel(dto.getNumTel());
-        client.setAdresseEmail(dto.getAdresseEmail());
+        client.setFirstname(dto.getFirstname());
+        client.setLastname(dto.getLastname());
+        client.setPhoneNum(dto.getPhoneNum());
+        client.setEmail(dto.getEmail());
         client.setDescription(dto.getDescription());
         client.setSiren(dto.getSiren());
         client.setSiret(dto.getSiret());
-        client.setAdresse(AdresseDto.toEntity(dto.getAdresseDto()));
-        client.setIsActive(dto.isActive);
+        client.setAddress(AdresseDto.toEntity(dto.getAddress()));
+        client.setEnabled(dto.isEnabled());
+        client.setAccountLocked(dto.isAccountLocked());
         //Cmd client
         client.setCommandeClients(
                 dto.getCommandeClientsDtos()!=null?

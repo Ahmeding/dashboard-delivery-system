@@ -5,19 +5,17 @@ import com.hitecart.deliverysystem.controllers.api.DevisApi;
 import com.hitecart.deliverysystem.dto.DevisDto;
 import com.hitecart.deliverysystem.dto.DevisDtoResponse;
 import com.hitecart.deliverysystem.services.DevisService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class DevisController implements DevisApi {
 
-    private DevisService devisService;
-
-    public DevisController(DevisService devisService) {
-        this.devisService = devisService;
-    }
+    private final DevisService devisService;
 
     @Override
     public ResponseEntity<DevisDto> save(DevisDto dto) {

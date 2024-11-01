@@ -121,6 +121,7 @@ public interface VehiculeApi {
             }
     )
     void delete(@PathVariable("id") Integer id);
+
     @GetMapping(value =FIND_ALL_VEHICULE_PAGEABLE_ENDPOINT,
             produces =MediaType.APPLICATION_JSON_VALUE  )
     ResponseEntity<PageResponse<VehiculeDto>> findAllVehicules(

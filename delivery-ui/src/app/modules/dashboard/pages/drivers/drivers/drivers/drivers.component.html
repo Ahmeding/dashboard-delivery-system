@@ -41,15 +41,15 @@
 
             <tr *ngFor="let driver of allDriversResponse.content">
               <td>{{ driver.id }}</td>
-              <td>{{ driver.nom }} {{ driver.prenom }}</td>
-              <td>{{ driver.numTel }}</td>
-              <td>{{ driver.adresseEmail }}</td>
-              <td>{{ driver.typePermi }}</td>
-              <td><i [ngClass]="driver.isActive?
+              <td>{{ driver.firstname }} {{ driver.lastname }}</td>
+              <td>{{ driver.phoneNum }}</td>
+              <td>{{ driver.email }}</td>
+              <td>{{ driver.drivingLicenseType }}</td>
+              <td><i [ngClass]="driver.enabled?
                                'fa fa-toggle-on text-success ml-3 mr-3' :
                                'fa fa-toggle-off text-danger ml-3 mr-3'"
-                     title="{{ driver.isActive ? 'Deactivate' : 'Activate' }}"
-                     (click)="handleDriverActivation(driver.id!,driver.isActive!)"></i>
+                     title="{{ driver.enabled ? 'Deactivate' : 'Activate' }}"
+                     (click)="handleDriverActivation(driver.id!,driver.enabled!)"></i>
               </td>
               <td class="text-center" style="cursor: pointer">
                 <i class="fas fa-pencil-alt text-warning" (click)="driverEdit(driver.id)" data-toggle="modal"
@@ -144,27 +144,27 @@
               <div class="row mb-3">
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="driver.nom"
-                           [ngClass]="{'is-invalid':isAddNewFormSubmitted && form.controls['nom']?.invalid}"
-                           name="nom" id="inputLastName" class="form-control"
+                    <input [(ngModel)]="driver.lastname"
+                           [ngClass]="{'is-invalid':isAddNewFormSubmitted && form.controls['lastname']?.invalid}"
+                           name="lastname" id="inputLastName" class="form-control"
                            type="text" placeholder="Enter your last name" required/>
                     <label for="inputLastName" class="text-primary">Last Name</label>
-                    <small *ngIf="isAddNewFormSubmitted && form.controls['nom']?.invalid" class="text-danger">Last name is required.</small>
+                    <small *ngIf="isAddNewFormSubmitted && form.controls['lastname']?.invalid" class="text-danger">Last name is required.</small>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-floating  mb-3 mb-md-0">
-                    <input [(ngModel)]="driver.prenom"
-                           [ngClass]="{'is-invalid':isAddNewFormSubmitted && form.controls['prenom']?.invalid}"
-                           name="prenom" class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" required/>
+                    <input [(ngModel)]="driver.firstname"
+                           [ngClass]="{'is-invalid':isAddNewFormSubmitted && form.controls['firstname']?.invalid}"
+                           name="firstname" class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" required/>
                     <label for="inputFirstName" class="text-primary">First Name</label>
-                    <small *ngIf="isAddNewFormSubmitted && form.controls['nom']?.invalid" class="text-danger">First name is required.</small>
+                    <small *ngIf="isAddNewFormSubmitted && form.controls['lastname']?.invalid" class="text-danger">First name is required.</small>
                   </div>
                 </div>
 
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="driver.dateNaissance"
+                    <input [(ngModel)]="driver.dateOfBirth"
                            [ngClass]="{'is-invalid':isAddNewFormSubmitted && form.controls['dateNaissance'].invalid}"
                            name="dateNaissance" class="form-control" id="inputdateNaissance" type="date" placeholder="Date of birth" required/>
                     <label for="inputdateNaissance" class="text-primary">Date of birth</label>
@@ -177,20 +177,20 @@
               <div class="row mb-3">
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="driver.numTel"
-                           [ngClass]="{'is-invalid':isAddNewFormSubmitted && form.controls['numTel']?.invalid}"
-                           name="numTel" class="form-control" id="inputnumTel" type="tel" placeholder="Phone number" required/>
+                    <input [(ngModel)]="driver.phoneNum"
+                           [ngClass]="{'is-invalid':isAddNewFormSubmitted && form.controls['phoneNum']?.invalid}"
+                           name="phoneNum" class="form-control" id="inputnumTel" type="tel" placeholder="Phone number" required/>
                     <label for="inputnumTel" class="text-primary">Phone number</label>
-                    <small *ngIf="isAddNewFormSubmitted && form.controls['numTel']?.invalid" class="text-danger">Phone n° is required.</small>
+                    <small *ngIf="isAddNewFormSubmitted && form.controls['phoneNum']?.invalid" class="text-danger">Phone n° is required.</small>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="driver.adresseEmail"
-                           [ngClass]="{'is-invalid':isAddNewFormSubmitted && form.controls['adresseEmail']?.invalid}"
-                           name="adresseEmail" class="form-control" id="inputEmail" type="email" placeholder="name@mail.com" required/>
+                    <input [(ngModel)]="driver.email"
+                           [ngClass]="{'is-invalid':isAddNewFormSubmitted && form.controls['email']?.invalid}"
+                           name="email" class="form-control" id="inputEmail" type="email" placeholder="name@mail.com" required/>
                     <label for="inputEmail" class="text-primary">Email address</label>
-                    <small *ngIf="isAddNewFormSubmitted && form.controls['adresseEmail']?.invalid" class="text-danger">Email address is required.</small>
+                    <small *ngIf="isAddNewFormSubmitted && form.controls['email']?.invalid" class="text-danger">Email address is required.</small>
                   </div>
                 </div>
               </div>
@@ -249,21 +249,21 @@
               <div class="row mb-3">
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="driver.motDePasse" name="motDePasse" autocomplete="new-password" class="form-control" id="inputPassword" type="password" placeholder="Create a password" />
+                    <input [(ngModel)]="driver.password" name="password" autocomplete="new-password" class="form-control" id="inputPassword" type="password" placeholder="Create a password" />
                     <label for="inputPassword" class="text-primary">Password</label>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <select [(ngModel)]="driver.typePermi"
-                            [ngClass]="{'is-invalid':isAddNewFormSubmitted && form.controls['dateNaissance']?.invalid}"
-                            class="form-select" name="typePermi" required>
+                    <select name="drivingLicenseType" [(ngModel)]="driver.drivingLicenseType"
+                            [ngClass]="{'is-invalid':isAddNewFormSubmitted && form.controls['drivingLicenseType']?.invalid}"
+                            class="form-select" name="drivingLicenseType" required>
                       <option value="" class="text-primary" disabled>Select Type of driving license</option>
                       <option value="B">B</option>
                       <option value="CD">CD</option>
                       <option value="E">E</option>
                     </select>
-                    <small *ngIf="isAddNewFormSubmitted && form.controls['typePermi']?.invalid" class="text-danger">License type is required.</small>
+                    <small *ngIf="isAddNewFormSubmitted && form.controls['drivingLicenseType']?.invalid" class="text-danger">License type is required.</small>
                   </div>
                 </div>
               </div>
@@ -320,26 +320,26 @@
               <div class="row mb-3">
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="selectedDriver.nom" name="nom"
-                           [ngClass]="{'is-invalid': isAddNewFormSubmitted && editForm.controls['nom']?.invalid}"
+                    <input [(ngModel)]="selectedDriver.lastname" name="lastname"
+                           [ngClass]="{'is-invalid': isAddNewFormSubmitted && editForm.controls['lastname']?.invalid}"
                            class="form-control" id="inputUpdateLastName" type="text" placeholder="Enter your last name" required/>
                     <label for="inputUpdateLastName" class="text-primary">Last Name</label>
-                    <small *ngIf="isAddNewFormSubmitted && editForm.controls['nom']?.invalid" class="text-danger">Last name is requidred</small>
+                    <small *ngIf="isAddNewFormSubmitted && editForm.controls['lastname']?.invalid" class="text-danger">Last name is requidred</small>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-floating  mb-3 mb-md-0">
-                    <input [(ngModel)]="selectedDriver.prenom"
-                           [ngClass]="{'is-invalid': isAddNewFormSubmitted && editForm.controls['prenom']?.invalid}"
-                           name="prenom" class="form-control" id="inputUpdateFirstName" type="text" placeholder="Enter your first name" required/>
+                    <input [(ngModel)]="selectedDriver.firstname"
+                           [ngClass]="{'is-invalid': isAddNewFormSubmitted && editForm.controls['firstname']?.invalid}"
+                           name="firstname" class="form-control" id="inputUpdateFirstName" type="text" placeholder="Enter your first name" required/>
                     <label for="inputUpdateFirstName" class="text-primary">First Name</label>
-                    <small *ngIf="isAddNewFormSubmitted && editForm.controls['prenom']?.invalid" class="text-danger">First name is required</small>
+                    <small *ngIf="isAddNewFormSubmitted && editForm.controls['firstname']?.invalid" class="text-danger">First name is required</small>
                   </div>
                 </div>
 
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="selectedDriver.dateNaissance" name="dateNaissance"
+                    <input [(ngModel)]="selectedDriver.dateOfBirth" name="dateOfBirth"
                            class="form-control" id="inputUpdatedateNaissance" type="date" placeholder="Date of birth" />
                     <label for="inputUpdatedateNaissance" class="text-primary">Date of birth</label>
                   </div>
@@ -350,13 +350,13 @@
               <div class="row mb-3">
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="selectedDriver.numTel" name="numTel" class="form-control" id="inputUpdatenumTel" type="tel" placeholder="Phone number" />
+                    <input [(ngModel)]="selectedDriver.phoneNum" name="phoneNum" class="form-control" id="inputUpdatenumTel" type="tel" placeholder="Phone number" />
                     <label for="inputUpdatenumTel" class="text-primary">Phone number</label>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="selectedDriver.adresseEmail" name="adresseEmail" class="form-control" id="inputUpdateEmail" type="email" placeholder="name@mail.com" />
+                    <input [(ngModel)]="selectedDriver.email" name="email" class="form-control" id="inputUpdateEmail" type="email" placeholder="name@mail.com" />
                     <label for="inputUpdateEmail" class="text-primary">Email address</label>
                   </div>
                 </div>
@@ -404,13 +404,13 @@
               <div class="row mb-3">
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="selectedDriver.motDePasse" name="motDePasse" autocomplete="new-password" class="form-control" id="inputUpdatePassword" type="password" placeholder="Create a password" />
+                    <input [(ngModel)]="selectedDriver.password" name="password" autocomplete="new-password" class="form-control" id="inputUpdatePassword" type="password" placeholder="Create a password" />
                     <label for="inputUpdatePassword" class="text-primary">Password</label>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <select [(ngModel)]="selectedDriver.typePermi" class="form-select" name="typePermi">
+                    <select [(ngModel)]="selectedDriver.drivingLicenseType" class="form-select" name="drivingLicenseType">
                       <option value="" class="text-primary" disabled>Select Type of driving license</option>
                       <option value="B">B</option>
                       <option value="CD">CD</option>
@@ -464,12 +464,12 @@
               <div class="row mb-3">
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <span class="text-primary">Name</span> : {{selectedDriver.nom}} {{selectedDriver.prenom}}
+                    <span class="text-primary">Name</span> : {{selectedDriver.lastname}} {{selectedDriver.firstname}}
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <span class="text-primary">Date of birth</span>: {{selectedDriver.dateNaissance}}
+                    <span class="text-primary">Date of birth</span>: {{selectedDriver.dateOfBirth}}
                   </div>
                 </div>
               </div>
@@ -478,12 +478,12 @@
               <div class="row mb-3">
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <span class="text-primary">Phone number</span>: {{selectedDriver.numTel}}
+                    <span class="text-primary">Phone number</span>: {{selectedDriver.phoneNum}}
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <span class="text-primary">Email address</span>: {{selectedDriver.adresseEmail}}
+                    <span class="text-primary">Email address</span>: {{selectedDriver.email}}
                   </div>
                 </div>
               </div>
@@ -492,12 +492,12 @@
               <div class="row mb-3">
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <span class="text-primary">Address</span>: {{selectedDriver.adresseDto?.adresse1}}
+                    <span class="text-primary">Address</span>: {{selectedDriver.address?.adresse1}}
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <span class="text-primary">Adresse 2</span>: {{selectedDriver.adresseDto?.adresse2}}
+                    <span class="text-primary">Adresse 2</span>: {{selectedDriver.address?.adresse2}}
                   </div>
                 </div>
               </div>
@@ -506,12 +506,12 @@
               <div class="row mb-3">
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <span for="inputCodePostale" class="text-primary">Postal code & City</span>: {{selectedDriver.adresseDto?.codepostal}} {{selectedDriver.adresseDto?.ville}}
+                    <span for="inputCodePostale" class="text-primary">Postal code & City</span>: {{selectedDriver.address?.codepostal}} {{selectedDriver.address?.ville}}
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <span for="inputPays" class="text-primary">Country</span>: {{selectedDriver.adresseDto?.pays}}
+                    <span for="inputPays" class="text-primary">Country</span>: {{selectedDriver.address?.pays}}
                   </div>
                 </div>
               </div>
@@ -525,7 +525,7 @@
                 </div>
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <span class="text-primary">Type Permis</span>: {{selectedDriver.typePermi}}
+                    <span class="text-primary">Type Permis</span>: {{selectedDriver.drivingLicenseType}}
                   </div>
                 </div>
               </div>

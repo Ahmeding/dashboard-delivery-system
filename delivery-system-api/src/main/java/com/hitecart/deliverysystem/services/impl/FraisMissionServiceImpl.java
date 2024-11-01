@@ -1,10 +1,7 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.DevisDto;
-import com.hitecart.deliverysystem.dto.FraisMissionDto;
-import com.hitecart.deliverysystem.dto.LigneFraisMissionDto;
-import com.hitecart.deliverysystem.dto.MissionDto;
+import com.hitecart.deliverysystem.dto.*;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
@@ -16,7 +13,9 @@ import com.hitecart.deliverysystem.model.Mission;
 import com.hitecart.deliverysystem.repository.FraisMissionRepository;
 import com.hitecart.deliverysystem.repository.LigneFraisMissionRepository;
 import com.hitecart.deliverysystem.services.FraisMissionService;
+import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.validator.FraisMissionValidator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,15 +30,13 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class FraisMissionServiceImpl implements FraisMissionService {
 
     private final FraisMissionRepository fraisMissionRepository;
     private final LigneFraisMissionRepository lignefraisMissionRepository;
+    private final UtilisateurService utilisateurServiceImpl;
 
-    public FraisMissionServiceImpl(FraisMissionRepository fraisMissionRepository, LigneFraisMissionRepository lignefraisMissionRepository) {
-        this.fraisMissionRepository = fraisMissionRepository;
-        this.lignefraisMissionRepository = lignefraisMissionRepository;
-    }
 
     @Override
     public FraisMissionDto updateFraisMission(FraisMissionDto dto) {
@@ -97,11 +94,14 @@ public class FraisMissionServiceImpl implements FraisMissionService {
                 ErrorCodes.FRAISMISSION_NOT_VALID_OPERATION);
         Optional<FraisMission> fraisMissionOp = fraisMissionRepository.findById(id);
 
-        return Optional.of(FraisMissionDto.fromEntity(fraisMissionOp.get()))
+        FraisMissionDto fraisMissionDto= Optional.of(FraisMissionDto.fromEntity(fraisMissionOp.get()))
                 .orElseThrow(
                         ()->new EntityNotFoundException("Aucune FraisMission avec l'id :"
                                 + id +"n'a ete trouvé dans la base de donnée",ErrorCodes.FRAISMISSION_NOT_FOUND)
                 );
+
+        setCreatedByUser(fraisMissionDto);
+        return fraisMissionDto;
     }
 
     @Override
@@ -113,10 +113,13 @@ public class FraisMissionServiceImpl implements FraisMissionService {
 
         FraisMission fraisMission = fraisMissionRepository.findByMissionId(idMission);
 
-        return Optional.of(FraisMissionDto.fromEntity( fraisMission)).orElseThrow(
+        FraisMissionDto fraisMissionDto =  Optional.of(FraisMissionDto.fromEntity( fraisMission)).orElseThrow(
                 ()->new EntityNotFoundException("la mission avec l'id :"
                         + idMission +"n'a pas de frais de mission",ErrorCodes.FRAISMISSION_NOT_FOUND)
         );
+
+        setCreatedByUser(fraisMissionDto);
+        return fraisMissionDto;
     }
 
     @Override
@@ -180,7 +183,7 @@ public class FraisMissionServiceImpl implements FraisMissionService {
     @Override
     public List<FraisMissionDto> findAll() {
         return fraisMissionRepository.findAll().stream()
-                .map(FraisMissionDto::fromEntity)
+                .map(this::updatedResponse)
                 .collect(Collectors.toList());
     }
 
@@ -203,7 +206,7 @@ public class FraisMissionServiceImpl implements FraisMissionService {
         Page<FraisMission> fraisMissions = fraisMissionRepository.findAllFraisMission(pageable);
 
         List<FraisMissionDto> fraisMissionsDto = fraisMissions.stream()
-                .map(FraisMissionDto::fromEntity)
+                .map(this::updatedResponse)
                 .toList();
 
         return new PageResponse<>(
@@ -224,4 +227,19 @@ public class FraisMissionServiceImpl implements FraisMissionService {
             throw new InvalidEntityException(msgException, errorCodes,errors);
         }
     }
+
+    private UtilisateurDto getCreatedBy(Integer userid) {
+        return utilisateurServiceImpl.findById(userid);
+    }
+    private void setCreatedByUser(FraisMissionDto response){
+        UtilisateurDto uDto = getCreatedBy(response.getCreatedBy());
+        response.setCreatedByUser(CreatedByUserDto.builder().id(uDto.getId()).fullname(uDto.getFullname()).build());
+    }
+
+    private FraisMissionDto updatedResponse(FraisMission fm) {
+        FraisMissionDto fmDto=FraisMissionDto.fromEntity(fm);
+        setCreatedByUser(fmDto);
+        return fmDto;
+    }
+
 }

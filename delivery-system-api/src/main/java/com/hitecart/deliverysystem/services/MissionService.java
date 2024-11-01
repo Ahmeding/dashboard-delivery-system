@@ -3,6 +3,7 @@ package com.hitecart.deliverysystem.services;
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.MissionDto;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
+import org.springframework.security.core.Authentication;
 
 import java.time.Instant;
 import java.util.List;
@@ -23,4 +24,5 @@ public interface MissionService {
     void delete(Integer id);
 
     PageResponse<MissionDto> findAllMissions(int page, int size);
+    PageResponse<MissionDto> findAllMissionsByDriverId(int page, int size, Authentication connectedUser);
 }

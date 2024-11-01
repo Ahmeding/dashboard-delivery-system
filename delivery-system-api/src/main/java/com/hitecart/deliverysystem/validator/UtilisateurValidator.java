@@ -20,22 +20,22 @@ public class UtilisateurValidator {
             errors.addAll(AdresseValidator.validate(null));
             return errors;
         }
-       if(!StringUtils.hasLength(dto.getNom())){
+       if(!StringUtils.hasLength(dto.getLastname())){
            errors.add("Veuillez renseigner le nom du utilisateur !");
        }
-       if(!StringUtils.hasLength(dto.getPrenom())){
+       if(!StringUtils.hasLength(dto.getFirstname())){
            errors.add("Veuillez renseigner le prenom du utilisateur !");
        }
-       if(!StringUtils.hasLength(dto.getNumTel())){
+       if(!StringUtils.hasLength(dto.getPhoneNum())){
            errors.add("Veuillez renseigner le numreo du telephone  du utilisateur !");
        }
        if(!StringUtils.hasLength(dto.getEmail())){
            errors.add("Veuillez renseigner l'adresse email du utilisateur !");
        }
-       if(!StringUtils.hasLength(dto.getMotDePasse())){
+       if(!StringUtils.hasLength(dto.getPassword())){
            errors.add("Veuillez renseigner le mot de passe du utilisateur !");
        }
-        errors.addAll(AdresseValidator.validate(dto.getAdresseDto()));
+        errors.addAll(AdresseValidator.validate(dto.getAddress()));
     return errors;
     }
 }

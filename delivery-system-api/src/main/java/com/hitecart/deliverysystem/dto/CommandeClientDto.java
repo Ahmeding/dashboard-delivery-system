@@ -34,6 +34,7 @@ public class CommandeClientDto  {
     private Integer clientId;
     private List<LigneCommandeClientDto> ligneCommandeClientsDtos;
     private OrderStatus etatCommande;
+    private CreatedByUserDto createdByUser;
 
     public static CommandeClientDto fromEntity(CommandeClient commandeClient) {
         if(commandeClient ==null){

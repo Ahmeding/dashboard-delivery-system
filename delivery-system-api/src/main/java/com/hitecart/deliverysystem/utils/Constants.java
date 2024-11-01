@@ -16,6 +16,15 @@ public interface Constants {
 /////////////////////////////////////////////////////////////////////////
 
 
+    String SERVICE_DELIVERY_ENDPOINT= "/services-delivery";
+    String CREATE_SERVICE_DELIVERY_ENDPOINT= "/create";
+    String FIND_SERVICE_DELIVERY_BY_ID_ENDPOINT= "/service-d/by-id/{id}";
+    String FIND_ALL_SERVICE_DELIVERY_ENDPOINT= "/all";
+    String FIND_ALL_BY_ENABLED_SERVICE_DELIVERY_ENDPOINT= "/sd/all/{isenabled}";
+    String UPDATE_SERVICE_DELIVERY_ENABLED_ENDPOINT= "/sd/is-enabled/{id}/{isenabled}";
+    String FIND_ALL_SERVICE_DELIVERY_PAGEABLE_ENDPOINT= "/";
+    /////////////////////////////////////////////////////////////////////
+
     String CLIENT_ENDPOINT= "/clients";
     String CREATE_CLIENT_ENDPOINT= "/create";
     String FIND_CLIENT_BY_ID_ENDPOINT= "/client/by-id/{id}";
@@ -115,6 +124,7 @@ String PIECE_RECHANGE_ENDPOINT= "/piecerenchanges";
     String FIND_ALL_REPARATION_PAGEABLE_ENDPOINT = "/";
     String FIND_ALL_PIECERECHANGE_PAGEABLE_ENDPOINT = "/";
     String FIND_ALL_MISSION_PAGEABLE_ENDPOINT = "/";
+    String FIND_ALL_MISSION_PAGEABLE_BY_DRIVERID_ENDPOINT = "/driver";
     String FIND_ALL_FRAISMISSION_PAGEABLE_ENDPOINT = "/";
     String FIND_ALL_ENTREPRISE_PAGEABLE_ENDPOINT = "/";
     String FIND_ALL_DEVIS_PAGEABLE_ENDPOINT = "/";

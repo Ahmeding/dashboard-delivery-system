@@ -1,12 +1,10 @@
 package com.hitecart.deliverysystem.model;
 
+import com.hitecart.deliverysystem.model.enums.DrivingLicenseType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -15,36 +13,19 @@ import java.util.List;
 @EqualsAndHashCode(callSuper=true)
 @Entity
 @SuperBuilder
-@Table(name="chauffeur")
-public class Chauffeur extends AbstractEntity{
+@Table(name = "chauffeur")
+public class Chauffeur extends Utilisateur{
 
-    @Column(name="nom")
-    private String nom;
-    @Column(name="prenom")
-    private String prenom;
-    @Column(name="adresseemail")
-    private String adresseEmail;
-    @Column(name="motdepasse")
 
-    private String motDePasse;
-    @Column(name="numtel")
-    private String numTel;
-    @Column(name="date_naissance")
-    private LocalDate dateNaissance;
+    @Column(name = "driving_license_nbr",nullable = false,unique = true)
+    private String drivinglicenseNbr;
+    @Enumerated(EnumType.STRING)  // or EnumType.ORDINAL for integer mapping
     @Column(name="typepermis")
-    private String typePermi;
+    private DrivingLicenseType drivinglicenseType;
     @Column(name="num_secu")
     private String numSecu;
     @Column(name="rib")
     private String rib;
-    @Embedded
-    private Adresse adresse;
-    @Column(name = "driving_license_nbr",nullable = false,unique = true)
-    private String drivinglicenseNbr;
-
-    @Column(name="is_active")
-    private Boolean isActive;
-
     @OneToMany(mappedBy = "chauffeur")
     private List<Contrat> contrats;
 }

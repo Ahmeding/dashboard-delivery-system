@@ -1,0 +1,19 @@
+<!--
+<div class="wrapper">
+  <app-sidebar
+    [isCollapsed]="isSidebarCollapsed"
+    [(isMobileMenuOpen)]="isMobileMenuOpen">
+  </app-sidebar>
+
+  <div class="main-content" [ngClass]="{'expanded': isSidebarCollapsed}">
+    <app-navbar (toggleSidebar)="toggleSidebar()"></app-navbar>
+
+    <div class="content-wrapper">
+      <router-outlet></router-outlet>
+    </div>
+
+    <app-footer></app-footer>
+  </div>
+</div>
+-->
+<router-outlet></router-outlet>

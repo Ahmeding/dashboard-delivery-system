@@ -15,12 +15,15 @@ import java.math.BigDecimal;
 @Data
 @Builder
 public class  LigneDevisDto {
+
     private Integer id;
+    private String reference;
     private BigDecimal quantite;
     private BigDecimal prixUnitaire;
     private BigDecimal prixTTC;
     private BigDecimal tva;
     private Integer devisId;
+    private ServiceDeliveryDto serviceDeliveryDto;
 
     public static LigneDevisDto fromEntity(LigneDevis ligneDevis) {
         if(ligneDevis == null){
@@ -33,6 +36,7 @@ public class  LigneDevisDto {
                 .prixTTC(ligneDevis.getPrixTTC())
                 .tva(ligneDevis.getTva())
                 .devisId(ligneDevis.getDevis()!=null?ligneDevis.getDevis().getId():null)
+                .serviceDeliveryDto(ServiceDeliveryDto.fromEntity(ligneDevis.getServiceDelivery()))
                 .build();
     }
 
@@ -46,7 +50,7 @@ public class  LigneDevisDto {
         ligneDevis.setPrixUnitaire(dto.getPrixUnitaire());
         ligneDevis.setPrixTTC(dto.getPrixTTC());
         ligneDevis.setTva(dto.getTva());
-        /*ligneDevis.setDevis(DevisDto.toEntity(dto.getDevisDto()));*/
+        ligneDevis.setServiceDelivery(ServiceDeliveryDto.toEntity(dto.getServiceDeliveryDto()));
 
         return ligneDevis;
     }

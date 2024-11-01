@@ -1,18 +1,20 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.DevisDto;
-import com.hitecart.deliverysystem.dto.UtilisateurDto;
+import com.hitecart.deliverysystem.dto.*;
 import com.hitecart.deliverysystem.dto.UtilisateurDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.model.Devis;
+import com.hitecart.deliverysystem.model.Mission;
 import com.hitecart.deliverysystem.model.Utilisateur;
 import com.hitecart.deliverysystem.repository.UtilisateurRepository;
 import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.validator.UtilisateurValidator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,14 +27,11 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UtilisateurServiceImpl implements UtilisateurService {
 
 
     private final UtilisateurRepository utilisateurRepository;
-
-    public UtilisateurServiceImpl(UtilisateurRepository utilisateurRepository) {
-        this.utilisateurRepository = utilisateurRepository;
-    }
 
     @Override
     public UtilisateurDto save(UtilisateurDto dto) {
@@ -43,6 +42,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
+    @Cacheable("users")
     public UtilisateurDto findById(Integer id) {
         CheckParmasUtil.checkID(id,
                 "Le parametre ID Utilisateur est null",
@@ -50,11 +50,14 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                 ErrorCodes.UTILISATEUR_NOT_VALID_OPERATION);
         Optional<Utilisateur> utilisateurOp = utilisateurRepository.findById(id);
 
-        return Optional.of(UtilisateurDto.fromEntity(utilisateurOp.get()))
+        UtilisateurDto userDto = Optional.of(UtilisateurDto.fromEntity(utilisateurOp.get()))
                 .orElseThrow(
                         ()->new EntityNotFoundException("Aucune Utilisateur avec l'id :"
                                 + id +"n'a ete trouvé dans la base deonnée",ErrorCodes.UTILISATEUR_NOT_FOUND)
                 );
+        //setCreatedByUser(userDto);
+        return
+                userDto;
     }
 
     @Override
@@ -66,13 +69,15 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
         Optional<Utilisateur> utilisateurOp = utilisateurRepository.findByEmail(email);
 
-        return Optional.of(UtilisateurDto.fromEntity(utilisateurOp.get()))
+        UtilisateurDto userDto = Optional.of(UtilisateurDto.fromEntity(utilisateurOp.get()))
                 .orElseThrow(
                         ()-> new EntityNotFoundException(
                                 "Aucun Utilisateur avec l'adresse email <<"+email+">> n'a ete trouver dans la base de donnée",
                                 ErrorCodes.UTILISATEUR_NOT_FOUND
                         )
                 );
+        //setCreatedByUser(userDto);
+        return userDto;
     }
 
     @Override
@@ -93,7 +98,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public PageResponse<UtilisateurDto> findAllUsers(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<Utilisateur> utilisateurs= utilisateurRepository.findAllUsers(pageable);
-        List<UtilisateurDto> utilisateurDtos = utilisateurs.stream().map(UtilisateurDto::fromEntity).toList();
+        List<UtilisateurDto> utilisateurDtos = utilisateurs.stream()
+                .map(UtilisateurDto::fromEntity)
+                .toList();
 
         return new PageResponse<>(
                 utilisateurDtos,
@@ -114,4 +121,17 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         }
     }
 
+ /*   private UtilisateurDto getCreatedBy(Integer userid) {
+        Utilisateur utilisateur = utilisateurRepository.findById(1).get();
+        return UtilisateurDto.fromEntity(utilisateur);
+    }
+    private void setCreatedByUser(UtilisateurDto response){
+        UtilisateurDto uDto = getCreatedBy(response.getCreatedBy());
+        response.setCreatedByUser(CreatedByUserDto.builder().id(uDto.getId()).fullname(uDto.getFullname()).build());
+    }
+    private UtilisateurDto updatedResponse(Utilisateur user) {
+        UtilisateurDto userDto=UtilisateurDto.fromEntity(user);
+        setCreatedByUser(userDto);
+        return userDto;
+    }*/
 }

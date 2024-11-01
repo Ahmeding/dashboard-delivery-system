@@ -40,15 +40,15 @@
 
             <tr *ngFor="let client of allClientsResponse.content">
               <td>{{ client.id }}</td>
-              <td>{{ client.nom }}&nbsp;{{ client.prenom }}</td>
-              <td>{{ client.numTel }}</td>
-              <td>{{ client.adresseEmail }}</td>
+              <td>{{ client.lastname }}&nbsp;{{ client.firstname }}</td>
+              <td>{{ client.phoneNum }}</td>
+              <td>{{ client.email }}</td>
               <td><i
-                [ngClass]="client.isActive?
+                [ngClass]="client.enabled?
                         'fa fa-toggle-on text-success ml-3 mr-3':
                         'fa fa-toggle-off text-danger ml-3 mr-3'"
-                title="{{ client.isActive ? 'Deactivate' : 'Activate' }}"
-                (click)="handleClientActivation(client.id,client.isActive)"></i></td>
+                title="{{ client.enabled ? 'Deactivate' : 'Activate' }}"
+                (click)="handleClientActivation(client.id,client.enabled)"></i></td>
               <td>
                 <i class="fas fa-pencil-alt text-warning mr-2" data-toggle="modal"
                    data-target="#editClientModal"  (click)="editClient(client.id)" title="Modify"></i>
@@ -142,25 +142,25 @@
               <div class="row mb-3">
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="newClient.nom"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['nom']?.invalid}"
-                            name="nom"  class="form-control" id="inputNom" type="text" placeholder="Last name"  required/>
+                    <input  [(ngModel)]="newClient.lastname"
+                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['lastname']?.invalid}"
+                            name="lastname"  class="form-control" id="inputNom" type="text" placeholder="Last name"  required/>
                     <label for="inputNom">Last name</label>
-                    <small *ngIf="isFormAddNewSubmitted && form.controls['nom']?.invalid" class="text-danger">Last name is required</small>
+                    <small *ngIf="isFormAddNewSubmitted && form.controls['lastname']?.invalid" class="text-danger">Last name is required</small>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="newClient.prenom"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['prenom']?.invalid}"
-                            name="prenom" class="form-control" id="inputPrenom" type="text" placeholder="First name"  required/>
+                    <input  [(ngModel)]="newClient.firstname"
+                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['firstname']?.invalid}"
+                            name="firstname" class="form-control" id="inputPrenom" type="text" placeholder="First name"  required/>
                     <label for="inputPrenom">First name</label>
-                    <small *ngIf="isFormAddNewSubmitted && form.controls['prenom']?.invalid" class="text-danger">First name is required</small>
+                    <small *ngIf="isFormAddNewSubmitted && form.controls['firstname']?.invalid" class="text-danger">First name is required</small>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="newClient.adresseEmail"
+                    <input  [(ngModel)]="newClient.email"
                             [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['email']?.invalid}"
                             name="email" class="form-control" id="inputEmail" type="text" placeholder="Email"  required/>
                     <label for="inputEmail">Email</label>
@@ -173,7 +173,7 @@
               <div class="row mb-3">
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="newClient.numTel"
+                    <input  [(ngModel)]="newClient.phoneNum"
                             [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['numtel']?.invalid}"
                             name="numtel" class="form-control" id="inputNumTel" type="text" placeholder="VIN N°"  required/>
                     <label for="inputNumTel">Phone N°</label>
@@ -294,25 +294,25 @@
               <div class="row mb-3">
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="selectedClient.nom"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['nom']?.invalid}"
+                    <input  [(ngModel)]="selectedClient.lastname"
+                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['lastname']?.invalid}"
                             name="marque"  class="form-control" id="inputEditNom" type="text" placeholder="Last name"  required/>
                     <label for="inputEditNom">Last name</label>
-                    <small *ngIf="isFormAddNewSubmitted && editForm.controls['nom']?.invalid" class="text-danger">Last name is required</small>
+                    <small *ngIf="isFormAddNewSubmitted && editForm.controls['lastname']?.invalid" class="text-danger">Last name is required</small>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="selectedClient.prenom"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['prenom']?.invalid}"
-                            name="prenom" class="form-control" id="inputEditPrenom" type="text" placeholder="First name"  required/>
+                    <input  [(ngModel)]="selectedClient.firstname"
+                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['firstname']?.invalid}"
+                            name="firstname" class="form-control" id="inputEditPrenom" type="text" placeholder="First name"  required/>
                     <label for="inputEditPrenom">First name</label>
-                    <small *ngIf="isFormAddNewSubmitted && editForm.controls['prenom']?.invalid" class="text-danger">First name is required</small>
+                    <small *ngIf="isFormAddNewSubmitted && editForm.controls['firstname']?.invalid" class="text-danger">First name is required</small>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="selectedClient.adresseEmail"
+                    <input  [(ngModel)]="selectedClient.email"
                             [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['email']?.invalid}"
                             name="email" class="form-control" id="inputEditEmail" type="text" placeholder="Email"  required/>
                     <label for="inputEditEmail">Email</label>
@@ -325,7 +325,7 @@
               <div class="row mb-3">
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="selectedClient.numTel"
+                    <input  [(ngModel)]="selectedClient.phoneNum"
                             [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['numtel']?.invalid}"
                             name="numtel" class="form-control" id="inputEditNumTel" type="text" placeholder="VIN N°"  required/>
                     <label for="inputEditNumTel">Phone N°</label>
@@ -424,6 +424,8 @@
     </div>
   </div>
 </div>
+
+
 <!--info modal-->
 <div class="modal fade" id="infoClientModal" tabindex="-1" aria-labelledby="infoClientModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
@@ -442,12 +444,12 @@
             <div class="row mb-3">
               <div class="col-md-6">
                 <div class="form-floating mb-3 mb-md-0">
-                  <span class="text-primary">Name</span> : {{selectedClient.nom}} {{selectedClient.prenom}}
+                  <span class="text-primary">Name</span> : {{selectedClient.lastname}} {{selectedClient.firstname}}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-floating mb-3 mb-md-0">
-                  <span class="text-primary">Phone N°</span>: {{ selectedClient.numTel}}
+                  <span class="text-primary">Phone N°</span>: {{ selectedClient.phoneNum}}
 
                 </div>
               </div>
@@ -457,7 +459,7 @@
             <div class="row mb-3">
               <div class="col-md-6">
                 <div class="form-floating mb-3 mb-md-0">
-                  <span class="text-primary">Email</span>: {{selectedClient.adresseEmail}}
+                  <span class="text-primary">Email</span>: {{selectedClient.email}}
                 </div>
               </div>
               <div class="col-md-6">
@@ -484,8 +486,8 @@
             <div class="row mb-3">
               <div class="col-md-6">
                 <div class="form-floating mb-3 mb-md-0">
-                  <span class="text-primary">Address</span>: {{selectedClient.adresseDto?.adresse1}}&nbsp;{{selectedClient.adresseDto?.adresse2}}
-                  &nbsp;{{selectedClient.adresseDto?.ville}}&nbsp; &nbsp;{{selectedClient.adresseDto?.codepostal}}&nbsp;&nbsp;{{selectedClient.adresseDto?.pays}}
+                  <span class="text-primary">Address</span>: {{selectedClient.address?.adresse1}}&nbsp;{{selectedClient.address?.adresse2}}
+                  &nbsp;{{selectedClient.address?.ville}}&nbsp; &nbsp;{{selectedClient.address?.codepostal}}&nbsp;&nbsp;{{selectedClient.address?.pays}}
 
                 </div>
               </div>

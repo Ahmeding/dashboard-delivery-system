@@ -35,6 +35,7 @@ public class ReparationDto{
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;
+    private CreatedByUserDto createdByUser;
 
     public static ReparationDto fromEntity(Reparation reparation) {
         if(reparation == null){

@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -25,33 +26,27 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Utilisateur implements UserDetails, Principal {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-    @CreatedDate
-    @Column(name = "createdat", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    @Column(name = "updatedat")
-    private LocalDateTime updatedAt;
-    @Column(name = "nom")
-    private String nom;
-    @Column(name = "prenom")
-    private String prenom;
-    @Column(name = "numtel")
-    private String numTel;
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Utilisateur extends AbstractEntity implements UserDetails, Principal {
+    
+    @Column(name = "lastname")
+    private String lastname;
+    @Column(name = "firstname")
+    private String firstname;
+    @Column(name = "phone_num")
+    private String phoneNum;
     @Column(name = "email")
     private String email;
-    @Column(name = "motdepasse")
-    private String motDePasse;
-    @Column(name = "adresse")
-    private Adresse adresse;
+    @Column(name = "password")
+    private String password;
+    @Column(name = "address")
+    private Adresse address;
+    @Column(name="date_of_birth")
+    private LocalDate dateOfBirth;
     @Column(name = "role")
     private RoleUtilisateur role;
     private boolean accountLocked;
     private boolean enabled;
-
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
 
@@ -66,7 +61,7 @@ public class Utilisateur implements UserDetails, Principal {
 
     @Override
     public String getPassword() {
-        return motDePasse;
+        return password;
     }
 
     @Override
@@ -99,6 +94,6 @@ public class Utilisateur implements UserDetails, Principal {
         return email;
     }
     public String fullName(){
-        return this.nom + " " + this.prenom;
+        return this.firstname + " " + this.lastname;
     }
 }

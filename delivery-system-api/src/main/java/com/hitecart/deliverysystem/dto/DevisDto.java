@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 public class DevisDto {
 
     private String code;
@@ -36,6 +36,7 @@ public class DevisDto {
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;
+    private CreatedByUserDto createdByUser;
 
     public static DevisDto fromEntity(Devis devis){
         if(devis==null){

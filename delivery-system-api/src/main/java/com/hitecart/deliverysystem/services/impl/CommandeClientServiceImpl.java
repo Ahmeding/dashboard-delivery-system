@@ -1,10 +1,7 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.ClientDto;
-import com.hitecart.deliverysystem.dto.CommandeClientDto;
-import com.hitecart.deliverysystem.dto.CommandeClientResponse;
-import com.hitecart.deliverysystem.dto.LigneCommandeClientDto;
+import com.hitecart.deliverysystem.dto.*;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
@@ -17,6 +14,7 @@ import com.hitecart.deliverysystem.repository.CommandeClientRepository;
 import com.hitecart.deliverysystem.repository.LigneCommandeClientRepository;
 import com.hitecart.deliverysystem.services.ClientService;
 import com.hitecart.deliverysystem.services.CommandeClientService;
+import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.utils.CalculeTva;
 import com.hitecart.deliverysystem.validator.CommandeClientValidator;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +39,7 @@ public class CommandeClientServiceImpl implements CommandeClientService {
     private final CommandeClientRepository commandeClientRepository;
      private final LigneCommandeClientRepository ligneCommandeClientRepository;
     private final ClientService   clientService;
+    private final UtilisateurService utilisateurServiceImpl;
 
 
     @Override
@@ -88,12 +87,13 @@ public class CommandeClientServiceImpl implements CommandeClientService {
                 "Le parametre ID Commande Client est null",
                 "Impossible de trouver une commande client avec un ID null",ErrorCodes.COMMANDECLIENT_NOT_VALID_OPERATION);
         Optional<CommandeClient> commandeClientOp= commandeClientRepository.findById(id);
+        CommandeClientResponse commandeClientResponse=Optional.of(CommandeClientResponse.fromEntity(commandeClientOp.get()))
+                .orElseThrow(()->new EntityNotFoundException( "Opps! Aucune Commande Client  avec l'id :"
+                        + id +"n'a ete trouvé dans la base deonnée"
+                        ,ErrorCodes.COMMANDECLIENT_NOT_FOUND));
 
-         //return CommandeClientDto.fromEntity(commandeClientOp.get());
-         return Optional.of(CommandeClientResponse.fromEntity(commandeClientOp.get()))
-                 .orElseThrow(()->new EntityNotFoundException( "Opps! Aucune Commande Client  avec l'id :"
-                         + id +"n'a ete trouvé dans la base deonnée"
-                         ,ErrorCodes.COMMANDECLIENT_NOT_FOUND));
+        setCreatedByUser(commandeClientResponse);
+        return commandeClientResponse;
     }
 
     @Override
@@ -102,17 +102,23 @@ public class CommandeClientServiceImpl implements CommandeClientService {
                 "Impossible de trouver une commande client avec un Code null",ErrorCodes.COMMANDECLIENT_NOT_VALID_OPERATION);
 
         Optional<CommandeClient> commandeClientOp= commandeClientRepository.findCommandeClientByCode(code);
-
-        return Optional.of(CommandeClientResponse.fromEntity(commandeClientOp.get()))
+        CommandeClientResponse commandeClientResponse=Optional.of(CommandeClientResponse.fromEntity(commandeClientOp.get()))
                 .orElseThrow(()->new EntityNotFoundException( "Opps! Aucune Commande Client  avec l'id :"
                         + code +"n'a ete trouvé dans la base deonnée"
                         ,ErrorCodes.COMMANDECLIENT_NOT_FOUND));
+        setCreatedByUser(commandeClientResponse);
+        return commandeClientResponse;
     }
 
     @Override
     public List<CommandeClientResponse> findAll() {
         return commandeClientRepository.findAll().stream()
-                .map(CommandeClientResponse::fromEntity)
+                //.map(CommandeClientResponse::fromEntity)
+                .map(order->{
+                    CommandeClientResponse commandeClientResponse=CommandeClientResponse.fromEntity(order);
+                    setCreatedByUser(commandeClientResponse);
+                    return  commandeClientResponse;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -133,7 +139,15 @@ public class CommandeClientServiceImpl implements CommandeClientService {
     public PageResponse<CommandeClientResponse> findAllCmdClient(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<CommandeClient> commandeClients= commandeClientRepository.findAllCmdsClient(pageable);
-        List<CommandeClientResponse> commandeClientDtos = commandeClients.stream().map(CommandeClientResponse::fromEntity).toList();
+        List<CommandeClientResponse> commandeClientDtos = commandeClients.stream()
+                //.map(CommandeClientResponse::fromEntity)
+                .map(order->{
+                    CommandeClientResponse commandeClientResponse=CommandeClientResponse.fromEntity(order);
+                    setCreatedByUser(commandeClientResponse);
+                    return commandeClientResponse;
+                })
+                .toList();
+
 
         return new PageResponse<>(
                 commandeClientDtos,
@@ -153,4 +167,12 @@ public class CommandeClientServiceImpl implements CommandeClientService {
             throw new InvalidEntityException(msgException, ErrorCodes.CHAUFFEUR_NOT_VALID,errors);
         }
     }
-}
+
+    private UtilisateurDto getCreatedBy(Integer userid) {
+        return utilisateurServiceImpl.findById(userid);
+    }
+    private void setCreatedByUser(CommandeClientResponse commandeClientResponse){
+        UtilisateurDto uDto = getCreatedBy(commandeClientResponse.getCreatedBy());
+        commandeClientResponse.setCreatedByUser(CreatedByUserDto.builder().id(uDto.getId()).fullname(uDto.getFullname()).build());
+    }
+    }

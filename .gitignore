@@ -20,8 +20,8 @@ delivery-system-api/.settings
 delivery-system-api/.springBeans
 delivery-system-api/.sts4-cache
 
-delivery-system-ui/node_modules/
-delivery-system-ui/dist/
+delivery-dashboard-ui/node_modules/
+delivery-dashboard-ui/dist/
 delivery-ui/node_modules/
 delivery-ui/dist/
 
@@ -104,7 +104,7 @@ testem.log
 /typings
 
 # System files
-delivery-system-ui/.DS_Store
-delivery-system-ui/Thumbs.db
+delivery-dashboard-ui/.DS_Store
+delivery-dashboard-ui/Thumbs.db
 delivery-ui/.DS_Store
 delivery-ui/Thumbs.db

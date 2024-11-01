@@ -9,10 +9,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.Instant;
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 @Repository
-public interface MissionRepository extends JpaRepository<Mission, Integer> {
+public interface MissionRepository extends JpaRepository<Mission, Integer>, JpaSpecificationExecutor<Mission> {
 
     List<Mission> findAllByDateDebut(Instant dateMission);
 

@@ -24,8 +24,8 @@ public class LigneDevis extends AbstractEntity{
     @Column(name = "tva")
     private BigDecimal tva;
     @ManyToOne
-    @JoinColumn(name = "idmission")
-    private Mission mission;
+    @JoinColumn(name = "servdelivery_id")
+    private ServiceDelivery serviceDelivery;
     @ManyToOne
     @JoinColumn(name = "iddevis")
     private Devis devis;

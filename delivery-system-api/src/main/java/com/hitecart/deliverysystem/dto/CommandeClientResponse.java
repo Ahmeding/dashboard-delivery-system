@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hitecart.deliverysystem.model.CommandeClient;
 import com.hitecart.deliverysystem.model.enums.OrderStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,11 +28,14 @@ public class CommandeClientResponse {
     private ClientDto client;
     private List<LigneCommandeClientDto> ligneCommandeClientsDtos;
     private OrderStatus etatCommande;
-    private Integer createdBy;
     private Integer id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Integer createdBy;
     private Integer lastModifiedBy;
+    private CreatedByUserDto createdByUser;
+    private BigDecimal montantTotalHT;
+    private BigDecimal montantTotalTTC;
 
     public static CommandeClientResponse fromEntity(CommandeClient commandeClient) {
         if(commandeClient ==null){
@@ -41,7 +46,8 @@ public class CommandeClientResponse {
                 .code(commandeClient.getCode())
                 .dateCommnde(commandeClient.getDateCommnde())
                 .client(ClientDto.fromEntity( commandeClient.getClient()))
-                .createdBy(commandeClient.getCreatedBy())
+                .montantTotalHT(commandeClient.getMontantTotalHT())
+                .montantTotalTTC(commandeClient.getMontantTotalTTC())
                 .ligneCommandeClientsDtos(
                         commandeClient.getLigneCommandeClients()!=null?
                                 commandeClient.getLigneCommandeClients().stream()

@@ -21,17 +21,17 @@ public class ClientValidator {
            errors.add("Veuillez renseigner la siret du client !");
            errors.addAll(AdresseValidator.validate(null));
         }
-       if(!StringUtils.hasLength(dto.getNom())){
+       if(!StringUtils.hasLength(dto.getLastname())){
            errors.add("Veuillez renseigner le nom du client !");
 
        }
-       if(!StringUtils.hasLength(dto.getPrenom())){
+       if(!StringUtils.hasLength(dto.getFirstname())){
            errors.add("Veuillez renseigner le prenom du client !");
        }
-       if(!StringUtils.hasLength(dto.getNumTel())){
+       if(!StringUtils.hasLength(dto.getPhoneNum())){
            errors.add("Veuillez renseigner le numreo du telephone  du client !");
        }
-       if(!StringUtils.hasLength(dto.getAdresseEmail())){
+       if(!StringUtils.hasLength(dto.getEmail())){
            errors.add("Veuillez renseigner l'adresse email du client !");
        }
        if(!StringUtils.hasLength(dto.getDescription())){
@@ -43,7 +43,7 @@ public class ClientValidator {
        if(!StringUtils.hasLength(dto.getSiret())){
            errors.add("Veuillez renseigner la siret du client !");
        }
-           errors.addAll(AdresseValidator.validate(dto.getAdresseDto()));
+           errors.addAll(AdresseValidator.validate(dto.getAddress()));
     return errors;
     }
 }

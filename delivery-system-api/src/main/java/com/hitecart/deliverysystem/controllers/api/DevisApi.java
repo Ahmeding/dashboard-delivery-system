@@ -21,8 +21,9 @@ import static com.hitecart.deliverysystem.utils.Constants.*;
 @RequestMapping(DEVIS_ENDPOINT)
 @Tag(name = "Devis")
 public interface DevisApi {
-    @PostMapping(value = CREATE_DEVIS_ENDPOINT,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-
+    @PostMapping(value = CREATE_DEVIS_ENDPOINT,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             description = "Ajouter/Modifier un devis, cette methode permet " +
                     "d'enregistrer ou modifier un devis",
@@ -40,6 +41,7 @@ public interface DevisApi {
                             content = @Content(mediaType = "application/json"))
             })
     ResponseEntity<DevisDto> save(@RequestBody DevisDto dto);
+
     @GetMapping(value = FIND_DEVIS_BY_ID_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             description = "Rechercher un Devis par ID! Cette methode permet de chercher un devis par son ID",
