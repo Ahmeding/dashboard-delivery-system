@@ -4,21 +4,24 @@
 
 import { AdresseDto } from '../models/adresse-dto';
 import { CommandeClientDto } from '../models/commande-client-dto';
+import { CreatedByUserDto } from '../models/created-by-user-dto';
 import { DevisDto } from '../models/devis-dto';
 export interface ClientDto {
-  adresseDto?: AdresseDto;
-  adresseEmail?: string;
+  accountLocked?: boolean;
+  address?: AdresseDto;
   commandeClientsDtos?: Array<CommandeClientDto>;
   createdAt?: string;
   createdBy?: number;
+  createdByUser?: CreatedByUserDto;
   description?: string;
   devisDtos?: Array<DevisDto>;
+  email?: string;
+  enabled?: boolean;
+  firstname?: string;
   id?: number;
-  isActive?: boolean;
   lastModifiedBy?: number;
-  nom?: string;
-  numTel?: string;
-  prenom?: string;
+  lastname?: string;
+  phoneNum?: string;
   siren?: string;
   siret?: string;
   updatedAt?: string;

@@ -69,7 +69,7 @@
                 <div *ngIf="mission.missionVehiclesDtos?.length">
                   <div *ngFor="let mvehicle of mission.missionVehiclesDtos">
                     <div *ngFor="let driver of mvehicle.chauffeursVehicleDto" style="margin-bottom: 5px;">
-                      <span class="badge bg-success">{{ driver.chauffeurDto?.nom }} {{ driver.chauffeurDto?.prenom }}</span>
+                      <span class="badge bg-success">{{ driver.chauffeurDto?.firstname }} {{ driver.chauffeurDto?.lastname }}</span>
                     </div>
                   </div>
                 </div>

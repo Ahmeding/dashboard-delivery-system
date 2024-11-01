@@ -1,0 +1,106 @@
+$primary-color: #3498db;
+$background-color: #f5f7fa;
+$card-color: #fff;
+$button-hover-color: darken($primary-color, 10%);
+
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: $background-color;
+  padding: 1rem;
+
+  .login-box {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    background-color: $card-color;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+
+    h2 {
+      margin-bottom: 0.5rem;
+      color: $primary-color;
+      font-size: 1.75rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: darken($background-color, 30%);
+    }
+
+    form {
+      .form-group {
+        margin-bottom: 1.5rem;
+        text-align: left;
+
+        label {
+          font-weight: bold;
+          font-size: 0.875rem;
+          color: darken($background-color, 30%);
+        }
+
+        input {
+          border-radius: 5px;
+          border: 1px solid lighten($background-color, 20%);
+          padding: 0.75rem;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+
+          &:focus {
+            border-color: $primary-color;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+          }
+
+          &.is-invalid {
+            border-color: #e74c3c;
+          }
+        }
+
+        .invalid-feedback {
+          font-size: 0.75rem;
+          color: #e74c3c;
+          margin-top: 0.25rem;
+        }
+      }
+
+      .btn {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        background-color: $primary-color;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: $button-hover-color;
+        }
+
+        &:disabled {
+          background-color: lighten($primary-color, 20%);
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    .footer-links {
+      margin-top: 1.5rem;
+      font-size: 0.875rem;
+      color: darken($background-color, 30%);
+
+      a {
+        color: $primary-color;
+        text-decoration: none;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: $button-hover-color;
+        }
+      }
+    }
+  }
+}

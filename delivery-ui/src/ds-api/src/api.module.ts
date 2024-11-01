@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { VehiculeService } from './services/vehicule.service';
+import { ServiceDeliveryService } from './services/service-delivery.service';
 import { ClientService } from './services/client.service';
 import { ChauffeurService } from './services/chauffeur.service';
 import { UtilisateurService } from './services/utilisateur.service';
@@ -31,6 +32,7 @@ import { AdminControllerService } from './services/admin-controller.service';
   declarations: [],
   providers: [
     VehiculeService,
+    ServiceDeliveryService,
     ClientService,
     ChauffeurService,
     UtilisateurService,

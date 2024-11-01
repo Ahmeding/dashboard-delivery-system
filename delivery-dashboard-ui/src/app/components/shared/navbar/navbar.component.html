@@ -1,0 +1,13 @@
+<nav class="navbar navbar-expand-lg" [class.sidebar-collapsed]="isSidebarCollapsed">
+  <div class="container-fluid">
+    <button class="btn btn-link sidebar-toggle" (click)="onToggleSidebar()">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <div class="d-flex align-items-center">
+      <app-theme-toggle></app-theme-toggle>
+      <app-notifications></app-notifications>
+      <app-profile-menu></app-profile-menu>
+    </div>
+  </div>
+</nav>

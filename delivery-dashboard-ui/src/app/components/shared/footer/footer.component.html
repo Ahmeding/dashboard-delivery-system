@@ -1,0 +1,65 @@
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <h5>Delivery System</h5>
+        <p>Streamlining your delivery operations with cutting-edge technology and real-time tracking solutions.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+          <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <div class="link-group">
+          <h6>Company</h6>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Our Services</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+
+        <div class="link-group">
+          <h6>Support</h6>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">API Status</a></li>
+          </ul>
+        </div>
+
+        <div class="link-group">
+          <h6>Legal</h6>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">Compliance</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© {{currentYear}} Delivery System. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Terms</a>
+        <a href="#">Privacy</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+
+  <button
+    class="scroll-top"
+    (click)="scrollToTop()"
+    [class.visible]="showScrollTop"
+    aria-label="Scroll to top">
+    <i class="bi bi-arrow-up"></i>
+  </button>
+</footer>

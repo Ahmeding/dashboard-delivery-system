@@ -1,0 +1,148 @@
+$sidebar-width: 250px;
+$sidebar-collapsed-width: 70px;
+$transition-duration: 0.3s;
+
+.sidebar {
+  width: $sidebar-width;
+  height: 100vh;
+  background: var(--dark-color);
+  color: var(--light-color);
+  transition: all $transition-duration ease;
+  position: fixed;
+  z-index: 1031;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  @media (max-width: 991.98px) {
+    transform: translateX(-100%);
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+
+    &.show-mobile {
+      transform: translateX(0);
+    }
+  }
+
+  &.collapsed {
+    width: $sidebar-collapsed-width;
+
+    @media (max-width: 991.98px) {
+      width: $sidebar-width;
+    }
+
+    .brand-name {
+      display: none;
+
+      @media (max-width: 991.98px) {
+        display: block;
+      }
+    }
+
+    .nav-link span {
+      display: none;
+
+      @media (max-width: 991.98px) {
+        display: inline;
+      }
+    }
+
+    .submenu-icon {
+      display: none;
+    }
+
+    .submenu {
+      position: absolute;
+      left: $sidebar-collapsed-width;
+      top: 0;
+      width: 200px;
+      background: var(--dark-color);
+      display: none;
+      padding-left: 0;
+      box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1);
+
+      @media (max-width: 991.98px) {
+        position: static;
+        width: 100%;
+        box-shadow: none;
+      }
+
+      &.show {
+        display: block;
+      }
+    }
+
+    .nav-item:hover .submenu {
+      @media (min-width: 992px) {
+        display: block;
+      }
+    }
+  }
+}
+
+.sidebar-header {
+  height: 60px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.1);
+
+  .logo {
+    width: 30px;
+    height: 30px;
+  }
+
+  .brand-name {
+    margin-left: 1rem;
+    font-weight: 600;
+  }
+}
+
+.nav-link {
+  color: var(--light-color);
+  padding: 0.8rem 1rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  white-space: nowrap;
+  opacity: 0.8;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 1;
+  }
+
+  &.active {
+    background: var(--primary-color);
+    opacity: 1;
+  }
+
+  i {
+    font-size: 1.2rem;
+    min-width: 25px;
+    margin-right: 1rem;
+  }
+}
+
+.submenu {
+  list-style: none;
+  padding-left: 3rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height $transition-duration ease;
+
+  &.show {
+    max-height: 500px;
+  }
+
+  .nav-link {
+    padding: 0.5rem 1rem;
+  }
+}
+
+.submenu-icon {
+  margin-left: auto;
+  transition: transform $transition-duration ease;
+
+  &.rotated {
+    transform: rotate(180deg);
+  }
+}

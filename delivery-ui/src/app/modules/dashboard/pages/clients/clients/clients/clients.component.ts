@@ -79,6 +79,7 @@ export class ClientsComponent {
       }
     )
   }
+
   addNewClient(form: NgForm) {
     form.form.markAllAsTouched();
     this.isFormAddNewSubmitted= true;
@@ -90,11 +91,14 @@ export class ClientsComponent {
       this.alertService.alertError('You must fill in the required fields.');
     }
   }
+
   private resetForm(form: NgForm) {
     form.resetForm();
     this.newClient={}
     this.isFormAddNewSubmitted=false;
   }
+
+
   deleteClient(client_id: number) {
     if (client_id === undefined) {
       this.alertService.alertError('Client ID is missing. Unable to delete client.');
@@ -115,12 +119,12 @@ export class ClientsComponent {
     )
   }
   editClient(client_id: number | undefined) {
-    this.clientService.findById10({
+    this.clientService.findById11({
       id:client_id as number
     }).subscribe({
       next:(res)=>{
         this.selectedClient=res;
-        this.address=this.selectedClient.adresseDto as AdresseDto;
+        this.address=this.selectedClient.address as AdresseDto;
         console.log(this.selectedClient);
       }
     })
@@ -142,8 +146,8 @@ export class ClientsComponent {
 
   }
   private saveClient(clientToSave: ClientDto, form: NgForm) {
-    clientToSave.adresseDto = this.address;
-    this.clientService.save10({
+    clientToSave.address = this.address;
+    this.clientService.save11({
       body:clientToSave
     }).subscribe({
       next:(res)=>{

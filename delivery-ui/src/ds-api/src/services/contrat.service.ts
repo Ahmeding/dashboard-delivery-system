@@ -14,17 +14,17 @@ import { StrictHttpResponse } from '../strict-http-response';
 import { ContratDto } from '../models/contrat-dto';
 import { delete8 } from '../fn/contrat/delete-8';
 import { Delete8$Params } from '../fn/contrat/delete-8';
-import { findAll8 } from '../fn/contrat/find-all-8';
-import { FindAll8$Params } from '../fn/contrat/find-all-8';
+import { findAll9 } from '../fn/contrat/find-all-9';
+import { FindAll9$Params } from '../fn/contrat/find-all-9';
 import { findAllByIdChauffeur } from '../fn/contrat/find-all-by-id-chauffeur';
 import { FindAllByIdChauffeur$Params } from '../fn/contrat/find-all-by-id-chauffeur';
 import { findAllContrats } from '../fn/contrat/find-all-contrats';
 import { FindAllContrats$Params } from '../fn/contrat/find-all-contrats';
-import { findById8 } from '../fn/contrat/find-by-id-8';
-import { FindById8$Params } from '../fn/contrat/find-by-id-8';
+import { findById9 } from '../fn/contrat/find-by-id-9';
+import { FindById9$Params } from '../fn/contrat/find-by-id-9';
 import { PageResponseContratDto } from '../models/page-response-contrat-dto';
-import { save8 } from '../fn/contrat/save-8';
-import { Save8$Params } from '../fn/contrat/save-8';
+import { save9 } from '../fn/contrat/save-9';
+import { Save9$Params } from '../fn/contrat/save-9';
 
 @Injectable({ providedIn: 'root' })
 export class ContratService extends BaseService {
@@ -32,60 +32,60 @@ export class ContratService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `save8()` */
-  static readonly Save8Path = '/contrats/create';
+  /** Path part for operation `save9()` */
+  static readonly Save9Path = '/contrats/create';
 
   /**
    * Ajouter/Modifier un contrat, cette methode permet d'enregistrer ou modifier un contrat
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save8()` instead.
+   * To access only the response body, use `save9()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save8$Response(params: Save8$Params, context?: HttpContext): Observable<StrictHttpResponse<ContratDto>> {
-    return save8(this.http, this.rootUrl, params, context);
+  save9$Response(params: Save9$Params, context?: HttpContext): Observable<StrictHttpResponse<ContratDto>> {
+    return save9(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier un contrat, cette methode permet d'enregistrer ou modifier un contrat
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save8$Response()` instead.
+   * To access the full response (for headers, for example), `save9$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save8(params: Save8$Params, context?: HttpContext): Observable<ContratDto> {
-    return this.save8$Response(params, context).pipe(
+  save9(params: Save9$Params, context?: HttpContext): Observable<ContratDto> {
+    return this.save9$Response(params, context).pipe(
       map((r: StrictHttpResponse<ContratDto>): ContratDto => r.body)
     );
   }
 
-  /** Path part for operation `findById8()` */
-  static readonly FindById8Path = '/contrats/contrat/{id}';
+  /** Path part for operation `findById9()` */
+  static readonly FindById9Path = '/contrats/contrat/{id}';
 
   /**
    * Rechercher un Contrat par ID! Cette methode permet de chercher un contrat par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById8()` instead.
+   * To access only the response body, use `findById9()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById8$Response(params: FindById8$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findById8(this.http, this.rootUrl, params, context);
+  findById9$Response(params: FindById9$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findById9(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher un Contrat par ID! Cette methode permet de chercher un contrat par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById8$Response()` instead.
+   * To access the full response (for headers, for example), `findById9$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById8(params: FindById8$Params, context?: HttpContext): Observable<any> {
-    return this.findById8$Response(params, context).pipe(
+  findById9(params: FindById9$Params, context?: HttpContext): Observable<any> {
+    return this.findById9$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
@@ -119,31 +119,31 @@ export class ContratService extends BaseService {
     );
   }
 
-  /** Path part for operation `findAll8()` */
-  static readonly FindAll8Path = '/contrats/all';
+  /** Path part for operation `findAll9()` */
+  static readonly FindAll9Path = '/contrats/all';
 
   /**
    * Rechercher tout les Contrat! Cette methode permet de retouner tous les contrats
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll8()` instead.
+   * To access only the response body, use `findAll9()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll8$Response(params?: FindAll8$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findAll8(this.http, this.rootUrl, params, context);
+  findAll9$Response(params?: FindAll9$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findAll9(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les Contrat! Cette methode permet de retouner tous les contrats
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll8$Response()` instead.
+   * To access the full response (for headers, for example), `findAll9$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll8(params?: FindAll8$Params, context?: HttpContext): Observable<any> {
-    return this.findAll8$Response(params, context).pipe(
+  findAll9(params?: FindAll9$Params, context?: HttpContext): Observable<any> {
+    return this.findAll9$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

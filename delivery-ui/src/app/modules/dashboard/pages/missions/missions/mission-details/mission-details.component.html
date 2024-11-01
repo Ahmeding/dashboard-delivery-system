@@ -156,7 +156,7 @@
               <ng-container *ngFor="let v of mission.missionVehiclesDtos" >
                 <tr *ngFor="let d of v.chauffeursVehicleDto">
                       <th scope="row">{{ d.chauffeurDto?.id }}</th>
-                      <td>{{ d.chauffeurDto?.nom }}&nbsp; {{ d.chauffeurDto?.prenom }}</td>
+                      <td>{{ d.chauffeurDto?.firstname }}&nbsp; {{ d.chauffeurDto?.lastname }}</td>
                       <td>12/09/2024</td>
                       <td>{{ v.vehicleDto?.marque }}&nbsp; {{v.vehicleDto?.modele}}</td>
                       <td>{{ v.vehicleDto?.immatriculation }}</td>
