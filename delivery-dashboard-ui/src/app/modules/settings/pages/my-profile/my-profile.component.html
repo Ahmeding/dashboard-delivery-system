@@ -1,1 +1,13 @@
-<p>my-profile works!</p>
+<div class="card shadow-hover p-4">
+  <div class="text-center">
+    <img src="assets/avatar.png" alt="Avatar" class="rounded-circle mb-3" width="120">
+    <h4 class="fw-bold">{{ user.fullname }}</h4>
+    <p class="text-muted">{{ user.role }}</p>
+  </div>
+  <div class="card-body">
+    <p><i class="bi bi-envelope"></i> {{ user.email }}</p>
+    <p><i class="bi bi-phone"></i> {{ user.phoneNum }}</p>
+    <p><i class="bi bi-calendar"></i> {{ user.dateOfBirth | date }}</p>
+    <button class="btn btn-outline-primary w-100 mt-3" (click)="editProfile()">Edit Profile</button>
+  </div>
+</div>

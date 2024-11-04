@@ -1,0 +1,93 @@
+<div class="container mt-5">
+  <div class="card shadow-hover p-4">
+    <h3 class="text-center mb-4">Create New Contract</h3>
+    <form #contractForm="ngForm" (ngSubmit)="onSubmit(contractForm)">
+
+      <!-- Chauffeur Field -->
+      <div class="form-group">
+        <input
+          type="number"
+          id="chauffeurId"
+          class="form-control"
+          name="chauffeurId"
+          placeholder=" "
+          required />
+        <label for="chauffeurId">Chauffeur ID</label>
+      </div>
+
+      <!-- Start Date Field -->
+      <div class="form-group">
+        <input
+          type="date"
+          id="dateDebut"
+          class="form-control"
+          name="dateDebut"
+          [(ngModel)]="contract.dateDebut"
+          placeholder=" "
+          required />
+        <label for="dateDebut">Start Date</label>
+      </div>
+
+      <!-- End Date Field -->
+      <div class="form-group">
+        <input
+          type="date"
+          id="dateFin"
+          class="form-control"
+          name="dateFin"
+          [(ngModel)]="contract.dateFin"
+          placeholder=" "
+          required />
+        <label for="dateFin">End Date</label>
+      </div>
+
+      <!-- Type of Contract Field -->
+      <div class="form-group">
+        <select
+          id="typeContrat"
+          class="form-control"
+          name="typeContrat"
+          [(ngModel)]="contract.typeContrat"
+          required>
+          <option value="" disabled>Select Contract Type</option>
+          <option value="CDD">CDD (Fixed-term contract)</option>
+          <option value="CDI">CDI (Permanent contract)</option>
+        </select>
+        <label for="typeContrat">Contract Type</label>
+      </div>
+
+      <!-- Created By Field -->
+      <div class="form-group">
+        <input
+          type="number"
+          id="createdBy"
+          class="form-control"
+          name="createdBy"
+          [(ngModel)]="contract.createdBy"
+          placeholder=" "
+          required />
+        <label for="createdBy">Created By (User ID)</label>
+      </div>
+
+      <!-- Last Modified By Field -->
+      <div class="form-group">
+        <input
+          type="number"
+          id="lastModifiedBy"
+          class="form-control"
+          name="lastModifiedBy"
+          [(ngModel)]="contract.lastModifiedBy"
+          placeholder=" "
+          required />
+        <label for="lastModifiedBy">Last Modified By (User ID)</label>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary btn-block"
+        [disabled]="contractForm.invalid">
+        <i class="bi bi-save"></i> Save Contract
+      </button>
+    </form>
+  </div>
+</div>

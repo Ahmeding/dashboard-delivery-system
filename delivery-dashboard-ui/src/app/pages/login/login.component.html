@@ -31,7 +31,13 @@
           Password is required.
         </div>
       </div>
-      <button type="submit" class="btn btn-primary btn-block" [disabled]="loginForm.invalid">Login</button>
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="loginForm.invalid || isLoading">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm"></span>
+        <span [ngClass]="isLoading?'hidden' : ''">&nbsp;Login</span>
+      </button>
+      <div class="invalid-credentials">
+        {{ errorSubject }} : <span *ngFor="let err of errorsMsg">{{err}}</span>
+      </div>
     </form>
     <div class="footer-links">
     </div>

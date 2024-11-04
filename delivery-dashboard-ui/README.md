@@ -1,6 +1,54 @@
 # DeliveryDashboardUi
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.14.
+````json
+"dependencies": {
+"ng-openapi-gen": "^0.52.0",
+"@auth0/angular-jwt": "^5.2.0",
+"@costlydeveloper/ngx-awesome-popup": "^3.2.2",
+"ngx-toastr": "^19.0.0",
+"quill": "^2.0.0",
+"sockjs-client": "1.6.1",
+"stompjs": "^2.3.3",
+}
+
+"devDependencies": {
+"@types/sockjs-client": "^1.5.4",
+"@types/stompjs": "^2.3.9"}
+````
+
+````bash
+npm i @costlydeveloper/ngx-awesome-popup
+`````
+````bash
+npm i ngx-pagination
+`````
+ngx-pagination
+
+
+````bash
+npm i @auth0/angular-jwt
+`````
+````bash
+ng g guard auth
+`````
+
+```bash
+npm i ngx-toastr
+````
+add to app-module
+````json
+imports:[
+'..',
+  ToastrModule
+  
+]
+````
+
+
+# DeliveryUi
+
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.14.
 
 ## Development server
 
@@ -25,3 +73,13 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Crete modules
+
+ng g m dashboard --routing
+
+
+
+             // "src/vendor/chart.js/Chart.min.js",
+             // "src/js/demo/chart-area-demo.js",
+              //"src/js/demo/chart-pie-demo.js"

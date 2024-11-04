@@ -28,9 +28,9 @@ public class WebConfig {
         //config.setAllowedOrigins(allowedOrigins);
         //config.setAllowedHeaders(Arrays.asList("*"));//ORIGIN,CONTENT_TYPE,ACCEPT,AUTHORIZATION));
         //config.setAllowedMethods(Arrays.asList("*"));//"GET","POST","PATCH","DELETE","PUT"));
-        /**      **/
-        config.setAllowCredentials(true);
-        config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+        config.setAllowCredentials(false);
+        //config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+        config.setAllowedOrigins(Collections.singletonList("*"));
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.ORIGIN,
                 HttpHeaders.CONTENT_TYPE,

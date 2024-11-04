@@ -1,0 +1,95 @@
+.is-invalid {
+  border: 1px solid red; /* Add red border */
+}
+
+.text-danger {
+  font-size: 0.875rem; /* Smaller font size for the error message */
+}
+
+.qte-select {
+  width: 50px; // Adjust the width as needed
+  min-width: 50px; // Set the minimum width you want
+  max-width: 50px; // Optional: to limit the maximum width
+  padding: 5px; // Adjust padding if necessary
+  font-size: 14px; // Adjust font size if needed
+
+  // Optional: Add hover and focus effects
+  &:hover {
+    border-color: #007bff; // Change border color on hover
+  }
+
+  &:focus {
+    outline: none; // Remove default focus outline
+    border-color: #007bff; // Change border color on focus
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); // Optional: add shadow on focus
+  }
+}
+
+
+.invoice {
+  width: 100%;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  font-family: Arial, sans-serif;
+  color: #333;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+
+  .invoice-header {
+    text-align: center;
+    margin-bottom: 20px;
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    .invoice-meta {
+      font-size: 14px;
+      color: #555;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+  }
+
+  .invoice-company-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-size: 14px;
+
+    div {
+      line-height: 1.5;
+    }
+  }
+
+  .invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background-color: #f9f9f9;
+      font-weight: bold;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f4f4f4;
+    }
+  }
+
+  .invoice-footer {
+    text-align: right;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+  }
+}

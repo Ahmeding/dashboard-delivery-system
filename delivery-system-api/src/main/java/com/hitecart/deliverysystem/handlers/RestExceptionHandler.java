@@ -84,12 +84,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorDto> handleException(BadCredentialsException exception,WebRequest webRequest){
-        final HttpStatus badRequet = HttpStatus.BAD_REQUEST;
+        final HttpStatus badRequet = HttpStatus.UNAUTHORIZED;
         final ErrorDto errorDto = ErrorDto.builder()
                 .errorCodes(ErrorCodes.BAD_CREDENTIALS)
                 .httpCode(badRequet.value())
                 .msg(exception.getMessage())
-                .errors(Collections.singletonList("Login et / ou mot de passe incorrecte"))
+                .errors(Collections.singletonList("Please check your username and password."))
                 .build();
 
         return new ResponseEntity<>(errorDto,badRequet);

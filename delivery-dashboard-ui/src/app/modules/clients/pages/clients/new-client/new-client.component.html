@@ -1,0 +1,158 @@
+<div class="client-form-container">
+  <div class="form-header">
+    <h1>{{ isEditMode ? 'Edit Client' : 'New Client' }}</h1>
+    <button class="btn btn-outline-secondary" routerLink="/clients/all">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
+  <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="client-form">
+    <div class="form-sections">
+      <!-- Personal Information -->
+      <div class="form-section">
+        <h2>Personal Information</h2>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="firstname"
+                     formControlName="firstname" placeholder="First Name"
+                     [class.is-invalid]="isFieldInvalid('firstname')">
+              <label for="firstname">First Name</label>
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('firstname')">
+                First name is required
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="lastname"
+                     formControlName="lastname" placeholder="Last Name"
+                     [class.is-invalid]="isFieldInvalid('lastname')">
+              <label for="lastname">Last Name</label>
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('lastname')">
+                Last name is required
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="form-section">
+        <h2>Contact Information</h2>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="email" class="form-control" id="email"
+                     formControlName="email" placeholder="Email"
+                     [class.is-invalid]="isFieldInvalid('email')">
+              <label for="email">Email</label>
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
+                Please enter a valid email address
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="tel" class="form-control" id="phoneNum"
+                     formControlName="phoneNum" placeholder="Phone Number"
+                     [class.is-invalid]="isFieldInvalid('phoneNum')">
+              <label for="phoneNum">Phone Number</label>
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('phoneNum')">
+                Please enter a valid phone number
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Business Information -->
+      <div class="form-section">
+        <h2>Business Information</h2>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="siren"
+                     formControlName="siren" placeholder="SIREN">
+              <label for="siren">SIREN</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="siret"
+                     formControlName="siret" placeholder="SIRET">
+              <label for="siret">SIRET</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Address -->
+      <div class="form-section" formGroupName="address">
+        <h2>Address</h2>
+        <div class="row g-3">
+          <div class="col-12">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="street"
+                     formControlName="street" placeholder="Street Address">
+              <label for="street">Street Address</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="city"
+                     formControlName="city" placeholder="City">
+              <label for="city">City</label>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="postalCode"
+                     formControlName="postalCode" placeholder="Postal Code">
+              <label for="postalCode">Postal Code</label>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="country"
+                     formControlName="country" placeholder="Country">
+              <label for="country">Country</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Information -->
+      <div class="form-section">
+        <h2>Additional Information</h2>
+        <div class="row g-3">
+          <div class="col-12">
+            <div class="form-floating">
+              <textarea class="form-control" id="description"
+                        formControlName="description" placeholder="Description"
+                        style="height: 100px"></textarea>
+              <label for="description">Description</label>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-check form-switch">
+              <input type="checkbox" class="form-check-input" id="enabled"
+                     formControlName="enabled">
+              <label class="form-check-label" for="enabled">Active Account</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-outline-secondary" routerLink="/clients/all">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="clientForm.invalid || isSubmitting">
+        <i class="bi bi-save"></i>
+        {{ isEditMode ? 'Update' : 'Create' }} Client
+      </button>
+    </div>
+  </form>
+</div>

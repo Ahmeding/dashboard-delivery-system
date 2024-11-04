@@ -12,4 +12,6 @@ export class NavbarComponent {
   onToggleSidebar() {
     this.toggleSidebar.emit();
   }
+
+
 }

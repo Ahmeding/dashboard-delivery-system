@@ -1,1 +1,171 @@
-<p>planning works!</p>
+
+<div id="content">
+  <!-- Begin Page Content -->
+  <div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Missions</h1>
+    </div>
+    <div class="container-fluid waiting" *ngIf="isLoading">
+      <span class="spinner-border"></span>
+      <div class="card"></div>
+    </div>
+    <!-- Content Row Table -->
+
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h4 class="lead">
+        <!--        {{
+                  allMissionsResponse.content?.length > 0
+                    ? "Mission List ("+missions.length+")"
+                    : "You don't have any themes yet"
+                }}-->
+      </h4>
+      <a class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" routerLink="/new-mission"><i
+        class="fas fa-plus fa-sm text-white-50"></i>&nbsp;New Mission</a>
+    </div>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center py-3 ">
+        <h6 class="m-0 font-weight-bold text-primary">Number of mission by pages?</h6>
+
+        <div class="">
+          <form
+            class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-md-0">
+            <div class="input-group">
+              <input type="text" class="form-control bg-light border-0 small" placeholder="Search Mission..."
+                     aria-label="Search" aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="button">
+                  <i class="fas fa-search fa-sm"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+
+            <th>Ref</th>
+            <th>Name</th>
+            <th>Driver</th>
+            <th>Vehicle</th>
+            <th>Volume(m<sup>3</sup>)</th>
+            <th>Status</th>
+            <th>Start date</th>
+            <th>Action</th>
+
+            </thead>
+            <tbody>
+            <tr  *ngFor="let mission of allMyMissionsResponse.content">
+              <td>{{ mission.id }}</td>
+              <td>{{ mission.titre }}</td>
+              <td>
+                <div *ngIf="mission.missionVehiclesDtos?.length">
+                  <div *ngFor="let mvehicle of mission.missionVehiclesDtos">
+                    <div *ngFor="let driver of mvehicle.chauffeursVehicleDto" style="margin-bottom: 5px;">
+                      <span class="badge bg-success">{{ driver.chauffeurDto?.lastname }} {{ driver.chauffeurDto?.firstname }}</span>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div *ngIf="mission.missionVehiclesDtos?.length">
+                  <div *ngFor="let vehicle of mission.missionVehiclesDtos">
+                    <div class="license-plate-container">
+                      <!-- License Plate Background Image -->
+                      <img src="assets/images/immat.png" alt="License Plate" class="license-plate-bg" width="90">
+                      <div class="registration-number">
+                        {{ vehicle.vehicleDto?.immatriculation }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </td>
+              <td><span class="badge bg-primary">{{ mission.volume }} m<sup>3</sup></span> </td>
+              <td><span class="badge bg-warning">{{ mission.etatMission }}</span></td>
+              <td>{{ mission.dateDebut }}</td>
+              <td class="text-center" style="cursor: pointer">
+                <i class="fas fa-pencil-alt ml-0" (click)="misionEdit(mission.id)" data-bs-toggle="modal"
+                   data-bs-target="#missionUpdateModal" title="Modify"></i>
+                <i class="fa fa-trash text-danger ml-3 mr-3" title="Supprimer" (click)="missionDelete(mission.id!)"></i>
+                <i class="fa fa-info text-info m-1" title="Détail" (click)="missionDetails(mission.id!)"></i>
+
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="d-flex justify-content-center mt-3">
+            <nav aria-label="Page navigation">
+              <ul class="pagination">
+                <li class="page-item">
+                  <a class="page-link"
+                     [class.disabled]="page == 0"
+                     (click)="goToFirstPage()"
+                     aria-label="First Page"
+                     href="javascript:void(0)"
+                  >
+                    <i class="fas fa-angle-double-left"></i>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link"
+                     [class.disabled]="page == 0"
+                     (click)="goToPreviousPage()"
+                     aria-label="Pevious Page"
+                     href="javascript:void(0)">
+                    <i class="fas fa-angle-left"></i>
+                  </a>
+                </li>
+
+                <li class="page-item" *ngFor="let _ of [].constructor(this.allMyMissionsResponse.totalPages);let pageIndex = index">
+                  <a class="page-link"
+                     (click)="goToPage(pageIndex)"
+                     aria-label="Page"
+                     href="javascript:void(0)"
+                     [class.active]="page == pageIndex"
+                  >
+                    {{pageIndex +1}}
+                  </a>
+                </li>
+
+                <li class="page-item">
+                  <a class="page-link"
+                     [class.disabled]="isLastPage"
+                     (click)="goToNextPage()"
+                     aria-label="Next Page"
+                     href="javascript:void(0)">
+
+                    <i class="fas fa-angle-right"></i>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link"
+                     [class.disabled]="isLastPage"
+                     (click)="goToLastPage()"
+                     aria-label="Last Page"
+                     href="javascript:void(0)">
+                    <i class="fas fa-angle-double-right"></i>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+    <!-- /.container-fluid -->
+
+  </div>
+</div>
+

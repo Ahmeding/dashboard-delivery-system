@@ -1,0 +1,112 @@
+<div class="container mt-5">
+  <div class="card shadow-hover p-4">
+    <h3 class="text-center mb-4">Create New Expense</h3>
+    <form #expenseForm="ngForm" (ngSubmit)="onSubmit(expenseForm)">
+
+      <!-- Name Field -->
+      <div class="form-group">
+        <input
+          type="text"
+          id="nom"
+          class="form-control"
+          name="nom"
+          [(ngModel)]="expense.nom"
+          placeholder=" "
+          required />
+        <label for="nom">Name</label>
+      </div>
+
+      <!-- Commentaire Field -->
+      <div class="form-group">
+        <textarea
+          id="commentaire"
+          class="form-control"
+          name="commentaire"
+          [(ngModel)]="expense.commentaire"
+          placeholder=" "
+          rows="3"
+          required></textarea>
+        <label for="commentaire">Comment</label>
+      </div>
+
+      <!-- Created At Field -->
+      <div class="form-group">
+        <input
+          type="date"
+          id="createdAt"
+          class="form-control"
+          name="createdAt"
+          [(ngModel)]="expense.createdAt"
+          placeholder=" "
+          required />
+        <label for="createdAt">Created At</label>
+      </div>
+
+      <!-- Created By Field -->
+      <div class="form-group">
+        <input
+          type="number"
+          id="createdBy"
+          class="form-control"
+          name="createdBy"
+          [(ngModel)]="expense.createdBy"
+          placeholder=" "
+          required />
+        <label for="createdBy">Created By (ID)</label>
+      </div>
+
+      <!-- Last Modified By Field -->
+      <div class="form-group">
+        <input
+          type="number"
+          id="lastModifiedBy"
+          class="form-control"
+          name="lastModifiedBy"
+          [(ngModel)]="expense.lastModifiedBy"
+          placeholder=" "
+          required />
+        <label for="lastModifiedBy">Last Modified By (ID)</label>
+      </div>
+
+      <!-- Mission Details (Optional) -->
+      <div class="form-group">
+        <select
+          type="text"
+          id="mission"
+          class="form-control"
+          name="missionDto"
+          [(ngModel)]="expense.missionDto"
+          placeholder=" " >
+          <option>fdgdfhfdh</option>
+        </select>
+        <label for="mission">Mission Title</label>
+      </div>
+
+      <!-- Ligne Frais (Expense Lines) -->
+     <!-- <div class="form-group">
+        <label >Expense Lines</label>
+        <div *ngFor="let line of expense.lignesFraisMissionDto; let i = index">
+          <input
+            type="text"
+            class="form-control my-2"
+            [(ngModel)]="line.type"
+            name="lignesFrais-{{i}}"
+            placeholder="Line Detail" />
+          <input
+            type="number"
+            class="form-control my-2"
+            [(ngModel)]="line.cout"
+            name="amount-{{i}}"
+            placeholder="Amount" />
+        </div>
+      </div>-->
+
+      <button
+        type="submit"
+        class="btn btn-primary btn-block"
+        [disabled]="expenseForm.invalid">
+        <i class="bi bi-save"></i> Save Expense
+      </button>
+    </form>
+  </div>
+</div>

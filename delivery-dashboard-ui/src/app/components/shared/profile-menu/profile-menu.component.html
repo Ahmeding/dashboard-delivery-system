@@ -1,13 +1,13 @@
 <div class="profile-menu" ngbDropdown>
   <button class="btn btn-link d-flex align-items-center" ngbDropdownToggle>
-    <span class="user-name d-none d-md-inline">{{user.name}}</span>
+    <span class="user-name d-none d-md-inline">{{fullname}}</span>
     <img [src]="user.avatar" alt="Profile" class="avatar  ms-2 ">
   </button>
 
   <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
     <div class="dropdown-header">
       <div class="user-info">
-        <h6 class="mb-0">{{user.name}}</h6>
+        <h6 class="mb-0">{{fullname}}</h6>
         <small class="text-muted">{{user.email}}</small>
       </div>
     </div>

@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +32,8 @@ public class DevisDtoResponse{
     private Integer createdBy;
     private Integer lastModifiedBy;
     private CreatedByUserDto createdByUser;
+    private BigDecimal montantTotalHT;
+    private BigDecimal montantTotalTTC;
 
     public static DevisDtoResponse fromEntity(Devis devis){
         if(devis==null){
@@ -53,6 +56,8 @@ public class DevisDtoResponse{
                 .updatedAt(devis.getUpdatedAt())
                 .createdBy(devis.getCreatedBy())
                 .lastModifiedBy(devis.getLastModifiedBy())
+                .montantTotalHT(devis.getMontantTotalHT())
+                .montantTotalTTC(devis.getMontantTotalTTC())
                 .build();
     }
 
@@ -78,6 +83,8 @@ public class DevisDtoResponse{
         devis.setUpdatedAt(dto.getUpdatedAt());
         devis.setCreatedBy(dto.getCreatedBy());
         devis.setLastModifiedBy(dto.getLastModifiedBy());
+        devis.setMontantTotalHT(dto.getMontantTotalHT());
+        devis.setMontantTotalTTC(dto.getMontantTotalTTC());
         return devis;
     }
 

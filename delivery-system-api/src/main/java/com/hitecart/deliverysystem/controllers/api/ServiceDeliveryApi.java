@@ -134,21 +134,9 @@ public interface ServiceDeliveryApi {
             }
     )
      ResponseEntity<List<ServiceDeliveryDto>> findAllEnabled(@PathVariable("isenabled") boolean enabled);
-    @GetMapping(
-            value = FIND_ALL_SERVICE_DELIVERY_PAGEABLE_ENDPOINT,
-            produces =MediaType.APPLICATION_JSON_VALUE )@Operation(
-            description = "Rechercher tout les ServiceDelivery! Cette methode permet de retouner toutes les ServiceDelivery",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "CommandeClients retrouvées ",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = CommandeClientResponse.class))
-                            )
-                    )
-            }
-    )
+
+    @GetMapping(value =FIND_ALL_SERVICE_DELIVERY_PAGEABLE_ENDPOINT,
+            produces =MediaType.APPLICATION_JSON_VALUE  )
      ResponseEntity<PageResponse<ServiceDeliveryDto>> findAllServicesDelivery(
             @RequestParam(name = "page",defaultValue = "1", required = false)  int page,
             @RequestParam(name = "size",defaultValue = "10", required = false) int size);

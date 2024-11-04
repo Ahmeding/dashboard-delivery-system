@@ -5,6 +5,9 @@
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/mixins";
 
+@import "ngx-toastr/toastr";
+@import "~node_modules/@costlydeveloper/ngx-awesome-popup/styles/theme.css";
+
 
 /*@import '@fullcalendar/core/main.css';
 @import '@fullcalendar/daygrid/main.css';

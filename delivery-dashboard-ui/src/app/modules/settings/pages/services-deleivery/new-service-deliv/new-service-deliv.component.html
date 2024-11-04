@@ -1,0 +1,107 @@
+<div class="container mt-5">
+  <div class="card shadow-hover p-4">
+    <h3 class="text-center mb-4">Create New Service Delivery</h3>
+    <form #serviceForm="ngForm" (ngSubmit)="onSubmit(serviceForm)">
+
+      <!-- Title Field -->
+      <div class="form-group">
+        <input
+          type="text"
+          id="title"
+          class="form-control"
+          name="title"
+          [(ngModel)]="service.title"
+          placeholder=" "
+          required />
+        <label for="title">Title</label>
+      </div>
+
+      <!-- Description Field -->
+      <div class="form-group">
+        <textarea
+          id="description"
+          class="form-control"
+          name="description"
+          [(ngModel)]="service.description"
+          placeholder=" "
+          rows="3"
+          required></textarea>
+        <label for="description">Description</label>
+      </div>
+
+      <!-- Reference Field -->
+      <div class="form-group">
+        <input
+          type="text"
+          id="reference"
+          class="form-control"
+          name="reference"
+          [(ngModel)]="service.reference"
+          placeholder=" "
+          required />
+        <label for="reference">Reference</label>
+      </div>
+
+      <!-- Price TTC Field -->
+      <div class="form-group">
+        <input
+          type="number"
+          id="priceTTC"
+          class="form-control"
+          name="priceTTC"
+          [(ngModel)]="service.priceTTC"
+          placeholder=" "
+          min="0"
+          required />
+        <label for="priceTTC">Price (TTC)</label>
+      </div>
+
+      <!-- Unit Price HT Field -->
+      <div class="form-group">
+        <input
+          type="number"
+          id="unitPriceHT"
+          class="form-control"
+          name="unitPriceHT"
+          [(ngModel)]="service.unitPriceHT"
+          placeholder=" "
+          min="0"
+          required />
+        <label for="unitPriceHT">Unit Price (HT)</label>
+      </div>
+
+      <!-- TVA Field -->
+      <div class="form-group">
+        <input
+          type="number"
+          id="tva"
+          class="form-control"
+          name="tva"
+          [(ngModel)]="service.tva"
+          placeholder=" "
+          min="0"
+          max="100"
+          required />
+        <label for="tva">TVA (%)</label>
+      </div>
+
+      <!-- Enabled Field -->
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          id="enabled"
+          class="form-check-input"
+          name="enabled"
+          [(ngModel)]="service.enabled" />
+        <label class="form-check-label" for="enabled">Enabled</label>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary btn-block"
+        [disabled]="serviceForm.invalid">
+        <i class="bi bi-save"></i> Save Service
+      </button>
+    </form>
+  </div>
+</div>

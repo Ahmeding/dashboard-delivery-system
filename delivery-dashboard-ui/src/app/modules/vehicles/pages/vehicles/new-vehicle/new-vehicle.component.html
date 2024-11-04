@@ -1,0 +1,111 @@
+<div class="container mt-5">
+  <div class="card shadow-hover p-4">
+    <h3 class="text-center mb-4">Create New Vehicle</h3>
+
+    <form #form="ngForm">
+      <!-- ligne 1-->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <div class="form-floating mb-3 mb-md-0">
+            <input  [(ngModel)]="newVehicle.marque"
+                    [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['marque']?.invalid}"
+                    name="marque"  class="form-control" id="inputMarque" type="text" placeholder="Vehicule brand"  required/>
+            <label for="inputMarque">Brand</label>
+            <small *ngIf="isFormAddNewSubmitted && form.controls['marque']?.invalid" class="text-danger">Brand is required</small>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-floating mb-3 mb-md-0">
+            <input  [(ngModel)]="newVehicle.modele"
+                    [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['modele']?.invalid}"
+                    name="modele" class="form-control" id="inputModel" type="text" placeholder="Model"  required/>
+            <label for="inputModel">Model</label>
+            <small *ngIf="isFormAddNewSubmitted && form.controls['modele']?.invalid" class="text-danger">Modele is required</small>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-floating mb-3 mb-md-0">
+            <input  [(ngModel)]="newVehicle.immatriculation"
+                    [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['immat']?.invalid}"
+                    name="immat" class="form-control" id="inputImmat" type="text" placeholder="License plate"  required/>
+            <label for="inputImmat">License plate</label>
+            <small *ngIf="isFormAddNewSubmitted && form.controls['immat']?.invalid" class="text-danger">License plate is required</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- ligne 2-->
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <div class="form-floating mb-3 mb-md-0">
+            <input  [(ngModel)]="newVehicle.numVin"
+                    [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['numvin']?.invalid}"
+                    name="numvin" class="form-control" id="inputNumVin" type="text" placeholder="VIN N°"  required/>
+            <label for="inputNumVin">VIN N°</label>
+            <small *ngIf="isFormAddNewSubmitted && form.controls['numvin']?.invalid" class="text-danger">VIN N° is required</small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating mb-3 mb-md-0">
+            <input  [(ngModel)]="newVehicle.datePMC"
+                    [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['datepmc']?.invalid}"
+                    name="datepmc" class="form-control" id="inputDatePMC" type="date" placeholder="Date P.M.C."  required/>
+            <label for="inputDatePMC">Date P.M.C.</label>
+            <small *ngIf="isFormAddNewSubmitted && form.controls['datepmc']?.invalid" class="text-danger">Date P.M.C. is required</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- ligne 3-->
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <div class="form-floating mb-3 mb-md-0">
+            <input  [(ngModel)]="newVehicle.kilometrage"
+                    [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['mileage']?.invalid}"
+                    name="mileage" class="form-control" id="inputKilometrage" type="number" placeholder="Date PMC"  required/>
+            <label for="inputKilometrage">Mileage</label>
+            <small *ngIf="isFormAddNewSubmitted && form.controls['mileage']?.invalid" class="text-danger">Mileage plate is required</small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating mb-3 mb-md-0">
+            <input  [(ngModel)]="newVehicle.volume"
+                    [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['volume']?.invalid}"
+                    name="volume" class="form-control" id="inputVolume" type="text" placeholder="Volume"  required/>
+            <label for="inputVolume">Volume (m<sup>3</sup>)</label>
+            <small *ngIf="isFormAddNewSubmitted && form.controls['volume']?.invalid" class="text-danger">Volume is required</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- ligne 4-->
+      <div class="row mb-3">
+
+        <div class="col-md-6">
+          <div class="form-floating mb-3 mb-md-0">
+            <select [(ngModel)]="newVehicle.typecarburant"
+                    [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['fueltype']?.invalid}" name="fueltype"
+                    class="form-select" id="inputTypeCarburant" placeholder="Fuel Type"  required>
+              <option selected disabled>Select fuel type</option>
+              <option value="GASOIL">Gasoil</option>
+              <option value="ESSENCE">Essence</option>
+              <option value="HYBRIDE">Hybride</option>
+              <option value="ELECTRIC">Electric</option>
+            </select>
+            <small *ngIf="isFormAddNewSubmitted && form.controls['fueltype']?.invalid" class="text-danger">Fuel type is required</small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating mb-3 mb-md-0">
+            <input [(ngModel)]="newVehicle.dateExpCtrlTec"
+                   [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['dateExpirCT']?.invalid}"
+                   name="dateExpirCT" class="form-control" id="inputdateExpirCT" type="date" placeholder="C.T. Expir. Date" />
+            <label for="inputdateExpirCT">Date Expir. CT</label>
+            <small *ngIf="isFormAddNewSubmitted && form.controls['dateExpirCT']?.invalid" class="text-danger">C.T. Expir. Date is required</small>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </div>
+</div>

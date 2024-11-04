@@ -23,4 +23,9 @@ export class ProfileMenuComponent {
     // Implement logout logic here
     console.log('Logging out...');
   }
+
+  get fullname():string{
+    return localStorage.getItem('user') as string;
+
+  }
 }

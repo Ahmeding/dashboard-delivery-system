@@ -1,0 +1,123 @@
+<div class="container mt-5">
+  <div class="card shadow-hover p-4">
+    <h3 class="text-center mb-4">Create New Repair</h3>
+
+
+    <form #repairForm="ngForm" (ngSubmit)="onSubmit(repairForm)">
+
+      <!-- Commentaire Field -->
+      <div class="form-group">
+        <textarea
+          id="commentaire"
+          class="form-control"
+          name="commentaire"
+          [(ngModel)]="repair.commentaire"
+          placeholder=" "
+          rows="3"
+          required></textarea>
+        <label for="commentaire">Comment</label>
+      </div>
+
+      <!-- Cost Field -->
+      <div class="form-group">
+        <input
+          type="number"
+          id="cout"
+          class="form-control"
+          name="cout"
+          [(ngModel)]="repair.cout"
+          placeholder=" "
+          required />
+        <label for="cout">Cost</label>
+      </div>
+
+      <!-- Start Date Field -->
+      <div class="form-group">
+        <input
+          type="date"
+          id="dateDebut"
+          class="form-control"
+          name="dateDebut"
+          [(ngModel)]="repair.dateDebut"
+          placeholder=" "
+          required />
+        <label for="dateDebut">Start Date</label>
+      </div>
+
+      <!-- End Date Field -->
+      <div class="form-group">
+        <input
+          type="date"
+          id="dateFin"
+          class="form-control"
+          name="dateFin"
+          [(ngModel)]="repair.dateFin"
+          placeholder=" "
+          required />
+        <label for="dateFin">End Date</label>
+      </div>
+
+      <!-- Next Repair Date Field -->
+      <div class="form-group">
+        <input
+          type="date"
+          id="dateProchainRep"
+          class="form-control"
+          name="dateProchainRep"
+          [(ngModel)]="repair.dateProchainRep"
+          placeholder=" " />
+        <label for="dateProchainRep">Next Repair Date</label>
+      </div>
+
+      <!-- Type Field -->
+      <div class="form-group">
+        <select
+          id="type"
+          class="form-control"
+          name="type"
+          [(ngModel)]="repair.type"
+          required>
+          <option value="" disabled>Select Repair Type</option>
+          <option value="MECANIQUE">Mechanical</option>
+          <option value="ELECTRIQUE">Electrical</option>
+          <option value="CARROSSERIE">Bodywork</option>
+          <option value="VIDANGE_COMPLET">Complete Oil Change</option>
+        </select>
+        <label for="type">Repair Type</label>
+      </div>
+
+      <!-- Created By Field -->
+      <div class="form-group">
+        <input
+          type="number"
+          id="createdBy"
+          class="form-control"
+          name="createdBy"
+          [(ngModel)]="repair.createdBy"
+          placeholder=" "
+          required />
+        <label for="createdBy">Created By (User ID)</label>
+      </div>
+
+      <!-- Last Modified By Field -->
+      <div class="form-group">
+        <input
+          type="number"
+          id="lastModifiedBy"
+          class="form-control"
+          name="lastModifiedBy"
+          [(ngModel)]="repair.lastModifiedBy"
+          placeholder=" "
+          required />
+        <label for="lastModifiedBy">Last Modified By (User ID)</label>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary btn-block"
+        [disabled]="repairForm.invalid">
+        <i class="bi bi-save"></i> Save Repair
+      </button>
+    </form>
+  </div>
+</div>
