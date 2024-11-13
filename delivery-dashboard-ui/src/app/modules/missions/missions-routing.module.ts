@@ -7,6 +7,8 @@ import {NewExpenseComponent} from "./pages/expenses/new-expense/new-expense.comp
 
 const routes: Routes = [
   { path: 'all', component: AllMissionsComponent },
+  { path: 'new-mission', component: AllMissionsComponent },
+
   { path: 'planning', component: PlanningComponent },
   { path: 'expenses', component: ExpensesComponent },
   { path: 'new-expense', component: NewExpenseComponent },

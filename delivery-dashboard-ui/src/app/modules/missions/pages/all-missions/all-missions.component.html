@@ -15,13 +15,9 @@
 
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
       <h4 class="lead">
-        <!--        {{
-                  allMissionsResponse.content?.length > 0
-                    ? "Mission List ("+missions.length+")"
-                    : "You don't have any themes yet"
-                }}-->
+
       </h4>
-      <a class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" routerLink="/new-mission"><i
+      <a class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" (click)="goToNewMission()"><i
         class="fas fa-plus fa-sm text-white-50"></i>&nbsp;New Mission</a>
     </div>
 

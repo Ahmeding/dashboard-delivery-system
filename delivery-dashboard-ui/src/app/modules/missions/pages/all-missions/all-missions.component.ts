@@ -131,4 +131,8 @@ export class AllMissionsComponent  implements OnInit{
   goToLastPage() {
     this.page=this.allMissionsResponse.totalPages as number -1;
   }
+
+  goToNewMission() {
+    this.router.navigate(['missons','new-mission"'])
+  }
 }
