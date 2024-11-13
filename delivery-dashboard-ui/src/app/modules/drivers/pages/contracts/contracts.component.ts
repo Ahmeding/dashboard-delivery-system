@@ -6,6 +6,12 @@ import {Router} from "@angular/router";
 import {PageResponseContratDto} from "../../../../../ds-api/src/models/page-response-contrat-dto";
 import {ContratService} from "../../../../../ds-api/src/services/contrat.service";
 import {ContratDto} from "../../../../../ds-api/src/models/contrat-dto";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ViewContractModalComponent} from "./view-contract-modal/view-contract-modal.component";
+import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
+import {AlertService} from "../../../../services/alert/alert.service";
+import {DateUtilsService} from "../../../../services/date-utils/date-utils.service";
+import {StringUtilsService} from "../../../../services/string-utils/string-utils.service";
 
 @Component({
   selector: 'app-contracts',
@@ -13,12 +19,19 @@ import {ContratDto} from "../../../../../ds-api/src/models/contrat-dto";
   styleUrls: ['./contracts.component.scss']
 })
 export class ContractsComponent implements OnInit{
+
   allContractsResponse: PageResponseContratDto={};
   page: number=0;
   size: number=4;
   selectedContract: ContratDto={};
 
-  constructor(private contratService:ContratService,
+  constructor(
+    private confirmBoxService:ConfirmBoxEvokeService,
+    private alertService:AlertService,
+    private dateUtilSdervice:DateUtilsService,
+    private stringUtilsService:StringUtilsService,
+    private modalService: NgbModal,
+    private contratService:ContratService,
               private router:Router) {
   }
 
@@ -34,6 +47,12 @@ export class ContractsComponent implements OnInit{
       }
     })
   }
+
+  formatDate(dateString: string | undefined):string{
+
+   return this.dateUtilSdervice.formatToDate(dateString as string);
+  }
+
   goToPreviousPage() {
     this.page--;
     this.getAllContracts();
@@ -48,7 +67,6 @@ export class ContractsComponent implements OnInit{
     this.page++;
     this.getAllContracts();
   }
-
 
   get  isLastPage():boolean{
     return this.page == this.allContractsResponse.totalPages as number -1;
@@ -71,11 +89,42 @@ export class ContractsComponent implements OnInit{
     this.getAllContracts();
   }
 
-  editContract(number: number) {
 
+  deleteContract(contract_id: number) {
+    if (contract_id === undefined) {
+      this.alertService.alertError('Repair ID is missing. Unable to delete contract.');
+      return;
+    }
+    this.confirmBoxService.customFour('Are you sure you want to delete this contract?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
+      resp => {
+        if (resp.success) {
+          this.contratService.delete8({id:contract_id}).subscribe(() => {
+            this.getAllContracts();
+            this.alertService.alertSuccess('Deletion successfully completed');
+          });
+        }
+      },
+      (err) => {
+        this.alertService.alertError(err.error !== null ? err.error.message : 'Unable to delete contract');
+      }
+    )
   }
 
-  deleteContract(number: number) {
+  goToUpdateContract(id: number) {
+    this.router.navigate(['drivers','edit-contract',id])
+  }
 
+  openDriverModal(contract: ContratDto) {
+    const modalRef = this.modalService.open(ViewContractModalComponent,{'size':'xl'});
+    modalRef.componentInstance.selectedContract= contract;
+  }
+
+  formatDateTime(dateTimeString: string | undefined):string {
+    console.log("=================> "+JSON.stringify(dateTimeString) );
+    return this.dateUtilSdervice.formatDateTime(dateTimeString);
+  }
+
+  capitalizeName(name: string | undefined) {
+    return this.stringUtilsService.capitalizeName(name!);
   }
 }

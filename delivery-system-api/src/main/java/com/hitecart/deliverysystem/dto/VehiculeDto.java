@@ -3,6 +3,7 @@ package com.hitecart.deliverysystem.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hitecart.deliverysystem.model.enums.TypeEnergie;
 import com.hitecart.deliverysystem.model.Vehicule;
+import com.hitecart.deliverysystem.model.enums.VehicleType;
 import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +21,8 @@ import java.util.List;
 @Builder
 public class VehiculeDto {
 
+    private String logo;
+    private VehicleType vehicleType;
     private String immatriculation;
     private String marque;
     private String modele;
@@ -60,7 +63,8 @@ public class VehiculeDto {
                 .updatedAt(vehicule.getUpdatedAt())
                 .createdBy(vehicule.getCreatedBy())
                 .lastModifiedBy(vehicule.getLastModifiedBy())
-
+                .vehicleType(vehicule.getVehicleType())
+                .logo(vehicule.getLogo())
                 .build();
 
     }
@@ -86,7 +90,8 @@ public class VehiculeDto {
         vh.setUpdatedAt(dto.getUpdatedAt());
         vh.setCreatedBy(dto.getCreatedBy());
         vh.setLastModifiedBy(dto.getLastModifiedBy());
-
+            vh.setVehicleType(dto.getVehicleType());
+            vh.setLogo(dto.getLogo());
         return vh;
     }
 

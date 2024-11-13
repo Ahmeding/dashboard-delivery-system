@@ -12,7 +12,6 @@ public class ReparationValidator {
 
         if(dto==null){
 
-           errors.add("Veuillez renseigner le cout de la reparation !");
            errors.add("Veuillez renseigner le type de la reparation !");
            errors.add("Veuillez renseigner le vehicule à reparer !");
            errors.add("Veuillez renseigner la date de debut de la reparation !");
@@ -20,9 +19,6 @@ public class ReparationValidator {
 
           return errors;
         }
-       if(dto.getCout()==null){
-           errors.add("Veuillez renseigner le cout de la reparation !");
-       }
        if(dto.getType()==null){
            errors.add("Veuillez renseigner le type de la reparation !");
        }

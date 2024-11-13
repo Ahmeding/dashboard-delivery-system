@@ -1,0 +1,66 @@
+<div class="modal-header">
+  <h5 class="modal-title text-primary">Vehicle Details</h5>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
+</div>
+<div class="modal-body">
+  <div *ngIf="selectedVehicle">
+    <div class="card mb-4">
+      <div class="card-body">
+
+        <!-- Row 1: Marque/Model and Date PMC -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <span class="text-primary">Marque/Model:</span> {{ selectedVehicle?.marque }} {{ selectedVehicle?.modele }}
+          </div>
+          <div class="col-md-6">
+            <span class="text-primary">Date PMC:</span> {{ selectedVehicle?.datePMC }}
+          </div>
+        </div>
+
+        <!-- Row 2: Immatriculation and Capacity -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <span class="text-primary">Immat. N°:</span> {{ selectedVehicle?.immatriculation }}
+          </div>
+          <div class="col-md-6">
+            <span class="text-primary">Capacity:</span> {{ selectedVehicle?.volume }} m<sup>3</sup>
+          </div>
+        </div>
+
+        <!-- Row 3: Milage and Vin -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <span class="text-primary">Milage:</span> {{ selectedVehicle?.kilometrage }}
+          </div>
+          <div class="col-md-6">
+            <span class="text-primary">VIN:</span> {{ selectedVehicle?.numVin }}
+          </div>
+        </div>
+
+        <!-- Row 4: Fuel Type and Number of Missions -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <span class="text-primary">Fuel:</span> {{ selectedVehicle?.typecarburant }}
+          </div>
+          <div class="col-md-6">
+            <span class="text-primary">Number of Missions:</span> <!--{{ selectedVehicle?.missionCount || 'N/A' }}-->
+          </div>
+        </div>
+
+        <!-- Row 5: Number of Repairs and Next Oil Change Date -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <span class="text-primary">Number of Repairs:</span> <!--{{ selectedVehicle?.repairCount || 'N/A' }}-->
+          </div>
+          <div class="col-md-6">
+            <span class="text-primary">Next Oil Change Date:</span> <!--{{ selectedVehicle?.nextOilChangeDate || 'N/A' }}-->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.close()">Close</button>
+</div>

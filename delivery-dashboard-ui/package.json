@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "npm cache clean --force & ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
@@ -14,7 +14,6 @@
     "ds-api:download": "cp C:/Users/Asus/Desktop/java-angular-project/delivery-system/delivery-system-api/target/deliverysystem-0.0.1-SNAPSHOT.jar ./tools/openapi/dist && cp C:/Users/Asus/Desktop/java-angular-project/delivery-system/delivery-system-api/target/openapi.json ./tools/openapi/src",
     "ds-api:extract": "node ./tools/openapi/src/openapi.json 0.0.1-SNAPSHOT",
     "ds-api:openapi-gen": "./node_modules/.bin/ng-openapi-gen -i ./tools/openapi/src/openapi.json -o src/ds-api/src"
-
   },
   "private": true,
   "dependencies": {
@@ -26,6 +25,8 @@
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
+    "@auth0/angular-jwt": "^5.2.0",
+    "@costlydeveloper/ngx-awesome-popup": "^3.2.2",
     "@fullcalendar/angular": "^6.1.10",
     "@fullcalendar/core": "^6.1.10",
     "@fullcalendar/daygrid": "^6.1.10",
@@ -35,15 +36,14 @@
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.2",
     "chart.js": "^3.9.1",
-    "ng2-charts": "^3.1.2",
     "ng-openapi-gen": "^0.52.0",
-    "@auth0/angular-jwt": "^5.2.0",
-    "@costlydeveloper/ngx-awesome-popup": "^3.2.2",
+    "ng2-charts": "^3.1.2",
     "ngx-toastr": "^19.0.0",
+    "openapi3-ts": "^3.0.0",
     "quill": "^2.0.0",
+    "rxjs": "~7.8.0",
     "sockjs-client": "1.6.1",
     "stompjs": "^2.3.3",
-    "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
   },
@@ -54,7 +54,6 @@
     "@types/jasmine": "~4.3.0",
     "@types/sockjs-client": "^1.5.4",
     "@types/stompjs": "^2.3.9",
-
     "jasmine-core": "~4.6.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

@@ -1,4 +1,3 @@
-
 <div id="content">
   <!-- Begin Page Content -->
   <div class="container-fluid">
@@ -28,33 +27,26 @@
             <thead>
             <tr>
               <th># ID</th>
-              <th>Desination</th>
-              <th>Mission</th>
-              <th>Repairs List</th>
-              <th>Total</th>
-              <th>Created by</th>
-              <th>Date</th>
+              <th>Vehicle</th>
+              <th>Repairs Type</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Done By</th>
               <th>Action</th>
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let repaire of allRepairsResponse.content">
-              <td>{{ repaire.id}}</td>
-              <td>{{ repaire.commentaire }}</td>
-              <td>{{ repaire.vehiculeDto?.immatriculation }}/{{ repaire.vehiculeDto?.marque }} {{ repaire.vehiculeDto?.modele }}</td>
-              <td>{{repaire.type}}</td>
-              <td>{{ repaire.cout}}</td>
-              <td>{{ repaire.dateDebut }}</td>
-              <td>{{ repaire.dateFin }}</td>
-              <td>{{ repaire.dateProchainRep }}</td>
-              <td>{{ repaire.createdByUser?.fullname}}</td>
-              <td>date</td>
+            <tr *ngFor="let repair of allRepairsResponse.content">
+              <td>{{ repair.id}}</td>
+              <td>{{ repair.vehiculeDto?.immatriculation }}/{{ repair.vehiculeDto?.marque }} {{ repair.vehiculeDto?.modele }}</td>
+              <td>{{repair.type}}</td>
+              <td>{{ formatDate(repair.dateDebut) }}</td>
+              <td>{{ formatDate(repair.dateDebut) }}</td>
+              <td>{{ repair.createdByUser?.fullname}}</td>
               <td>
-                <i class="bi bi-pen text-warning mr-2" data-toggle="modal"
-                   data-target="#editVehicleModal"  (click)="editRepair(repaire.id!)" title="Modify"></i>
-                <i class="bi bi-eye text-info ml-3" title="Détail"
-                   data-toggle="modal" data-target="#infoVehicleModal" (click)="selectedRepair = repaire"></i>
-                <i class="bi bi-trash text-danger ml-3 mr-3" title="Supprimer" (click)="deleteRepair(repaire.id!)"></i>
+                <i class="bi bi-pen text-warning mr-3" (click)="goToUpdateRepair(repair.id!)" title="Modify"></i>
+                <i class="bi bi-eye text-info m-3" title="Détail" (click)="openRepairModal(repair)" ></i>
+                <i class="bi bi-trash text-danger ml-3 mr-3" title="Supprimer" (click)="deleteRepair(repair.id!)"></i>
 
               </td>
             </tr>

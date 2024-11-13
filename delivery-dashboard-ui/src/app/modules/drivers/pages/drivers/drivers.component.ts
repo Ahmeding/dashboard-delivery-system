@@ -6,6 +6,13 @@ import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
 import {AlertService} from "../../../../services/alert/alert.service";
 import {ChauffeurService} from "../../../../../ds-api/src/services/chauffeur.service";
 import {NgForm} from "@angular/forms";
+import {Router} from "@angular/router";
+import {
+  ViewVehiculeModalComponent
+} from "../../../vehicles/pages/vehicles/view-vehicule-modal/view-vehicule-modal.component";
+import {ViewDriverModalComponent} from "./view-driver-modal/view-driver-modal.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {StringUtilsService} from "../../../../services/string-utils/string-utils.service";
 
 @Component({
   selector: 'app-drivers',
@@ -18,8 +25,6 @@ export class DriversComponent implements OnInit{
   selectedAddress:AdresseDto | undefined={};
   isAddNewFormSubmitted:boolean=false;
   driver:ChauffeurDto={};
-
-  allDrivers:ChauffeurDto[]=[];
   allDriversResponse: PageResponseChauffeurDto={};
   selectedDriver: ChauffeurDto={};
   page: number = 0;
@@ -28,9 +33,12 @@ export class DriversComponent implements OnInit{
 
 
   constructor(
+    private modalService: NgbModal,
     private confirmBoxService:ConfirmBoxEvokeService,
     private alertService:AlertService,
-    private chauffeurService:ChauffeurService
+    private stringUtilsService:StringUtilsService,
+    private chauffeurService:ChauffeurService,
+    private router:Router
   ) {
   }
 
@@ -45,9 +53,6 @@ export class DriversComponent implements OnInit{
     }).subscribe({
         next:(drivers)=>{
           this.allDriversResponse= drivers;
-          console.log(this.allDriversResponse.content?.length);
-          console.log(drivers.content?.length);
-          console.log(drivers.content);
         },
         error:(err)=>{
           console.log(err);
@@ -57,32 +62,33 @@ export class DriversComponent implements OnInit{
     )
   }
 
-  updateDriverStatus(id: number, isActive: boolean | undefined) {
+  updateDriverStatus(id: number, isActive: boolean) {console.log("====================== "+ isActive);
     this.chauffeurService.updateIsActive2({
-      id:id,
-      isactive: !isActive
+      id:id,isactive:isActive
     }).subscribe({
       next:(res)=>{
-        console.log(res);
+
         this.getAllDrivers();
         this.alertService.alertSuccess("Driver successfully deactivated");
       },
       error:(err)=>{
-        console.log(err);
         this.alertService.alertWaring("Driver deactivation failed");
       }
     })
   }
 
   handleDriverActivation(driver_id: number | undefined, isActive: boolean | undefined) {
-    const action = isActive? "disable" : "enable";
+    console.log("===========before=========== "+ isActive);
+    const action = isActive? "disable" : "enable"; const updateIsActive : boolean = !(isActive);
     if (driver_id === undefined) {
       this.alertService.alertError('Driver ID is missing. Unable to delete driver.');
       return;
     }
     this.confirmBoxService.customFour(`Are you sure you want to ${action} this vehicle?`, 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
       resp => {
-        this.updateDriverStatus(driver_id,isActive);
+        console.log("============updateIsActive========== "+ updateIsActive);
+
+        this.updateDriverStatus(driver_id,updateIsActive);
       },
       (err) => {
         this.alertService.alertError(err.error !== null ? err.error.message : `Unable to ${action} mission`);
@@ -215,5 +221,52 @@ export class DriversComponent implements OnInit{
 
   get isLastPage():boolean{
     return this.page == this.allDriversResponse.totalPages as number -1;
+  }
+
+  goToNewDriver() {
+    this.router.navigate(['drivers','new-driver']);
+  }
+
+  openDriverModal(driver: ChauffeurDto) {
+    const modalRef = this.modalService.open(ViewDriverModalComponent, { size: 'xl' });
+    modalRef.componentInstance.selectedDriver = driver;  // Pass data to modal
+  }
+
+  goToUpdateDriver(id: number) {
+    this.router.navigate(['drivers','edit-driver',id])
+  }
+
+  handleDeleteDriver(driver_id: number | undefined) {
+    if (driver_id === undefined) {
+      this.alertService.alertError('Driver ID is missing. Unable to delete driver.');
+      return;
+    }
+    this.confirmBoxService.customFour(`Are you sure you want to delete this driver ?`, 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
+      resp => {
+        this.deleteDriver(driver_id);
+      },
+      (err) => {
+        this.alertService.alertError(err.error !== null ? err.error.message : `Unable to delete driver`);
+      }
+    )
+  }
+
+  private deleteDriver(driver_id: number) {
+    this.chauffeurService.delete11({
+      id:driver_id
+    }).subscribe({
+      next:(res)=>{
+        console.log(res);
+        this.getAllDrivers();
+        this.alertService.alertInfo("Driver deleted successfully.")
+      },error:(err)=>{
+        console.log(err);
+        this.alertService.alertWaring("An error occurred while deleting the driver. Please try again.")
+      }
+    })
+  }
+
+  capitalizeName(name: string | undefined) {
+    return this.stringUtilsService.capitalizeName(name!);
   }
 }

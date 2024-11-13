@@ -143,7 +143,7 @@ export class ClientsComponent implements OnInit{
 
   viewClientDetails(client: ClientDto) {
     const modalRef = this.modalService.open(ViewClientModalComponent, { size: 'xl' });
-    modalRef.componentInstance.selectedDriver = client;  // Pass data to modal
+    modalRef.componentInstance.selectedClient = client;  // Pass data to modal
   }
 
 
@@ -151,7 +151,8 @@ export class ClientsComponent implements OnInit{
 
   }
 
-  getPageNumbers() {const totalPages = this.allClientsResponse?.totalPages as number -1 || 0;
+  getPageNumbers() {
+    const totalPages = this.allClientsResponse?.totalPages as number -1 || 0;
     return undefined;//Array.from({ length : totalPages }, (_, i) => i + 1);
   }
 

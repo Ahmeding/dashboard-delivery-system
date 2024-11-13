@@ -10,6 +10,7 @@ import {NewQuoteComponent} from "./pages/quotes/new-quote/new-quote.component";
 const routes: Routes = [
   { path: 'all', component: ClientsComponent },
   { path: 'new-client', component: NewClientComponent },
+  { path: 'edit-client/:id', component: NewClientComponent },
   { path: 'orders', component: OrdersComponent },
   { path: 'new-order', component: NewOrderComponent },
   { path: 'quotes', component: QuotesComponent },

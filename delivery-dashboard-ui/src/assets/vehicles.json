@@ -1,0 +1,138 @@
+[
+  {
+    "marque": "DAF",
+    "logo": "https://www.daf.com/logo.png",
+    "type": "TRUCK",
+    "models": [
+      "CF",
+      "XF",
+      "LF"
+    ]
+  },
+  {
+    "marque": "Fiat",
+    "logo": "https://www.fiat.com/logo.png",
+    "type": "VAN",
+    "models": [
+      "Ducato",
+      "Talento",
+      "Fiorino"
+    ]
+  },
+  {
+    "marque": "Ford",
+    "logo": "https://www.ford.com/logo.png",
+    "type": "VAN",
+    "models": [
+      "Transit",
+      "Transit Custom",
+      "Connect"
+    ]
+  },
+  {
+    "marque": "Iveco",
+    "logo": "https://www.iveco.com/logo.png",
+    "type": "TRUCK",
+    "models": [
+      "Daily",
+      "Eurocargo",
+      "Stralis",
+      "S-Way",
+      "Trakker"
+    ]
+  },
+  {
+    "marque": "MAN",
+    "logo": "https://www.man.com/logo.png",
+    "type": "TRUCK",
+    "models": [
+      "TGE",
+      "TGS",
+      "TGX",
+      "TGM"
+    ]
+  },
+  {
+    "marque": "Mercedes-Benz",
+    "logo": "/assets/images/vehicles_logos/daf.png",
+    "type": "VAN",
+    "models": [
+      "Sprinter",
+      "Vito",
+      "Citan"
+    ]
+  },
+  {
+    "marque": "Nissan",
+    "logo": "https://www.nissan.com/logo.png",
+    "type": "VAN",
+    "models": [
+      "NV400",
+      "NV300",
+      "NV250"
+    ]
+  },
+  {
+    "marque": "Opel",
+    "logo": "https://www.opel.com/logo.png",
+    "type": "VAN",
+    "models": [
+      "Movano",
+      "Vivaro",
+      "Combo"
+    ]
+  },
+  {
+    "marque": "Peugeot",
+    "logo": "https://www.peugeot.com/logo.png",
+    "type": "VAN",
+    "models": [
+      "Boxer",
+      "Expert",
+      "Partner",
+      "Rifter"
+    ]
+  },
+  {
+    "marque": "Renault",
+    "logo": "https://www.renault.com/logo.png",
+    "type": "VAN",
+    "models": [
+      "Master",
+      "Trafic",
+      "Kangoo"
+    ]
+  },
+  {
+    "marque": "Scania",
+    "logo": "./assets/images/vehicles_logos/scania.png",
+    "type": "TRUCK",
+    "models": [
+      "R Series",
+      "S Series",
+      "P Series",
+      "G Series"
+    ]
+  },
+  {
+    "marque": "Volvo",
+    "logo": "https://www.volvo.com/logo.png",
+    "type": "TRUCK",
+    "models": [
+      "FH",
+      "FM",
+      "FMX",
+      "FE"
+    ]
+  },
+  {
+    "marque": "Volkswagen",
+    "logo": "https://www.volkswagen.com/logo.png",
+    "type": "VAN",
+    "models": [
+      "Transporter",
+      "Crafter",
+      "Caddy"
+    ]
+  }
+]

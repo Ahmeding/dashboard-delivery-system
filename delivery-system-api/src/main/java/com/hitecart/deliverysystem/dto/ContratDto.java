@@ -2,6 +2,7 @@ package com.hitecart.deliverysystem.dto;
 
 import com.hitecart.deliverysystem.model.Contrat;
 import com.hitecart.deliverysystem.model.enums.TypeContrat;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 public class ContratDto{
 
     private TypeContrat typeContrat;

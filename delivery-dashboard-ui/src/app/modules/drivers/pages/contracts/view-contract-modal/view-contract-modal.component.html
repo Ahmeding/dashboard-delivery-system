@@ -1,0 +1,45 @@
+<div class="modal-header">
+  <h5 class="modal-title text-primary">Vehicle Details</h5>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
+</div>
+<div class="modal-body">
+  <div *ngIf="selectedContract">
+    <div class="card mb-4">
+      <div class="card-body">
+
+        <!-- Row 1: Marque/Model and Date PMC -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <span class="text-primary">Driver:</span> {{ selectedContract?.chauffeurDto?.firstname }} {{ selectedContract?.chauffeurDto?.lastname }}
+          </div>
+          <div class="col-md-6">
+            <span class="text-primary">Type:</span> {{ selectedContract?.typeContrat }}
+          </div>
+        </div>
+
+        <!-- Row 2: Immatriculation and Capacity -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <span class="text-primary">Start Date</span> {{ selectedContract?.dateDebut }}
+          </div>
+          <div class="col-md-6">
+            <span class="text-primary">End Date</span> {{ selectedContract?.dateFin }} m<sup>3</sup>
+          </div>
+        </div>
+
+        <!-- Row 3: Milage and Vin -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <span class="text-primary">Created By:</span> {{ selectedContract?.createdByUser }}
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.close()">Close</button>
+</div>

@@ -6,13 +6,19 @@ import { ContractsComponent } from './pages/contracts/contracts.component';
 import {DriversComponent} from "./pages/drivers/drivers.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { NewContractComponent } from './pages/contracts/new-contract/new-contract.component';
+import { NewDriverComponent } from './pages/drivers/new-driver/new-driver.component';
+import { ViewDriverModalComponent } from './pages/drivers/view-driver-modal/view-driver-modal.component';
+import { ViewContractModalComponent } from './pages/contracts/view-contract-modal/view-contract-modal.component';
 
 
 @NgModule({
   declarations: [
     DriversComponent,
     ContractsComponent,
-    NewContractComponent
+    NewContractComponent,
+    NewDriverComponent,
+    ViewDriverModalComponent,
+    ViewContractModalComponent
   ],
     imports: [
         CommonModule,

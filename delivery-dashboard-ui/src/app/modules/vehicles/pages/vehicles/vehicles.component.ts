@@ -1,10 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {VehiculeDto} from "../../../../../ds-api/src/models/vehicule-dto";
 import {PageResponseVehiculeDto} from "../../../../../ds-api/src/models/page-response-vehicule-dto";
 import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
 import {AlertService} from "../../../../services/alert/alert.service";
 import {VehiculeService} from "../../../../../ds-api/src/services/vehicule.service";
 import {NgForm} from "@angular/forms";
+import {Router} from "@angular/router";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ViewVehiculeModalComponent} from "./view-vehicule-modal/view-vehicule-modal.component";
 
 @Component({
   selector: 'app-vehicles',
@@ -12,7 +15,7 @@ import {NgForm} from "@angular/forms";
   styleUrls: ['./vehicles.component.scss']
 })
 export class VehiclesComponent implements OnInit{
-
+  @ViewChild('infoVehicleModal') infoVehicleModal!: TemplateRef<any>;
   allVehicles:VehiculeDto[]=[];
   allVehiclesResponse: PageResponseVehiculeDto={};
   selectedVehicle: VehiculeDto={};
@@ -23,6 +26,8 @@ export class VehiclesComponent implements OnInit{
   size:number =5;
 
   constructor(
+    private modalService:NgbModal,
+    private router:Router,
     private confirmBoxService:ConfirmBoxEvokeService,
     private alertService:AlertService,
     private vehicleService: VehiculeService) {
@@ -115,7 +120,7 @@ private resetForm(form: NgForm) {
       }
     )
   }
-  editVehicle(vehicle_id: number | undefined) {
+/*  editVehicle(vehicle_id: number | undefined) {
     this.vehicleService.findById({
       id:vehicle_id as number
     }).subscribe({
@@ -127,7 +132,9 @@ private resetForm(form: NgForm) {
 
       }
     })
-  }
+  }*/
+/*
+
   convertDateToInput(dateArray: number[] ) :string{
     const year= dateArray[0];
     const month= dateArray[1].toString().padStart(2,'0');
@@ -143,7 +150,7 @@ private resetForm(form: NgForm) {
       this.alertService.alertError('You must fill in the required fields.');
     }
 
-  }
+  }*/
 private saveVehicle(vehicleToSave: VehiculeDto, form: NgForm) {
     this.vehicleService.save({
       body:vehicleToSave
@@ -187,5 +194,18 @@ private saveVehicle(vehicleToSave: VehiculeDto, form: NgForm) {
 
   goToLastPage() {
     this.page=this.allVehiclesResponse.totalPages as number -1;
+  }
+
+  navigateToNewVehicle() {
+    this.router.navigate(['vehicles','new-vehicle']);
+  }
+
+  goToUpdateVehicle(id: number) {
+    this.router.navigate(['vehicles','edit-vehicle',id])
+  }
+
+  openVehicleModal(vehicle: VehiculeDto) {
+    const modalRef = this.modalService.open(ViewVehiculeModalComponent, { size: 'xl' });
+    modalRef.componentInstance.selectedVehicle = vehicle;  // Pass data to modal
   }
 }

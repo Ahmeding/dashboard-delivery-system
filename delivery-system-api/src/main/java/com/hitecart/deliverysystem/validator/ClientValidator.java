@@ -16,9 +16,9 @@ public class ClientValidator {
            errors.add("Veuillez renseigner le numreo du telephone  du client !");
            errors.add("Veuillez renseigner l'adresse email du client !");
            errors.add("Veuillez renseigner l'adresse email du client !");
-           errors.add("Veuillez renseigner une description du client !");
+/*           errors.add("Veuillez renseigner une description du client !");
            errors.add("Veuillez renseigner la siren du client !");
-           errors.add("Veuillez renseigner la siret du client !");
+           errors.add("Veuillez renseigner la siret du client !");*/
            errors.addAll(AdresseValidator.validate(null));
         }
        if(!StringUtils.hasLength(dto.getLastname())){
@@ -34,7 +34,7 @@ public class ClientValidator {
        if(!StringUtils.hasLength(dto.getEmail())){
            errors.add("Veuillez renseigner l'adresse email du client !");
        }
-       if(!StringUtils.hasLength(dto.getDescription())){
+      /* if(!StringUtils.hasLength(dto.getDescription())){
            errors.add("Veuillez renseigner une description du client !");
        }
        if(!StringUtils.hasLength(dto.getSiren())){
@@ -42,7 +42,7 @@ public class ClientValidator {
        }
        if(!StringUtils.hasLength(dto.getSiret())){
            errors.add("Veuillez renseigner la siret du client !");
-       }
+       }*/
            errors.addAll(AdresseValidator.validate(dto.getAddress()));
     return errors;
     }

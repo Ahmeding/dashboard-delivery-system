@@ -1,6 +1,7 @@
 package com.hitecart.deliverysystem.model;
 
 import com.hitecart.deliverysystem.model.enums.TypeEnergie;
+import com.hitecart.deliverysystem.model.enums.VehicleType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -19,6 +20,11 @@ import java.util.List;
 @Table(name = "vehicule")
 public class Vehicule extends AbstractEntity{
 
+    @Column(name = "logo")
+    private String logo;
+    @Column(name = "type")
+    @Enumerated(EnumType.STRING)
+    private VehicleType vehicleType;
     @Column(name = "immatriculation")
     private String immatriculation;
     @Column(name = "marque")
@@ -32,6 +38,7 @@ public class Vehicule extends AbstractEntity{
     @Column(name = "kilometrage")
     private BigDecimal kilometrage;
     @Column(name = "typecarburant")
+    @Enumerated(EnumType.STRING)
     private TypeEnergie typecarburant;
     @Column(name = "volume")
     private BigDecimal volume;

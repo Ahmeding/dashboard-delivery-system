@@ -40,17 +40,17 @@
             <tbody>
             <tr *ngFor="let contract of allContractsResponse.content">
               <td>{{ contract.id}}</td>
-              <td>{{ contract.chauffeurDto?.firstname }}</td>
+              <td>{{ capitalizeName(contract.chauffeurDto?.firstname) }}&nbsp;{{ capitalizeName(contract.chauffeurDto?.lastname) }}</td>
               <td>{{ contract.typeContrat}}</td>
-              <td>{{contract.dateDebut}}</td>
-              <td>{{ contract.dateFin}}</td>
-              <td>{{ contract.createdByUser?.fullname }}</td>
-              <td>{{ contract.createdAt }}</td>
+              <td>{{formatDate(contract.dateDebut) }}</td>
+              <td>{{formatDate(contract.dateFin)}}</td>
+              <td>{{ capitalizeName(contract.createdByUser?.fullname) }}</td>
+              <td>{{ formatDateTime(contract.createdAt) }}</td>
               <td>
                 <i class="bi bi-pen text-warning mr-2" data-toggle="modal"
-                   data-target="#editVehicleModal"  (click)="editContract(contract.id!)" title="Modify"></i>
+                   data-target="#editVehicleModal"  (click)="goToUpdateContract(contract.id!)" title="Modify"></i>
                 <i class="bi bi-eye text-info ml-3" title="Détail"
-                   data-toggle="modal" data-target="#infoVehicleModal" (click)="selectedContract = contract"></i>
+                   data-toggle="modal" data-target="#infoVehicleModal" (click)="openDriverModal(contract)"></i>
                 <i class="bi bi-trash text-danger ml-3 mr-3" title="Supprimer" (click)="deleteContract(contract.id!)"></i>
 
               </td>

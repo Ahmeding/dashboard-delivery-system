@@ -14,10 +14,12 @@ export interface VehiculeDto {
   isActive?: boolean;
   kilometrage?: number;
   lastModifiedBy?: number;
+  logo?: string;
   marque?: string;
   modele?: string;
   numVin?: string;
   typecarburant?: 'GASOIL' | 'ESSENCE' | 'ELECTRIC' | 'HYBRIDE';
   updatedAt?: string;
+  vehicleType?: 'VAN' | 'TRUCK';
   volume?: number;
 }

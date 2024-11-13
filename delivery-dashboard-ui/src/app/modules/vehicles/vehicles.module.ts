@@ -7,6 +7,8 @@ import {VehiclesComponent} from "./pages/vehicles/vehicles.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { NewRepaireComponent } from './pages/repaires/new-repaire/new-repaire.component';
 import { NewVehicleComponent } from './pages/vehicles/new-vehicle/new-vehicle.component';
+import { ViewVehiculeModalComponent } from './pages/vehicles/view-vehicule-modal/view-vehicule-modal.component';
+import { ViewRepairModalComponent } from './pages/repaires/view-repair-modal/view-repair-modal.component';
 
 
 @NgModule({
@@ -14,7 +16,9 @@ import { NewVehicleComponent } from './pages/vehicles/new-vehicle/new-vehicle.co
     VehiclesComponent,
     RepairesComponent,
     NewRepaireComponent,
-    NewVehicleComponent
+    NewVehicleComponent,
+    ViewVehiculeModalComponent,
+    ViewRepairModalComponent
   ],
     imports: [
         CommonModule,

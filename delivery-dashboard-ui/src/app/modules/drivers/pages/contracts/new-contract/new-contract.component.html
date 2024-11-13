@@ -1,93 +1,69 @@
-<div class="container mt-5">
-  <div class="card shadow-hover p-4">
-    <h3 class="text-center mb-4">Create New Contract</h3>
-    <form #contractForm="ngForm" (ngSubmit)="onSubmit(contractForm)">
+<div id="content">
+  <!-- Begin Page Content -->
+  <div class="container-fluid">
 
-      <!-- Chauffeur Field -->
-      <div class="form-group">
-        <input
-          type="number"
-          id="chauffeurId"
-          class="form-control"
-          name="chauffeurId"
-          placeholder=" "
-          required />
-        <label for="chauffeurId">Chauffeur ID</label>
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Contracts</h1>
+    </div>
+    <div class="container mt-5">
+      <div class="card shadow-hover p-4">
+        <h3 class="text-center mb-4">Create New Contract</h3>
+        <div class="vehicle-form">
+          <form  [formGroup]="contractForm" (ngSubmit)="onSubmit()">
+            <div class="row g-4">
+              <div class="col-md-6"><div class="form-group">
+                <select id="driver" class="form-control" formControlName="chauffeurDto"
+                        [class.is-invalid]="contractForm.get('chauffeurDto')?.invalid && contractForm.get('chauffeurDto')?.touched">
+                  <option [ngValue]="undefined" disabled selected>Select Vehicle</option>
+                  <option *ngFor="let d of allDrivers" [ngValue]="d">{{d.firstname}}&nbsp;{{d.lastname}}</option>
+                </select>
+                <label for="driver">Select Driver</label>
+                <small class="invalid-feedback">Driver is required</small>
+              </div></div>
+              <div class="col-md-6"><div class="form-group">
+                <select id="type" class="form-control" formControlName="typeContrat"
+                        [class.is-invalid]="contractForm.get('typeContrat')?.invalid && contractForm.get('typeContrat')?.touched">
+                  <option [ngValue]="undefined" disabled selected>Select Contract Type</option>
+                  <option  value="CDI">CDI</option>
+                  <option  value="CDD">CDD</option>
+                </select>
+                <label for="type">Select Contract Type</label>
+                <small class="invalid-feedback">Type contract is required</small>
+              </div></div>
+              <div class="col-md-6"><div class="form-group">
+                <input
+                  type="date"
+                  id="startdate"
+                  class="form-control"
+                  formControlName="dateDebut"
+                  [class.is-invalid]="contractForm.get('dateDebut')?.invalid && contractForm.get('dateDebut')?.touched"/>
+                <label for="startdate">Start Date</label>
+                <small class="invalid-feedback">Start date is required</small>
+              </div></div>
+              <div class="col-md-6"><div class="form-group">
+                <input
+                  type="date"
+                  id="endDate"
+                  class="form-control"
+                  formControlName="dateFin"
+                  [class.is-invalid]="contractForm.get('dateFin')?.invalid && contractForm.get('dateFin')?.touched"/>
+                <label for="endDate">End Date</label>
+                <small class="invalid-feedback">End Date is required</small>
+              </div></div>
+            </div>
+            <div class="form-actions mt-4">
+              <button type="button" class="btn btn-light" (click)="navigateToContractList()">
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary btn-block"
+                [disabled]="contractForm.invalid">
+                <i class="bi bi-save"></i> Save Repair
+              </button></div>
+          </form>
+        </div>
       </div>
-
-      <!-- Start Date Field -->
-      <div class="form-group">
-        <input
-          type="date"
-          id="dateDebut"
-          class="form-control"
-          name="dateDebut"
-          [(ngModel)]="contract.dateDebut"
-          placeholder=" "
-          required />
-        <label for="dateDebut">Start Date</label>
-      </div>
-
-      <!-- End Date Field -->
-      <div class="form-group">
-        <input
-          type="date"
-          id="dateFin"
-          class="form-control"
-          name="dateFin"
-          [(ngModel)]="contract.dateFin"
-          placeholder=" "
-          required />
-        <label for="dateFin">End Date</label>
-      </div>
-
-      <!-- Type of Contract Field -->
-      <div class="form-group">
-        <select
-          id="typeContrat"
-          class="form-control"
-          name="typeContrat"
-          [(ngModel)]="contract.typeContrat"
-          required>
-          <option value="" disabled>Select Contract Type</option>
-          <option value="CDD">CDD (Fixed-term contract)</option>
-          <option value="CDI">CDI (Permanent contract)</option>
-        </select>
-        <label for="typeContrat">Contract Type</label>
-      </div>
-
-      <!-- Created By Field -->
-      <div class="form-group">
-        <input
-          type="number"
-          id="createdBy"
-          class="form-control"
-          name="createdBy"
-          [(ngModel)]="contract.createdBy"
-          placeholder=" "
-          required />
-        <label for="createdBy">Created By (User ID)</label>
-      </div>
-
-      <!-- Last Modified By Field -->
-      <div class="form-group">
-        <input
-          type="number"
-          id="lastModifiedBy"
-          class="form-control"
-          name="lastModifiedBy"
-          [(ngModel)]="contract.lastModifiedBy"
-          placeholder=" "
-          required />
-        <label for="lastModifiedBy">Last Modified By (User ID)</label>
-      </div>
-
-      <button
-        type="submit"
-        class="btn btn-primary btn-block"
-        [disabled]="contractForm.invalid">
-        <i class="bi bi-save"></i> Save Contract
-      </button>
-    </form>
-  </div>
-</div>
+    </div>
+  </div></div>

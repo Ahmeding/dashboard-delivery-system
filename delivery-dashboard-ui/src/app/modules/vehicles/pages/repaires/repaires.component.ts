@@ -3,6 +3,15 @@ import {PageResponseReparationDto} from "../../../../../ds-api/src/models/page-r
 import {ReparationService} from "../../../../../ds-api/src/services/reparation.service";
 import {ReparationDto} from "../../../../../ds-api/src/models/reparation-dto";
 import {Router} from "@angular/router";
+import {VehiculeService} from "../../../../../ds-api/src/services/vehicule.service";
+import {VehiculeDto} from "../../../../../ds-api/src/models/vehicule-dto";
+import {FormControl, FormGroup} from "@angular/forms";
+import {DateUtilsService} from "../../../../services/date-utils/date-utils.service";
+import {ViewVehiculeModalComponent} from "../vehicles/view-vehicule-modal/view-vehicule-modal.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ViewRepairModalComponent} from "./view-repair-modal/view-repair-modal.component";
+import {AlertService} from "../../../../services/alert/alert.service";
+import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
 
 @Component({
   selector: 'app-repaires',
@@ -10,16 +19,31 @@ import {Router} from "@angular/router";
   styleUrls: ['./repaires.component.scss']
 })
 export class RepairesComponent implements OnInit{
+
+
   allRepairsResponse: PageResponseReparationDto={};
   page: number=0;
   size: number=4;
-  selectedRepaire: ReparationDto={};
   selectedRepair: ReparationDto={};
 
-constructor(private repairService:ReparationService,
+constructor(
+  private confirmBoxService:ConfirmBoxEvokeService,
+  private alertService:AlertService,
+  private modalService:NgbModal,
+    private dateUtilSdervice:DateUtilsService,
+  private repairService:ReparationService,
+  private vehiculeService:VehiculeService,
             private router:Router) {
 }
 
+
+  ngOnInit(): void {
+    this.getAllRepairs();
+  }
+
+  formatDate(dateString: string | undefined):string{
+  return this.dateUtilSdervice.formatToDate(dateString) as string;
+  }
 getAllRepairs(){
   this.repairService.findAllReparations({
     page:this.page,
@@ -64,20 +88,35 @@ getAllRepairs(){
   navigateToNewRepair() {
     this.router.navigate(['vehicles','new-repair'])
   }
-
-  ngOnInit(): void {
-  this.getAllRepairs();
+  deleteRepair(repair_id: number) {
+    if (repair_id === undefined) {
+      this.alertService.alertError('Repair ID is missing. Unable to delete repair.');
+      return;
+    }
+    this.confirmBoxService.customFour('Are you sure you want to delete this repair?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
+      resp => {
+        if (resp.success) {
+          this.repairService.delete2({id:repair_id}).subscribe(() => {
+            this.getAllRepairs();
+            this.alertService.alertSuccess('Deletion successfully completed');
+          });
+        }
+      },
+      (err) => {
+        this.alertService.alertError(err.error !== null ? err.error.message : 'Unable to delete repair');
+      }
+    )
+  }
+*
+  goToUpdateRepair(id: number) {
+    this.router.navigate(['vehicles','edit-repair',id])
   }
 
-  editRepaire(number: number) {
-
+  openRepairModal(repair: ReparationDto) {
+    const modalRef = this.modalService.open(ViewRepairModalComponent, { size: 'xl' });
+    modalRef.componentInstance.selectedRepair = repair;  // Pass data to modal
   }
 
-  deleteRepair(number: number) {
 
-  }
 
-  editRepair(number: number) {
-
-  }
 }

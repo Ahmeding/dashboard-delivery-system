@@ -3,26 +3,40 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor, HttpHeaders
+  HttpInterceptor, HttpHeaders, HttpErrorResponse
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {catchError, Observable, throwError} from 'rxjs';
 import {TokenService} from "../token/token.service";
+import {Router} from "@angular/router";
 
 @Injectable()
 export class HttpTokenInterceptor implements HttpInterceptor {
 
-  constructor(private tokenService:TokenService) {}
+  constructor(private router:Router,
+    private tokenService:TokenService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const token:string =this.tokenService.token;
+    console.log("interceptor start ");
     if(token){
       const authReq=request.clone({
         headers : new HttpHeaders({
-          Authorization: 'Bearer '+ token
+          'Content-type' : 'application/json',
+          Accept : 'application/json',
+          Authorization : 'Bearer '+ token
         })
       })
       return next.handle(authReq);
+    }else{
+      return next.handle(request).pipe(catchError(
+        (err)=>{
+          if(err.status === 401 || err.status === 403 ){
+            this.router.navigate(['']);
+          }
+          return throwError(()=>err);
+        }
+      ));
     }
-    return next.handle(request);
+
   }
 }

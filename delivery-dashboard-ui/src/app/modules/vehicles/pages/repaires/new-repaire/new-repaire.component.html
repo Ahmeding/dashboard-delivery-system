@@ -1,123 +1,90 @@
-<div class="container mt-5">
+<div id="content">
+  <!-- Begin Page Content -->
+  <div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Repairs</h1>
+    </div>
+
+    <div class="container mt-5">
   <div class="card shadow-hover p-4">
     <h3 class="text-center mb-4">Create New Repair</h3>
-
-
-    <form #repairForm="ngForm" (ngSubmit)="onSubmit(repairForm)">
-
+    <form  [formGroup]="repairForm" (ngSubmit)="onSubmit()">
+      <div class="row g-4">
+      <div class="col-md-6">
+        <div class="form-group">
+        <select id="vehicle" class="form-control" formControlName="vehiculeDto"
+        [class.is-invalid]="repairForm.get('vehiculeDto')?.invalid && repairForm.get('vehiculeDto')?.touched">
+          <option [ngValue]="undefined" disabled selected>Select Vehicle</option>
+          <option *ngFor="let v of allVehicles" [ngValue]="v">[{{v.immatriculation}}]&nbsp;{{v.marque}}&nbsp;{{v.modele}}</option>
+        </select>
+        <label for="vehicle">Select Vehicle</label>
+        <small class="invalid-feedback">Vehicle is required</small>
+      </div>
+      </div>
+      <div class="col-md-6"><div class="form-group">
+        <select id="type" class="form-control" formControlName="type"
+        [class.is-invalid]="repairForm.get('type')?.invalid && repairForm.get('type')?.touched">
+          <option [ngValue]="undefined" disabled selected>Select type</option>
+          <option *ngFor="let typeRep of typesRepair" [ngValue]="typeRep">{{typeRep}}</option>
+        </select>
+        <label for="type">Select Type</label>
+        <small class="invalid-feedback">Nature of repair is required</small>
+      </div></div>
+      <div class="col-md-6"><div class="form-group">
+        <input
+          type="date"
+          id="startDate"
+          class="form-control"
+          formControlName="dateDebut"
+          [class.is-invalid]="repairForm.get('dateDebut')?.invalid && repairForm.get('dateDebut')?.touched"/>
+        <label for="startDate">Start Date</label>
+        <small class="invalid-feedback">Start date is required</small>
+      </div></div>
+      <div class="col-md-6"><div class="form-group">
+        <input
+          type="date"
+          id="endDate"
+          class="form-control"
+          formControlName="dateFin"
+          [class.is-invalid]="repairForm.get('dateFin')?.invalid && repairForm.get('dateFin')?.touched"/>
+        <label for="endDate">End Date</label>
+        <small class="invalid-feedback">End Date/Time is required</small>
+      </div></div>
+      <!-- Next Repair Date Field -->
+      <div class="form-group">
+        <input
+          type="date"
+          id="nextRepDate"
+          class="form-control"
+          formControlName="dateProchainRep"
+          placeholder=" " />
+        <label for="nextRepDate">Next Repair Date</label>
+      </div>
       <!-- Commentaire Field -->
       <div class="form-group">
         <textarea
           id="commentaire"
           class="form-control"
-          name="commentaire"
-          [(ngModel)]="repair.commentaire"
-          placeholder=" "
+          formControlName="commentaire"
           rows="3"
-          required></textarea>
+          [class.is-invalid]="repairForm.get('commentaire')?.invalid && repairForm.get('commentaire')?.touched"></textarea>
         <label for="commentaire">Comment</label>
+        <small class="invalid-feedback">Comment is required</small>
       </div>
-
-      <!-- Cost Field -->
-      <div class="form-group">
-        <input
-          type="number"
-          id="cout"
-          class="form-control"
-          name="cout"
-          [(ngModel)]="repair.cout"
-          placeholder=" "
-          required />
-        <label for="cout">Cost</label>
       </div>
-
-      <!-- Start Date Field -->
-      <div class="form-group">
-        <input
-          type="date"
-          id="dateDebut"
-          class="form-control"
-          name="dateDebut"
-          [(ngModel)]="repair.dateDebut"
-          placeholder=" "
-          required />
-        <label for="dateDebut">Start Date</label>
-      </div>
-
-      <!-- End Date Field -->
-      <div class="form-group">
-        <input
-          type="date"
-          id="dateFin"
-          class="form-control"
-          name="dateFin"
-          [(ngModel)]="repair.dateFin"
-          placeholder=" "
-          required />
-        <label for="dateFin">End Date</label>
-      </div>
-
-      <!-- Next Repair Date Field -->
-      <div class="form-group">
-        <input
-          type="date"
-          id="dateProchainRep"
-          class="form-control"
-          name="dateProchainRep"
-          [(ngModel)]="repair.dateProchainRep"
-          placeholder=" " />
-        <label for="dateProchainRep">Next Repair Date</label>
-      </div>
-
-      <!-- Type Field -->
-      <div class="form-group">
-        <select
-          id="type"
-          class="form-control"
-          name="type"
-          [(ngModel)]="repair.type"
-          required>
-          <option value="" disabled>Select Repair Type</option>
-          <option value="MECANIQUE">Mechanical</option>
-          <option value="ELECTRIQUE">Electrical</option>
-          <option value="CARROSSERIE">Bodywork</option>
-          <option value="VIDANGE_COMPLET">Complete Oil Change</option>
-        </select>
-        <label for="type">Repair Type</label>
-      </div>
-
-      <!-- Created By Field -->
-      <div class="form-group">
-        <input
-          type="number"
-          id="createdBy"
-          class="form-control"
-          name="createdBy"
-          [(ngModel)]="repair.createdBy"
-          placeholder=" "
-          required />
-        <label for="createdBy">Created By (User ID)</label>
-      </div>
-
-      <!-- Last Modified By Field -->
-      <div class="form-group">
-        <input
-          type="number"
-          id="lastModifiedBy"
-          class="form-control"
-          name="lastModifiedBy"
-          [(ngModel)]="repair.lastModifiedBy"
-          placeholder=" "
-          required />
-        <label for="lastModifiedBy">Last Modified By (User ID)</label>
-      </div>
-
+      <div class="form-actions mt-4">
+        <button type="button" class="btn btn-light" (click)="navigateToRepairList()">
+          Cancel
+        </button>
       <button
         type="submit"
         class="btn btn-primary btn-block"
         [disabled]="repairForm.invalid">
         <i class="bi bi-save"></i> Save Repair
-      </button>
+      </button></div>
     </form>
   </div>
 </div>
+  </div></div>

@@ -9,6 +9,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { NewClientComponent } from './pages/clients/new-client/new-client.component';
 import { NewOrderComponent } from './pages/orders/new-order/new-order.component';
 import { NewQuoteComponent } from './pages/quotes/new-quote/new-quote.component';
+import { ViewClientModalComponent } from './pages/clients/view-client-modal/view-client-modal.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { NewQuoteComponent } from './pages/quotes/new-quote/new-quote.component'
     QuotesComponent,
     NewClientComponent,
     NewOrderComponent,
-    NewQuoteComponent
+    NewQuoteComponent,
+    ViewClientModalComponent
   ],
   imports: [
     CommonModule,

@@ -6,3 +6,29 @@
 .text-danger {
   font-size: 0.875rem; /* Smaller font size for the error message */
 }
+
+.toggle-icon {
+  font-size: 1.8rem;  // Adjust icon size as needed
+  transition: color 0.3s ease, transform 0.3s ease;
+
+  &.text-success {
+    color: #28a745;
+  }
+
+  &.text-danger {
+    color: #dc3545;
+  }
+
+  &:hover {
+    transform: scale(1.2); // Slightly scale up on hover
+  }
+
+  // Add optional style for the margin or spacing between elements
+  &.ml-3 {
+    margin-left: 0.75rem;
+  }
+
+  &.mr-3 {
+    margin-right: 0.75rem;
+  }
+}

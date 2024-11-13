@@ -86,7 +86,7 @@ public class Utilisateur extends AbstractEntity implements UserDetails, Principa
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enabled;
     }
 
     @Override

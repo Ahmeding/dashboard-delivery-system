@@ -1,0 +1,197 @@
+<div id="content">
+  <!-- Begin Page Content -->
+  <div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Drivers</h1>
+    </div>
+    <div class="container mt-5">
+      <div class="card shadow-hover p-4">
+        <h3 class="text-center mb-4">Create New Driver</h3>
+        <div class="vehicle-form">
+          <form [formGroup]="driverForm" (ngSubmit)="onSubmit()">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input (keyup)="setEmailOnKeyUp($event)" formControlName="firstname" id="firstname" type="text" class="form-control" placeholder=""
+                  [class.is-invalid]="driverForm.get('firstname')?.invalid && driverForm.get('firstname')?.touched">
+                  <label for="firstname">First Name</label>
+                  <small class="invalid-feedback" *ngIf="driverForm.get('firstname')?.invalid && driverForm.get('firstname')?.touched">
+                    Please enter a valid first name.
+                  </small>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input (keyup)="setEmailOnKeyUp($event)" formControlName="lastname" id="lastname" type="text" class="form-control" placeholder=""
+                  [class.is-invalid]="driverForm.get('lastname')?.invalid && driverForm.get('lastname')?.touched">
+                  <label for="lastname">Last Name</label>
+                  <small class="invalid-feedback" *ngIf="driverForm.get('lastname')?.invalid && driverForm.get('lastname')?.touched">
+                    Please enter a valid last name.
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <input formControlName="dateOfBirth" id="dateOfBirth" type="date" class="form-control"
+                         [class.is-invalid]="driverForm.get('dateOfBirth')?.invalid && driverForm.get('dateOfBirth')?.touched"
+                  >
+                  <label for="dateOfBirth">Date of Birth</label>
+                  <small class="invalid-feedback" *ngIf="driverForm.get('dateOfBirth')?.invalid && driverForm.get('dateOfBirth')?.touched">
+                    Please select a valid date of birth.
+                  </small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <input formControlName="email" id="email" type="email" class="form-control" placeholder=""
+                         [class.is-invalid]="driverForm.get('email')?.invalid && driverForm.get('email')?.touched">
+                  <label for="email">Email</label>
+                  <small class="invalid-feedback" *ngIf="driverForm.get('email')?.invalid && driverForm.get('email')?.touched">
+                    Please enter a valid email address.
+                  </small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <input (click)="onGeneratePhoneNumClick()" formControlName="phoneNum" id="phoneNum" type="text" class="form-control" placeholder=""
+                         [class.is-invalid]="driverForm.get('phoneNum')?.invalid && driverForm.get('phoneNum')?.touched">
+                  <label for="phoneNum">Phone Number</label>
+                  <small class="invalid-feedback" *ngIf="driverForm.get('phoneNum')?.invalid && driverForm.get('phoneNum')?.touched">
+                    Please enter a valid phone number.
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+            </div>
+
+            <div class="row">
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input formControlName="drivinglicenseNbr" id="drivinglicenseNbr" type="number" class="form-control" placeholder=""
+                         [class.is-invalid]="driverForm.get('drivinglicenseNbr')?.invalid && driverForm.get('drivinglicenseNbr')?.touched">
+                  <label for="drivinglicenseNbr">Driving License Number</label>
+                  <small class="invalid-feedback" *ngIf="driverForm.get('drivinglicenseNbr')?.invalid && driverForm.get('drivinglicenseNbr')?.touched">
+                    Please enter a valid driving license number.
+                  </small>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                 <select formControlName="drivingLicenseType" id="drivingLicenseType" class="form-control"
+                         [class.is-invalid]="driverForm.get('drivingLicenseType')?.invalid && driverForm.get('drivingLicenseType')?.touched">
+                    <option value="B">B</option>
+                    <option value="E">E</option>
+                    <option value="CD">CD</option>
+                  </select>
+                  <label for="drivingLicenseType">Select Driving License Type</label>
+                  <small class="invalid-feedback" *ngIf="driverForm.get('drivingLicenseType')?.invalid && driverForm.get('drivingLicenseType')?.touched">
+                    Please select a valid driving license type.
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input  formControlName="rib" id="rib" type="text" class="form-control" placeholder=""
+                         [class.is-invalid]="driverForm.get('rib')?.invalid && driverForm.get('rib')?.touched">
+                  <label for="rib">RIB</label>
+                  <small class="invalid-feedback" *ngIf="driverForm.get('rib')?.invalid && driverForm.get('rib')?.touched">
+                    Please enter a valid RIB.
+                  </small>
+
+                </div>
+              </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <input formControlName="numSecu" id="numSecu" type="number" class="form-control" placeholder=""
+                           [class.is-invalid]="driverForm.get('numSecu')?.invalid && driverForm.get('numSecu')?.touched">
+                    <label for="numSecu">Social Security Number</label>
+                    <small class="invalid-feedback" *ngIf="driverForm.get('numSecu')?.invalid && driverForm.get('numSecu')?.touched">
+                      Please enter a valid social security number.
+                    </small>
+                  </div>
+                </div>
+            </div>
+            <div formGroupName="address">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <input formControlName="adresse1" id="adresse1" type="text" class="form-control" placeholder=""
+                           [class.is-invalid]="driverForm.get('address.adresse1')?.invalid && driverForm.get('address.adresse1')?.touched">
+                   <label for="adresse1">Address Line 1</label>
+                    <small class="invalid-feedback" *ngIf="driverForm.get('address.adresse1')?.invalid && driverForm.get('address.adresse1')?.touched">
+                      Please enter a valid adsress.
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <input formControlName="adresse2" id="adresse2" type="text" class="form-control" placeholder="">
+                    <label for="adresse2">Address Line 2</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <input formControlName="codepostal" id="codepostal" type="number" class="form-control" placeholder=""
+                           [class.is-invalid]="driverForm.get('address.codepostal')?.invalid && driverForm.get('address.codepostal')?.touched">
+                    <label for="codepostal">Postal Code</label>
+                    <small class="invalid-feedback" *ngIf="driverForm.get('address.codepostal')?.invalid && driverForm.get('address.codepostal')?.touched">
+                      Please enter a valid RIB.
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <input formControlName="ville" id="city" type="text" class="form-control" placeholder=""
+                           [class.is-invalid]="driverForm.get('address.ville')?.invalid && driverForm.get('address.ville')?.touched">
+                    <label for="city">City</label>
+                    <small class="invalid-feedback" *ngIf="driverForm.get('address.ville')?.invalid && driverForm.get('address.ville')?.touched">
+                      Please enter a valid RIB.
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <input formControlName="pays" id="pays" type="text" class="form-control" placeholder=""
+                           [class.is-invalid]="driverForm.get('address.pays')?.invalid && driverForm.get('address.pays')?.touched">
+                    <label for="pays">Country</label>
+                    <small class="invalid-feedback" *ngIf="driverForm.get('address.pays')?.invalid && driverForm.get('address.pays')?.touched">
+                      Please enter a valid RIB.
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+
+
+
+            <div class="form-actions mt-4">
+              <button type="button" class="btn btn-light" (click)="navigateToDriverList()">
+                Cancel
+              </button>
+
+              <button type="submit" class="btn btn-primary" [disabled]="driverForm.invalid">
+                Save Driver
+              </button>
+            </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

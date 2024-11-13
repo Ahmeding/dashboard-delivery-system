@@ -1,0 +1,52 @@
+<div class="modal-header">
+  <h5 class="modal-title text-primary">Repair Details</h5>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
+</div>
+<div class="modal-body">
+  <div *ngIf="selectedRepair">
+    <div class="card mb-4">
+      <div class="card-body">
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <span class="text-primary">Vehicle:</span> {{ selectedRepair.vehiculeDto?.marque}} {{ selectedRepair?.vehiculeDto?.modele }}
+          </div>
+          <div class="col-md-6">
+            <span class="text-primary">Type Of Repair:</span> {{ selectedRepair?.type }}
+          </div>
+        </div>
+
+        <!-- Row 2: Date and Capacity -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <span class="text-primary">Start Date:</span> {{ selectedRepair?.dateDebut}}
+          </div>
+          <div class="col-md-6">
+            <span class="text-primary">End Date:</span> {{ selectedRepair?.dateFin }} m<sup>3</sup>
+          </div>
+        </div>
+
+        <!-- Row 3: Milage and Vin -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <span class="text-primary">Next Repair Date:</span> {{ selectedRepair?.dateProchainRep }}
+          </div>
+          <div class="col-md-6">
+            <span class="text-primary">By:</span> {{ selectedRepair?.createdByUser?.fullname }}
+          </div>
+        </div>
+
+        <!-- Row 4: Fuel Type and Number of Missions -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <span class="text-primary">Comment:</span> {{ selectedRepair?.commentaire }}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.close()">Close</button>
+</div>

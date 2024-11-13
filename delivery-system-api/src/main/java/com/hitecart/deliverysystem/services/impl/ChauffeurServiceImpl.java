@@ -7,6 +7,7 @@ import com.hitecart.deliverysystem.model.Chauffeur;
 import com.hitecart.deliverysystem.model.Contrat;
 import com.hitecart.deliverysystem.model.Mission;
 import com.hitecart.deliverysystem.model.ServiceDelivery;
+import com.hitecart.deliverysystem.model.enums.TypeContrat;
 import com.hitecart.deliverysystem.repository.ChauffeurRepository;
 import com.hitecart.deliverysystem.repository.ContratRepository;
 import com.hitecart.deliverysystem.repository.MissionRepository;
@@ -25,6 +26,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,11 +55,20 @@ public class  ChauffeurServiceImpl implements ChauffeurService {
 
         chauffeurToSave.setPassword(passwordEncoder.encode(dto.getPassword()));
         chauffeurToSave.setRoles(List.of(userRole));
+        Contrat contratToSave= Contrat.builder()
+                .typeContrat(TypeContrat.CDD)
+                .dateDebut(LocalDate.now())
+                .dateFin(LocalDate.now().plusMonths(6))
+                .build();
+
+
 
         try {
-             chauffeurToSave = chauffeurRepository.save(
-                    ChauffeurDto.toEntity(dto));
+             chauffeurToSave = chauffeurRepository.save( ChauffeurDto.toEntity(dto));
+                contratToSave.setChauffeur(chauffeurToSave);
+                contratRepository.save(contratToSave);
         return ChauffeurDto.fromEntity(chauffeurToSave);
+
         } catch (DataIntegrityViolationException e) {
             // Handle the exception when trying to insert a duplicate drivingLicenseNum
             throw new DuplicateDrivingLicenseException("Duplicate driving license number: " + ChauffeurDto.toEntity(dto).getDrivinglicenseNbr(), e);
@@ -170,7 +182,9 @@ public class  ChauffeurServiceImpl implements ChauffeurService {
                                 ()-> new EntityNotFoundException("Opps! Aucun chauffeur avec l'id :"
                                    + id + "n'a ete trouvé dans la base donnée",
                            ErrorCodes.CHAUFFEUR_NOT_FOUND));
+        log.error("--------------------------------> "+enabled);
                chauffeurOp.setEnabled(enabled);
+        log.error("--------------------------------> "+chauffeurOp.isEnabled());
         return  ChauffeurDto.fromEntity(chauffeurRepository.save(chauffeurOp));
     }
 
