@@ -7,6 +7,8 @@ import {AlertService} from "../../../../services/alert/alert.service";
 import {ClientService} from "../../../../../ds-api/src/services/client.service";
 import {NgForm} from "@angular/forms";
 import {Router} from "@angular/router";
+import {ViewClientModalComponent} from "./view-client-modal/view-client-modal.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-clients',
@@ -28,6 +30,7 @@ export class ClientsComponent implements OnInit{
   pageSize: any;
 
   constructor(
+    private modalService: NgbModal,
     private router:Router,
     private confirmBoxService:ConfirmBoxEvokeService,
     private alertService:AlertService,
@@ -50,19 +53,13 @@ export class ClientsComponent implements OnInit{
       }
     });
   }
-  formatDateDDMMYYYY(datePMC: string | undefined) : string{
-    const dateString= JSON.stringify(datePMC);
-    const dateArray=JSON.parse(dateString);
-    const year=dateArray[0];
-    const month=dateArray[1].toString().padStart(2,'0');
-    const day=dateArray[2].toString().padStart(2,'0');
-    return `${day}-${month}-${year}`;
-  }
+
   handleClientActivation(client_id: number | undefined, isActive: boolean | undefined) {
     const action = isActive? "disable" : "enable";
+    const updatedStatus = !isActive;
     if (client_id === undefined) {
       console.log("mission_id : "+ client_id);
-      this.alertService.alertError('Mission ID is missing. Unable to delete mission.');
+      this.alertService.alertError('Mission ID is missing. Unable to desactivate Client.');
       return;
     }
     this.confirmBoxService.customFour(`Are you sure you want to ${action} this client?`, '', 'Confirme', 'Cancel').subscribe(
@@ -71,7 +68,7 @@ export class ClientsComponent implements OnInit{
           this.clientService.updateIsActive1(
             {
               id:client_id,
-              isactive:!isActive
+              isactive:updatedStatus
             }
           ).subscribe(() => {
             this.getAllClients();
@@ -84,25 +81,6 @@ export class ClientsComponent implements OnInit{
       }
     )
   }
-
-  addNewClient(form: NgForm) {
-    form.form.markAllAsTouched();
-    this.isFormAddNewSubmitted= true;
-
-    if(form.valid)
-    {
-      this.saveClient(this.newClient,form);
-    }else{
-      this.alertService.alertError('You must fill in the required fields.');
-    }
-  }
-
-  private resetForm(form: NgForm) {
-    form.resetForm();
-    this.newClient={}
-    this.isFormAddNewSubmitted=false;
-  }
-
 
   deleteClient(client_id: number) {
     if (client_id === undefined) {
@@ -122,49 +100,6 @@ export class ClientsComponent implements OnInit{
         this.alertService.alertError(err.error !== null ? err.error.message : 'Unable to delete client');
       }
     )
-  }
-  editClient(client_id: number | undefined) {
-    this.clientService.findById11({
-      id:client_id as number
-    }).subscribe({
-      next:(res)=>{
-        this.selectedClient=res;
-        this.address=this.selectedClient.address as AdresseDto;
-        console.log(this.selectedClient);
-      }
-    })
-  }
-  convertDateToInput(dateArray: number[] ) :string{
-    const year= dateArray[0];
-    const month= dateArray[1].toString().padStart(2,'0');
-    const day= dateArray[2].toString().padStart(2,'0');
-    return `${year}-${month}-${day}`;
-  }
-  saveEditingClient(editForm: NgForm) {
-    editForm.form.markAllAsTouched();
-    this.isFormAddNewSubmitted= true;
-    if(editForm.valid){
-      this.saveClient(this.selectedClient,editForm);
-    }else{
-      this.alertService.alertError('You must fill in the required fields.');
-    }
-
-  }
-  private saveClient(clientToSave: ClientDto, form: NgForm) {
-    clientToSave.address = this.address;
-    this.clientService.save11({
-      body:clientToSave
-    }).subscribe({
-      next:(res)=>{
-        console.log(res);
-        this.alertService.alertSuccess("Client saved successfully!");
-        this.getAllClients();
-        this.resetForm(form);
-      },
-      error:(err)=>{
-        console.log(err);
-        this.alertService.alertError("An error occurred while saving a client.");
-      }})
   }
 
 
@@ -207,18 +142,20 @@ export class ClientsComponent implements OnInit{
   }
 
   viewClientDetails(client: ClientDto) {
-
+    const modalRef = this.modalService.open(ViewClientModalComponent, { size: 'xl' });
+    modalRef.componentInstance.selectedDriver = client;  // Pass data to modal
   }
 
-  confirmDelete(client: ClientDto) {
-
-  }
 
   onPageSizeChange() {
 
   }
 
-  getPageNumbers() {
-    return undefined;
+  getPageNumbers() {const totalPages = this.allClientsResponse?.totalPages as number -1 || 0;
+    return undefined;//Array.from({ length : totalPages }, (_, i) => i + 1);
+  }
+
+  goToEditClient(id: number | undefined) {
+    this.router.navigate(['clients','edit-client',id]);
   }
 }

@@ -1,0 +1,67 @@
+<div class="modal-header">
+  <h5 class="modal-title text-primary">Client Details dddd</h5>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
+</div>
+<div class="modal-body">dddddd
+  <div *ngIf="selectedClient">
+    <div class="card mb-4">
+      <div class="card-body">
+
+        <!-- Row 1: Marque/Model and Date PMC -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <span class="text-primary">Full Name:</span> {{ selectedClient?.firstname }} {{ selectedClient?.lastname }}
+          </div>
+          <div class="col-md-6">
+            <span class="text-primary">Email:</span> {{ selectedClient?.email }}
+          </div>
+        </div>
+
+        <!-- Row 2: Immatriculation and Capacity -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <span class="text-primary">Phone. N°:</span> {{ selectedClient?.phoneNum }}
+          </div>
+          <div class="col-md-6">
+            <span class="text-primary">Created By :</span> {{ selectedClient?.createdByUser?.fullname }}
+          </div>
+        </div>
+
+        <!-- Row 3: Milage and Vin -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <span class="text-primary">Description:</span> {{ selectedClient?.description }}
+          </div>
+          <div class="col-md-6">
+            <span class="text-primary">Siret N°:</span> {{ selectedClient?.siret }}
+          </div>
+        </div>
+
+        <!-- Row 4: Fuel Type and Number of Missions -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <span class="text-primary">Siren:</span> {{ selectedClient?.siren }}
+          </div>
+          <div class="col-md-6">
+            <span class="text-primary">Number of Missions:</span> <!--{{ selectedClient?.missionCount || 'N/A' }}-->
+          </div>
+        </div>
+
+        <!-- Row 5: Number of Repairs and Next Oil Change Date -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <span class="text-primary">Number of Repairs:</span> <!--{{ selectedClient?.repairCount || 'N/A' }}-->
+          </div>
+          <div class="col-md-6">
+            <span class="text-primary">Next Oil Change Date:</span> <!--{{ selectedClient?.nextOilChangeDate || 'N/A' }}-->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.close()">Close</button>
+</div>
+

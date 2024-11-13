@@ -63,22 +63,31 @@
               {{client.phoneNum}}
             </div>
           </td>
-          <td>
+         <!-- <td>
             <div class="form-check form-switch">
               <input class="form-check-input" type="checkbox"
                      [checked]="client.enabled"
                      (change)="handleClientActivation(client.id, !client.enabled)">
             </div>
+          </td>-->
+          <td>
+            <i
+              [ngClass]="client.enabled
+                            ? 'bi bi-toggle2-on text-success toggle-icon ml-3 mr-3'
+                            : 'bi bi-toggle2-off text-danger toggle-icon ml-3 mr-3'"
+              title="{{ client.enabled ? 'Deactivate' : 'Activate' }}"
+              (click)="handleClientActivation(client.id!, client.enabled!)">
+            </i>
           </td>
           <td>
             <div class="action-buttons">
               <button class="btn btn-icon" (click)="viewClientDetails(client)">
                 <i class="bi bi-eye"></i>
               </button>
-              <button class="btn btn-icon" (click)="editClient(client.id)">
+              <button class="btn btn-icon" (click)="goToEditClient(client.id)">
                 <i class="bi bi-pencil"></i>
               </button>
-              <button class="btn btn-icon text-danger" (click)="confirmDelete(client)">
+              <button class="btn btn-icon text-danger" (click)="deleteClient(client.id!)">
                 <i class="bi bi-trash"></i>
               </button>
             </div>
@@ -112,7 +121,7 @@
         </li>
         <li class="page-item" *ngFor="let p of getPageNumbers()"
             [class.active]="page === p">
-          <a class="page-link" (click)="goToPage(p)">{{p + 1}}</a>
+          <a class="page-link" (click)="goToPage(p)">{{p+1}}</a>
         </li>
         <li class="page-item" [class.disabled]="isLastPage">
           <a class="page-link" (click)="goToNextPage()">
@@ -128,310 +137,9 @@
     </div>
   </div>
 </div>
-<!--add new client modal-->
-<div class="modal fade" id="clientModal" tabindex="-1" aria-labelledby="clientModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title text-primary" id="driverModalLabel">New Client</h5>
-        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="card mb-4">
-          <div class="card-body">
-            <form #form="ngForm">
-              <!-- ligne 1-->
-              <div class="row mb-3">
-                <div class="col-md-4">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="newClient.lastname"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['lastname']?.invalid}"
-                            name="lastname"  class="form-control" id="inputNom" type="text" placeholder="Last name"  required/>
-                    <label for="inputNom">Last name</label>
-                    <small *ngIf="isFormAddNewSubmitted && form.controls['lastname']?.invalid" class="text-danger">Last name is required</small>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="newClient.firstname"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['firstname']?.invalid}"
-                            name="firstname" class="form-control" id="inputPrenom" type="text" placeholder="First name"  required/>
-                    <label for="inputPrenom">First name</label>
-                    <small *ngIf="isFormAddNewSubmitted && form.controls['firstname']?.invalid" class="text-danger">First name is required</small>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="newClient.email"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['email']?.invalid}"
-                            name="email" class="form-control" id="inputEmail" type="text" placeholder="Email"  required/>
-                    <label for="inputEmail">Email</label>
-                    <small *ngIf="isFormAddNewSubmitted && form.controls['email']?.invalid" class="text-danger">Email is required</small>
-                  </div>
-                </div>
-              </div>
-
-              <!-- ligne 2-->
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="newClient.phoneNum"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['numtel']?.invalid}"
-                            name="numtel" class="form-control" id="inputNumTel" type="text" placeholder="VIN N°"  required/>
-                    <label for="inputNumTel">Phone N°</label>
-                    <small *ngIf="isFormAddNewSubmitted && form.controls['numtel']?.invalid" class="text-danger">Phone N° is required</small>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="newClient.siren"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['siren']?.invalid}"
-                            name="siren" class="form-control" id="inputSiren" type="text" placeholder="Siren"  required/>
-                    <label for="inputSiren">Siren</label>
-                    <small *ngIf="isFormAddNewSubmitted && form.controls['siren']?.invalid" class="text-danger">Siren. is required</small>
-                  </div>
-                </div>
-              </div>
-
-              <!-- ligne 3-->
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="newClient.siret"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['siret']?.invalid}"
-                            name="siret" class="form-control" id="inputSiret" type="number" placeholder="Siret"  required/>
-                    <label for="inputSiret">Siret</label>
-                    <small *ngIf="isFormAddNewSubmitted && form.controls['siret']?.invalid" class="text-danger">Siret is required</small>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="newClient.description"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['description']?.invalid}"
-                            name="description" class="form-control" id="inputDescription" type="text" placeholder="Description"  required/>
-                    <label for="inputDescription">Description</label>
-                    <small *ngIf="isFormAddNewSubmitted && form.controls['description']?.invalid" class="text-danger">Description is required</small>
-                  </div>
-                </div>
-              </div>
-
-              <!-- ligne 3-->
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="address.adresse1"
-                           [ngClass]="{'is-invalid':isFormAddNewSubmitted && form.controls['adresse1']?.invalid}"
-                           name="adresse1" class="form-control" id="inputAdresse1" type="text" placeholder="Address 1" required/>
-                    <label for="inputAdresse1" class="text-primary">Address</label>
-                    <small *ngIf="isFormAddNewSubmitted && form.controls['adresse1']?.invalid" class="text-danger">Address is required.</small>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="address.adresse2" name="adresse2" class="form-control" id="inputAdresse2" type="text" placeholder="Address 2" />
-                    <label for="inputAdresse2" class="text-primary">Adresse 2</label>
-                  </div>
-                </div>
-              </div>
-              <!-- ligne 4-->
-              <div class="row mb-3">
-                <div class="col-md-4">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="address.codepostal"
-                           [ngClass]="{'is-invalid':isFormAddNewSubmitted && form.controls['codepostal']?.invalid}"
-                           name="codepostal" class="form-control" id="inputCodePostale" type="text" placeholder="Postal code" required/>
-                    <label for="inputCodePostale" class="text-primary">Postal code</label>
-                    <small *ngIf="isFormAddNewSubmitted && form.controls['codepostal']?.invalid" class="text-danger">Postal code is required.</small>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="address.ville"
-                           [ngClass]="{'is-invalid':isFormAddNewSubmitted && form.controls['ville']?.invalid}"
-                           name="ville" class="form-control" id="inputVille" type="text" placeholder="City" required/>
-                    <label for="inputCodePostale" class="text-primary">City</label>
-                    <small *ngIf="isFormAddNewSubmitted && form.controls['ville']?.invalid" class="text-danger">City is required.</small>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="address.pays"
-                           [ngClass]="{'is-invalid':isFormAddNewSubmitted && form.controls['pays']?.invalid}"
-                           name="pays" class="form-control" id="inputPays" type="text" placeholder="Country" required/>
-                    <label for="inputPays" class="text-primary">Country</label>
-                    <small *ngIf="isFormAddNewSubmitted && form.controls['pays']?.invalid" class="text-danger">Country is required.</small>
-                  </div>
-                </div>
-              </div>
-              <!-- ligne 6-->
-
-            </form>
-
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="addNewClient(form)">Save</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!--edit client modal-->
-<div class="modal fade" id="editClientModal" tabindex="-1" aria-labelledby="editClientModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title text-primary" id="editClientModalLabel">New Client</h5>
-        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="card mb-4">
-          <div class="card-body">
-
-            <form #editForm="ngForm">
-              <!-- ligne 1-->
-              <div class="row mb-3">
-                <div class="col-md-4">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="selectedClient.lastname"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['lastname']?.invalid}"
-                            name="marque"  class="form-control" id="inputEditNom" type="text" placeholder="Last name"  required/>
-                    <label for="inputEditNom">Last name</label>
-                    <small *ngIf="isFormAddNewSubmitted && editForm.controls['lastname']?.invalid" class="text-danger">Last name is required</small>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="selectedClient.firstname"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['firstname']?.invalid}"
-                            name="firstname" class="form-control" id="inputEditPrenom" type="text" placeholder="First name"  required/>
-                    <label for="inputEditPrenom">First name</label>
-                    <small *ngIf="isFormAddNewSubmitted && editForm.controls['firstname']?.invalid" class="text-danger">First name is required</small>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="selectedClient.email"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['email']?.invalid}"
-                            name="email" class="form-control" id="inputEditEmail" type="text" placeholder="Email"  required/>
-                    <label for="inputEditEmail">Email</label>
-                    <small *ngIf="isFormAddNewSubmitted && editForm.controls['email']?.invalid" class="text-danger">Email is required</small>
-                  </div>
-                </div>
-              </div>
-
-              <!-- ligne 2-->
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="selectedClient.phoneNum"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['numtel']?.invalid}"
-                            name="numtel" class="form-control" id="inputEditNumTel" type="text" placeholder="VIN N°"  required/>
-                    <label for="inputEditNumTel">Phone N°</label>
-                    <small *ngIf="isFormAddNewSubmitted && editForm.controls['numtel']?.invalid" class="text-danger">Phone N° is required</small>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="selectedClient.siren"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['siren']?.invalid}"
-                            name="siren" class="form-control" id="inputEditSiren" type="text" placeholder="Siren"  required/>
-                    <label for="inputEditSiren">Siren N°</label>
-                    <small *ngIf="isFormAddNewSubmitted && editForm.controls['siren']?.invalid" class="text-danger">Siren N° is required</small>
-                  </div>
-                </div>
-              </div>
-
-              <!-- ligne 3-->
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="selectedClient.siret"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['mileage']?.invalid}"
-                            name="siret" class="form-control" id="inputEditSiret" type="number" placeholder="Siret"  required/>
-                    <label for="inputEditSiret">Siret N°</label>
-                    <small *ngIf="isFormAddNewSubmitted && editForm.controls['siret']?.invalid" class="text-danger">Siret N° is required</small>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="selectedClient.description"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['description']?.invalid}"
-                            name="description" class="form-control" id="inputEditDescription" type="text" placeholder="Description"  required/>
-                    <label for="inputEditDescription">Description</label>
-                    <small *ngIf="isFormAddNewSubmitted && editForm.controls['description']?.invalid" class="text-danger">Description is required</small>
-                  </div>
-                </div>
-              </div>
-              <!-- ligne 3-->
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="address.adresse1"
-                           [ngClass]="{'is-invalid':isFormAddNewSubmitted && editForm.controls['adresse1']?.invalid}"
-                           name="adresse1" class="form-control" id="inputEditAdresse1" type="text" placeholder="Address 1" required/>
-                    <label for="inputEditAdresse1" class="text-primary">Address</label>
-                    <small *ngIf="isFormAddNewSubmitted && editForm.controls['adresse1']?.invalid" class="text-danger">Address is required.</small>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="address.adresse2" name="adresse2" class="form-control"
-                           id="inputEditAdresse2" type="text" placeholder="Address 2" />
-                    <label for="inputEditAdresse2" class="text-primary">Adresse 2</label>
-                  </div>
-                </div>
-              </div>
-              <!-- ligne 4-->
-              <div class="row mb-3">
-                <div class="col-md-4">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="address.codepostal"
-                           [ngClass]="{'is-invalid':isFormAddNewSubmitted && editForm.controls['codepostal']?.invalid}"
-                           name="codepostal" class="form-control" id="inputEditCodePostale" type="text" placeholder="Postal code" required/>
-                    <label for="inputEditCodePostale" class="text-primary">Postal code</label>
-                    <small *ngIf="isFormAddNewSubmitted && editForm.controls['codepostal']?.invalid" class="text-danger">Postal code is required.</small>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="address.ville"
-                           [ngClass]="{'is-invalid':isFormAddNewSubmitted && editForm.controls['ville']?.invalid}"
-                           name="ville" class="form-control" id="inputEditVille" type="text" placeholder="City" required/>
-                    <label for="inputEditVille" class="text-primary">City</label>
-                    <small *ngIf="isFormAddNewSubmitted && editForm.controls['ville']?.invalid" class="text-danger">City is required.</small>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-floating mb-3 mb-md-0">
-                    <input [(ngModel)]="address.pays"
-                           [ngClass]="{'is-invalid':isFormAddNewSubmitted && editForm.controls['pays']?.invalid}"
-                           name="pays" class="form-control" id="inputEditPays" type="text" placeholder="Country" required/>
-                    <label for="inputEditPays" class="text-primary">Country</label>
-                    <small *ngIf="isFormAddNewSubmitted && editForm.controls['pays']?.invalid" class="text-danger">Country is required.</small>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="saveEditingClient(editForm)">Save</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 
 <!--info modal-->
-<div class="modal fade" id="infoClientModal" tabindex="-1" aria-labelledby="infoClientModalLabel" aria-hidden="true">
+<!--<div class="modal fade" id="infoClientModal" tabindex="-1" aria-labelledby="infoClientModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
@@ -444,7 +152,7 @@
 
         <div class="card mb-4">
           <div class="card-body" *ngIf="selectedClient">
-            <!-- ligne 1-->
+            &lt;!&ndash; ligne 1&ndash;&gt;
             <div class="row mb-3">
               <div class="col-md-6">
                 <div class="form-floating mb-3 mb-md-0">
@@ -459,7 +167,7 @@
               </div>
             </div>
 
-            <!-- ligne 2-->
+            &lt;!&ndash; ligne 2&ndash;&gt;
             <div class="row mb-3">
               <div class="col-md-6">
                 <div class="form-floating mb-3 mb-md-0">
@@ -473,7 +181,7 @@
               </div>
             </div>
 
-            <!-- ligne 3-->
+            &lt;!&ndash; ligne 3&ndash;&gt;
             <div class="row mb-3">
               <div class="col-md-6">
                 <div class="form-floating mb-3 mb-md-0">
@@ -486,7 +194,7 @@
                 </div>
               </div>
             </div>
-            <!-- ligne 4-->
+            &lt;!&ndash; ligne 4&ndash;&gt;
             <div class="row mb-3">
               <div class="col-md-6">
                 <div class="form-floating mb-3 mb-md-0">
@@ -496,7 +204,7 @@
                 </div>
               </div>
             </div>
-            <!-- ligne 6-->
+            &lt;!&ndash; ligne 6&ndash;&gt;
             <div class="row mb-3">
               <div class="col-md-6">
                 <div class="form-floating mb-3 mb-md-0">
@@ -513,4 +221,4 @@
       </div>
     </div>
   </div>
-</div>
+</div>-->

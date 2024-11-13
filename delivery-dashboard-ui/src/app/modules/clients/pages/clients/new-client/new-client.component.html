@@ -1,21 +1,20 @@
-<div class="client-form-container">
-  <div class="form-header">
-    <h1>{{ isEditMode ? 'Edit Client' : 'New Client' }}</h1>
-    <button class="btn btn-outline-secondary" routerLink="/clients/all">
-      <i class="bi bi-x-lg"></i>
-    </button>
-  </div>
-
-  <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="client-form">
-    <div class="form-sections">
-      <!-- Personal Information -->
-      <div class="form-section">
-        <h2>Personal Information</h2>
-        <div class="row g-3">
+<div id="content">
+  <!-- Begin Page Content -->
+  <div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Clients</h1>
+    </div>
+    <div class="container mt-5">
+      <div class="card shadow-hover p-4">
+        <h3 class="text-center mb-4">{{ isEditMode?"Update":"Create New" }} Client</h3>
+        <div class="vehicle-form">
+       <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+        <div class="row">
           <div class="col-md-6">
-            <div class="form-floating">
-              <input type="text" class="form-control" id="firstname"
-                     formControlName="firstname" placeholder="First Name"
+            <div class="form-group">
+              <input (click)="inputFillDataOnClick()" type="text" class="form-control" id="firstname"
+                     formControlName="firstname" placeholder=""
                      [class.is-invalid]="isFieldInvalid('firstname')">
               <label for="firstname">First Name</label>
               <div class="invalid-feedback" *ngIf="isFieldInvalid('firstname')">
@@ -24,9 +23,9 @@
             </div>
           </div>
           <div class="col-md-6">
-            <div class="form-floating">
+            <div class="form-group">
               <input type="text" class="form-control" id="lastname"
-                     formControlName="lastname" placeholder="Last Name"
+                     formControlName="lastname" placeholder=""
                      [class.is-invalid]="isFieldInvalid('lastname')">
               <label for="lastname">Last Name</label>
               <div class="invalid-feedback" *ngIf="isFieldInvalid('lastname')">
@@ -35,16 +34,12 @@
             </div>
           </div>
         </div>
-      </div>
-
       <!-- Contact Information -->
-      <div class="form-section">
-        <h2>Contact Information</h2>
         <div class="row g-3">
           <div class="col-md-6">
-            <div class="form-floating">
+            <div class="form-group">
               <input type="email" class="form-control" id="email"
-                     formControlName="email" placeholder="Email"
+                     formControlName="email" placeholder=""
                      [class.is-invalid]="isFieldInvalid('email')">
               <label for="email">Email</label>
               <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
@@ -53,9 +48,9 @@
             </div>
           </div>
           <div class="col-md-6">
-            <div class="form-floating">
+            <div class="form-group">
               <input type="tel" class="form-control" id="phoneNum"
-                     formControlName="phoneNum" placeholder="Phone Number"
+                     formControlName="phoneNum" placeholder=""
                      [class.is-invalid]="isFieldInvalid('phoneNum')">
               <label for="phoneNum">Phone Number</label>
               <div class="invalid-feedback" *ngIf="isFieldInvalid('phoneNum')">
@@ -64,59 +59,80 @@
             </div>
           </div>
         </div>
-      </div>
-
       <!-- Business Information -->
-      <div class="form-section">
-        <h2>Business Information</h2>
         <div class="row g-3">
           <div class="col-md-6">
-            <div class="form-floating">
+            <div class="form-group">
               <input type="text" class="form-control" id="siren"
-                     formControlName="siren" placeholder="SIREN">
+                     formControlName="siren" placeholder="">
               <label for="siren">SIREN</label>
             </div>
           </div>
           <div class="col-md-6">
-            <div class="form-floating">
+            <div class="form-group">
               <input type="text" class="form-control" id="siret"
-                     formControlName="siret" placeholder="SIRET">
+                     formControlName="siret" placeholder="">
               <label for="siret">SIRET</label>
             </div>
           </div>
         </div>
-      </div>
+
 
       <!-- Address -->
-      <div class="form-section" formGroupName="address">
-        <h2>Address</h2>
+      <div formGroupName="address">
         <div class="row g-3">
-          <div class="col-12">
-            <div class="form-floating">
-              <input type="text" class="form-control" id="street"
-                     formControlName="street" placeholder="Street Address">
-              <label for="street">Street Address</label>
-            </div>
-          </div>
           <div class="col-md-6">
-            <div class="form-floating">
+            <div class="form-group">
+              <input type="text" class="form-control" id="street"
+                     formControlName="adresse1" placeholder=""
+                     [class.is-invalid]="isFieldInvalid('address.adresse1')">
+              <label for="street">Street Address</label>
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('address.adresse1')">
+                Please enter a valid street
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <input type="text" class="form-control" id="street2"
+                     formControlName="adresse2" placeholder="">
+              <label for="street2">Street Address (optional)</label>
+            </div>
+          </div>
+        </div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="form-group">
               <input type="text" class="form-control" id="city"
-                     formControlName="city" placeholder="City">
+                     formControlName="ville" placeholder=""
+                     [class.is-invalid]="isFieldInvalid('address.ville')">
               <label for="city">City</label>
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('address.ville')">
+                Please enter a valid street
+              </div>
             </div>
           </div>
           <div class="col-md-3">
-            <div class="form-floating">
+            <div class="form-group">
               <input type="text" class="form-control" id="postalCode"
-                     formControlName="postalCode" placeholder="Postal Code">
+                     formControlName="codepostal" placeholder=""
+                     [class.is-invalid]="isFieldInvalid('address.codepostal')">
               <label for="postalCode">Postal Code</label>
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('address.codepostal')">
+                Please enter a valid postal code
+              </div>
             </div>
           </div>
           <div class="col-md-3">
-            <div class="form-floating">
+            <div class="form-group">
               <input type="text" class="form-control" id="country"
-                     formControlName="country" placeholder="Country">
+                     formControlName="pays" placeholder=""
+                     [class.is-invalid]="isFieldInvalid('address.pays')">
               <label for="country">Country</label>
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('address.pays')">
+                Please enter a valid country
+              </div>
             </div>
           </div>
         </div>
@@ -124,28 +140,19 @@
 
       <!-- Additional Information -->
       <div class="form-section">
-        <h2>Additional Information</h2>
         <div class="row g-3">
           <div class="col-12">
-            <div class="form-floating">
+            <div class="form-group">
               <textarea class="form-control" id="description"
-                        formControlName="description" placeholder="Description"
+                        formControlName="description" placeholder=""
                         style="height: 100px"></textarea>
               <label for="description">Description</label>
             </div>
           </div>
-          <div class="col-12">
-            <div class="form-check form-switch">
-              <input type="checkbox" class="form-check-input" id="enabled"
-                     formControlName="enabled">
-              <label class="form-check-label" for="enabled">Active Account</label>
-            </div>
-          </div>
         </div>
       </div>
-    </div>
 
-    <div class="form-actions">
+    <div class="d-flex justify-content-end">
       <button type="button" class="btn btn-outline-secondary" routerLink="/clients/all">
         Cancel
       </button>
@@ -155,4 +162,8 @@
       </button>
     </div>
   </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
