@@ -129,7 +129,7 @@ export class QuotesComponent implements OnInit{
   }
 
   private getAllClients() {
-    this.clientService.findAll11().subscribe({
+    this.clientService.findAll12().subscribe({
       next:(clientsResponse)=>{
         this.allClients=clientsResponse;
       }

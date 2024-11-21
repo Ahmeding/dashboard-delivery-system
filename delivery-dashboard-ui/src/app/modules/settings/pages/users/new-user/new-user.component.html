@@ -1,23 +1,34 @@
-<div class="container py-4">
-  <div class="card shadow-hover">
-    <div class="card-header text-center">
-      <h3 class="mb-0 text-primary">Create New User</h3>
+<div class="new-user-container">
+  <div class="header-section">
+    <div class="d-flex align-items-center gap-3">
+      <button class="btn btn-icon back-button" (click)="goBack()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <h1 class="mb-0">Create New User</h1>
     </div>
-    <div class="card-body">
-      <form (ngSubmit)="onSubmit()" #userForm="ngForm">
-        <div class="row">
+  </div>
+
+  <div class="form-card">
+    <form (ngSubmit)="onSubmit()" #userForm="ngForm" class="user-form">
+      <div class="form-section personal-info">
+        <h2 class="section-title">Personal Information</h2>
+        <div class="row g-4">
           <div class="col-md-6">
             <div class="form-group">
               <input
                 type="text"
                 id="firstname"
                 name="firstname"
-                class="form-control"
                 required
                 [(ngModel)]="user.firstname"
                 placeholder=" "
+                [class.is-invalid]="firstnameInput.invalid && firstnameInput.touched"
+                #firstnameInput="ngModel"
               />
               <label for="firstname">First Name</label>
+              <div class="invalid-feedback" *ngIf="firstnameInput.invalid && firstnameInput.touched">
+                First name is required
+              </div>
             </div>
           </div>
           <div class="col-md-6">
@@ -26,76 +37,157 @@
                 type="text"
                 id="lastname"
                 name="lastname"
-                class="form-control"
                 required
                 [(ngModel)]="user.lastname"
                 placeholder=" "
+                [class.is-invalid]="lastnameInput.invalid && lastnameInput.touched"
+                #lastnameInput="ngModel"
               />
               <label for="lastname">Last Name</label>
+              <div class="invalid-feedback" *ngIf="lastnameInput.invalid && lastnameInput.touched">
+                Last name is required
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="form-group">
-          <input
-            type="email"
-            id="email"
-            name="email"
-            class="form-control"
-            required
-            [(ngModel)]="user.email"
-            placeholder=" "
-          />
-          <label for="email">Email</label>
+      <div class="form-section contact-info">
+        <h2 class="section-title">Contact Information</h2>
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="form-group">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                [(ngModel)]="user.email"
+                placeholder=" "
+                [class.is-invalid]="emailInput.invalid && emailInput.touched"
+                #emailInput="ngModel"
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+              />
+              <label for="email">Email</label>
+              <div class="invalid-feedback" *ngIf="emailInput.invalid && emailInput.touched">
+                <span *ngIf="emailInput.errors?.['required']">Email is required</span>
+                <span *ngIf="emailInput.errors?.['pattern']">Please enter a valid email</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <input
+                type="tel"
+                id="phoneNum"
+                name="phoneNum"
+                required
+                [(ngModel)]="user.phoneNum"
+                placeholder=" "
+                [class.is-invalid]="phoneInput.invalid && phoneInput.touched"
+                #phoneInput="ngModel"
+                pattern="^\+?[1-9]\d{1,14}$"
+              />
+              <label for="phoneNum">Phone Number</label>
+              <div class="invalid-feedback" *ngIf="phoneInput.invalid && phoneInput.touched">
+                Please enter a valid phone number
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="form-group">
-          <input
-            type="tel"
-            id="phoneNum"
-            name="phoneNum"
-            class="form-control"
-            required
-            [(ngModel)]="user.phoneNum"
-            placeholder=" "
-          />
-          <label for="phoneNum">Phone Number</label>
+      <div class="form-section account-info">
+        <h2 class="section-title">Account Settings</h2>
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="password-input">
+                <input
+                  [type]="showPassword ? 'text' : 'password'"
+                  id="password"
+                  name="password"
+                  required
+                  [(ngModel)]="user.password"
+                  placeholder=" "
+                  [class.is-invalid]="passwordInput.invalid && passwordInput.touched"
+                  #passwordInput="ngModel"
+                  pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                />
+                <button type="button" class="btn btn-icon toggle-password" (click)="togglePasswordVisibility()">
+                  <i class="bi" [class.bi-eye-fill]="!showPassword" [class.bi-eye-slash-fill]="showPassword"></i>
+                </button>
+              </div>
+              <label for="password">Password</label>
+              <div class="invalid-feedback" *ngIf="passwordInput.invalid && passwordInput.touched">
+                Password must be at least 8 characters with letters and numbers
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <select
+                id="role"
+                name="role"
+                [(ngModel)]="user.role"
+                required
+                [class.is-invalid]="roleInput.invalid && roleInput.touched"
+                #roleInput="ngModel"
+              >
+                <option value="" disabled selected>Select Role</option>
+                <option value="ADMIN">Administrator</option>
+                <option value="USER">Regular User</option>
+                <option value="MODERATOR">Moderator</option>
+              </select>
+              <label for="role">User Role</label>
+              <div class="invalid-feedback" *ngIf="roleInput.invalid && roleInput.touched">
+                Please select a role
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="form-group">
-          <input
-            type="password"
-            id="password"
-            name="password"
-            class="form-control"
-            required
-            [(ngModel)]="user.password"
-            placeholder=" "
-          />
-          <label for="password">Password</label>
+      <div class="form-section account-status">
+        <h2 class="section-title">Account Status</h2>
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="form-check form-switch">
+              <input
+                type="checkbox"
+                id="enabled"
+                name="enabled"
+                class="form-check-input"
+                [(ngModel)]="user.enabled"
+              />
+              <label class="form-check-label" for="enabled">Account Active</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-check form-switch">
+              <input
+                type="checkbox"
+                id="accountLocked"
+                name="accountLocked"
+                class="form-check-input"
+                [(ngModel)]="user.accountLocked"
+              />
+              <label class="form-check-label" for="accountLocked">Account Locked</label>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="form-group">
-          <select
-            id="role"
-            name="role"
-            class="form-control"
-            [(ngModel)]="user.role"
-            required
-          >
-            <option value="" disabled selected>Select Role</option>
-            <option value="ADMIN">Admin</option>
-            <option value="USER">User</option>
-          </select>
-          <label for="role">Role</label>
-        </div>
-
-        <div class="text-center mt-4">
-          <button type="submit" class="btn btn-primary" [disabled]="!userForm.valid">
-            <i class="bi bi-person-plus"></i> Add User
-          </button>
-        </div>
-      </form>
-    </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline-secondary" (click)="goBack()">
+          <i class="bi bi-x-lg"></i> Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="!userForm.valid || isSubmitting">
+          <i class="bi bi-person-plus"></i>
+          <span *ngIf="!isSubmitting">Create User</span>
+          <span *ngIf="isSubmitting">Creating...</span>
+        </button>
+      </div>
+    </form>
   </div>
 </div>

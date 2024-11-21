@@ -96,7 +96,7 @@ getAllRepairs(){
     this.confirmBoxService.customFour('Are you sure you want to delete this repair?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.repairService.delete2({id:repair_id}).subscribe(() => {
+          this.repairService.delete3({id:repair_id}).subscribe(() => {
             this.getAllRepairs();
             this.alertService.alertSuccess('Deletion successfully completed');
           });

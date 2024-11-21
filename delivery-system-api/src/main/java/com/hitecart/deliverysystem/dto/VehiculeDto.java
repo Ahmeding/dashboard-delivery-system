@@ -35,6 +35,7 @@ public class VehiculeDto {
     @JsonIgnore
     private List<ReparationDto> reparationsDtos;
     private Boolean isActive;
+    private boolean isAssigned;
     private Integer id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -56,6 +57,7 @@ public class VehiculeDto {
         .kilometrage(vehicule.getKilometrage())
         .typecarburant(vehicule.getTypecarburant())
         .volume(vehicule.getVolume())
+                .isAssigned(vehicule.isAssigned())
                 .isActive(vehicule.getIsActive())
         .dateExpCtrlTec(vehicule.getDateExpCtrlTec())
 
@@ -84,7 +86,8 @@ public class VehiculeDto {
                 vh.setTypecarburant(dto.getTypecarburant());
                 vh.setVolume(dto.getVolume());
                 vh.setDateExpCtrlTec(dto.getDateExpCtrlTec());
-                vh.setIsActive(dto.isActive);
+                vh.setIsActive(dto.getIsActive());
+                vh.setAssigned(dto.isAssigned);
 
         vh.setCreatedAt(dto.getCreatedAt());
         vh.setUpdatedAt(dto.getUpdatedAt());

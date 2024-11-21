@@ -8,6 +8,7 @@ import {AlertService} from "../../../../services/alert/alert.service";
 import {MissionService} from "../../../../../ds-api/src/services/mission.service";
 import {ToastrService} from "ngx-toastr";
 import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
+import {debounceTime, distinctUntilChanged} from "rxjs";
 
 @Component({
   selector: 'app-all-missions',
@@ -25,6 +26,8 @@ export class AllMissionsComponent  implements OnInit{
   page: number = 0;
   size: number = 5;
 
+  searchControl = new FormControl('');
+
   constructor(
     private router:Router,
     private alertService:AlertService,
@@ -34,9 +37,47 @@ export class AllMissionsComponent  implements OnInit{
   }
   ngOnInit(): void {
     this.innitForm();
-    this.getAllMission()
+    this.getAllMission();
+    this.search();
   }
 
+  search(){
+    this.searchControl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(value => {
+      // Implement search functionality
+    });
+  }
+  getStatusIcon(status: string): string {
+    switch (status) {
+      case 'EN_COURS':
+        return 'bi-play-circle-fill text-primary';
+      case 'ACCOMPLI':
+        return 'bi-check-circle-fill text-success';
+      case 'ANNULEE':
+        return 'bi-x-circle-fill text-danger';
+      case 'TERMINIEE':
+        return 'bi-flag-fill text-info';
+      default:
+        return 'bi-question-circle-fill text-warning';
+    }
+  }
+
+  getStatusLabel(status: string): string {
+    switch (status) {
+      case 'EN_COURS':
+        return 'In Progress';
+      case 'ACCOMPLI':
+        return 'Completed';
+      case 'ANNULEE':
+        return 'Cancelled';
+      case 'TERMINIEE':
+        return 'Finished';
+      default:
+        return status;
+    }
+  }
 
 
   getAllMission(){
@@ -70,7 +111,7 @@ export class AllMissionsComponent  implements OnInit{
     this.confirmBoxService.customFour('Are you sure you want to delete this mission?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.missionService.delete4({id:mission_id}).subscribe(() => {
+          this.missionService.delete5({id:mission_id}).subscribe(() => {
             this.getAllMission();
             this.alertService.alertSuccess('Deleted successfully');
             this.alertService.alertSuccess('Deletion successfully completed');
@@ -86,8 +127,7 @@ export class AllMissionsComponent  implements OnInit{
   missionDetails(id: number | undefined) {
     this.router.navigate([`details/${id}`]);
   }
-  //for pagination
-  position: number = 1;
+
   handlePageChange(event: number) {
     this.page  = event
   }
@@ -133,6 +173,10 @@ export class AllMissionsComponent  implements OnInit{
   }
 
   goToNewMission() {
-    this.router.navigate(['missons','new-mission"'])
+    this.router.navigate(['missions','new-mission'])
+  }
+
+  goToMissionDetails(id: number | undefined) {
+    this.router.navigate(['missions','mission-details',id])
   }
 }

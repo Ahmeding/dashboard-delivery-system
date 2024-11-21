@@ -25,15 +25,16 @@ import java.util.stream.Collectors;
 @Builder
 public class CommandeClientDto  {
     private Integer id;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private Integer createdBy;
-    private Integer lastModifiedBy;
     private String code;
     private LocalDateTime dateCommnde;
     private Integer clientId;
     private List<LigneCommandeClientDto> ligneCommandeClientsDtos;
     private OrderStatus etatCommande;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Integer createdBy;
+    private Integer lastModifiedBy;
     private CreatedByUserDto createdByUser;
 
     public static CommandeClientDto fromEntity(CommandeClient commandeClient) {
@@ -57,6 +58,7 @@ public class CommandeClientDto  {
                 .updatedAt(commandeClient.getUpdatedAt())
                 .createdBy(commandeClient.getCreatedBy())
                 .lastModifiedBy(commandeClient.getLastModifiedBy())
+
                 .build();
     }
 

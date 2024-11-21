@@ -29,4 +29,6 @@ public class Client extends Utilisateur{
     private List<CommandeClient> commandeClients;
     @OneToMany(mappedBy = "client")
     private List<Devis> devis;
+    @OneToMany(mappedBy = "client")
+    private List<DeliveryPoint>  deliveryPoints;
 }

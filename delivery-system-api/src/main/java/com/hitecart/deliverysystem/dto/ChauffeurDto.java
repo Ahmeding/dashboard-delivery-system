@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @Setter
 @Builder
 public class ChauffeurDto {
+
     private Integer id;
     private String firstname;
     private String lastname;
@@ -29,21 +30,24 @@ public class ChauffeurDto {
     private AdresseDto address;
     private LocalDate dateOfBirth;
     private RoleUtilisateur role;
-    private boolean accountLocked;
-    private boolean enabled;
     private String drivinglicenseNbr;
     private DrivingLicenseType drivingLicenseType;
     private String numSecu;
     private String rib;
+    private boolean accountLocked;
+    private boolean enabled;
+    private boolean isAssigned;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;
+    private CreatedByUserDto createdByUser;
+
     @JsonIgnore
     private List<ContratDto> contratDtos;
     @JsonIgnore
     private List<RoleDto> roles;
-    private CreatedByUserDto createdByUser;
 
     public static ChauffeurDto fromEntity(Chauffeur chauffeur) {
         if(chauffeur==null) {
@@ -64,6 +68,7 @@ public class ChauffeurDto {
                 .address(AdresseDto.fromEntity(chauffeur.getAddress()))
                 .enabled(chauffeur.isEnabled())
                 .accountLocked(chauffeur.isAccountLocked())
+                .isAssigned(chauffeur.isAssigned())
                 .roles(chauffeur.getRoles()!=null?
                         chauffeur.getRoles().stream()
                                 .map(RoleDto::fromEntiy)
@@ -103,6 +108,7 @@ public class ChauffeurDto {
                 chauffeur.setRib(dto.getRib());
                 chauffeur.setAddress(AdresseDto.toEntity(dto.getAddress()));
                 chauffeur.setEnabled(dto.isEnabled());
+                chauffeur.setAssigned(dto.isAssigned());
                 chauffeur.setAccountLocked(dto.isAccountLocked());
                 chauffeur.setRoles(dto.roles!=null?
                         dto.roles.stream()

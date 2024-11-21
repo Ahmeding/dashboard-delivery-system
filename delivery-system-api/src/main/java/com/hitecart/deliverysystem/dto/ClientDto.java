@@ -32,11 +32,13 @@ public class ClientDto {
     private String description;
     private List<CommandeClientDto> commandeClientsDtos;
     private List<DevisDto> devisDtos;
+    private List<DeliveryPointDto> deliveryPointDtos;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;
     private CreatedByUserDto createdByUser;
+
     public static ClientDto fromEntity(Client client) {
         if(client==null){
 
@@ -68,7 +70,11 @@ public class ClientDto {
                                         .collect(Collectors.toList()):null
                 )
 
-
+                .deliveryPointDtos(client.getDeliveryPoints()!=null?
+                                    client.getDeliveryPoints().stream()
+                                            .map(DeliveryPointDto::fromEntity)
+                                            .collect(Collectors.toList()):null
+                                    )
                 .createdAt(client.getCreatedAt())
                 .updatedAt(client.getUpdatedAt())
                 .createdBy(client.getCreatedBy())

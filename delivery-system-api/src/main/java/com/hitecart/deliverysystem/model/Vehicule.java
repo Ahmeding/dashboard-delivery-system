@@ -48,4 +48,6 @@ public class Vehicule extends AbstractEntity{
     private Boolean isActive;
     @OneToMany(mappedBy = "vehicule")
     private List<Reparation> reparations;
+    @Column(name="is_assigned")
+    private boolean isAssigned;
 }

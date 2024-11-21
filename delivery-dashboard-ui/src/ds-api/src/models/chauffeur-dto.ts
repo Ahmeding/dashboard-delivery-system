@@ -7,6 +7,7 @@ import { CreatedByUserDto } from '../models/created-by-user-dto';
 export interface ChauffeurDto {
   accountLocked?: boolean;
   address?: AdresseDto;
+  assigned?: boolean;
   createdAt?: string;
   createdBy?: number;
   createdByUser?: CreatedByUserDto;

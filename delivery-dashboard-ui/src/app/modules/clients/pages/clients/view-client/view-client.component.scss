@@ -1,0 +1,221 @@
+.client-details {
+  padding: 1.5rem;
+  background-color: var(--bg-color);
+
+  .grid-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+    .card-header {
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      background-color: var(--card-bg);
+      color: var(--text-color);
+
+      h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+        color: var(--text-color);
+      }
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+
+      i {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+      }
+
+      .info-content {
+        flex: 1;
+
+        label {
+          display: block;
+          font-size: 0.875rem;
+          color: var(--text-muted);
+          margin-bottom: 0.25rem;
+        }
+
+        span {
+          font-weight: 500;
+          color: var(--text-color);
+        }
+      }
+    }
+  }
+
+  .status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+
+    &.status-warehouse {
+      background-color: rgba(var(--primary-rgb), 0.1);
+      color: var(--primary-color);
+    }
+
+    &.status-store {
+      background-color: rgba(var(--success-rgb), 0.1);
+      color: var(--success-color);
+    }
+
+    &.status-distribution {
+      background-color: rgba(var(--warning-rgb), 0.1);
+      color: var(--warning-color);
+    }
+  }
+
+  .table {
+    th {
+      font-weight: 600;
+      color: var(--text-color);
+      border-bottom: 2px solid var(--border-color);
+      background-color: var(--card-bg);
+    }
+
+    td {
+      vertical-align: middle;
+      color: var(--text-color);
+      border-bottom: 1px solid var(--border-color);
+      background-color: var(--card-bg);
+
+      .contact-info, .address-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        span {
+          font-size: 0.875rem;
+
+          &.contact-name {
+            font-weight: 500;
+          }
+
+          &.contact-phone, &.contact-email {
+            color: var(--text-muted);
+          }
+        }
+      }
+      .status-badge {
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: fit-content;
+      }
+
+      .status-shop {
+        background-color: rgba(var(--primary-rgb), 0.1);
+        color: var(--primary-color);
+      }
+
+      .status-depot {
+        background-color: rgba(var(--warning-rgb), 0.1);
+        color: var(--warning-color);
+      }
+
+    }
+  }
+
+  .btn {
+    &.btn-icon {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text-color);
+
+      &:hover {
+        background-color: rgba(var(--primary-rgb), 0.1);
+        color: var(--primary-color);
+      }
+    }
+
+    &.btn-primary {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      font-weight: 500;
+    }
+  }
+
+  .dropdown-menu {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+
+    .dropdown-item {
+      color: var(--text-color);
+
+      &:hover {
+        background-color: rgba(var(--primary-rgb), 0.1);
+        color: var(--primary-color);
+      }
+
+      i {
+        margin-right: 0.5rem;
+      }
+    }
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+
+  .btn-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+
+    &:hover {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+
+      &.text-danger {
+        background-color: var(--danger-color);
+        border-color: var(--danger-color);
+      }
+    }
+  }
+}

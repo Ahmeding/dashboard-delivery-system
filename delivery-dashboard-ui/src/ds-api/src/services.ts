@@ -4,6 +4,7 @@
 
 export { VehiculeService } from './services/vehicule.service';
 export { ServiceDeliveryService } from './services/service-delivery.service';
+export { DeliveryPointsService } from './services/delivery-points.service';
 export { ClientService } from './services/client.service';
 export { ChauffeurService } from './services/chauffeur.service';
 export { UtilisateurService } from './services/utilisateur.service';

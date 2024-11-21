@@ -11,8 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { delete2 } from '../fn/reparation/delete-2';
-import { Delete2$Params } from '../fn/reparation/delete-2';
+import { delete3 } from '../fn/reparation/delete-3';
+import { Delete3$Params } from '../fn/reparation/delete-3';
 import { findAll3 } from '../fn/reparation/find-all-3';
 import { FindAll3$Params } from '../fn/reparation/find-all-3';
 import { findAllReparations } from '../fn/reparation/find-all-reparations';
@@ -173,31 +173,31 @@ export class ReparationService extends BaseService {
     );
   }
 
-  /** Path part for operation `delete2()` */
-  static readonly Delete2Path = '/reparations/delete/{id}';
+  /** Path part for operation `delete3()` */
+  static readonly Delete3Path = '/reparations/delete/{id}';
 
   /**
    * Supprimer une Reparation par ID! Cette methode permet de suprimmer une reparation par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete2()` instead.
+   * To access only the response body, use `delete3()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete2$Response(params: Delete2$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return delete2(this.http, this.rootUrl, params, context);
+  delete3$Response(params: Delete3$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return delete3(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Supprimer une Reparation par ID! Cette methode permet de suprimmer une reparation par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete2$Response()` instead.
+   * To access the full response (for headers, for example), `delete3$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete2(params: Delete2$Params, context?: HttpContext): Observable<any> {
-    return this.delete2$Response(params, context).pipe(
+  delete3(params: Delete3$Params, context?: HttpContext): Observable<any> {
+    return this.delete3$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

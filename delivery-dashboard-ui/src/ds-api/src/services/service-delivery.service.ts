@@ -11,6 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { delete2 } from '../fn/service-delivery/delete-2';
+import { Delete2$Params } from '../fn/service-delivery/delete-2';
 import { findAll2 } from '../fn/service-delivery/find-all-2';
 import { FindAll2$Params } from '../fn/service-delivery/find-all-2';
 import { findAllEnabled } from '../fn/service-delivery/find-all-enabled';
@@ -199,6 +201,35 @@ export class ServiceDeliveryService extends BaseService {
   findAllServicesDelivery(params?: FindAllServicesDelivery$Params, context?: HttpContext): Observable<PageResponseServiceDeliveryDto> {
     return this.findAllServicesDelivery$Response(params, context).pipe(
       map((r: StrictHttpResponse<PageResponseServiceDeliveryDto>): PageResponseServiceDeliveryDto => r.body)
+    );
+  }
+
+  /** Path part for operation `delete2()` */
+  static readonly Delete2Path = '/services-delivery/delete/{id}';
+
+  /**
+   * Supprimer un Delivery Service par ID! Cette methode permet de suprimmer un delivery service par son ID
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `delete2()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete2$Response(params: Delete2$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return delete2(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Supprimer un Delivery Service par ID! Cette methode permet de suprimmer un delivery service par son ID
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `delete2$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  delete2(params: Delete2$Params, context?: HttpContext): Observable<any> {
+    return this.delete2$Response(params, context).pipe(
+      map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
 

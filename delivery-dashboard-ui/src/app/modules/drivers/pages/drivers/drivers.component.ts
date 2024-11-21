@@ -63,7 +63,7 @@ export class DriversComponent implements OnInit{
   }
 
   updateDriverStatus(id: number, isActive: boolean) {console.log("====================== "+ isActive);
-    this.chauffeurService.updateIsActive2({
+    this.chauffeurService.updateIsActive3({
       id:id,isactive:isActive
     }).subscribe({
       next:(res)=>{
@@ -105,7 +105,7 @@ export class DriversComponent implements OnInit{
         this.driver.address=this.address;
         this.driver.enabled=false;
         console.log(this.driver.dateOfBirth);
-        this.chauffeurService.save12({
+        this.chauffeurService.save13({
           body:this.driver
         }) .subscribe({
           next:()=>{
@@ -119,7 +119,7 @@ export class DriversComponent implements OnInit{
           }
         })
       }else{
-        this.chauffeurService.save12({
+        this.chauffeurService.save13({
           body:this.driver
         }) .subscribe({
           next:()=>{
@@ -142,7 +142,7 @@ export class DriversComponent implements OnInit{
     editForm.form.markAllAsTouched();
 
     if(editForm.valid){
-      this.chauffeurService.save12({
+      this.chauffeurService.save13({
         body:driver
       }).subscribe({
         next:(res)=>{
@@ -165,7 +165,7 @@ export class DriversComponent implements OnInit{
   }
 
   driverEdit(id: number | undefined) {
-    this.chauffeurService.findById12({
+    this.chauffeurService.findById13({
       id:id as number
     }).subscribe({
       next:(res)=>{
@@ -252,7 +252,7 @@ export class DriversComponent implements OnInit{
   }
 
   private deleteDriver(driver_id: number) {
-    this.chauffeurService.delete11({
+    this.chauffeurService.delete13({
       id:driver_id
     }).subscribe({
       next:(res)=>{

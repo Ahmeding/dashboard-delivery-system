@@ -86,12 +86,11 @@ public class CommandeClientServiceImpl implements CommandeClientService {
         CheckParmasUtil.checkID(id,
                 "Le parametre ID Commande Client est null",
                 "Impossible de trouver une commande client avec un ID null",ErrorCodes.COMMANDECLIENT_NOT_VALID_OPERATION);
-        Optional<CommandeClient> commandeClientOp= commandeClientRepository.findById(id);
-        CommandeClientResponse commandeClientResponse=Optional.of(CommandeClientResponse.fromEntity(commandeClientOp.get()))
-                .orElseThrow(()->new EntityNotFoundException( "Opps! Aucune Commande Client  avec l'id :"
-                        + id +"n'a ete trouvé dans la base deonnée"
-                        ,ErrorCodes.COMMANDECLIENT_NOT_FOUND));
 
+       CommandeClient commandeClientOp= commandeClientRepository.findById(id).orElseThrow(()->new EntityNotFoundException( "Opps! Aucune Commande Client  avec l'id :"
+                + id +"n'a ete trouvé dans la base deonnée"
+                ,ErrorCodes.COMMANDECLIENT_NOT_FOUND));
+        CommandeClientResponse commandeClientResponse= CommandeClientResponse.fromEntity(commandeClientOp);
         setCreatedByUser(commandeClientResponse);
         return commandeClientResponse;
     }

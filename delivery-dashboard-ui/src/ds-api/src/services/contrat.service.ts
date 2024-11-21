@@ -12,19 +12,19 @@ import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
 import { ContratDto } from '../models/contrat-dto';
-import { delete8 } from '../fn/contrat/delete-8';
-import { Delete8$Params } from '../fn/contrat/delete-8';
-import { findAll9 } from '../fn/contrat/find-all-9';
-import { FindAll9$Params } from '../fn/contrat/find-all-9';
+import { delete10 } from '../fn/contrat/delete-10';
+import { Delete10$Params } from '../fn/contrat/delete-10';
+import { findAll10 } from '../fn/contrat/find-all-10';
+import { FindAll10$Params } from '../fn/contrat/find-all-10';
 import { findAllByIdChauffeur } from '../fn/contrat/find-all-by-id-chauffeur';
 import { FindAllByIdChauffeur$Params } from '../fn/contrat/find-all-by-id-chauffeur';
 import { findAllContrats } from '../fn/contrat/find-all-contrats';
 import { FindAllContrats$Params } from '../fn/contrat/find-all-contrats';
-import { findById9 } from '../fn/contrat/find-by-id-9';
-import { FindById9$Params } from '../fn/contrat/find-by-id-9';
+import { findById10 } from '../fn/contrat/find-by-id-10';
+import { FindById10$Params } from '../fn/contrat/find-by-id-10';
 import { PageResponseContratDto } from '../models/page-response-contrat-dto';
-import { save9 } from '../fn/contrat/save-9';
-import { Save9$Params } from '../fn/contrat/save-9';
+import { save10 } from '../fn/contrat/save-10';
+import { Save10$Params } from '../fn/contrat/save-10';
 
 @Injectable({ providedIn: 'root' })
 export class ContratService extends BaseService {
@@ -32,60 +32,60 @@ export class ContratService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `save9()` */
-  static readonly Save9Path = '/contrats/create';
+  /** Path part for operation `save10()` */
+  static readonly Save10Path = '/contrats/create';
 
   /**
    * Ajouter/Modifier un contrat, cette methode permet d'enregistrer ou modifier un contrat
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save9()` instead.
+   * To access only the response body, use `save10()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save9$Response(params: Save9$Params, context?: HttpContext): Observable<StrictHttpResponse<ContratDto>> {
-    return save9(this.http, this.rootUrl, params, context);
+  save10$Response(params: Save10$Params, context?: HttpContext): Observable<StrictHttpResponse<ContratDto>> {
+    return save10(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier un contrat, cette methode permet d'enregistrer ou modifier un contrat
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save9$Response()` instead.
+   * To access the full response (for headers, for example), `save10$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save9(params: Save9$Params, context?: HttpContext): Observable<ContratDto> {
-    return this.save9$Response(params, context).pipe(
+  save10(params: Save10$Params, context?: HttpContext): Observable<ContratDto> {
+    return this.save10$Response(params, context).pipe(
       map((r: StrictHttpResponse<ContratDto>): ContratDto => r.body)
     );
   }
 
-  /** Path part for operation `findById9()` */
-  static readonly FindById9Path = '/contrats/contrat/{id}';
+  /** Path part for operation `findById10()` */
+  static readonly FindById10Path = '/contrats/contrat/{id}';
 
   /**
    * Rechercher un Contrat par ID! Cette methode permet de chercher un contrat par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById9()` instead.
+   * To access only the response body, use `findById10()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById9$Response(params: FindById9$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findById9(this.http, this.rootUrl, params, context);
+  findById10$Response(params: FindById10$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findById10(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher un Contrat par ID! Cette methode permet de chercher un contrat par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById9$Response()` instead.
+   * To access the full response (for headers, for example), `findById10$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById9(params: FindById9$Params, context?: HttpContext): Observable<any> {
-    return this.findById9$Response(params, context).pipe(
+  findById10(params: FindById10$Params, context?: HttpContext): Observable<any> {
+    return this.findById10$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
@@ -119,31 +119,31 @@ export class ContratService extends BaseService {
     );
   }
 
-  /** Path part for operation `findAll9()` */
-  static readonly FindAll9Path = '/contrats/all';
+  /** Path part for operation `findAll10()` */
+  static readonly FindAll10Path = '/contrats/all';
 
   /**
    * Rechercher tout les Contrat! Cette methode permet de retouner tous les contrats
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll9()` instead.
+   * To access only the response body, use `findAll10()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll9$Response(params?: FindAll9$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findAll9(this.http, this.rootUrl, params, context);
+  findAll10$Response(params?: FindAll10$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findAll10(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les Contrat! Cette methode permet de retouner tous les contrats
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll9$Response()` instead.
+   * To access the full response (for headers, for example), `findAll10$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll9(params?: FindAll9$Params, context?: HttpContext): Observable<any> {
-    return this.findAll9$Response(params, context).pipe(
+  findAll10(params?: FindAll10$Params, context?: HttpContext): Observable<any> {
+    return this.findAll10$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
@@ -173,31 +173,31 @@ export class ContratService extends BaseService {
     );
   }
 
-  /** Path part for operation `delete8()` */
-  static readonly Delete8Path = '/contrats/delete/{id}';
+  /** Path part for operation `delete10()` */
+  static readonly Delete10Path = '/contrats/delete/{id}';
 
   /**
    * Supprimer un Contrat par ID! Cette methode permet de suprimmer un contrat par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete8()` instead.
+   * To access only the response body, use `delete10()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete8$Response(params: Delete8$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return delete8(this.http, this.rootUrl, params, context);
+  delete10$Response(params: Delete10$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return delete10(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Supprimer un Contrat par ID! Cette methode permet de suprimmer un contrat par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete8$Response()` instead.
+   * To access the full response (for headers, for example), `delete10$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete8(params: Delete8$Params, context?: HttpContext): Observable<any> {
-    return this.delete8$Response(params, context).pipe(
+  delete10(params: Delete10$Params, context?: HttpContext): Observable<any> {
+    return this.delete10$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

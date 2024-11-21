@@ -47,4 +47,9 @@ public class ServiceDeliveryController  implements ServiceDeliveryApi {
         return ResponseEntity.ok(deliveryService.findAllServicesDelivery(page,
                 size));
     }
+
+    @Override
+    public void delete(Integer id) {
+        deliveryService.delete(id);
+    }
 }

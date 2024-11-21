@@ -11,8 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { delete4 } from '../fn/mission/delete-4';
-import { Delete4$Params } from '../fn/mission/delete-4';
+import { delete5 } from '../fn/mission/delete-5';
+import { Delete5$Params } from '../fn/mission/delete-5';
 import { findAll5 } from '../fn/mission/find-all-5';
 import { FindAll5$Params } from '../fn/mission/find-all-5';
 import { findAllByDate } from '../fn/mission/find-all-by-date';
@@ -262,31 +262,31 @@ export class MissionService extends BaseService {
     );
   }
 
-  /** Path part for operation `delete4()` */
-  static readonly Delete4Path = '/missions/delete/{id}';
+  /** Path part for operation `delete5()` */
+  static readonly Delete5Path = '/missions/delete/{id}';
 
   /**
    * Supprimer une Mission par ID! Cette methode permet de suprimmer une mission par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete4()` instead.
+   * To access only the response body, use `delete5()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete4$Response(params: Delete4$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return delete4(this.http, this.rootUrl, params, context);
+  delete5$Response(params: Delete5$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return delete5(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Supprimer une Mission par ID! Cette methode permet de suprimmer une mission par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete4$Response()` instead.
+   * To access the full response (for headers, for example), `delete5$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete4(params: Delete4$Params, context?: HttpContext): Observable<any> {
-    return this.delete4$Response(params, context).pipe(
+  delete5(params: Delete5$Params, context?: HttpContext): Observable<any> {
+    return this.delete5$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

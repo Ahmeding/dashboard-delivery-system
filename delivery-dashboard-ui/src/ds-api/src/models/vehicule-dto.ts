@@ -4,6 +4,7 @@
 
 import { CreatedByUserDto } from '../models/created-by-user-dto';
 export interface VehiculeDto {
+  assigned?: boolean;
   createdAt?: string;
   createdBy?: number;
   createdByUser?: CreatedByUserDto;

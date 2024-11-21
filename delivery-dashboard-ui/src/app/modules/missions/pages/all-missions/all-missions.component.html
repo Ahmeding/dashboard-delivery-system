@@ -1,9 +1,302 @@
 
+
+<div class="mission-table">
+  <!-- Header Section -->
+  <div class="table-header">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="table-title">Missions</h1>
+      <button class="btn btn-primary" (click)="goToNewMission()">
+        <i class="bi bi-plus-lg me-2"></i>
+        New Mission
+      </button>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="search-bar mb-4">
+      <div class="search-input">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          [formControl]="searchControl"
+          class="form-control"
+          placeholder="Search missions..."
+        >
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner-container">
+      <div class="spinner-border text-primary"></div>
+      <span>Loading missions...</span>
+    </div>
+  </div>
+
+  <!-- Table Content -->
+  <div class="table-container" *ngIf="!isLoading">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Ref</th>
+        <th>Name</th>
+        <th>Driver</th>
+        <th>Vehicle</th>
+        <th>Volume</th>
+        <th>Status</th>
+        <th>Start Date</th>
+        <th class="text-center">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let mission of allMissionsResponse.content">
+        <td>
+          <span class="ref-number">#{{mission.id}}</span>
+        </td>
+        <td>{{mission.titre}}</td>
+        <td>
+          <div class="drivers-list">
+            <ng-container *ngIf="mission.missionVehiclesDtos?.length">
+              <ng-container *ngFor="let mvehicle of mission.missionVehiclesDtos">
+                <div *ngFor="let driver of mvehicle.chauffeursVehicleDto" class="driver-badge">
+                  <i class="bi bi-person-circle me-1"></i>
+                  {{driver.chauffeurDto?.firstname}} {{driver.chauffeurDto?.lastname}}
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+        </td>
+        <td>
+          <div class="vehicles-list">
+            <ng-container *ngIf="mission.missionVehiclesDtos?.length">
+              <div *ngFor="let vehicle of mission.missionVehiclesDtos" class="license-plate">
+                <div class="license-plate-content">
+                  <i class="bi bi-truck"></i>
+                  <span class="plate-number">{{vehicle.vehicleDto?.immatriculation}}</span>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </td>
+        <td>
+            <span class="volume-badge">
+              {{mission.volume}} m³
+            </span>
+        </td>
+        <td>
+          <div class="status-badge" [ngClass]="mission.etatMission?.toLowerCase()">
+            <i [class]="'bi ' + getStatusIcon(mission.etatMission!)"></i>
+            <span class="status-text">{{getStatusLabel(mission.etatMission!)}}</span>
+          </div>
+        </td>
+        <td>
+          <span class="date">{{mission.dateDebut | date:'medium'}}</span>
+        </td>
+        <td>
+          <div class="actions">
+            <button class="btn btn-icon" (click)="misionEdit(mission.id)" title="Edit">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-icon text-danger" (click)="missionDelete(mission.id!)" title="Delete">
+              <i class="bi bi-trash"></i>
+            </button>
+            <button class="btn btn-icon text-info" (click)="goToMissionDetails(mission.id)" title="Details">
+              <i class="bi bi-info-circle"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <!--*ngIf="!isLoading && allMissionsResponse?.totalPages > 1"-->
+  <div class="pagination-container" >
+    <nav aria-label="Mission table navigation">
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="page === 0">
+          <button class="page-link" (click)="goToFirstPage()" aria-label="First page">
+            <i class="bi bi-chevron-double-left"></i>
+          </button>
+        </li>
+        <li class="page-item" [class.disabled]="page === 0">
+          <button class="page-link" (click)="goToPreviousPage()" aria-label="Previous page">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+        </li>
+
+        <li class="page-item"
+            *ngFor="let _ of [].constructor(allMissionsResponse.totalPages); let i = index"
+            [class.active]="page === i">
+          <button class="page-link" (click)="goToPage(i)">{{i + 1}}</button>
+        </li>
+
+        <li class="page-item" [class.disabled]="isLastPage">
+          <button class="page-link" (click)="goToNextPage()" aria-label="Next page">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </li>
+        <li class="page-item" [class.disabled]="isLastPage">
+          <button class="page-link" (click)="goToLastPage()" aria-label="Last page">
+            <i class="bi bi-chevron-double-right"></i>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<!--<div class="mission-table">
+  &lt;!&ndash; Header Section &ndash;&gt;
+  <div class="table-header">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="table-title">Missions</h1>
+      <button class="btn btn-primary" (click)="goToNewMission()">
+        <i class="bi bi-plus-lg me-2"></i>
+        New Mission
+      </button>
+    </div>
+
+    &lt;!&ndash; Search and Filters &ndash;&gt;
+    <div class="search-bar mb-4">
+      <div class="search-input">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          [formControl]="searchControl"
+          class="form-control"
+          placeholder="Search missions..."
+        >
+      </div>
+    </div>
+  </div>
+
+  &lt;!&ndash; Loading State &ndash;&gt;
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner-container">
+      <div class="spinner-border text-primary"></div>
+      <span>Loading missions...</span>
+    </div>
+  </div>
+
+  &lt;!&ndash; Table Content &ndash;&gt;
+  <div class="table-container" *ngIf="!isLoading">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Ref</th>
+        <th>Name</th>
+        <th>Driver</th>
+        <th>Vehicle</th>
+        <th>Volume</th>
+        <th>Status</th>
+        <th>Start Date</th>
+        <th class="text-center">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let mission of allMissionsResponse.content">
+        <td>
+          <span class="ref-number">#{{mission.id}}</span>
+        </td>
+        <td>{{mission.titre}}</td>
+        <td>
+          <div class="drivers-list">
+            <ng-container *ngIf="mission.missionVehiclesDtos?.length">
+              <ng-container *ngFor="let mvehicle of mission.missionVehiclesDtos">
+                <div *ngFor="let driver of mvehicle.chauffeursVehicleDto" class="driver-badge">
+                  <i class="bi bi-person-circle me-1"></i>
+                  {{driver.chauffeurDto?.firstname}} {{driver.chauffeurDto?.lastname}}
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+        </td>
+        <td>
+          <div class="vehicles-list">
+            <ng-container *ngIf="mission.missionVehiclesDtos?.length">
+              <div *ngFor="let vehicle of mission.missionVehiclesDtos" class="license-plate">
+                <i class="bi bi-truck me-2"></i>
+                {{vehicle.vehicleDto?.immatriculation}}
+              </div>
+            </ng-container>
+          </div>
+        </td>
+        <td>
+            <span class="volume-badge">
+              {{mission.volume}} m³
+            </span>
+        </td>
+        <td>
+            <span class="status-badge">
+              {{mission.etatMission}}
+            </span>
+        </td>
+        <td>
+          <span class="date">{{mission.dateDebut | date:'medium'}}</span>
+        </td>
+        <td>
+          <div class="actions">
+            <button class="btn btn-icon" (click)="misionEdit(mission.id)" title="Edit">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-icon text-danger" (click)="missionDelete(mission.id!)" title="Delete">
+              <i class="bi bi-trash"></i>
+            </button>
+            <button class="btn btn-icon text-info" (click)="missionDetails(mission.id)" title="Details">
+              <i class="bi bi-info-circle"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  &lt;!&ndash; Pagination &ndash;&gt;
+  &lt;!&ndash;*ngIf="!isLoading && allMissionsResponse?.totalPages > 1"&ndash;&gt;
+  <div class="pagination-container" >
+    <nav aria-label="Mission table navigation">
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="page === 0">
+          <button class="page-link" (click)="goToFirstPage()" aria-label="First page">
+            <i class="bi bi-chevron-double-left"></i>
+          </button>
+        </li>
+        <li class="page-item" [class.disabled]="page === 0">
+          <button class="page-link" (click)="goToPreviousPage()" aria-label="Previous page">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+        </li>
+
+        <li class="page-item"
+            *ngFor="let _ of [].constructor(allMissionsResponse.totalPages); let i = index"
+            [class.active]="page === i">
+          <button class="page-link" (click)="goToPage(i)">{{i + 1}}</button>
+        </li>
+
+        <li class="page-item" [class.disabled]="isLastPage">
+          <button class="page-link" (click)="goToNextPage()" aria-label="Next page">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </li>
+        <li class="page-item" [class.disabled]="isLastPage">
+          <button class="page-link" (click)="goToLastPage()" aria-label="Last page">
+            <i class="bi bi-chevron-double-right"></i>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>-->
+
+<!--
+
 <div id="content">
-  <!-- Begin Page Content -->
+  &lt;!&ndash; Begin Page Content &ndash;&gt;
   <div class="container-fluid">
 
-    <!-- Page Heading -->
+    &lt;!&ndash; Page Heading &ndash;&gt;
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
       <h1 class="h3 mb-0 text-gray-800">Missions</h1>
     </div>
@@ -11,20 +304,20 @@
       <span class="spinner-border"></span>
       <div class="card"></div>
     </div>
-    <!-- Content Row Table -->
+    &lt;!&ndash; Content Row Table &ndash;&gt;
 
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
       <h4 class="lead">
 
       </h4>
       <a class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" (click)="goToNewMission()"><i
-        class="fas fa-plus fa-sm text-white-50"></i>&nbsp;New Mission</a>
+        class="bi bi-plus bi-sm text-white-50"></i>&nbsp;New Mission</a>
     </div>
 
-    <!-- DataTales Example -->
+    &lt;!&ndash; DataTales Example &ndash;&gt;
     <div class="card shadow mb-4">
       <div class="card-header d-flex justify-content-between align-items-center py-3 ">
-        <h6 class="m-0 font-weight-bold text-primary">Number of mission by pages?</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Number of mission by pages </h6>
 
         <div class="">
           <form
@@ -34,7 +327,7 @@
                      aria-label="Search" aria-describedby="basic-addon2">
               <div class="input-group-append">
                 <button class="btn btn-primary" type="button">
-                  <i class="fas fa-search fa-sm"></i>
+                  <i class="bi bi-search bi-sm"></i>
                 </button>
               </div>
             </div>
@@ -74,7 +367,7 @@
                 <div *ngIf="mission.missionVehiclesDtos?.length">
                   <div *ngFor="let vehicle of mission.missionVehiclesDtos">
                     <div class="license-plate-container">
-                      <!-- License Plate Background Image -->
+                      &lt;!&ndash; License Plate Background Image &ndash;&gt;
                       <img src="assets/images/immat.png" alt="License Plate" class="license-plate-bg" width="90">
                       <div class="registration-number">
                         {{ vehicle.vehicleDto?.immatriculation }}
@@ -160,8 +453,9 @@
       </div>
 
     </div>
-    <!-- /.container-fluid -->
+    &lt;!&ndash; /.container-fluid &ndash;&gt;
 
   </div>
 </div>
 
+-->

@@ -11,6 +11,8 @@ import {MissionService} from "../../../../../../ds-api/src/services/mission.serv
 import {AlertService} from "../../../../../services/alert/alert.service";
 import {VehiculeService} from "../../../../../../ds-api/src/services/vehicule.service";
 import {ChauffeurService} from "../../../../../../ds-api/src/services/chauffeur.service";
+import {ServiceDeliveryDto} from "../../../../../../ds-api/src/models/service-delivery-dto";
+import {ServiceDeliveryService} from "../../../../../../ds-api/src/services/service-delivery.service";
 
 @Component({
   selector: 'app-new-mission',
@@ -37,8 +39,10 @@ export class NewMissionComponent implements OnInit {
   selectedMissionVehicles: MissionVehicleDto[] = [];
   selectedMissionVehicle: MissionVehicleDto = {};
   selectedDriverVehicule: ChauffeurDto = {};
+  allServiceDelivery: ServiceDeliveryDto[]=[];
 
   constructor(
+    private servDeliveryService:ServiceDeliveryService,
     private missionService:MissionService,
     private alertService: AlertService,
     private vehicleService: VehiculeService,
@@ -46,6 +50,7 @@ export class NewMissionComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
+    this.findAllServicesDelivery()
     this.findAllVehicles();
     this.findAllDrivers();
     this.initEtapeForm();
@@ -94,7 +99,7 @@ export class NewMissionComponent implements OnInit {
     });
   }
   private findAllDrivers() {
-    this.driversService.findAll12().subscribe({
+    this.driversService.findAll13().subscribe({
       next: (res) => {
         this.availableDrivers = res;
       },
@@ -155,6 +160,16 @@ export class NewMissionComponent implements OnInit {
          this.alertService.alertWaring(err.error.httpCode+ " ERROR :: "+ err.error.msg)
     }
     });
+  }
+
+  private findAllServicesDelivery() {
+    this.servDeliveryService.findAll2().subscribe({
+      next:(sdResponse)=>{
+        this.allServiceDelivery=sdResponse;
+      },error:(error)=>{
+        console.log(error);
+      }
+    })
   }
 }
 

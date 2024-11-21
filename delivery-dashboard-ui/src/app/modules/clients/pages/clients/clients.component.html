@@ -39,6 +39,7 @@
               <i class="bi bi-arrow-down-up"></i>
             </div>
           </th>
+          <th>Delivery Points</th>
           <th>Status</th>
           <th>Actions</th>
         </tr>
@@ -49,9 +50,9 @@
           <td>
             <div class="client-info">
               <div class="client-avatar">
-                {{ client.firstname?.[0] }}{{ client.lastname?.[0] }}
+               <a (click)="goToClientDetails(client.id)"> {{ client.firstname?.[0] }}{{ client.lastname?.[0] }}</a>
               </div>
-              <div class="client-details">
+              <div class="client-details" (click)="goToClientDetails(client.id)">
                 <span class="client-name">{{client.lastname}} {{client.firstname}}</span>
                 <span class="client-email">{{client.email}}</span>
               </div>
@@ -63,20 +64,21 @@
               {{client.phoneNum}}
             </div>
           </td>
-         <!-- <td>
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox"
-                     [checked]="client.enabled"
-                     (change)="handleClientActivation(client.id, !client.enabled)">
-            </div>
-          </td>-->
           <td>
-            <i
-              [ngClass]="client.enabled
-                            ? 'bi bi-toggle2-on text-success toggle-icon ml-3 mr-3'
-                            : 'bi bi-toggle2-off text-danger toggle-icon ml-3 mr-3'"
-              title="{{ client.enabled ? 'Deactivate' : 'Activate' }}"
-              (click)="handleClientActivation(client.id!, client.enabled!)">
+            <div class="delivery-points">
+              <span>{{client.deliveryPointDtos?.length || 0}}</span>
+              <button class="add-dp-btn" (click)="openAddNewDPModal(client)">
+                <i class="bi bi-plus-circle"></i>
+                Add Point
+              </button>
+            </div>
+          </td>
+          <td>
+            <i [ngClass]="client.enabled
+                ? 'bi bi-toggle2-on text-success toggle-icon'
+                : 'bi bi-toggle2-off text-danger toggle-icon'"
+               title="{{ client.enabled ? 'Deactivate' : 'Activate' }}"
+               (click)="handleClientActivation(client.id!, client.enabled!)">
             </i>
           </td>
           <td>
@@ -137,6 +139,147 @@
     </div>
   </div>
 </div>
+
+
+
+<!--
+
+<div class="clients-container">
+  &lt;!&ndash; Header Section &ndash;&gt;
+  <div class="header-section">
+    <div class="title-search">
+      <h1>Clients</h1>
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input type="text" placeholder="Search clients..." [(ngModel)]="searchTerm" (keyup)="filterClients()">
+      </div>
+    </div>
+    <button class="btn btn-primary" (click)="navigateToNewClient()">
+      <i class="bi bi-plus-lg"></i>
+      Add New Client
+    </button>
+  </div>
+
+  &lt;!&ndash; Table Card &ndash;&gt;
+  <div class="table-card">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>
+            <div class="th-content">
+              ID
+              <i class="bi bi-arrow-down-up"></i>
+            </div>
+          </th>
+          <th>
+            <div class="th-content">
+              Client
+              <i class="bi bi-arrow-down-up"></i>
+            </div>
+          </th>
+          <th>
+            <div class="th-content">
+              Contact
+              <i class="bi bi-arrow-down-up"></i>
+            </div>
+          </th>
+          <th>Number of Delivery Points</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let client of allClientsResponse.content" class="client-row">
+          <td>{{client.id}}</td>
+          <td>
+            <div class="client-info">
+              <div class="client-avatar">
+                {{ client.firstname?.[0] }}{{ client.lastname?.[0] }}
+              </div>
+              <div class="client-details">
+                <span class="client-name">{{client.lastname}} {{client.firstname}}</span>
+                <span class="client-email">{{client.email}}</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="contact-info">
+              <i class="bi bi-telephone"></i>
+              {{client.phoneNum}}
+            </div>
+          </td>
+          <td>
+            {{client.deliveryPointDtos?.length}} <i class="bi bi-plus text-success" (click)="openAddNewDPModal(client)">Add deliverypoint </i>
+          </td>
+          <td>
+            <i
+              [ngClass]="client.enabled
+                            ? 'bi bi-toggle2-on text-success toggle-icon ml-3 mr-3'
+                            : 'bi bi-toggle2-off text-danger toggle-icon ml-3 mr-3'"
+              title="{{ client.enabled ? 'Deactivate' : 'Activate' }}"
+              (click)="handleClientActivation(client.id!, client.enabled!)">
+            </i>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn btn-icon" (click)="viewClientDetails(client)">
+                <i class="bi bi-eye"></i>
+              </button>
+              <button class="btn btn-icon" (click)="goToEditClient(client.id)">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-icon text-danger" (click)="deleteClient(client.id!)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    &lt;!&ndash; Pagination &ndash;&gt;
+    <div class="pagination-container">
+      <div class="items-per-page">
+        <span>Show:</span>
+        <select [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="page === 0">
+          <a class="page-link" (click)="goToFirstPage()">
+            <i class="bi bi-chevron-double-left"></i>
+          </a>
+        </li>
+        <li class="page-item" [class.disabled]="page === 0">
+          <a class="page-link" (click)="goToPreviousPage()">
+            <i class="bi bi-chevron-left"></i>
+          </a>
+        </li>
+        <li class="page-item" *ngFor="let p of getPageNumbers()"
+            [class.active]="page === p">
+          <a class="page-link" (click)="goToPage(p)">{{p+1}}</a>
+        </li>
+        <li class="page-item" [class.disabled]="isLastPage">
+          <a class="page-link" (click)="goToNextPage()">
+            <i class="bi bi-chevron-right"></i>
+          </a>
+        </li>
+        <li class="page-item" [class.disabled]="isLastPage">
+          <a class="page-link" (click)="goToLastPage()">
+            <i class="bi bi-chevron-double-right"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+-->
 
 <!--info modal-->
 <!--<div class="modal fade" id="infoClientModal" tabindex="-1" aria-labelledby="infoClientModalLabel" aria-hidden="true">
