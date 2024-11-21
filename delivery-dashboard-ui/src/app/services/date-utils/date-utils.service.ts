@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {LocalTime} from "../../../ds-api/src/models/local-time";
 
 @Injectable({
   providedIn: 'root'
@@ -66,7 +67,9 @@ export class DateUtilsService {
   }
 
   formatDateTime(dateTimeString: string | undefined):string {
-    const dateArray =JSON.parse(JSON.stringify(dateTimeString));
+    const dateTimeStringToArray=JSON.stringify(dateTimeString)
+    console.log("========dateTimeStringToArray================"+dateTimeStringToArray);
+    const dateArray =JSON.parse(dateTimeStringToArray);
     // Convert to Date
     const convertedDate = new Date(
       dateArray[0],              // Year
@@ -74,12 +77,12 @@ export class DateUtilsService {
       dateArray[2],              // Day
       dateArray[3],              // Hour
       dateArray[4],              // Minute
-      dateArray[5],              // Second
-      Math.floor(dateArray[6] / 1000000) // Milliseconds (from nanoseconds)
+      /*dateArray[5],              // Second
+      Math.floor(dateArray[6] / 1000000) // Milliseconds (from nanoseconds)*/
     );
 
 
-    const formatter = new Intl.DateTimeFormat('en-GB', {
+    const formatter = new Intl.DateTimeFormat('fr-FR', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
@@ -97,5 +100,49 @@ export class DateUtilsService {
 // Adjust to match your desired format (DD-MM-YYYY HH:MM)
     formattedDate = formattedDate.replace(',', '');
 return formattedDate;
+  }
+
+  formatTime(dateTimeString: string | undefined):string {
+    const dateTimeStringToArray=JSON.stringify(dateTimeString)
+    console.log("========dateTimeStringToArray================"+dateTimeStringToArray);
+    const dateArray =JSON.parse(dateTimeStringToArray);
+    // Convert to Date
+    const convertedDate = new Date(
+      dateArray[0],              // Year
+      dateArray[1] - 1,          // Month (JavaScript uses 0-based index)
+      dateArray[2],              // Day
+      dateArray[3],              // Hour
+      dateArray[4],              // Minute
+      /*dateArray[5],              // Second
+      Math.floor(dateArray[6] / 1000000) // Milliseconds (from nanoseconds)*/
+    );
+
+
+    const formatter = new Intl.DateTimeFormat('fr-FR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false, // 24-hour format
+    });
+
+// Format the date and time
+    let formattedDate = formatter.format(convertedDate);
+// Replace slashes with dashes
+    formattedDate = formattedDate.replace(/\//g, '-');
+// Adjust to match your desired format (DD-MM-YYYY HH:MM)
+    formattedDate = formattedDate.replace(',', '');
+    return formattedDate;
+  }
+
+  formatToTime(schedule: LocalTime | undefined) :string{
+    console.log(schedule);
+    if(!schedule) return "No schedule available";
+
+    const hour= schedule?.hour ?? 0;
+    const minute= schedule?.minute ?? 0;
+
+    return `${this.padNumber(hour)}:${this.padNumber(minute)}`;
+  }
+  private padNumber(value: number) : string{
+    return value < 10 ? `0${value}` : value.toString();
   }
 }

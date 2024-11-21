@@ -1,13 +1,171 @@
-<div class="card shadow-hover p-4">
-  <div class="text-center">
-    <img src="assets/avatar.png" alt="Avatar" class="rounded-circle mb-3" width="120">
-    <h4 class="fw-bold">{{ user.fullname }}</h4>
-    <p class="text-muted">{{ user.role }}</p>
+<div class="profile-container">
+  <!-- Header with Theme Toggle -->
+  <div class="header-section">
+    <div class="d-flex align-items-center gap-3">
+      <button class="btn btn-icon back-button" (click)="goBack()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <h1 class="mb-0">Profile Details</h1>
+    </div>
   </div>
-  <div class="card-body">
-    <p><i class="bi bi-envelope"></i> {{ user.email }}</p>
-    <p><i class="bi bi-phone"></i> {{ user.phoneNum }}</p>
-    <p><i class="bi bi-calendar"></i> {{ user.dateOfBirth | date }}</p>
-    <button class="btn btn-outline-primary w-100 mt-3" (click)="editProfile()">Edit Profile</button>
+
+  <div class="profile-content">
+    <!-- Profile Card -->
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="avatar-wrapper">
+          <div class="avatar" [style.background-color]="getAvatarColor(user.fullname)">
+            {{ user.fullname?.[0] }}
+          </div>
+          <button class="edit-avatar">
+            <i class="bi bi-pencil"></i>
+          </button>
+        </div>
+        <h2 class="user-name">{{ user.fullname }}</h2>
+        <div class="role-badge" [class]="'role-' + user.role?.toLowerCase()">
+          {{ user.role }}
+        </div>
+        <div class="status-badges">
+          <span class="status-badge" [class.active]="user.enabled">
+            {{ user.enabled ? 'Active' : 'Inactive' }}
+          </span>
+          <span class="status-badge lock-badge" [class.locked]="user.accountLocked">
+            <i class="bi" [class.bi-lock-fill]="user.accountLocked" [class.bi-unlock-fill]="!user.accountLocked"></i>
+            {{ user.accountLocked ? 'Locked' : 'Unlocked' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="profile-info">
+        <div class="info-section">
+          <h3 class="section-title">Personal Information</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <i class="bi bi-envelope"></i>
+              <div class="info-content">
+                <label>Email</label>
+                <span>{{ user.email }}</span>
+              </div>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-telephone"></i>
+              <div class="info-content">
+                <label>Phone</label>
+                <span>{{ user.phoneNum }}</span>
+              </div>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-calendar3"></i>
+              <div class="info-content">
+                <label>Date of Birth</label>
+                <span>{{ user.dateOfBirth | date:'mediumDate' }}</span>
+              </div>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-geo-alt"></i>
+              <div class="info-content">
+                <label>Location</label>
+                <span>{{ user.location }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-section">
+          <h3 class="section-title">Account Information</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <i class="bi bi-person-badge"></i>
+              <div class="info-content">
+                <label>Employee ID</label>
+                <span>{{ user.employeeId }}</span>
+              </div>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-calendar-check"></i>
+              <div class="info-content">
+                <label>Join Date</label>
+                <span>{{ user.joinDate | date:'mediumDate' }}</span>
+              </div>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-building"></i>
+              <div class="info-content">
+                <label>Department</label>
+                <span>{{ user.department }}</span>
+              </div>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-person-workspace"></i>
+              <div class="info-content">
+                <label>Position</label>
+                <span>{{ user.position }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Missions Section -->
+        <div class="missions-section">
+          <div class="section-header">
+            <h3 class="section-title">Assigned Missions</h3>
+            <div class="mission-filters">
+              <select [(ngModel)]="missionFilter" class="form-select">
+                <option value="all">All Missions</option>
+                <option value="active">Active</option>
+                <option value="completed">Completed</option>
+                <option value="pending">Pending</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="missions-grid">
+            <div *ngFor="let mission of filteredMissions" class="mission-card" [class]="'status-' + mission.status.toLowerCase()">
+              <div class="mission-header">
+                <h4 class="mission-title">{{ mission.title }}</h4>
+                <span class="mission-status">{{ mission.status }}</span>
+              </div>
+              <p class="mission-description">{{ mission.description }}</p>
+              <div class="mission-details">
+                <div class="detail-item">
+                  <i class="bi bi-calendar-event"></i>
+                  <span>{{ mission.startDate | date:'shortDate' }} - {{ mission.endDate | date:'shortDate' }}</span>
+                </div>
+                <div class="detail-item">
+                  <i class="bi bi-people"></i>
+                  <span>{{ mission.teamSize }} team members</span>
+                </div>
+              </div>
+              <div class="mission-progress">
+                <div class="progress">
+                  <div class="progress-bar"
+                       [style.width.%]="mission.progress"
+                       [class]="'bg-' + getProgressColor(mission.progress)">
+                    {{ mission.progress }}%
+                  </div>
+                </div>
+              </div>
+              <div class="mission-actions">
+                <button class="btn btn-outline-primary btn-sm">
+                  <i class="bi bi-eye"></i> View Details
+                </button>
+                <button class="btn btn-outline-secondary btn-sm">
+                  <i class="bi bi-file-text"></i> Report
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-actions">
+        <button class="btn btn-outline-secondary" (click)="goBack()">
+          <i class="bi bi-arrow-left"></i> Back
+        </button>
+        <button class="btn btn-primary" (click)="editProfile()">
+          <i class="bi bi-pencil"></i> Edit Profile
+        </button>
+      </div>
+    </div>
   </div>
 </div>

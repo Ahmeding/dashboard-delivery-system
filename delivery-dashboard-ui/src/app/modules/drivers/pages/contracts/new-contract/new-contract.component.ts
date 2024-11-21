@@ -48,7 +48,7 @@ export class NewContractComponent  implements OnInit{
   }
 
   private getAllDrivers() {
-    this.driverService.findAll12().subscribe({
+    this.driverService.findAll13().subscribe({
       next:(allDriversResponse)=>{
         console.log("-------------> "+allDriversResponse.length);
         this.allDrivers=allDriversResponse  ;
@@ -73,7 +73,7 @@ export class NewContractComponent  implements OnInit{
   }
 
   loadRepairToEdit(rId:number){
-    this.contractService.findById9({id:rId}).subscribe({
+    this.contractService.findById10({id:rId}).subscribe({
       next:(contractToEditResponse)=>{
         this.contractValue= contractToEditResponse;
 
@@ -108,7 +108,7 @@ export class NewContractComponent  implements OnInit{
   }
 
   saveRepair(contractData: ContratDto, successMsg: string, errorMsg: string){
-    this.contractService.save9({body:contractData}).subscribe({
+    this.contractService.save10({body:contractData}).subscribe({
       next:(response)=>{
         this.alertService.alertSuccess(successMsg+" completed successfully!")
         this.router.navigate(['dirvers','contracts']);

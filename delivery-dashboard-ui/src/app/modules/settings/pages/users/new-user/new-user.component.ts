@@ -9,7 +9,20 @@ import {UtilisateurDto} from "../../../../../../ds-api/src/models/utilisateur-dt
 export class NewUserComponent {
 
   user:UtilisateurDto={}
+  showPassword: any;
+  isSubmitting!: boolean;
+
   onSubmit() {
 
   }
+
+  goBack() {
+
+  }
+
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
 }

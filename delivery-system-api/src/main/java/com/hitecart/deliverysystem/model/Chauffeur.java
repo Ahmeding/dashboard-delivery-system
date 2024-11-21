@@ -28,4 +28,6 @@ public class Chauffeur extends Utilisateur{
     private String rib;
     @OneToMany(mappedBy = "chauffeur")
     private List<Contrat> contrats;
+    @Column(name="is_assigned")
+    private boolean isAssigned;
 }

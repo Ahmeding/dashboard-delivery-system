@@ -11,8 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { delete7 } from '../fn/devis/delete-7';
-import { Delete7$Params } from '../fn/devis/delete-7';
+import { delete8 } from '../fn/devis/delete-8';
+import { Delete8$Params } from '../fn/devis/delete-8';
 import { DevisDto } from '../models/devis-dto';
 import { DevisDtoResponse } from '../models/devis-dto-response';
 import { findAll8 } from '../fn/devis/find-all-8';
@@ -174,31 +174,31 @@ export class DevisService extends BaseService {
     );
   }
 
-  /** Path part for operation `delete7()` */
-  static readonly Delete7Path = '/devis/delete/{id}';
+  /** Path part for operation `delete8()` */
+  static readonly Delete8Path = '/devis/delete/{id}';
 
   /**
    * Supprimer un Devis par ID! Cette methode permet de suprimmer un devis par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete7()` instead.
+   * To access only the response body, use `delete8()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete7$Response(params: Delete7$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return delete7(this.http, this.rootUrl, params, context);
+  delete8$Response(params: Delete8$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return delete8(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Supprimer un Devis par ID! Cette methode permet de suprimmer un devis par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete7$Response()` instead.
+   * To access the full response (for headers, for example), `delete8$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete7(params: Delete7$Params, context?: HttpContext): Observable<any> {
-    return this.delete7$Response(params, context).pipe(
+  delete8(params: Delete8$Params, context?: HttpContext): Observable<any> {
+    return this.delete8$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

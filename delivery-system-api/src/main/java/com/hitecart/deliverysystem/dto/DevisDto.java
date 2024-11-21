@@ -26,12 +26,13 @@ import java.util.stream.Collectors;
 @Builder
 public class DevisDto {
 
+    private Integer id;
     private String code;
     private LocalDateTime dateDevis;
     private Integer clientId;
     private List<LigneDevisDto> ligneDevisDtos;
     private QuoteStatus etatDevis;
-    private Integer id;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer createdBy;

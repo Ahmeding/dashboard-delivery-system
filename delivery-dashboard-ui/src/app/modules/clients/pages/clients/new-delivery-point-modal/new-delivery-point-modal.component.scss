@@ -1,0 +1,55 @@
+host {
+  display: block;
+}
+
+.modal-content {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-footer {
+  border-top: 1px solid var(--border-color);
+}
+
+.form-control, .form-select {
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+
+  &::placeholder {
+    color: var(--text-muted);
+  }
+
+  option {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+  }
+}
+
+.form-control:focus, .form-select:focus {
+  background-color: var(--bg-color);
+  border-color: var(--primary-color);
+  color: var(--text-color);
+  box-shadow: none;
+}
+
+.form-label {
+  color: var(--text-color);
+}
+
+.btn-close {
+  filter: invert(var(--bs-dark-rgb));
+}
+
+.modal-title {
+  color: var(--text-color);
+}
+
+.invalid-feedback {
+  color: var(--danger-color);
+}

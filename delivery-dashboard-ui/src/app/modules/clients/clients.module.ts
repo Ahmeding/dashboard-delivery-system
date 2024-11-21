@@ -10,6 +10,8 @@ import { NewClientComponent } from './pages/clients/new-client/new-client.compon
 import { NewOrderComponent } from './pages/orders/new-order/new-order.component';
 import { NewQuoteComponent } from './pages/quotes/new-quote/new-quote.component';
 import { ViewClientModalComponent } from './pages/clients/view-client-modal/view-client-modal.component';
+import { NewDeliveryPointModalComponent } from './pages/clients/new-delivery-point-modal/new-delivery-point-modal.component';
+import { ViewClientComponent } from './pages/clients/view-client/view-client.component';
 
 
 @NgModule({
@@ -20,7 +22,9 @@ import { ViewClientModalComponent } from './pages/clients/view-client-modal/view
     NewClientComponent,
     NewOrderComponent,
     NewQuoteComponent,
-    ViewClientModalComponent
+    ViewClientModalComponent,
+    NewDeliveryPointModalComponent,
+    ViewClientComponent
   ],
   imports: [
     CommonModule,

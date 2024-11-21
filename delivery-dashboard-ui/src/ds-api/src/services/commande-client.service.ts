@@ -13,19 +13,19 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { CommandeClientDto } from '../models/commande-client-dto';
 import { CommandeClientResponse } from '../models/commande-client-response';
-import { delete9 } from '../fn/commande-client/delete-9';
-import { Delete9$Params } from '../fn/commande-client/delete-9';
-import { findAll10 } from '../fn/commande-client/find-all-10';
-import { FindAll10$Params } from '../fn/commande-client/find-all-10';
+import { delete11 } from '../fn/commande-client/delete-11';
+import { Delete11$Params } from '../fn/commande-client/delete-11';
+import { findAll11 } from '../fn/commande-client/find-all-11';
+import { FindAll11$Params } from '../fn/commande-client/find-all-11';
 import { findAllCommandeClients } from '../fn/commande-client/find-all-commande-clients';
 import { FindAllCommandeClients$Params } from '../fn/commande-client/find-all-commande-clients';
 import { findByCode1 } from '../fn/commande-client/find-by-code-1';
 import { FindByCode1$Params } from '../fn/commande-client/find-by-code-1';
-import { findById10 } from '../fn/commande-client/find-by-id-10';
-import { FindById10$Params } from '../fn/commande-client/find-by-id-10';
+import { findById11 } from '../fn/commande-client/find-by-id-11';
+import { FindById11$Params } from '../fn/commande-client/find-by-id-11';
 import { PageResponseCommandeClientResponse } from '../models/page-response-commande-client-response';
-import { save10 } from '../fn/commande-client/save-10';
-import { Save10$Params } from '../fn/commande-client/save-10';
+import { save11 } from '../fn/commande-client/save-11';
+import { Save11$Params } from '../fn/commande-client/save-11';
 
 @Injectable({ providedIn: 'root' })
 export class CommandeClientService extends BaseService {
@@ -33,60 +33,60 @@ export class CommandeClientService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `save10()` */
-  static readonly Save10Path = '/cmdclients/create';
+  /** Path part for operation `save11()` */
+  static readonly Save11Path = '/cmdclients/create';
 
   /**
    * Ajouter/Modifier un commande client , cette methode permet d'enregistrer ou modifier un chauffreur
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save10()` instead.
+   * To access only the response body, use `save11()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save10$Response(params: Save10$Params, context?: HttpContext): Observable<StrictHttpResponse<CommandeClientDto>> {
-    return save10(this.http, this.rootUrl, params, context);
+  save11$Response(params: Save11$Params, context?: HttpContext): Observable<StrictHttpResponse<CommandeClientDto>> {
+    return save11(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier un commande client , cette methode permet d'enregistrer ou modifier un chauffreur
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save10$Response()` instead.
+   * To access the full response (for headers, for example), `save11$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save10(params: Save10$Params, context?: HttpContext): Observable<CommandeClientDto> {
-    return this.save10$Response(params, context).pipe(
+  save11(params: Save11$Params, context?: HttpContext): Observable<CommandeClientDto> {
+    return this.save11$Response(params, context).pipe(
       map((r: StrictHttpResponse<CommandeClientDto>): CommandeClientDto => r.body)
     );
   }
 
-  /** Path part for operation `findById10()` */
-  static readonly FindById10Path = '/cmdclients/cmdclient/by-id/{id}';
+  /** Path part for operation `findById11()` */
+  static readonly FindById11Path = '/cmdclients/cmdclient/by-id/{id}';
 
   /**
    * Rechercher un CommandeClient  par ID! Cette methode permet de chercher un commande client  par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById10()` instead.
+   * To access only the response body, use `findById11()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById10$Response(params: FindById10$Params, context?: HttpContext): Observable<StrictHttpResponse<CommandeClientResponse>> {
-    return findById10(this.http, this.rootUrl, params, context);
+  findById11$Response(params: FindById11$Params, context?: HttpContext): Observable<StrictHttpResponse<CommandeClientResponse>> {
+    return findById11(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher un CommandeClient  par ID! Cette methode permet de chercher un commande client  par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById10$Response()` instead.
+   * To access the full response (for headers, for example), `findById11$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById10(params: FindById10$Params, context?: HttpContext): Observable<CommandeClientResponse> {
-    return this.findById10$Response(params, context).pipe(
+  findById11(params: FindById11$Params, context?: HttpContext): Observable<CommandeClientResponse> {
+    return this.findById11$Response(params, context).pipe(
       map((r: StrictHttpResponse<CommandeClientResponse>): CommandeClientResponse => r.body)
     );
   }
@@ -120,31 +120,31 @@ export class CommandeClientService extends BaseService {
     );
   }
 
-  /** Path part for operation `findAll10()` */
-  static readonly FindAll10Path = '/cmdclients/all';
+  /** Path part for operation `findAll11()` */
+  static readonly FindAll11Path = '/cmdclients/all';
 
   /**
    * Rechercher tout les CommandeClient ! Cette methode permet de retouner toutes les commandes clients
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll10()` instead.
+   * To access only the response body, use `findAll11()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll10$Response(params?: FindAll10$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CommandeClientResponse>>> {
-    return findAll10(this.http, this.rootUrl, params, context);
+  findAll11$Response(params?: FindAll11$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CommandeClientResponse>>> {
+    return findAll11(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les CommandeClient ! Cette methode permet de retouner toutes les commandes clients
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll10$Response()` instead.
+   * To access the full response (for headers, for example), `findAll11$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll10(params?: FindAll10$Params, context?: HttpContext): Observable<Array<CommandeClientResponse>> {
-    return this.findAll10$Response(params, context).pipe(
+  findAll11(params?: FindAll11$Params, context?: HttpContext): Observable<Array<CommandeClientResponse>> {
+    return this.findAll11$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<CommandeClientResponse>>): Array<CommandeClientResponse> => r.body)
     );
   }
@@ -174,31 +174,31 @@ export class CommandeClientService extends BaseService {
     );
   }
 
-  /** Path part for operation `delete9()` */
-  static readonly Delete9Path = '/cmdclients/delete/{id}';
+  /** Path part for operation `delete11()` */
+  static readonly Delete11Path = '/cmdclients/delete/{id}';
 
   /**
    * Supprimer un CommandeClient  par ID! Cette methode permet de suprimmer un commande client  par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete9()` instead.
+   * To access only the response body, use `delete11()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete9$Response(params: Delete9$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return delete9(this.http, this.rootUrl, params, context);
+  delete11$Response(params: Delete11$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return delete11(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Supprimer un CommandeClient  par ID! Cette methode permet de suprimmer un commande client  par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete9$Response()` instead.
+   * To access the full response (for headers, for example), `delete11$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete9(params: Delete9$Params, context?: HttpContext): Observable<any> {
-    return this.delete9$Response(params, context).pipe(
+  delete11(params: Delete11$Params, context?: HttpContext): Observable<any> {
+    return this.delete11$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

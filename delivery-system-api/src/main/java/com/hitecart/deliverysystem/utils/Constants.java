@@ -33,6 +33,17 @@ public interface Constants {
     String FIND_ALL_CLIENT_PAGEABLE_ENDPOINT= "/";
     String DELETE_CLIENT_ENDPOINT= "/delete/{id}";
     String UPDATE_ISACTIVE_CLIENT_ENDPOINT= "/is-active/{id}/{isactive}";
+    /////////////////////////////////////////////////////////////////////
+
+    String DELIVERY_POINT_ENDPOINT= "/delivery-points";
+    String CREATE_DELIVERY_POINT_ENDPOINT= "/create";
+    String FIND_DELIVERY_POINT_BY_ID_ENDPOINT= "/dpoint/by-id/{id}";
+    String FIND_DELIVERY_POINT_BY_CITY_ENDPOINT= "/dpoint/by-city/{city}";
+    String FIND_ALL_DELIVERY_POINT_ENDPOINT= "/all";
+    String FIND_ALL_DELIVERY_POINT_PAGEABLE_ENDPOINT= "/";
+    String DELETE_DELIVERY_POINT_ENDPOINT= "/delete/{id}";
+    String UPDATE_ISACTIVE_DELIVERY_POINT_ENDPOINT= "/is-active/{id}/{isactive}";
+
 /////////////////////////////////////////////////////////////////////////
     String COMMANDE_CLI_ENDPOINT= "/cmdclients";
     String CREATE_COMMANDE_CLI_ENDPOINT= "/create";
@@ -130,4 +141,5 @@ String PIECE_RECHANGE_ENDPOINT= "/piecerenchanges";
     String FIND_ALL_DEVIS_PAGEABLE_ENDPOINT = "/";
     String FIND_ALL_CONTRAT_PAGEABLE_ENDPOINT = "/";
     String FIND_ALL_COMMANDECLIENT_PAGEABLE_ENDPOINT = "/";
+    String DELETE_DELIVERY_SERVICE_ENDPOINT = "/delete/{id}";
 }

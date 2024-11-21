@@ -140,4 +140,27 @@ public interface ServiceDeliveryApi {
      ResponseEntity<PageResponse<ServiceDeliveryDto>> findAllServicesDelivery(
             @RequestParam(name = "page",defaultValue = "1", required = false)  int page,
             @RequestParam(name = "size",defaultValue = "10", required = false) int size);
+
+    @DeleteMapping(value = DELETE_DELIVERY_SERVICE_ENDPOINT)
+    @Operation(
+            description = "Supprimer un Delivery Service par ID! Cette methode permet de suprimmer un delivery service par son ID",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Le delivery service a été  supprimer de la BBD",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Le delivery service avec L'ID frounie n'esxiste pas dans la BDD",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    )
+            }
+    )
+    void delete(@PathVariable("id") Integer id);
+
 }

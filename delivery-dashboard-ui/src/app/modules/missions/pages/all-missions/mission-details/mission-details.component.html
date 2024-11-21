@@ -1,72 +1,98 @@
-<div class="container-fluid">
-
-  <div class="row">
-
-    <!-- Area Chart -->
-    <div class="col-xl-8 col-lg-7">
-      <div class="card shadow mb-4">
-        <!-- Card Header - Dropdown -->
-        <div
-          class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-primary">
-          <h6 class="m-0 font-weight-bold text-white-50">Mission Detail</h6>
+<div class="mission-details-container">
+  <div class="grid-layout">
+    <!-- Main Mission Info Card -->
+    <div class="card main-info">
+      <div class="card-header">
+        <h2>Mission Details</h2>
+        <div class="status-badge" [ngClass]="mission.etatMission?.toLowerCase()">
+          {{ getMissionStatus(mission.etatMission!) }}
         </div>
-        <!-- Card Body -->
-        <div class="card-body">
-          <!--  LINE 1 -->
-          <div class="container-fluid">
-            <div class="row">
-              <!-- Column 1 -->
-              <div class="col-12 col-sm-6 col-md-6">
-                <div class="p-1 d-flex justify-content-between bg-light">
-                  <span class="text-primary">Ref</span>
-                  <span class="ml-auto">{{ mission.id }}</span>  <!-- Added margin to align to the right -->
-                </div>
-                <div class="p-1 d-flex justify-content-between">
-                  <span class="text-primary">Title</span><span class="ml-auto">{{ mission.titre }}</span>
-                </div>
-                <div class="p-1 d-flex justify-content-between  bg-light">
-                  <span>Volume(m<sup>3</sup>)</span>{{ mission.volume }}
-                </div>
-                <div class="p-1 d-flex justify-content-between">
-                  <span class="text-primary">Start Date</span><span class="ml-auto">{{ formatingDateTime(mission.dateDebut!) | date: 'dd/MM/yyyy' }}</span>
-                </div>
-                <div class="p-1 d-flex justify-content-between bg-light">
-                  <span class="text-primary">Status</span>
-                  <span class="ml-auto">
-                    <span [ngSwitch]="mission.etatMission">
-                      <span *ngSwitchCase="'EN_COURS'">In Progress</span>
-                      <span *ngSwitchCase="'ACCOMPLI'">Accomplished</span>
-                      <span *ngSwitchCase="'ANNULEE'">Cancelled</span>
-                      <span *ngSwitchCase="'TERMINIEE'">Finished</span>
-                    </span>
-                  </span>
-                </div>
-                <div class="p-1 d-flex justify-content-between">
-                  <span class="text-primary">Comment</span><span>{{ mission.commentaire }}</span>
-                </div>
+      </div>
+
+      <div class="card-body">
+        <div class="info-grid">
+          <!-- Left Column -->
+          <div class="info-column">
+            <div class="info-item">
+              <i class="bi bi-hash"></i>
+              <div class="info-content">
+                <label>Reference</label>
+                <span>{{ mission.id }}</span>
               </div>
+            </div>
 
-              <!-- Column 2 -->
-              <div class="col-12 col-sm-6 col-md-6">
-                <div class="p-1 d-flex justify-content-between ">
-                  <span class="text-primary">Starting mileage</span><span class="ml-auto">{{ mission.kmDebut }}</span>
-                </div>
+            <div class="info-item">
+              <i class="bi bi-card-text"></i>
+              <div class="info-content">
+                <label>Title</label>
+                <span>{{ mission.titre }}</span>
+              </div>
+            </div>
 
-                <div class="p-1 d-flex justify-content-between bg-light">
-                  <span class="text-primary">End Mileage</span><span  class="ml-auto">{{ mission.kmFin }}</span>
-                </div>
-                <div class="p-1 d-flex justify-content-between">
-                  <span class="text-primary">End Date</span><span  class="ml-auto">{{ formatingDateTime(mission.dateFin!) | date: 'dd/MM/yyyy'  }}</span>
-                </div>
-                <div class="p-1 d-flex justify-content-between bg-light">
-                  <span class="text-primary">Number of Drivers</span><span class="ml-auto">{{drivers.length}}</span>
-                </div>
-                <div class="p-1 d-flex justify-content-between">
-                  <span class="text-primary">Number of Vehicles</span><span class="ml-auto">{{mission.missionVehiclesDtos?.length}}</span>
-                </div>
-                <div class="p-1 d-flex justify-content-between bg-light">
-                  <span class="text-primary">Expenses</span><span class="ml-auto">520.0 €</span>
-                </div>
+            <div class="info-item">
+              <i class="bi bi-box"></i>
+              <div class="info-content">
+                <label>Volume</label>
+                <span>{{ mission.volume }} m³</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="bi bi-calendar-event"></i>
+              <div class="info-content">
+                <label>Start Date</label>
+                <span>{{ formatingDateTime(mission.dateDebut!) | date: 'dd MMM yyyy' }}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="bi bi-chat-text"></i>
+              <div class="info-content">
+                <label>Comment</label>
+                <span class="comment-text">{{ mission.commentaire }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="info-column">
+            <div class="info-item">
+              <i class="bi bi-speedometer2"></i>
+              <div class="info-content">
+                <label>Starting Mileage</label>
+                <span>{{ mission.kmDebut }} km</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="bi bi-speedometer"></i>
+              <div class="info-content">
+                <label>End Mileage</label>
+                <span>{{ mission.kmFin }} km</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="bi bi-calendar-check"></i>
+              <div class="info-content">
+                <label>End Date</label>
+                <span>{{ formatingDateTime(mission.dateFin!) | date: 'dd MMM yyyy' }}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="bi bi-people"></i>
+              <div class="info-content">
+                <label>Drivers</label>
+                <span>{{ drivers.length }}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="bi bi-truck"></i>
+              <div class="info-content">
+                <label>Vehicles</label>
+                <span>{{ mission.missionVehiclesDtos?.length }}</span>
               </div>
             </div>
           </div>
@@ -74,143 +100,147 @@
       </div>
     </div>
 
-    <!-- Pie Chart -->
-    <div class="col-xl-4 col-lg-5">
-      <div class="card shadow mb-4">
-        <!-- Card Header - Dropdown -->
-        <div
-          class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-          <div class="dropdown no-arrow">
-            <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown"
-               href="#" id="dropdownMenuLink" role="button">
-              <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-            </a>
-            <div aria-labelledby="dropdownMenuLink"
-                 class="dropdown-menu dropdown-menu-right shadow animated--fade-in">
-              <div class="dropdown-header">Dropdown Header:</div>
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </div>
+    <!-- Analytics Card -->
+    <div class="card analytics">
+      <div class="card-header">
+        <h2>Analytics Overview</h2>
+        <div class="header-actions">
+          <button class="btn btn-icon" >
+            <i class="bi bi-three-dots-vertical"></i>
+          </button><!--
+          <mat-menu>
+            <button mat-menu-item>
+              <i class="bi bi-download"></i>
+              Export Data
+            </button>
+            <button mat-menu-item>
+              <i class="bi bi-printer"></i>
+              Print Report
+            </button>
+          </mat-menu>-->
         </div>
-        <!-- Card Body -->
-        <div class="card-body">
-          <div class="chart-pie pt-4 pb-2">
+      </div>
 
-            <div class="card mb-4">
-              <div class="card-header">
-                <i class="fas fa-chart-area me-1"></i>
-                Area Chart Example
-              </div>
-              <div class="card-body">
-
-                <div class="chart-container">
-                  <canvas  id="myChartDonut" ></canvas>
-                </div>
-
-              </div>
-            </div>
+      <div class="card-body">
+        <div class="chart-container">
+          <canvas id="myChartDonut"></canvas>
+        </div>
+        <div class="chart-legend">
+          <div class="legend-item">
+            <span class="legend-color" style="background: var(--primary-color)"></span>
+            <span>Direct</span>
           </div>
-          <div class="mt-4 text-center small">
-            <span class="mr-2">
-                <i class="fas fa-circle text-primary"></i> Direct
-            </span>
-            <span class="mr-2">
-               <i class="fas fa-circle text-success"></i> Social
-            </span>
-            <span class="mr-2">
-                <i class="fas fa-circle text-info"></i> Referral
-            </span>
+          <div class="legend-item">
+            <span class="legend-color" style="background: var(--success-color)"></span>
+            <span>Social</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color"></span>
+            <span>Referral</span>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="row">
-    <!-- Area Chart -->
-    <div class="col-xl-8 col-lg-7">
-      <div class="card shadow mb-4">
-        <!-- Card Header - Dropdown -->
-        <div
-          class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-light">
-          <h6 class="m-0 font-weight-bold text-primary">Drivers & Cars Details</h6>
+  <!-- Details Tables Section -->
+  <div class="grid-layout">
+    <!-- Drivers & Vehicles Table -->
+    <div class="card table-card">
+      <div class="card-header">
+        <h2>Drivers & Vehicles</h2>
+        <button class="btn btn-primary btn-sm">
+          <i class="bi bi-plus-lg"></i>
+          Add Assignment
+        </button>
+      </div>
 
-        </div>
-        <!-- Card Body -->
-        <div class="card-body">
-            <table class="table table-hover">
-              <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Driver</th>
-                <th scope="col">Date</th>
-                <th scope="col">Vehicle</th>
-                <th scope="col">Register N°</th>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>Driver</th>
+              <th>Date</th>
+              <th>Vehicle</th>
+              <th>Registration</th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let v of mission.missionVehiclesDtos">
+              <tr *ngFor="let d of v.chauffeursVehicleDto">
+                <td>{{ d.chauffeurDto?.id }}</td>
+                <td>
+                  <div class="driver-info">
+                    <div class="driver-avatar">
+                      {{ getInitials(d.chauffeurDto?.firstname, d.chauffeurDto?.lastname) }}
+                    </div>
+                    <span>{{ d.chauffeurDto?.firstname }} {{ d.chauffeurDto?.lastname }}</span>
+                  </div>
+                </td>
+                <td>12/09/2024</td>
+                <td>
+                  <div class="vehicle-info">
+                    <i class="bi bi-truck"></i>
+                    <span>{{ v.vehicleDto?.marque }} {{ v.vehicleDto?.modele }}</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="registration-number">{{ v.vehicleDto?.immatriculation }}</span>
+                </td>
               </tr>
-              </thead>
-              <tbody>
-              <ng-container *ngFor="let v of mission.missionVehiclesDtos" >
-                <tr *ngFor="let d of v.chauffeursVehicleDto">
-                      <th scope="row">{{ d.chauffeurDto?.id }}</th>
-                      <td>{{ d.chauffeurDto?.firstname }}&nbsp; {{ d.chauffeurDto?.lastname }}</td>
-                      <td>12/09/2024</td>
-                      <td>{{ v.vehicleDto?.marque }}&nbsp; {{v.vehicleDto?.modele}}</td>
-                      <td>{{ v.vehicleDto?.immatriculation }}</td>
-                  </tr>
-              </ng-container>
-              </tbody>
-            </table>
+            </ng-container>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
 
-    <!-- Pie Chart -->
-    <div class="col-xl-4 col-lg-5">
-      <div class="card shadow mb-4">
-        <!-- Card Header - Dropdown -->
-        <div
-          class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary">Expences</h6>
-
+    <!-- Expenses Table -->
+    <div class="card table-card">
+      <div class="card-header">
+        <h2>Expenses</h2>
+        <div class="total-expenses">
+          <span>Total:</span>
+          <strong>520.00 €</strong>
         </div>
-        <!-- Card Body -->
-        <div class="card-body"  style="height: 280px; overflow: auto;">
-            <table class="table table-hover">
-              <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Designation</th>
-                <th scope="col">Quantite</th>
-                <th scope="col">Costs</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
-              </tr>
-              </tbody>
-            </table>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>Designation</th>
+              <th>Quantity</th>
+              <th>Cost</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>1</td>
+              <td>Fuel</td>
+              <td>45L</td>
+              <td>75.00 €</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Maintenance</td>
+              <td>1</td>
+              <td>150.00 €</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Toll Fees</td>
+              <td>5</td>
+              <td>45.00 €</td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
-
 </div>

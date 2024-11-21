@@ -11,8 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { delete6 } from '../fn/entreprise-controller/delete-6';
-import { Delete6$Params } from '../fn/entreprise-controller/delete-6';
+import { delete7 } from '../fn/entreprise-controller/delete-7';
+import { Delete7$Params } from '../fn/entreprise-controller/delete-7';
 import { EntrepriseDto } from '../models/entreprise-dto';
 import { findAll7 } from '../fn/entreprise-controller/find-all-7';
 import { FindAll7$Params } from '../fn/entreprise-controller/find-all-7';
@@ -173,31 +173,31 @@ export class EntrepriseControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `delete6()` */
-  static readonly Delete6Path = '/entreprises/delete/{id}';
+  /** Path part for operation `delete7()` */
+  static readonly Delete7Path = '/entreprises/delete/{id}';
 
   /**
    * Supprimer une Entreprise par ID! Cette methode permet de suprimmer une entreprise par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete6()` instead.
+   * To access only the response body, use `delete7()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete6$Response(params: Delete6$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return delete6(this.http, this.rootUrl, params, context);
+  delete7$Response(params: Delete7$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return delete7(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Supprimer une Entreprise par ID! Cette methode permet de suprimmer une entreprise par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete6$Response()` instead.
+   * To access the full response (for headers, for example), `delete7$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete6(params: Delete6$Params, context?: HttpContext): Observable<any> {
-    return this.delete6$Response(params, context).pipe(
+  delete7(params: Delete7$Params, context?: HttpContext): Observable<any> {
+    return this.delete7$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

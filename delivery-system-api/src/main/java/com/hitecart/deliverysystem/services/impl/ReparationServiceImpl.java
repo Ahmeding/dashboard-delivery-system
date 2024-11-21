@@ -7,30 +7,21 @@ import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.exception.InvalidOperationException;
-import com.hitecart.deliverysystem.model.Devis;
-import com.hitecart.deliverysystem.model.Mission;
 import com.hitecart.deliverysystem.model.PieceRechange;
 import com.hitecart.deliverysystem.model.Reparation;
 import com.hitecart.deliverysystem.repository.PieceRechangeRepository;
 import com.hitecart.deliverysystem.repository.ReparationRepository;
-import com.hitecart.deliverysystem.services.ChauffeurService;
-import com.hitecart.deliverysystem.services.ReparationService;
-import com.hitecart.deliverysystem.services.UtilisateurService;
-import com.hitecart.deliverysystem.services.VehiculeService;
-import com.hitecart.deliverysystem.utils.Constants;
+import com.hitecart.deliverysystem.services.*;
 import com.hitecart.deliverysystem.validator.ReparationValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -173,4 +164,5 @@ public class ReparationServiceImpl implements ReparationService {
         setCreatedByUser(reparationDto);
         return reparationDto;
     }
+
 }

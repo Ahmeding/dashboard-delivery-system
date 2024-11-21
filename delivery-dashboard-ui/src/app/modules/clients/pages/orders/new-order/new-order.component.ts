@@ -149,7 +149,7 @@ export class NewOrderComponent implements OnInit{
   }
 
   private getAllClients() {
-    this.clientService.findAll11().subscribe({
+    this.clientService.findAll12().subscribe({
       next:(clientsResponse)=>{
         this.allClients=clientsResponse;
       }
@@ -163,7 +163,7 @@ export class NewOrderComponent implements OnInit{
     this.newOrder.ligneCommandeClientsDtos=this.orderlines;
     this.newOrder.etatCommande= "IN_PROGRESS"
     console.log(this.newOrder);
-    this.cmdClientService.save10({body:this.newOrder}).subscribe({
+    this.cmdClientService.save11({body:this.newOrder}).subscribe({
       next:(resp)=>{
         this.getAllOrders();
         this.resetForm(form);
@@ -245,7 +245,7 @@ export class NewOrderComponent implements OnInit{
   }
 
   editOrder(id: number | undefined) {
-    this.cmdClientService.findById10({id:id as number}).subscribe({
+    this.cmdClientService.findById11({id:id as number}).subscribe({
       next:(order)=>{
         this.selectedToEditOrder = order;
         this.orderlines = this.selectedToEditOrder.ligneCommandeClientsDtos as Array<CommandeClientDto>;

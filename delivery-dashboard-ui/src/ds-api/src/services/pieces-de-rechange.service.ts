@@ -11,8 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { delete3 } from '../fn/pieces-de-rechange/delete-3';
-import { Delete3$Params } from '../fn/pieces-de-rechange/delete-3';
+import { delete4 } from '../fn/pieces-de-rechange/delete-4';
+import { Delete4$Params } from '../fn/pieces-de-rechange/delete-4';
 import { findAll4 } from '../fn/pieces-de-rechange/find-all-4';
 import { FindAll4$Params } from '../fn/pieces-de-rechange/find-all-4';
 import { findAllPieceRechanges } from '../fn/pieces-de-rechange/find-all-piece-rechanges';
@@ -173,31 +173,31 @@ export class PiecesDeRechangeService extends BaseService {
     );
   }
 
-  /** Path part for operation `delete3()` */
-  static readonly Delete3Path = '/piecerenchanges/delete/{id}';
+  /** Path part for operation `delete4()` */
+  static readonly Delete4Path = '/piecerenchanges/delete/{id}';
 
   /**
    * Supprimer une PieceRechange par ID! Cette methode permet de suprimmer une piece de rechange par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete3()` instead.
+   * To access only the response body, use `delete4()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete3$Response(params: Delete3$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return delete3(this.http, this.rootUrl, params, context);
+  delete4$Response(params: Delete4$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return delete4(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Supprimer une PieceRechange par ID! Cette methode permet de suprimmer une piece de rechange par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete3$Response()` instead.
+   * To access the full response (for headers, for example), `delete4$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete3(params: Delete3$Params, context?: HttpContext): Observable<any> {
-    return this.delete3$Response(params, context).pipe(
+  delete4(params: Delete4$Params, context?: HttpContext): Observable<any> {
+    return this.delete4$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

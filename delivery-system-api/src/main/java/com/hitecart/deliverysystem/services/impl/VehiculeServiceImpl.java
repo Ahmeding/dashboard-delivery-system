@@ -100,7 +100,6 @@ public class VehiculeServiceImpl implements VehiculeService {
                     "Impossible de supprimer un vehicule qui a deja une liste des reparations",
                     ErrorCodes.VEHICULE_NOT_VALID_OPERATION);
         }
-        System.out.println("test....calls.......");
         vehiculeRepository.deleteById(idVehicule);
     }
 

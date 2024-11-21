@@ -1,0 +1,179 @@
+<!-- client-details.component.html -->
+<div class="client-details">
+  <!-- Client Info Section -->
+  <div class="grid-layout">
+    <div class="card main-info">
+      <div class="card-header">
+        <h2>Client Information</h2>
+        <div class="client-status active">Active Client</div>
+      </div>
+
+      <div class="card-body">
+        <div class="info-grid">
+
+          <div class="info-column">
+            <div class="info-item">
+              <i class="bi bi-hash"></i>
+              <div class="info-content">
+                <label>Client ID</label>
+                <span>{{client.id}}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="bi bi-person"></i>
+              <div class="info-content">
+                <label>Name</label>
+                <span>{{fullname}}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="bi bi-building"></i>
+              <div class="info-content">
+                <label>SIREN/SIRET</label>
+                <span>{{client.siren}} / {{client.siret}}</span>
+              </div>
+            </div>
+
+
+            <div class="info-item">
+              <i class="bi bi-cart-check"></i>
+              <div class="info-content">
+                <label>Total Orders</label>
+                <span>{{client.commandeClientsDtos?.length}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-column">
+
+            <div class="info-item">
+              <i class="bi bi-telephone"></i>
+              <div class="info-content">
+                <label>Contact</label>
+                <span>{{client.phoneNum}}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="bi bi-envelope"></i>
+              <div class="info-content">
+                <label>Email</label>
+                <span>{{client.email}}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="bi bi-calendar-check"></i>
+              <div class="info-content">
+                <label>Created</label>
+                <span>{{ formatDate(client.createdAt!)}}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="bi bi-geo-alt"></i>
+              <div class="info-content">
+                <label>Total Delivery Points</label>
+                <span>{{client.deliveryPointDtos?.length}}</span>
+              </div>
+            </div>
+
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <div class="card analytics">
+      <div class="card-header">
+        <h2>Revenue Analytics</h2>
+        <div class="dropdown">
+          <button class="btn btn-icon" type="button" data-bs-toggle="dropdown">
+            <i class="bi bi-three-dots-vertical"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><button class="dropdown-item"><i class="bi bi-download"></i> Export</button></li>
+            <li><button class="dropdown-item"><i class="bi bi-printer"></i> Print</button></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <canvas id="revenueChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delivery Points Table -->
+  <div class="card delivery-points">
+    <div class="card-header">
+      <h2>Delivery Points</h2>
+      <button class="btn btn-primary" (click)="openAddNewDPModal(client)">
+        <i class="bi bi-plus-lg"></i> Add Point
+      </button>
+    </div>
+
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Contact</th>
+            <th>Address</th>
+            <th>Type</th>
+            <th>Schedule</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let point of client.deliveryPointDtos">
+            <td>{{point.name}}</td>
+            <td>{{point.city}}</td>
+            <td>
+              <div class="contact-info">
+                <span class="contact-name">{{point.contact?.firstname}}&nbsp;{{point.contact?.lastname}}</span>
+                <span class="contact-phone">{{point.contact?.phoneNum}}</span>
+                <span class="contact-email">{{point.contact?.email}}</span>
+              </div>
+            </td>
+            <td>
+              <div class="address-info">
+                <span>{{point.addressDto?.adresse1}}</span>
+                <span>{{point.addressDto?.ville}}, {{point.addressDto?.codepostal}}</span>
+              </div>
+            </td>
+            <td>
+<!--                <span class="status-badge" [class]="getStatusClass(point.deliveryPointType!)">
+                  {{point.deliveryPointType}}
+                </span>-->
+              <span class="status-badge" [class]="getStatusClass(point.deliveryPointType)">
+                <i [class]="getTypeIcon(point.deliveryPointType)"></i>
+                {{point.deliveryPointType}}
+              </span>
+            </td>
+            <td>
+              <span><i class="bi bi-clock-fill text-success"></i> &nbsp;{{point.schedule}} </span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-icon" (click)="goToEditDelivery(point.id, client)">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-icon text-danger" (click)="deleteDeliveryPoint(point.id!)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

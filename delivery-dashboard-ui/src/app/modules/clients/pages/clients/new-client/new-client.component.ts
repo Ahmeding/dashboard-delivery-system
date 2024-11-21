@@ -6,6 +6,7 @@ import {ClientDto} from "../../../../../../ds-api/src/models/client-dto";
 import {AlertService} from "../../../../../services/alert/alert.service";
 import {ClientService} from "../../../../../../ds-api/src/services/client.service";
 import {fileName} from "ng-openapi-gen/lib/gen-utils";
+import {DeliveryPointDto} from "../../../../../../ds-api/src/models/delivery-point-dto";
 
 
 @Component({
@@ -21,7 +22,7 @@ export class NewClientComponent implements OnInit {
   isEditMode = false;
   isSubmitting = false;
   clientId: number | null = null;
-
+  DeliveryPoint! :DeliveryPointDto;
   constructor(
     private fillInputService: InputFillUtilsService,
     private fb: FormBuilder,
@@ -61,7 +62,7 @@ export class NewClientComponent implements OnInit {
   }
 
   private loadClient(id: number) {
-    this.clientService.findById11({id:id as number}).subscribe({
+    this.clientService.findById12({id:id as number}).subscribe({
       next: (client) => {
         this.clientValue=client;
         this.clientForm.patchValue(this.clientValue as ClientDto);
@@ -77,8 +78,8 @@ export class NewClientComponent implements OnInit {
       const clientData = this.clientForm.value;
 
       const request$ = this.isEditMode
-        ? this.clientService.save11({body:clientData})
-        : this.clientService.save11({body:clientData});
+        ? this.clientService.save12({body:clientData})
+        : this.clientService.save12({body:clientData});
 
       request$.subscribe({
         next: () => {
@@ -108,7 +109,7 @@ export class NewClientComponent implements OnInit {
   }
 
   saveClient(clientValue: ClientDto, sucessAction: string, failedAction:string){
-    this.clientService.save11({body:clientValue}).subscribe({
+    this.clientService.save12$Response({body:clientValue}).subscribe({
       next:(response)=>{
         this.alertService.alertSuccess(sucessAction + " completed successfully!")
         this.router.navigate(['clients/all']);

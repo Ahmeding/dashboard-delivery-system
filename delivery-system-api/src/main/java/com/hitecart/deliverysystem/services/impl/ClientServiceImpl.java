@@ -133,7 +133,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public PageResponse<ClientDto> findAllClients(int page, int size) {
 
-        Pageable pageable = PageRequest.of(page,size, Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(page,size, Sort.by(
+                "createdAt").descending());
         Page<Client> clients = clientRepository.findAllClients(pageable);
 
         List<ClientDto> clientsDto = clients.stream()

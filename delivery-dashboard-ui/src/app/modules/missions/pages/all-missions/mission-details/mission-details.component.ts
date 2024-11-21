@@ -38,14 +38,34 @@ constructor(private activeRouter:ActivatedRoute,
     this.createPolarChart();
     this.createDonutChart();
   }
+  getMissionStatus(status: string): string {
+    const statusMap: { [key: string]: string } = {
+      'EN_COURS': 'In Progress',
+      'ACCOMPLI': 'Accomplished',
+      'ANNULEE': 'Cancelled',
+      'TERMINIEE': 'Finished'
+    };
+    return statusMap[status] || status;
+  }
+
+  getInitials(firstName?: string, lastName?: string): string {
+    const first = firstName?.charAt(0) || '';
+    const last = lastName?.charAt(0) || '';
+    return (first + last).toUpperCase();
+  }
+
+  formatingDateTime(date: string): Date {
+    return new Date(date);
+  }
 
 
-  formatingDateTime(dateDebut: any): string{
+
+/*  formatingDateTime(dateDebut: any): string{
     // Convert the timestamp from seconds to milliseconds
     const milliseconds = dateDebut * 1000;
 
     return milliseconds.toString() as string;
-  }
+  }*/
 
   loadMission(){
     this.missionService.findById5({id:this.id}).subscribe(

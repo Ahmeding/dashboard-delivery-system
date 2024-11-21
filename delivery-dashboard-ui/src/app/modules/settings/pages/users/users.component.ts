@@ -14,6 +14,8 @@ export class UsersComponent implements OnInit{
   selectedUser: UtilisateurDto={};
   page:number=0;
   size:number=5;
+  pageSize: any;
+  searchTerm: any;
 
   constructor(private router:Router,
               private userService:UtilisateurService) {
@@ -77,6 +79,14 @@ export class UsersComponent implements OnInit{
   }
 
   deleteUser(number: number) {
+
+  }
+
+  onPageSizeChange() {
+
+  }
+
+  filterUsers() {
 
   }
 }

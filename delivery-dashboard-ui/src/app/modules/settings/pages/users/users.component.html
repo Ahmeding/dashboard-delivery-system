@@ -1,126 +1,141 @@
-
-<div id="content">
-  <!-- Begin Page Content -->
-  <div class="container-fluid">
-
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-      <h1 class="h3 mb-0 text-gray-800">Users</h1>
-    </div>
-
-    <!-- Content Row Table -->
-
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-      <h1 class="h3 mb-0 text-gray-800">See all Users</h1>
-      <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-         data-toggle="modal" data-target="#vehicleModal" (click)="navigateToNewUser()"><i
-        class="bi bi-plus fa-sm text-white-50"></i>New User</a>
-    </div>
-
-    <!-- DataTales Example -->
-    <div class="card shadow mb-4">
-      <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Users</h6>
-      </div>
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-hover" width="100%" cellspacing="0">
-            <thead>
-            <tr>
-              <th># ID</th>
-              <th>Full Name</th>
-              <th>Email</th>
-              <th>Phone N°</th>
-              <th>Created by</th>
-              <th>Created At</th>
-              <th>Enabled</th>
-              <th>Locked Account</th>
-              <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let user of allUsersResponse.content">
-              <td>{{ user.id}}</td>
-              <td>{{ user.fullname}}</td>
-              <td>{{user.email}}</td>
-              <td>{{ user.phoneNum }}</td>
-              <td>{{ user.createdByUser }}</td>
-              <td>{{ user.createdAt }}</td>
-              <td>{{user.enabled}}</td>
-              <td>{{ user.accountLocked}}</td>
-              <td>
-                <i class="bi bi-pen text-warning mr-2" data-toggle="modal"
-                   data-target="#editVehicleModal"  (click)="editUser(user.id!)" title="Modify"></i>
-                <i class="bi bi-eye text-info ml-3" title="Détail"
-                   data-toggle="modal" data-target="#infoVehicleModal" (click)="selectedUser = user"></i>
-                <i class="bi bi-trash text-danger ml-3 mr-3" title="Supprimer" (click)="deleteUser(user.id!)"></i>
-
-              </td>
-            </tr>
-            </tbody>
-          </table>
-
-          <div class="d-flex justify-content-center mt-3">
-            <nav aria-label="Page navigation">
-              <ul class="pagination">
-                <li class="page-item">
-                  <a class="page-link"
-                     [class.disabled]="page == 0"
-                     (click)="goToFirstPage()"
-                     aria-label="First Page"
-                     href="javascript:void(0)"
-                  >
-                    <i class="bi bi-chevron-double-left"></i>
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link"
-                     [class.disabled]="page == 0"
-                     (click)="goToPreviousPage()"
-                     aria-label="Pevious Page"
-                     href="javascript:void(0)">
-                    <i class="bi bi-chevron-left"></i>
-                  </a>
-                </li>
-
-                <li class="page-item" *ngFor="let _ of [].constructor(this.allUsersResponse.totalPages);let pageIndex = index">
-                  <a class="page-link"
-                     (click)="goToPage(pageIndex)"
-                     aria-label="Page"
-                     href="javascript:void(0)"
-                     [class.active]="page == pageIndex"
-                  >
-                    {{pageIndex +1}}
-                  </a>
-                </li>
-
-                <li class="page-item">
-                  <a class="page-link"
-                     [class.disabled]="isLastPage"
-                     (click)="goToNextPage()"
-                     aria-label="Next Page"
-                     href="javascript:void(0)">
-
-                    <i class="bi bi-chevron-right"></i>
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link"
-                     [class.disabled]="isLastPage"
-                     (click)="goToLastPage()"
-                     aria-label="Last Page"
-                     href="javascript:void(0)">
-                    <i class="bi bi-chevron-double-right"></i>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
+<div class="users-container">
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="title-search">
+      <h1>Users Management</h1>
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input type="text" placeholder="Search users..." [(ngModel)]="searchTerm" (keyup)="filterUsers()">
       </div>
     </div>
-
+    <button class="btn btn-primary" (click)="navigateToNewUser()">
+      <i class="bi bi-plus-lg"></i>
+      Add New User
+    </button>
   </div>
-  <!-- /.container-fluid -->
 
+  <!-- Table Card -->
+  <div class="table-card">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>
+            <div class="th-content">
+              ID
+              <i class="bi bi-arrow-down-up"></i>
+            </div>
+          </th>
+          <th>
+            <div class="th-content">
+              User
+              <i class="bi bi-arrow-down-up"></i>
+            </div>
+          </th>
+          <th>Contact</th>
+          <th>Created Info</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of allUsersResponse.content">
+          <td>{{user.id}}</td>
+          <td>
+            <div class="user-info">
+              <div class="user-avatar">
+                {{user.fullname?.[0]}}
+              </div>
+              <div class="user-details">
+                <span class="user-name">{{user.fullname}}</span>
+                <span class="user-email">{{user.email}}</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="contact-info">
+              <i class="bi bi-telephone"></i>
+              <span>{{user.phoneNum}}</span>
+            </div>
+          </td>
+          <td>
+            <div class="created-info">
+              <div class="creator">
+                <i class="bi bi-person"></i>
+                <span>{{user.createdByUser}}</span>
+              </div>
+              <div class="created-date">
+                <i class="bi bi-calendar3"></i>
+                <span>{{user.createdAt | date:'medium'}}</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="status-badges">
+                <span class="status-badge" [class.active]="user.enabled">
+                  {{ user.enabled ? 'Active' : 'Inactive' }}
+                </span>
+              <span class="status-badge lock-badge" [class.locked]="user.accountLocked">
+                  <i class="bi" [class.bi-lock-fill]="user.accountLocked" [class.bi-unlock-fill]="!user.accountLocked"></i>
+                {{ user.accountLocked ? 'Locked' : 'Unlocked' }}
+                </span>
+            </div>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn btn-icon" (click)="editUser(user.id!)">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-icon" (click)="selectedUser = user">
+                <i class="bi bi-eye"></i>
+              </button>
+              <button class="btn btn-icon text-danger" (click)="deleteUser(user.id!)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-container">
+      <div class="items-per-page">
+        <span>Show:</span>
+        <select [(ngModel)]="size" (change)="onPageSizeChange()">
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="page === 0">
+          <a class="page-link" (click)="goToFirstPage()">
+            <i class="bi bi-chevron-double-left"></i>
+          </a>
+        </li>
+        <li class="page-item" [class.disabled]="page === 0">
+          <a class="page-link" (click)="goToPreviousPage()">
+            <i class="bi bi-chevron-left"></i>
+          </a>
+        </li>
+        <li class="page-item" *ngFor="let _ of [].constructor(allUsersResponse.totalPages); let pageIndex = index"
+            [class.active]="page === pageIndex">
+          <a class="page-link" (click)="goToPage(pageIndex)">{{pageIndex + 1}}</a>
+        </li>
+        <li class="page-item" [class.disabled]="isLastPage">
+          <a class="page-link" (click)="goToNextPage()">
+            <i class="bi bi-chevron-right"></i>
+          </a>
+        </li>
+        <li class="page-item" [class.disabled]="isLastPage">
+          <a class="page-link" (click)="goToLastPage()">
+            <i class="bi bi-chevron-double-right"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>

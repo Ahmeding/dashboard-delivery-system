@@ -1,107 +1,128 @@
-<div class="container mt-5">
-  <div class="card shadow-hover p-4">
-    <h3 class="text-center mb-4">Create New Service Delivery</h3>
-    <form #serviceForm="ngForm" (ngSubmit)="onSubmit(serviceForm)">
-
-      <!-- Title Field -->
-      <div class="form-group">
-        <input
-          type="text"
-          id="title"
-          class="form-control"
-          name="title"
-          [(ngModel)]="service.title"
-          placeholder=" "
-          required />
-        <label for="title">Title</label>
-      </div>
-
-      <!-- Description Field -->
-      <div class="form-group">
-        <textarea
-          id="description"
-          class="form-control"
-          name="description"
-          [(ngModel)]="service.description"
-          placeholder=" "
-          rows="3"
-          required></textarea>
-        <label for="description">Description</label>
-      </div>
-
-      <!-- Reference Field -->
-      <div class="form-group">
-        <input
-          type="text"
-          id="reference"
-          class="form-control"
-          name="reference"
-          [(ngModel)]="service.reference"
-          placeholder=" "
-          required />
-        <label for="reference">Reference</label>
-      </div>
-
-      <!-- Price TTC Field -->
-      <div class="form-group">
-        <input
-          type="number"
-          id="priceTTC"
-          class="form-control"
-          name="priceTTC"
-          [(ngModel)]="service.priceTTC"
-          placeholder=" "
-          min="0"
-          required />
-        <label for="priceTTC">Price (TTC)</label>
-      </div>
-
-      <!-- Unit Price HT Field -->
-      <div class="form-group">
-        <input
-          type="number"
-          id="unitPriceHT"
-          class="form-control"
-          name="unitPriceHT"
-          [(ngModel)]="service.unitPriceHT"
-          placeholder=" "
-          min="0"
-          required />
-        <label for="unitPriceHT">Unit Price (HT)</label>
-      </div>
-
-      <!-- TVA Field -->
-      <div class="form-group">
-        <input
-          type="number"
-          id="tva"
-          class="form-control"
-          name="tva"
-          [(ngModel)]="service.tva"
-          placeholder=" "
-          min="0"
-          max="100"
-          required />
-        <label for="tva">TVA (%)</label>
-      </div>
-
-      <!-- Enabled Field -->
-      <div class="form-group form-check">
-        <input
-          type="checkbox"
-          id="enabled"
-          class="form-check-input"
-          name="enabled"
-          [(ngModel)]="service.enabled" />
-        <label class="form-check-label" for="enabled">Enabled</label>
-      </div>
-
-      <button
-        type="submit"
-        class="btn btn-primary btn-block"
-        [disabled]="serviceForm.invalid">
-        <i class="bi bi-save"></i> Save Service
-      </button>
-    </form>
+<div class="service-delivery-form-container">
+  <div class="form-header">
+    <h2>{{ isEditing ? 'Edit' : 'New' }} Service Delivery</h2>
+    <button type="button" class="btn btn-outline" (click)="reset()">
+      <i class="bi bi-arrow-counterclockwise"></i>
+      Reset
+    </button>
   </div>
+
+  <form [formGroup]="serviceDeliveryForm" (ngSubmit)="onSubmit()" class="form-content">
+    <div class="form-grid">
+      <!-- Reference -->
+      <div class="form-field">
+        <label for="reference">Reference</label>
+        <div class="input-container">
+          <i class="bi bi-hash"></i>
+          <input
+            id="reference"
+            type="text"
+            formControlName="reference"
+            [class.is-invalid]="serviceDeliveryForm.get('reference')?.invalid && serviceDeliveryForm.get('reference')?.touched"
+          >
+        </div>
+        <div class="error-message" *ngIf="serviceDeliveryForm.get('reference')?.invalid && serviceDeliveryForm.get('reference')?.touched">
+          Reference is required
+        </div>
+      </div>
+
+      <!-- Title (Delivery Point Selection) -->
+      <div class="form-field">
+        <label for="title">Delivery Point</label>
+        <div class="input-container">
+          <i class="bi bi-geo-alt"></i>
+          <select
+            id="title"
+            formControlName="title"
+            [class.is-invalid]="serviceDeliveryForm.get('title')?.invalid && serviceDeliveryForm.get('title')?.touched"
+          >
+            <option value="">Select a delivery point</option>
+            <option *ngFor="let point of deliveryPoints" [value]="point.name +' '+ point.city">
+              {{point.name}} ({{point.city}} - {{point.deliveryPointType}})
+            </option>
+          </select>
+        </div>
+        <div class="error-message" *ngIf="serviceDeliveryForm.get('title')?.invalid && serviceDeliveryForm.get('title')?.touched">
+          Delivery point is required
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="form-field full-width">
+        <label for="description">Description</label>
+        <div class="input-container">
+          <i class="bi bi-text-paragraph"></i>
+          <textarea
+            id="description"
+            formControlName="description"
+            rows="3"
+            [class.is-invalid]="serviceDeliveryForm.get('description')?.invalid && serviceDeliveryForm.get('description')?.touched"
+          ></textarea>
+        </div>
+        <div class="error-message" *ngIf="serviceDeliveryForm.get('description')?.invalid && serviceDeliveryForm.get('description')?.touched">
+          Description is required
+        </div>
+      </div>
+
+      <!-- Unit Price HT -->
+      <div class="form-field">
+        <label for="unitPriceHT">Price (HT)</label>
+        <div class="input-container">
+          <i class="bi bi-currency-euro"></i>
+          <input
+            id="unitPriceHT"
+            type="number"
+            step="0.01"
+            formControlName="unitPriceHT"
+            [class.is-invalid]="serviceDeliveryForm.get('unitPriceHT')?.invalid && serviceDeliveryForm.get('unitPriceHT')?.touched"
+          >
+        </div>
+        <div class="error-message" *ngIf="serviceDeliveryForm.get('unitPriceHT')?.invalid && serviceDeliveryForm.get('unitPriceHT')?.touched">
+          Valid price is required
+        </div>
+      </div>
+
+      <!-- TVA -->
+      <div class="form-field">
+        <label for="tva">TVA (%)</label>
+        <div class="input-container">
+          <i class="bi bi-percent"></i>
+          <input
+            id="tva"
+            type="number"
+            step="0.1"
+            formControlName="tva"
+            [class.is-invalid]="serviceDeliveryForm.get('tva')?.invalid && serviceDeliveryForm.get('tva')?.touched"
+          >
+        </div>
+        <div class="error-message" *ngIf="serviceDeliveryForm.get('tva')?.invalid && serviceDeliveryForm.get('tva')?.touched">
+          TVA must be between 0 and 100
+        </div>
+      </div>
+
+      <!-- Price TTC (Read-only) -->
+      <div class="form-field">
+        <label for="priceTTC">Price (TTC)</label>
+        <div class="input-container">
+          <i class="bi bi-currency-euro"></i>
+          <input
+            id="priceTTC"
+            type="number"
+            formControlName="priceTTC"
+            readonly
+            class="readonly"
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-outline" routerLink="/service-delivery">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="!serviceDeliveryForm.valid">
+        {{ isEditing ? 'Update' : 'Create' }} Service Delivery
+      </button>
+    </div>
+  </form>
 </div>

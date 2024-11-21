@@ -1,0 +1,171 @@
+.service-delivery-form-container {
+  padding: 1.5rem;
+  background-color: var(--card-bg);
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  .form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    h2 {
+      color: var(--text-color);
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+    }
+  }
+
+  .form-content {
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+
+      .form-field {
+        &.full-width {
+          grid-column: 1 / -1;
+        }
+
+        label {
+          display: block;
+          margin-bottom: 0.5rem;
+          color: var(--text-color);
+          font-weight: 500;
+        }
+
+        .input-container {
+          position: relative;
+
+          i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+          }
+
+          input, select, textarea {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.2s ease;
+
+            &::placeholder {
+              color: var(--text-muted);
+            }
+
+            &:focus {
+              outline: none;
+              border-color: var(--primary-color);
+              box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
+            }
+
+            &.is-invalid {
+              border-color: var(--danger-color);
+
+              &:focus {
+                box-shadow: 0 0 0 2px rgba(var(--danger-rgb), 0.1);
+              }
+            }
+
+            &.readonly {
+              background-color: var(--bg-color);
+              opacity: 0.7;
+              cursor: not-allowed;
+            }
+          }
+
+          textarea {
+            padding-left: 2.5rem;
+            resize: vertical;
+            min-height: 100px;
+          }
+
+          select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+
+            option {
+              background-color: var(--bg-color);
+              color: var(--text-color);
+            }
+          }
+        }
+
+        .error-message {
+          margin-top: 0.5rem;
+          color: var(--danger-color);
+          font-size: 0.875rem;
+        }
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        i {
+          font-size: 1.25rem;
+        }
+
+        &.btn-outline {
+          border: 1px solid var(--border-color);
+          background-color: transparent;
+          color: var(--text-color);
+
+          &:hover {
+            background-color: var(--bg-color);
+          }
+        }
+
+        &.btn-primary {
+          background-color: var(--primary-color);
+          border: none;
+          color: white;
+
+          &:hover {
+            background-color: rgba(var(--primary-rgb), 0.9);
+          }
+
+          &:disabled {
+            background-color: var(--text-muted);
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .service-delivery-form-container {
+    .form-content {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}

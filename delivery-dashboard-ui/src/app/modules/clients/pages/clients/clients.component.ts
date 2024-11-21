@@ -9,6 +9,8 @@ import {NgForm} from "@angular/forms";
 import {Router} from "@angular/router";
 import {ViewClientModalComponent} from "./view-client-modal/view-client-modal.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {DeliveryPointDto} from "../../../../../ds-api/src/models/delivery-point-dto";
+import {NewDeliveryPointModalComponent} from "./new-delivery-point-modal/new-delivery-point-modal.component";
 
 @Component({
   selector: 'app-clients',
@@ -17,6 +19,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 })
 export class ClientsComponent implements OnInit{
 
+  deliveryPoint:DeliveryPointDto = {}
   allClients:ClientDto[]=[];
   selectedClient: ClientDto={};
   newClient: ClientDto={};
@@ -65,7 +68,7 @@ export class ClientsComponent implements OnInit{
     this.confirmBoxService.customFour(`Are you sure you want to ${action} this client?`, '', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.clientService.updateIsActive1(
+          this.clientService.updateIsActive2(
             {
               id:client_id,
               isactive:updatedStatus
@@ -90,7 +93,7 @@ export class ClientsComponent implements OnInit{
     this.confirmBoxService.customFour('Are you sure you want to delete this client?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.clientService.delete10({id:client_id}).subscribe(() => {
+          this.clientService.delete12({id:client_id}).subscribe(() => {
             this.getAllClients();
             this.alertService.alertSuccess('Deletion successfully completed');
           });
@@ -158,5 +161,30 @@ export class ClientsComponent implements OnInit{
 
   goToEditClient(id: number | undefined) {
     this.router.navigate(['clients','edit-client',id]);
+  }
+
+  openAddNewDPModal(client: any) {
+    const modalRef = this.modalService.open(NewDeliveryPointModalComponent, {
+      size: 'lg',
+      centered: true,
+      backdrop: 'static'
+    });
+
+    modalRef.componentInstance.clientId = client.id;
+
+    modalRef.result.then((result) => {
+      if (result) {
+        // Handle the new delivery point data
+        console.log('New delivery point:', result);
+        this.getAllClients();
+        // Add your API call here
+      }
+    }).catch((error) => {
+      console.log('Modal dismissed');
+    });
+  }
+
+  goToClientDetails(id: number | undefined) {
+    this.router.navigate(['clients','view-client',id]);
   }
 }
