@@ -16,6 +16,8 @@ import java.util.List;
 @Entity
 @Table(name = "fraisMission")
 public class FraisMission extends AbstractEntity{
+
+    private String reference;
     @Column(name = "nom")
     private String nom;
     @Column(name = "commentaire")
@@ -26,5 +28,10 @@ public class FraisMission extends AbstractEntity{
 
     @OneToMany(mappedBy = "fraisMission")
     private List<LigneFraisMission> lignesFM;
-
+    @PrePersist
+    private void generateReference() {
+        if(this.reference == null || this.reference.isEmpty()){
+            this.reference = "MF-"+System.currentTimeMillis();
+        }
+    }
 }

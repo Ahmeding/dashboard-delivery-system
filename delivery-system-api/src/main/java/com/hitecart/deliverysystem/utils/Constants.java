@@ -21,6 +21,7 @@ public interface Constants {
     String FIND_SERVICE_DELIVERY_BY_ID_ENDPOINT= "/service-d/by-id/{id}";
     String FIND_ALL_SERVICE_DELIVERY_ENDPOINT= "/all";
     String FIND_ALL_BY_ENABLED_SERVICE_DELIVERY_ENDPOINT= "/sd/all/{isenabled}";
+    String COUNT_ALL_NEW_DELIVERY_SERVICE_ENDPOINT= "/sd/count/new";
     String UPDATE_SERVICE_DELIVERY_ENABLED_ENDPOINT= "/sd/is-enabled/{id}/{isenabled}";
     String FIND_ALL_SERVICE_DELIVERY_PAGEABLE_ENDPOINT= "/";
     /////////////////////////////////////////////////////////////////////
@@ -43,6 +44,15 @@ public interface Constants {
     String FIND_ALL_DELIVERY_POINT_PAGEABLE_ENDPOINT= "/";
     String DELETE_DELIVERY_POINT_ENDPOINT= "/delete/{id}";
     String UPDATE_ISACTIVE_DELIVERY_POINT_ENDPOINT= "/is-active/{id}/{isactive}";
+    /////////////////////////////////////////////////////////////////////
+
+    String DELIVERY_DESTINATION_ENDPOINT= "/delivery-destinations";
+    String CREATE_DELIVERY_DESTINATION_ENDPOINT= "/create";
+    String FIND_DELIVERY_DESTINATION_BY_ID_ENDPOINT= "/ddestination/by-id/{id}";
+    String FIND_DELIVERY_DESTINATION_BY_CLIENT_ID_ENDPOINT= "/ddestination/by-client/{clientId}";
+    String FIND_ALL_DELIVERY_DESTINATION_ENDPOINT= "/all";
+    String FIND_ALL_DELIVERY_DESTINATION_PAGEABLE_ENDPOINT= "/";
+    String DELETE_DELIVERY_DESTINATION_ENDPOINT= "/delete/{id}";
 
 /////////////////////////////////////////////////////////////////////////
     String COMMANDE_CLI_ENDPOINT= "/cmdclients";

@@ -22,6 +22,7 @@ import java.util.List;
 public class VehiculeDto {
 
     private String logo;
+    private String reference;
     private VehicleType vehicleType;
     private String immatriculation;
     private String marque;
@@ -49,6 +50,7 @@ public class VehiculeDto {
         }
         return VehiculeDto.builder()
          .id(vehicule.getId())
+                .reference(vehicule.getReference())
          .immatriculation(vehicule.getImmatriculation())
          .marque(vehicule.getMarque())
          .modele(vehicule.getModele())
@@ -77,6 +79,7 @@ public class VehiculeDto {
         }
         Vehicule vh = new Vehicule();
                 vh.setId(dto.getId());
+                vh.setReference(dto.getReference());
                 vh.setImmatriculation(dto.getImmatriculation());
                 vh.setMarque(dto.getMarque());
                 vh.setModele(dto.getModele());

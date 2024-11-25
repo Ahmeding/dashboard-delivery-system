@@ -45,6 +45,7 @@
         </tr>
         </thead>
         <tbody>
+        <tr *ngIf="allClientsResponse.content?.length===0"><td colspan="6" align="center">No Client Saved Yet</td></tr>
         <tr *ngFor="let client of allClientsResponse.content" class="client-row">
           <td>{{client.id}}</td>
           <td>

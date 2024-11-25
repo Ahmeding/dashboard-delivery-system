@@ -32,7 +32,7 @@ public class ClientDto {
     private String description;
     private List<CommandeClientDto> commandeClientsDtos;
     private List<DevisDto> devisDtos;
-    private List<DeliveryPointDto> deliveryPointDtos;
+    private List<DeliveryDestinationDto> deliveryDestinationsDto;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer createdBy;
@@ -70,9 +70,9 @@ public class ClientDto {
                                         .collect(Collectors.toList()):null
                 )
 
-                .deliveryPointDtos(client.getDeliveryPoints()!=null?
-                                    client.getDeliveryPoints().stream()
-                                            .map(DeliveryPointDto::fromEntity)
+                .deliveryDestinationsDto(client.getDeliveryDestinations()!=null?
+                                    client.getDeliveryDestinations().stream()
+                                            .map(DeliveryDestinationDto::fromEntity)
                                             .collect(Collectors.toList()):null
                                     )
                 .createdAt(client.getCreatedAt())
@@ -112,7 +112,10 @@ public class ClientDto {
                         .map(DevisDto::toEntity)
                         .collect(Collectors.toList()):null
                 );
-
+        client.setDeliveryDestinations(dto.getDeliveryDestinationsDto()!=null?
+                dto.getDeliveryDestinationsDto().stream()
+                        .map(DeliveryDestinationDto::toEntity)
+                        .collect(Collectors.toList()):null);
         client.setCreatedAt(dto.getCreatedAt());
         client.setUpdatedAt(dto.getUpdatedAt());
         client.setCreatedBy(dto.getCreatedBy());

@@ -18,9 +18,11 @@ public class DeliveryPointDto {
     private Integer id;
     private String name;
     private String city;
+
     private AdresseDto addressDto;
     private DeliveryPointType deliveryPointType;
-    private Integer clientId;
+
+    private Integer delivDestinationId;
     private DeliveryPointContactDto contact;
     @JsonFormat(pattern = "HH:mm")
     private LocalTime schedule;
@@ -38,6 +40,7 @@ public class DeliveryPointDto {
                 {
                     return null;
                 }
+
                 return DeliveryPointDto.builder()
                         .id(deliveryPoint.getId())
                         .name(deliveryPoint.getName())
@@ -46,7 +49,9 @@ public class DeliveryPointDto {
                         .addressDto(AdresseDto.fromEntity(deliveryPoint.getAddress()) )
                         .schedule(deliveryPoint.getSchedule())
                         .contact(DeliveryPointContactDto.fromEntity(deliveryPoint.getContact()))
-                        .clientId(deliveryPoint.getClient()!=null?deliveryPoint.getClient().getId():null)
+                        .delivDestinationId(deliveryPoint.getDeliveryDestination()!=null ?
+                                deliveryPoint.getDeliveryDestination().getId()
+                                : null)
                         .enabled(deliveryPoint.isEnabled())
 
                         .createdAt(deliveryPoint.getCreatedAt())
@@ -72,6 +77,7 @@ public class DeliveryPointDto {
                 .schedule(dto.getSchedule())
                 .contact(DeliveryPointContactDto.toEntity(dto.getContact()))
                 .enabled(dto.isEnabled())
+
                 .createdAt(dto.getCreatedAt())
                 .updatedAt(dto.getUpdatedAt())
                 .createdBy(dto.getCreatedBy())

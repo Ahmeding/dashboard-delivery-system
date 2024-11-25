@@ -6,14 +6,12 @@ import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.exception.InvalidOperationException;
-import com.hitecart.deliverysystem.model.Client;
-import com.hitecart.deliverysystem.model.CommandeClient;
-import com.hitecart.deliverysystem.model.LigneCommandeClient;
-import com.hitecart.deliverysystem.model.Utilisateur;
+import com.hitecart.deliverysystem.model.*;
 import com.hitecart.deliverysystem.repository.CommandeClientRepository;
 import com.hitecart.deliverysystem.repository.LigneCommandeClientRepository;
 import com.hitecart.deliverysystem.services.ClientService;
 import com.hitecart.deliverysystem.services.CommandeClientService;
+import com.hitecart.deliverysystem.services.IServiceDeliveryService;
 import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.utils.CalculeTva;
 import com.hitecart.deliverysystem.validator.CommandeClientValidator;
@@ -40,6 +38,7 @@ public class CommandeClientServiceImpl implements CommandeClientService {
      private final LigneCommandeClientRepository ligneCommandeClientRepository;
     private final ClientService   clientService;
     private final UtilisateurService utilisateurServiceImpl;
+    private final IServiceDeliveryService serviceDeliveryService;
 
 
     @Override
@@ -71,6 +70,12 @@ public class CommandeClientServiceImpl implements CommandeClientService {
                 LigneCommandeClient cmdLineToSave = LigneCommandeClientDto.toEntity(cmdLine);
                 cmdLineToSave.setPrixTTC(prixttc);
                 cmdLineToSave.setComamndeClient(finalSavedCommandeClient);
+                ServiceDelivery serviceDelivery = this.getServiceDeliveryById(cmdLine.getServiceDeliveryDtoId());
+                if (serviceDelivery == null) {
+                    throw new InvalidOperationException("ServiceDeliveryDto ID is missing for one of the command lines",
+                            ErrorCodes.SERVICE_DELIVERY_NOT_FOUND);
+                }
+               cmdLineToSave.setServiceDelivery(serviceDelivery);
 
                 ligneCommandeClientRepository.save(cmdLineToSave);
             }
@@ -81,6 +86,12 @@ public class CommandeClientServiceImpl implements CommandeClientService {
         return CommandeClientDto.fromEntity(savedCommandeClient);
     }
 
+    private ServiceDelivery getServiceDeliveryById(Integer id_sd){
+        log.info("Fetching ServiceDelivery with ID: {}", id_sd);
+        ServiceDeliveryDto serviceDeliveryDto = serviceDeliveryService.findById(id_sd);
+        log.info("Fetched ServiceDelivery: {}", serviceDeliveryDto);
+        return ServiceDeliveryDto.toEntity(serviceDeliveryDto);
+    }
     @Override
     public CommandeClientResponse findById(Integer id) {
         CheckParmasUtil.checkID(id,

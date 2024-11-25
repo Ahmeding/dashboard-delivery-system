@@ -14,11 +14,11 @@ public class ServiceDeliveryDto {
 
     private Integer id;
     private String reference;
+    private String destinationCity;
+    private double distance;
     private String title;
     private String description;
-    private BigDecimal unitPriceHT;
-    private BigDecimal priceTTC;
-    private BigDecimal tva;
+    private BigDecimal basicTripCost;
     private boolean enabled;
     private Integer createdBy;
     private CreatedByUserDto createdByUser;
@@ -30,11 +30,11 @@ public class ServiceDeliveryDto {
         return ServiceDeliveryDto.builder()
                 .id(serviceDelivery.getId())
                 .reference(serviceDelivery.getReference())
+                .destinationCity(serviceDelivery.getDestinationCity())
+                .distance(serviceDelivery.getDistance())
                 .title(serviceDelivery.getTitle())
                 .description(serviceDelivery.getDescription())
-                .unitPriceHT(serviceDelivery.getUnitPriceHT())
-                .tva(serviceDelivery.getTva())
-                .priceTTC(serviceDelivery.getPriceTTC())
+                .basicTripCost(serviceDelivery.getBasicTripCost())
                 .enabled(serviceDelivery.isEnabled())
                 .createdBy(serviceDelivery.getCreatedBy())
                 .build();
@@ -45,11 +45,11 @@ public class ServiceDeliveryDto {
         return ServiceDelivery.builder()
                 .id(serviceDeliveryDto.getId())
                 .reference(serviceDeliveryDto.getReference())
+                .destinationCity(serviceDeliveryDto.getDestinationCity())
+                .distance(serviceDeliveryDto.getDistance())
                 .title(serviceDeliveryDto.getTitle())
                 .description(serviceDeliveryDto.getDescription())
-                .unitPriceHT(serviceDeliveryDto.getUnitPriceHT())
-                .tva(serviceDeliveryDto.getTva())
-                .priceTTC(serviceDeliveryDto.getPriceTTC())
+                .basicTripCost(serviceDeliveryDto.getBasicTripCost())
                 .enabled(serviceDeliveryDto.isEnabled())
                 .build();
     }

@@ -53,15 +53,16 @@ public class ClientServiceImpl implements ClientService {
         CheckParmasUtil.checkID(id,"Le parametre ID chauffeur est null",
                 "Impossible de trouver un client avec un ID null",ErrorCodes.CLIENT_NOT_VALID_OPERATION);
 
-        Optional<Client> clientOp = clientRepository.findById(id);
-        ClientDto clientDto = Optional.of(
-                ClientDto.fromEntity(clientOp.get()))
-                .orElseThrow(
-                        ()->new EntityNotFoundException(
+        Client clientOp = clientRepository.findById(id).orElseThrow(
+                ()->new EntityNotFoundException(
                         "Opps! Aucun client avec l'id :"
-                        + id +"n'a ete trouvé dans la base deonnée",
+                                + id +"n'a ete trouvé dans la base deonnée",
                         ErrorCodes.CLIENT_NOT_FOUND
-                        ));
+                )
+        );
+        ClientDto clientDto =
+                ClientDto.fromEntity(clientOp);
+
 
         setCreatedByUser(clientDto);
         return clientDto;

@@ -18,7 +18,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper=true)
 @Table(name = "mission")
 public class Mission extends AbstractEntity {
-
+    private String reference;
     @Column(name = "titre")
     private String titre;
     @Column(name = "commentaire")
@@ -50,5 +50,10 @@ public class Mission extends AbstractEntity {
     @JoinColumn(name = "idfraismission", referencedColumnName = "id")
     private FraisMission fraisMission;
 
-
+    @PrePersist
+    private void generateReference() {
+        if(this.reference == null || this.reference.isEmpty()){
+            this.reference = "DP-"+System.currentTimeMillis();
+        }
+    }
 }

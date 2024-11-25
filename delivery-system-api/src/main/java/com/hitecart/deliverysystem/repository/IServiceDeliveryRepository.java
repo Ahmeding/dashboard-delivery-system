@@ -19,4 +19,5 @@ public interface IServiceDeliveryRepository extends JpaRepository<ServiceDeliver
     Page<ServiceDelivery> findAllServicesDelivery(Pageable pageable);
 
     List<ServiceDelivery> findAllByEnabled(boolean enabled);
+
 }

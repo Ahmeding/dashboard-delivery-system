@@ -25,8 +25,8 @@ public class LigneCommandeClient extends  AbstractEntity{
     private BigDecimal prixTTC;
     @Column(name = "tva")
     private BigDecimal tva;
-    @ManyToOne
-    @JoinColumn(name = "servdelivery_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_service_delivery",nullable = false,referencedColumnName = "id")
     private ServiceDelivery serviceDelivery;
     @ManyToOne
     @JoinColumn(name = "idcommandeclient")

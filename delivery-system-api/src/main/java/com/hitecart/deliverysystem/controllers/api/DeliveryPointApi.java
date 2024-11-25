@@ -93,7 +93,7 @@ public interface DeliveryPointApi {
                     )
             }
     )
-    ResponseEntity<DeliveryPointDto> findByCity(@PathVariable("city") String city);
+    ResponseEntity<List<DeliveryPointDto>> findAllByCity(@PathVariable("city") String city);
     @GetMapping(
             value = FIND_ALL_DELIVERY_POINT_ENDPOINT,
             produces = MediaType.APPLICATION_JSON_VALUE

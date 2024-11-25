@@ -1,5 +1,4 @@
 <div class="service-delivery-container">
-  <!-- Header Section -->
   <div class="header-section">
     <div class="title-section">
       <h1>Service Delivery</h1>
@@ -14,7 +13,6 @@
     </button>
   </div>
 
-  <!-- Table Card -->
   <div class="table-card">
     <div class="table-responsive">
       <table class="table">
@@ -22,40 +20,73 @@
         <tr>
           <th>
             <div class="th-content">
-              # Ref
-              <i class="bi bi-arrow-down-up"></i>
+              <i class="bi bi-hash"></i>
+              Ref
             </div>
           </th>
           <th>
             <div class="th-content">
+              <i class="bi bi-card-text"></i>
               Title
-              <i class="bi bi-arrow-down-up"></i>
             </div>
           </th>
-          <th>Description</th>
           <th>
             <div class="th-content">
-              Price HT
-              <i class="bi bi-arrow-down-up"></i>
+              <i class="bi bi-cash-stack"></i>
+              Price TTC
             </div>
           </th>
-          <th>TVA</th>
-          <th>Price TTC</th>
-          <th>Created By</th>
-          <th>Status</th>
-          <th>Actions</th>
+          <th>
+            <div class="th-content">
+              <i class="bi bi-person"></i>
+              Created By
+            </div>
+          </th>
+          <th>
+            <div class="th-content">
+              <i class="bi bi-toggle-on"></i>
+              Status
+            </div>
+          </th>
+          <th>
+            <div class="th-content">
+              <i class="bi bi-gear"></i>
+              Actions
+            </div>
+          </th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let service_delivery of allServiceDeliveryResponse.content">
-          <td>{{ service_delivery.reference }}</td>
-          <td>{{ service_delivery.title }}</td>
           <td>
-            <span class="description-text">{{ service_delivery.description }}</span>
+              <span class="reference">
+                <i class="bi bi-upc text-primary"></i>
+                {{ service_delivery.reference }}
+              </span>
           </td>
-          <td>{{ service_delivery.unitPriceHT | currency:'EUR' }}</td>
-          <td>{{ service_delivery.tva }}%</td>
-          <td>{{ service_delivery.priceTTC | currency:'EUR' }}</td>
+          <td>
+              <span class="title">
+                <i class="bi bi-geo-alt text-info"></i>
+                {{ service_delivery.title }}
+              </span>
+          </td>
+          <td>
+              <span class="price">
+                <i class="bi bi-tag text-primary"></i>
+                {{ service_delivery.unitPriceHT || "0.00"| currency:'EUR' }}
+              </span>
+            <span class="tva">
+                <i class="bi bi-percent text-warning"></i>
+              {{ service_delivery.tva  || "20"}}%
+              </span>
+            <span class="price">
+                <i class="bi bi-receipt text-success"></i>
+              {{ service_delivery.priceTTC  || "0.00"| currency:'EUR' }}
+              </span>
+          </td>
+
+
+
           <td>
             <div class="creator-info">
               <div class="creator-avatar">
@@ -66,6 +97,7 @@
           </td>
           <td>
               <span class="status-badge" [class.active]="service_delivery.enabled">
+                <i [class]="service_delivery.enabled ? 'bi bi-check-circle' : 'bi bi-x-circle'"></i>
                 {{ service_delivery.enabled ? 'Active' : 'Inactive' }}
               </span>
           </td>
@@ -87,7 +119,6 @@
       </table>
     </div>
 
-    <!-- Pagination -->
     <div class="pagination-container">
       <div class="items-per-page">
         <span>Show:</span>

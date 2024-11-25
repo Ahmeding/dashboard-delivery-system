@@ -22,11 +22,11 @@ import java.time.LocalDateTime;
 public class PieceRechangeDto{
 
 
+    private Integer id;
     private String reference;
     private String nom;
     private BigDecimal prix;
     private ReparationDto reparationDto;
-    private Integer id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer createdBy;
@@ -55,6 +55,7 @@ public class PieceRechangeDto{
         }
         PieceRechange pieceRechange = new PieceRechange();
         pieceRechange.setId(dto.getId());
+        pieceRechange.setReference(dto.getReference());
         pieceRechange.setNom(dto.getNom());
         pieceRechange.setPrix(dto.getPrix());
         pieceRechange.setReference(dto.getReference());

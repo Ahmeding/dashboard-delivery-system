@@ -19,7 +19,7 @@ import java.util.List;
 @Entity
 @Table(name = "reparation")
 public class Reparation extends AbstractEntity{
-
+    private String reference;
     @Column(name = "type")
     private TypeReparation type;
     @Column(name = "commentaire")
@@ -37,4 +37,11 @@ public class Reparation extends AbstractEntity{
     @ManyToOne
     @JoinColumn(name = "idvehicule")
     private Vehicule vehicule;
+
+    @PrePersist
+    private void generateReference() {
+        if(this.reference == null || this.reference.isEmpty()){
+            this.reference = "RP-"+System.currentTimeMillis();
+        }
+    }
 }

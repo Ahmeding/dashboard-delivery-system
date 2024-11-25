@@ -17,11 +17,12 @@ import java.util.stream.Collectors;
 public class FraisMissionDto{
 
 
+    private Integer id;
+    private String reference;
     private String nom;
     private String commentaire;
     private MissionDto missionDto;
     private List<LigneFraisMissionDto> lignesFraisMissionDto;
-    private Integer id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer createdBy;
@@ -35,6 +36,7 @@ public class FraisMissionDto{
         }
         return FraisMissionDto.builder()
                 .id(fraisMission.getId())
+                .reference(fraisMission.getReference())
                 .nom(fraisMission.getNom())
                 .commentaire(fraisMission.getCommentaire())
                 .missionDto(MissionDto.fromEntity(fraisMission.getMission()))
@@ -58,6 +60,7 @@ public class FraisMissionDto{
         }
         FraisMission fraisMission = new FraisMission();
                 fraisMission.setId(dto.getId());
+                fraisMission.setReference(dto.getReference());
                 fraisMission.setNom(dto.getNom());
                 fraisMission.setCommentaire(dto.getCommentaire());
                 fraisMission.setMission(MissionDto.toEntity(dto.getMissionDto()));

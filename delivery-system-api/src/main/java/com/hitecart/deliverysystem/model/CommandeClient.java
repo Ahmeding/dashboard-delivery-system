@@ -22,6 +22,7 @@ import java.util.List;
 @Table(name = "commandeclient")
 public class CommandeClient extends AbstractEntity {
 
+    private String reference;
     @Column(name = "code")
     private String code;
     @Column(name = "datecommande")
@@ -38,4 +39,10 @@ public class CommandeClient extends AbstractEntity {
     @Column(name = "etat_commande")
     @Enumerated(EnumType.STRING)
     private OrderStatus etatCommande;
+    @PrePersist
+    private void generateReference() {
+        if(this.reference == null || this.reference.isEmpty()){
+            this.reference = "ORD-"+System.currentTimeMillis();
+        }
+    }
 }

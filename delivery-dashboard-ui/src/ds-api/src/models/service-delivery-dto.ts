@@ -6,7 +6,10 @@ import { CreatedByUserDto } from '../models/created-by-user-dto';
 export interface ServiceDeliveryDto {
   createdBy?: number;
   createdByUser?: CreatedByUserDto;
+  deliveryPointName?: string;
   description?: string;
+  destinationCity?: string;
+  distance?: number;
   enabled?: boolean;
   id?: number;
   priceTTC?: number;

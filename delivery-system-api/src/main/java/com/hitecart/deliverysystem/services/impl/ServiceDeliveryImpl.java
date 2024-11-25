@@ -38,6 +38,9 @@ public class ServiceDeliveryImpl implements IServiceDeliveryService {
 
     @Override
     public ServiceDeliveryDto findById(Integer id) {
+        CheckParmasUtil.checkID(id,"Le parametre ID  est null",
+                "Impossible de trouver un Delivery Service avec un ID null",ErrorCodes.SERVICE_DELIVERY_NOT_FOUND);
+
         ServiceDelivery serviceDeliveryToFind = serviceDeliveryRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Service Delivery with ID " + id + " not found",
                         ErrorCodes.SERVICE_DELIVERY_NOT_FOUND));
@@ -95,6 +98,8 @@ public class ServiceDeliveryImpl implements IServiceDeliveryService {
         );
 
     }
+
+
 
 
     private UtilisateurDto getCreatedBy(Integer userid) {

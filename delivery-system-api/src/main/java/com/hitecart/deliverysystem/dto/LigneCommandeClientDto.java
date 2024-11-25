@@ -16,7 +16,8 @@ public class LigneCommandeClientDto {
     private BigDecimal prixUnitaire;
     private BigDecimal prixTTC;
     private BigDecimal tva;
-    private ServiceDeliveryDto serviceDeliveryDto;
+    //private ServiceDeliveryDto serviceDeliveryDto;
+    private Integer ServiceDeliveryDtoId;
     private Integer cmdClientId;
     public static LigneCommandeClientDto fromEntity(LigneCommandeClient ligneCommandeClient) {
         if(ligneCommandeClient == null){
@@ -28,7 +29,8 @@ public class LigneCommandeClientDto {
                 .prixUnitaire(ligneCommandeClient.getPrixUnitaire())
                 .prixTTC(ligneCommandeClient.getPrixTTC())
                 .tva(ligneCommandeClient.getTva())
-                .serviceDeliveryDto(ServiceDeliveryDto.fromEntity(ligneCommandeClient.getServiceDelivery()))
+                //.serviceDeliveryDto(ServiceDeliveryDto.fromEntity(ligneCommandeClient.getServiceDelivery()))
+                .ServiceDeliveryDtoId(ligneCommandeClient.getServiceDelivery()!=null?ligneCommandeClient.getServiceDelivery().getId():null)
                 .cmdClientId(ligneCommandeClient.getComamndeClient()!=null?ligneCommandeClient.getComamndeClient().getId():null)
                 .build();
     }
@@ -43,7 +45,7 @@ public class LigneCommandeClientDto {
         ligneCommandeClient.setPrixUnitaire(dto.getPrixUnitaire());
         ligneCommandeClient.setPrixTTC(dto.getPrixTTC());
         ligneCommandeClient.setTva(dto.getTva());
-        ligneCommandeClient.setServiceDelivery(ServiceDeliveryDto.toEntity(dto.getServiceDeliveryDto()));
+        //ligneCommandeClient.setServiceDelivery(ServiceDeliveryDto.toEntity(dto.getServiceDeliveryDto()));
 
         return ligneCommandeClient;
     }

@@ -59,8 +59,8 @@ export class NewDeliveryPointModalComponent implements OnInit,AfterViewInit{
 
   initForm(){
   this.deliveryPointForm = this.fb.group({
-    id:[this.selectedDeliveryPoint.id ||'', Validators.required],
-    name: [this.selectedDeliveryPoint.name ||'', Validators.required],
+    id:[this.selectedDeliveryPoint.id || ''],
+    name: [this.selectedDeliveryPoint.name || '', Validators.required],
     deliveryPointType: [this.selectedDeliveryPoint.deliveryPointType||'', Validators.required],
     city: [this.selectedDeliveryPoint.city||'', Validators.required],
     schedule: [this.selectedDeliveryPoint.schedule||'', [Validators.required]],
