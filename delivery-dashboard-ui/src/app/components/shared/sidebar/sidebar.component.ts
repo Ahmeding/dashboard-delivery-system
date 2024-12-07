@@ -30,6 +30,7 @@ export class SidebarComponent {
       children: [
         { label: 'All Missions', icon: 'bi-list-check', route: '/missions/all' },
         { label: 'My Planning', icon: 'bi-calendar3', route: '/missions/planning' },
+        { label: 'Weekly Planning', icon: 'bi-calendar3', route: '/missions/w-planning' },
         { label: 'Expenses', icon: 'bi-cash', route: '/missions/expenses' }
       ]
     },
@@ -64,7 +65,8 @@ export class SidebarComponent {
       children: [
         { label: 'My Profile', icon: 'bi-person', route: '/settings/profile' },
         { label: 'Users', icon: 'bi-people', route: '/settings/users' },
-        { label: 'Services', icon: 'bi-truck', route: '/settings/services' }
+        { label: 'Services', icon: 'bi-truck', route: '/settings/services' },
+        { label: 'D-Point Categories', icon: 'bi-tags', route: '/settings/categories' }
       ]
     }
   ];

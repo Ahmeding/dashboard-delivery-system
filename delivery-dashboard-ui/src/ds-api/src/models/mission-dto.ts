@@ -20,6 +20,7 @@ export interface MissionDto {
   lastModifiedBy?: number;
   missionAccomplished?: boolean;
   missionVehiclesDtos?: Array<MissionVehicleDto>;
+  reference?: string;
   titre?: string;
   updatedAt?: string;
   volume?: number;

@@ -206,8 +206,8 @@
                   <th>Action</th>
 
                   <tr *ngFor="let orderL of orderlines; let i = index">
-                    <td>{{ orderL.serviceDeliveryDto?.reference }}</td>
-                    <td>{{ orderL.serviceDeliveryDto?.title }} &nbsp; {{ orderL.serviceDeliveryDto?.description }}</td>
+                    <td>{{ orderL.serviceDeliveryDtoId }}</td>
+                    <td>{{ orderL.serviceDeliveryDtoId }} &nbsp;</td>
                     <td><select (change)="onQteChange($event,i)"
                                 id="selectQte" class="form-select qte-select" name="qte">
                       <option [ngValue]="1">1</option>
@@ -217,8 +217,8 @@
                       <option [ngValue]="5">5</option>
                       <option [ngValue]="6">6</option>
                     </select></td>
-                    <td>{{ orderL.serviceDeliveryDto?.unitPriceHT }}€</td>
-                    <td>{{ orderL.serviceDeliveryDto?.tva}}%</td>
+                    <td>00€</td>
+                    <td>20%</td>
                     <td><i class="bi bi-trash text-danger" (click)="deleteServDelivery(i)"></i></td>
                   </tr>
 
@@ -325,8 +325,8 @@
                   <th>Action</th>
 
                   <tr *ngFor="let orderL of orderlines; let i = index">
-                    <td>{{ orderL.serviceDeliveryDto?.reference }}</td>
-                    <td>{{ orderL.serviceDeliveryDto?.title }} &nbsp; {{ orderL.serviceDeliveryDto?.description }}</td>
+                    <td>{{ orderL.serviceDeliveryDtoId }}</td>
+                    <td>Service name </td>
                     <td><select (change)="onQteChange($event,i)"
                                 id="selectEditQte" class="form-select qte-select" name="qte">
                       <option [ngValue]="1">1</option>
@@ -336,8 +336,8 @@
                       <option [ngValue]="5">5</option>
                       <option [ngValue]="6">6</option>
                     </select></td>
-                    <td>{{ orderL.serviceDeliveryDto?.unitPriceHT }}€</td>
-                    <td>{{ orderL.serviceDeliveryDto?.tva}}%</td>
+                    <td>unit price 00 €</td>
+                    <td>20%</td>
                     <td><i class="bi bi-trash text-danger" (click)="deleteServDelivery(i)"></i></td>
                   </tr>
 
@@ -389,7 +389,7 @@
           </thead>
           <tbody>
           <tr *ngFor="let orderl of selectedOrder?.ligneCommandeClientsDtos">
-            <td>{{ orderl.serviceDeliveryDto?.title }}</td>
+            <td>{{ orderl.serviceDeliveryDtoId }}</td>
             <td>{{ orderl.quantite }}</td>
             <td>{{ orderl.prixUnitaire }}€</td>
             <td>{{ orderl.prixTTC}}€</td>

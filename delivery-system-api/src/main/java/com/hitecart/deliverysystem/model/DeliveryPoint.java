@@ -22,7 +22,6 @@ public class DeliveryPoint extends AbstractEntity{
 
     private String reference;
     private String name;
-    private String city;
     private Adresse address;
     private DeliveryPointContact contact;
     @JsonFormat(pattern = "HH:mm")
@@ -34,6 +33,9 @@ public class DeliveryPoint extends AbstractEntity{
     @JoinColumn(name = "delivery_distination_id")
     private DeliveryDestination deliveryDestination;
     private boolean enabled;
+    @ManyToOne
+    @JoinColumn(name = "id_delivery_point_category")
+    private DeliveryPointCategory deliveryPointCategory;
 
     @PrePersist
     private void generateReference() {

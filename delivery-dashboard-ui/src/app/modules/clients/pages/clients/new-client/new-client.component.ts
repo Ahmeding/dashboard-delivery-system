@@ -23,6 +23,8 @@ export class NewClientComponent implements OnInit {
   isSubmitting = false;
   clientId: number | null = null;
   DeliveryPoint! :DeliveryPointDto;
+
+
   constructor(
     private fillInputService: InputFillUtilsService,
     private fb: FormBuilder,
@@ -62,7 +64,7 @@ export class NewClientComponent implements OnInit {
   }
 
   private loadClient(id: number) {
-    this.clientService.findById12({id:id as number}).subscribe({
+    this.clientService.findById14({id:id as number}).subscribe({
       next: (client) => {
         this.clientValue=client;
         this.clientForm.patchValue(this.clientValue as ClientDto);
@@ -78,8 +80,8 @@ export class NewClientComponent implements OnInit {
       const clientData = this.clientForm.value;
 
       const request$ = this.isEditMode
-        ? this.clientService.save12({body:clientData})
-        : this.clientService.save12({body:clientData});
+        ? this.clientService.save14({body:clientData})
+        : this.clientService.save14({body:clientData});
 
       request$.subscribe({
         next: () => {
@@ -109,7 +111,7 @@ export class NewClientComponent implements OnInit {
   }
 
   saveClient(clientValue: ClientDto, sucessAction: string, failedAction:string){
-    this.clientService.save12$Response({body:clientValue}).subscribe({
+    this.clientService.save14({body:clientValue}).subscribe({
       next:(response)=>{
         this.alertService.alertSuccess(sucessAction + " completed successfully!")
         this.router.navigate(['clients/all']);

@@ -1,12 +1,20 @@
 import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {DeliveryPointDto} from "../../../../../../ds-api/src/models/delivery-point-dto";
 import {DeliveryPointsService} from "../../../../../../ds-api/src/services/delivery-points.service";
+import {ClientService} from "../../../../../../ds-api/src/services/client.service";
+import {DeliveryDestinationDto} from "../../../../../../ds-api/src/models/delivery-destination-dto";
+import {ServiceDeliveryDto} from "../../../../../../ds-api/src/models/service-delivery-dto";
+import {ServiceDeliveryService} from "../../../../../../ds-api/src/services/service-delivery.service";
+import {DeliveryPointCategoryDto} from "../../../../../../ds-api/src/models/delivery-point-category-dto";
+import {DeliveryPointCategoriesService} from "../../../../../../ds-api/src/services/delivery-point-categories.service";
+import {CreatedByUserDto} from "../../../../../../ds-api/src/models/created-by-user-dto";
 import {AdresseDto} from "../../../../../../ds-api/src/models/adresse-dto";
 import {DeliveryPointContactDto} from "../../../../../../ds-api/src/models/delivery-point-contact-dto";
-import {CreatedByUserDto} from "../../../../../../ds-api/src/models/created-by-user-dto";
-import {ClientService} from "../../../../../../ds-api/src/services/client.service";
+import {LocalTime} from "../../../../../../ds-api/src/models/local-time";
+import {DeliveryDestinationService} from "../../../../../../ds-api/src/services/delivery-destination.service";
+import {InputFillUtilsService} from "../../../../../services/input-fill-utils/input-fill-utils.service";
 
 
 @Component({
@@ -20,34 +28,100 @@ export class NewDeliveryPointModalComponent implements OnInit,AfterViewInit{
   @Input() clientId!: number;
   @Input() dpointId!: number;
 
-  deliveryPointForm!: FormGroup;
+  deliveryDestination:DeliveryDestinationDto={};
+  destinationForm!: FormGroup;
+
   deliveryPoint:DeliveryPointDto={};
+  deliveryPointForm!: FormGroup;
+
   selectedDeliveryPoint:DeliveryPointDto={};
+  currentPointForm: FormGroup | null = null;
+
+
+  serviceDeliveries: ServiceDeliveryDto[]=[];
+  deliveryPoints: DeliveryPointDto[]=[];
+  dpCategories:DeliveryPointCategoryDto[]=[];
 
   constructor(
+    private fillInputService: InputFillUtilsService,
+    private dpCategoryService:DeliveryPointCategoriesService,
+    private serviceDeliveryService:ServiceDeliveryService,
     private clientService:ClientService,
     private deliveryPointsService:DeliveryPointsService,
+    private dDestinationService:DeliveryDestinationService,
     public activeModal: NgbActiveModal,
     private fb: FormBuilder
-  ){}
+  ){this.initDestForm();}
+
+
+  initDestForm(){
+    this.destinationForm = this.fb.group({
+      id:[''],
+      clientId: [''],
+      serviceDeliveryId: ['', Validators.required],
+      deliveryPointsDto: this.fb.array([])
+    });
+  }
+
+  get deliveryPointsArray(){
+    return this.destinationForm.get('deliveryPointsDto') as FormArray;
+  }
+
 
   ngOnInit() {
-
-    console.log(this.dpointId);
+    this.getAllCategories()
+    this.getAllServiceDelivery()
     if(this.dpointId){
         this.getDeliveryPointById();
     }
-    this.initForm();
-    this.deliveryPointForm.patchValue({ clientId: this.clientId });
+   // this.initForm();
+    this.destinationForm.patchValue({clientId: this.clientId})
+    //this.deliveryPointForm.patchValue({ clientId: this.clientId });
   }
 
+  createDeliveryPoint(){
+    this.currentPointForm=this.fb.group({
+      id:[''],
+      name:['', Validators.required],
+      deliveryPointType:['', Validators.required],
+      deliveryPointCategoryId:['', Validators.required],
+      schedule:['09:00', Validators.required],
+
+      addressDto:this.fb.group({
+            adresse1:['', Validators.required],
+            adresse2:[''],
+            codepostal:['', Validators.required],
+            ville:['', Validators.required],
+            pays:['', Validators.required]
+      }),
+      contact:this.fb.group({
+        email: ['',[Validators.required,Validators.email] ],
+        firstname: ['', Validators.required],
+        lastname: ['', Validators.required],
+        phoneNum: ['', Validators.required]
+      })
+    })
+  }
+
+  addDeliveryPoint(){
+    if(this.currentPointForm && this.currentPointForm.valid){
+      this.deliveryPointsArray.push(this.currentPointForm);
+      this.deliveryPoints.push(this.currentPointForm.value);
+      this.currentPointForm=null;
+    }
+  }
+
+  removeDeliveryPoint(index:number){
+    this.deliveryPointsArray.removeAt(index);
+    this.deliveryPoints.splice(index,1)
+  }
+
+
   getDeliveryPointById(){
-    this.deliveryPointsService.findById9({id:this.dpointId}).subscribe({
+    this.deliveryPointsService.findById10({id:this.dpointId}).subscribe({
       next:(dpResp)=>{
         this.selectedDeliveryPoint=dpResp;
-
         console.log(this.selectedDeliveryPoint);
-
         this.deliveryPointForm.patchValue(this.selectedDeliveryPoint);
       },
       error:(err)=>{
@@ -57,7 +131,7 @@ export class NewDeliveryPointModalComponent implements OnInit,AfterViewInit{
   }
 
 
-  initForm(){
+ /* initForm(){
   this.deliveryPointForm = this.fb.group({
     id:[this.selectedDeliveryPoint.id || ''],
     name: [this.selectedDeliveryPoint.name || '', Validators.required],
@@ -79,9 +153,9 @@ export class NewDeliveryPointModalComponent implements OnInit,AfterViewInit{
     }),
     clientId: ['']
   });
-}
+}*/
 
-
+/*
    get name() { return this.deliveryPointForm.get('name'); }
    get deliveryPointType() { return this.deliveryPointForm.get('deliveryPointType'); }
    get city() { return this.deliveryPointForm.get('city'); }
@@ -91,23 +165,65 @@ export class NewDeliveryPointModalComponent implements OnInit,AfterViewInit{
    get lastname(){ return this.deliveryPointForm.get('contact.lastname'); }
    get phoneNum() { return this.deliveryPointForm.get('contact.phoneNum'); }
 
+*/
+
   save() {
-    if (this.deliveryPointForm.valid) {
-      this.deliveryPoint=this.deliveryPointForm.value;
-      this.deliveryPointsService.save9({body:this.deliveryPoint}).subscribe({
+    if (this.destinationForm.valid) {
+      const deliveryDest=this.destinationForm.getRawValue();
+      console.log( );
+      this.dDestinationService.save11({body:deliveryDest}).subscribe({
         next:(dpResp)=>{
           console.log(dpResp);
-
-          this.activeModal.close(this.deliveryPointForm.value);
+          this.activeModal.close(this.destinationForm.value);
         },error:(err)=>{
           console.log(err);
         }
       })
-
+      console.log("save !!!! ");
     }
   }
 
   ngAfterViewInit(): void {
 
+  }
+
+  private getAllServiceDelivery() {
+    this.serviceDeliveryService.findAll2().subscribe({
+      next:(response)=>{
+        this.serviceDeliveries=response;
+      }
+    })
+
+  }
+
+  private getAllCategories() {
+    this.dpCategoryService.findAll8().subscribe({
+      next:(dpCatRep)=>{
+        this.dpCategories=dpCatRep;
+      },error:(err)=>{
+        console.log(err);
+
+      }
+    })
+  }
+
+  inputFillDataOnClick() {
+    const name = this.fillInputService.generateRandomName();
+    if (this.currentPointForm) {
+      this.currentPointForm.get('contact.firstname')?.setValue(name.firstName)
+      this.currentPointForm.get('contact.lastname')?.setValue(name.lastName)
+      this.currentPointForm.get('contact.email')?.setValue(name.email)
+
+      const numPhone = this.fillInputService.generateFrenchPhoneNumber();
+      this.currentPointForm.get('contact.phoneNum')?.setValue(numPhone)
+
+      const numNameStreet = this.fillInputService.generateRandomFrenchAddress();
+      this.currentPointForm.get('addressDto.adresse1')?.setValue(numNameStreet)
+
+      const randomCity = this.fillInputService.generateRandomCityAndPostalCode();
+      this.currentPointForm.get('addressDto.codepostal')?.setValue(randomCity.postalCode)
+      this.currentPointForm.get('addressDto.ville')?.setValue(randomCity.city)
+      this.currentPointForm.get('addressDto.pays')?.setValue("France")
+    }
   }
 }

@@ -125,7 +125,7 @@ export class OrdersComponent implements OnInit{
   }
 
   private getAllClients() {
-    this.clientService.findAll12().subscribe({
+    this.clientService.findAll14().subscribe({
       next:(clientsResponse)=>{
         this.allClients=clientsResponse;
       }
@@ -139,7 +139,7 @@ export class OrdersComponent implements OnInit{
     this.newOrder.ligneCommandeClientsDtos=this.orderlines;
     this.newOrder.etatCommande= "IN_PROGRESS"
     console.log(this.newOrder);
-    this.cmdClientService.save11({body:this.newOrder}).subscribe({
+    this.cmdClientService.save13({body:this.newOrder}).subscribe({
       next:(resp)=>{
         this.getAllOrders();
         this.resetForm(form);
@@ -171,7 +171,7 @@ export class OrdersComponent implements OnInit{
 
   onServiceDeliveryChange() {
     console.log(this.selectedServiceDelivery);
-    this.orderLine.prixUnitaire=this.selectedServiceDelivery?.unitPriceHT;
+    //this.orderLine.prixUnitaire=this.selectedServiceDelivery?.unitPriceHT;
 
   }
 
@@ -183,19 +183,19 @@ export class OrdersComponent implements OnInit{
       this.alertService.alertWaring("Please select a service before adding")
       return;
     }
-    const exists= this.orderlines.some(orderL=>orderL.serviceDeliveryDto?.id===this.selectedServiceDelivery?.id)
+    const exists= this.orderlines.some(orderL=>orderL.serviceDeliveryDtoId===this.selectedServiceDelivery?.id)
     if(exists){
       this.alertService.alertWaring("This service has already been added.")
       return;
     }
     const newOrdeLine :LigneCommandeClientDto = {
-      serviceDeliveryDto : this.selectedServiceDelivery,
+      serviceDeliveryDtoId : this.selectedServiceDelivery.id,
       quantite: 2 as number,
-      prixUnitaire: this.selectedServiceDelivery.unitPriceHT,
-      tva: this.selectedServiceDelivery.tva,
+      prixUnitaire: this.selectedServiceDelivery.basicTripCost,
+      tva: 20,
     }
 
-    this.orderLine.serviceDeliveryDto=this.selectedServiceDelivery;
+    this.orderLine.serviceDeliveryDtoId=this.selectedServiceDelivery.id;
     this.orderlines.push(newOrdeLine);
     this.selectedServiceDelivery = undefined;
   }
@@ -219,7 +219,7 @@ export class OrdersComponent implements OnInit{
   }
 
   editOrder(id: number | undefined) {
-    this.cmdClientService.findById11({id:id as number}).subscribe({
+    this.cmdClientService.findById13({id:id as number}).subscribe({
       next:(order)=>{
         this.selectedToEditOrder = order;
         this.orderlines = this.selectedToEditOrder.ligneCommandeClientsDtos as Array<CommandeClientDto>;

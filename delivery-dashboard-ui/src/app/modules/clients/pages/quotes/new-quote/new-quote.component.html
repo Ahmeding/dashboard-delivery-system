@@ -82,8 +82,8 @@
               <th>Action</th>
 
               <tr *ngFor="let orderL of orderlines; let i = index">
-                <td>{{ orderL.serviceDeliveryDto?.reference }}</td>
-                <td>{{ orderL.serviceDeliveryDto?.title }} &nbsp; {{ orderL.serviceDeliveryDto?.description }}</td>
+                <td>{{ orderL.serviceDeliveryDtoId }}</td>
+                <td>servile delivery</td>
                 <td><select (change)="onQteChange($event,i)"
                             id="selectQte" class="form-select qte-select" name="qte">
                   <option [ngValue]="1">1</option>
@@ -93,8 +93,8 @@
                   <option [ngValue]="5">5</option>
                   <option [ngValue]="6">6</option>
                 </select></td>
-                <td>{{ orderL.serviceDeliveryDto?.unitPriceHT }}€</td>
-                <td>{{ orderL.serviceDeliveryDto?.tva}}%</td>
+                <td>price service delivery €</td>
+                <td>20%</td>
                 <td><i class="bi bi-trash text-danger" (click)="deleteServDelivery(i)"></i></td>
               </tr>
 

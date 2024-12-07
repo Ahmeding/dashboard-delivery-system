@@ -51,8 +51,6 @@ export class ServicesDeleiveryComponent implements OnInit{
   }
 
   deleteServdelivery(id_service: number) {
-
-
     if (id_service === undefined) {
       this.alertService.alertError('Service Delivery ID is missing. Unable to delete S. delivery.');
       return;

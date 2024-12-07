@@ -15,6 +15,7 @@ export interface ReparationDto {
   dateProchainRep?: string;
   id?: number;
   lastModifiedBy?: number;
+  reference?: string;
   type?: 'MECANIQUE' | 'ELECTRIQUE' | 'CARROSSERIE' | 'VIDANGE_COMPLET';
   updatedAt?: string;
   vehiculeDto?: VehiculeDto;

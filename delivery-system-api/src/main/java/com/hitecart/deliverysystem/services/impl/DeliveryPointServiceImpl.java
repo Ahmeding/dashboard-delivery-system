@@ -49,7 +49,7 @@ public class DeliveryPointServiceImpl implements IDeliveryPointService {
 
    private DeliveryDestinationDto getDeliveryDestination(Integer ddestinationId){
         return deliveryDestinationService.findById(ddestinationId);
-}
+    }
 
 
     @Override
@@ -71,7 +71,7 @@ public class DeliveryPointServiceImpl implements IDeliveryPointService {
     @Override
     public List<DeliveryPointDto> findAllByCity(String city) {
         CheckParmasUtil.checkStringParma(city,"","",ErrorCodes.DELIVERY_POINT_NOT_VALID_OPERATION);
-        List<DeliveryPoint> deliveryPoints= deliveryPointRepository.findAllByCity(city);
+        List<DeliveryPoint> deliveryPoints= deliveryPointRepository.findAllByAddress_Ville(city);
         if(deliveryPoints.isEmpty()){
             throw new EntityNotFoundException(
                             "Opps! Aucun deliveryPoint avec la ville :"

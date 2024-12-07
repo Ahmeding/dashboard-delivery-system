@@ -22,12 +22,6 @@ public interface DeliveryDestinationRepository extends JpaRepository<DeliveryDes
         """)
     Page<DeliveryPoint> findAllDeliveryDestinations(Pageable pageable);
 
-    @Query("""
-            SELECT ds
-            FROM DeliveryDestination ds
-            WHERE ds.serviceDelivery.title = :city
-        """)
-    Optional<DeliveryDestination> findByCity(String city);
 
     @Query("""
             SELECT ds
@@ -35,4 +29,5 @@ public interface DeliveryDestinationRepository extends JpaRepository<DeliveryDes
             WHERE ds.client.id = :clientId
         """)
     List<DeliveryDestination> findAllByClientId(Integer clientId);
+
 }

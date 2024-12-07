@@ -46,10 +46,20 @@ public interface Constants {
     String UPDATE_ISACTIVE_DELIVERY_POINT_ENDPOINT= "/is-active/{id}/{isactive}";
     /////////////////////////////////////////////////////////////////////
 
+    String DELIVERY_POINT_CATEGORY_ENDPOINT= "/dp-categories";
+    String CREATE_DELIVERY_POINT_CATEGORY_ENDPOINT= "/create";
+    String FIND_DELIVERY_POINT_CATEGORY_BY_ID_ENDPOINT= "/dp-category/by-id/{id}";
+    String FIND_DELIVERY_POINT_CATEGORY_BY_NAME_ENDPOINT= "/dp-category/by-name/{name}";
+    String FIND_ALL_DELIVERY_POINT_CATEGORY_ENDPOINT= "/all";
+    String FIND_ALL_DELIVERY_POINT_CATEGORY_PAGEABLE_ENDPOINT= "/";
+    String DELETE_DELIVERY_POINT_CATEGORY_ENDPOINT= "/delete/{id}";
+    /////////////////////////////////////////////////////////////////////
+
     String DELIVERY_DESTINATION_ENDPOINT= "/delivery-destinations";
     String CREATE_DELIVERY_DESTINATION_ENDPOINT= "/create";
     String FIND_DELIVERY_DESTINATION_BY_ID_ENDPOINT= "/ddestination/by-id/{id}";
     String FIND_DELIVERY_DESTINATION_BY_CLIENT_ID_ENDPOINT= "/ddestination/by-client/{clientId}";
+    String FIND_DELIVERY_DESTINATION_BY_DELIVERYSERVICE_ID_ENDPOINT= "/ddestination/by-delivery-serv/{deliveryServId}";
     String FIND_ALL_DELIVERY_DESTINATION_ENDPOINT= "/all";
     String FIND_ALL_DELIVERY_DESTINATION_PAGEABLE_ENDPOINT= "/";
     String DELETE_DELIVERY_DESTINATION_ENDPOINT= "/delete/{id}";

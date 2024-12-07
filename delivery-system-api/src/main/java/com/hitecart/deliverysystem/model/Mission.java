@@ -45,7 +45,9 @@ public class Mission extends AbstractEntity {
 
     @Column(name = "kmfin")
     private double kmFin;
-
+    @ManyToOne
+    @JoinColumn(name = "id_day_paly")
+    private DayPlan dayPlan;
     @OneToOne
     @JoinColumn(name = "idfraismission", referencedColumnName = "id")
     private FraisMission fraisMission;

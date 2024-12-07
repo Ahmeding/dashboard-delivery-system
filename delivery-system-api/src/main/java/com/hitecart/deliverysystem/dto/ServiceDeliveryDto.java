@@ -14,7 +14,9 @@ public class ServiceDeliveryDto {
 
     private Integer id;
     private String reference;
+    private String color;
     private String destinationCity;
+    private String pickUpLocation;
     private double distance;
     private String title;
     private String description;
@@ -30,7 +32,9 @@ public class ServiceDeliveryDto {
         return ServiceDeliveryDto.builder()
                 .id(serviceDelivery.getId())
                 .reference(serviceDelivery.getReference())
+                .color(serviceDelivery.getColor())
                 .destinationCity(serviceDelivery.getDestinationCity())
+                .pickUpLocation(serviceDelivery.getPickUpLocation())
                 .distance(serviceDelivery.getDistance())
                 .title(serviceDelivery.getTitle())
                 .description(serviceDelivery.getDescription())
@@ -45,7 +49,9 @@ public class ServiceDeliveryDto {
         return ServiceDelivery.builder()
                 .id(serviceDeliveryDto.getId())
                 .reference(serviceDeliveryDto.getReference())
+                .color(serviceDeliveryDto.getColor())
                 .destinationCity(serviceDeliveryDto.getDestinationCity())
+                .pickUpLocation(serviceDeliveryDto.getPickUpLocation())
                 .distance(serviceDeliveryDto.getDistance())
                 .title(serviceDeliveryDto.getTitle())
                 .description(serviceDeliveryDto.getDescription())

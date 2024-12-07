@@ -73,15 +73,11 @@
           <td>
               <span class="price">
                 <i class="bi bi-tag text-primary"></i>
-                {{ service_delivery.unitPriceHT || "0.00"| currency:'EUR' }}
-              </span>
-            <span class="tva">
-                <i class="bi bi-percent text-warning"></i>
-              {{ service_delivery.tva  || "20"}}%
+                {{ service_delivery.basicTripCost || "0.00"| currency:'EUR' }}
               </span>
             <span class="price">
                 <i class="bi bi-receipt text-success"></i>
-              {{ service_delivery.priceTTC  || "0.00"| currency:'EUR' }}
+              {{ service_delivery.distance  || 0 }} KM
               </span>
           </td>
 

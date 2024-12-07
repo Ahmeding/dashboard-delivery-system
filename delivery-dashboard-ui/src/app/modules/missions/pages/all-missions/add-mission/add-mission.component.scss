@@ -1,0 +1,220 @@
+.mission-stepper {
+  padding: 2rem;
+  background-color: var(--bg-color);
+  min-height: 100vh;
+
+  .stepper-header {
+    margin-bottom: 2rem;
+
+    .stepper-title {
+      text-align: center;
+      margin-bottom: 3rem;
+
+      h1 {
+        color: var(--text-color);
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    .steps-progress {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 auto;
+      max-width: 800px;
+      padding: 0 2rem;
+
+      .step {
+        flex: 1;
+        text-align: center;
+        position: relative;
+
+        .step-icon {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: var(--card-bg);
+          border: 2px solid var(--border-color);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 1rem;
+          position: relative;
+          z-index: 1;
+          transition: all 0.3s ease;
+
+          i {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+          }
+
+          .step-line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: var(--border-color);
+            transform: translateY(-50%);
+            z-index: -1;
+          }
+        }
+
+        .step-label {
+          font-size: 0.875rem;
+          color: var(--text-muted);
+          transition: all 0.3s ease;
+        }
+
+        &.active {
+          .step-icon {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+
+            i {
+              color: white;
+            }
+          }
+
+          .step-label {
+            color: var(--primary-color);
+            font-weight: 500;
+          }
+        }
+
+        &.completed {
+          .step-icon {
+            border-color: var(--success-color);
+            background: var(--success-color);
+
+            i {
+              color: white;
+            }
+          }
+
+          .step-line {
+            background: var(--success-color);
+          }
+
+          .step-label {
+            color: var(--success-color);
+          }
+        }
+      }
+    }
+  }
+
+  .stepper-content {
+    max-width: 1000px;
+    margin: 0 auto;
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+
+      .section-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        color: var(--text-color);
+      }
+    }
+  }
+
+  .stepper-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--border-color);
+
+    .btn {
+      min-width: 120px;
+
+      &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+// Form styling
+.form-floating {
+  > .form-control,
+  > .form-select {
+    height: calc(3.5rem + 2px);
+    line-height: 1.25;
+    background-color: var(--bg-color);
+    border-color: var(--border-color);
+    color: var(--text-color);
+
+    &:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem rgba(var(--primary-rgb), 0.25);
+    }
+  }
+
+  > label {
+    color: var(--text-muted);
+
+    .required {
+      color: var(--danger-color);
+      margin-left: 0.25rem;
+    }
+  }
+}
+// Stages List Styling
+.stages-list {
+  .stage-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-color);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+
+    .stage-content {
+      flex: 1;
+    }
+
+    .stage-route {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+
+      .location {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-color); // Add this to ensure text color changes with theme
+
+        i {
+          font-size: 1.1rem;
+        }
+
+        span {
+          color: var(--text-color); // Explicitly set span color
+        }
+      }
+
+      .route-line {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-muted);
+      }
+    }
+
+    .stage-date {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+  }
+}

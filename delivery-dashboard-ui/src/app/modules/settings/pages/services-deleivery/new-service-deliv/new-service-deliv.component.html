@@ -37,8 +37,8 @@
             [class.is-invalid]="serviceDeliveryForm.get('title')?.invalid && serviceDeliveryForm.get('title')?.touched"
           >
             <option value="">Select a delivery point</option>
-            <option *ngFor="let point of deliveryPoints" [value]="point.name +' '+ point.city">
-              {{point.name}} ({{point.city}} - {{point.deliveryPointType}})
+            <option *ngFor="let point of deliveryPoints" [value]="point.name">
+              {{point.name}} ({{point.deliveryPointType}})
             </option>
           </select>
         </div>

@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface DeliveryPointRepository extends JpaRepository<DeliveryPoint, Integer> {
 
-    List<DeliveryPoint> findAllByCity(String city);
+    List<DeliveryPoint> findAllByAddress_Ville(String city);
 
     @Query("""
             SELECT deliveryPoint

@@ -15,7 +15,7 @@
         </h5>
 
         <div class="row g-4">
-          <div class="col-md-4">
+          <div class="col-md-6">
             <div class="form-floating">
               <!--<input
                 [(ngModel)]="missionToSave.titre"
@@ -25,11 +25,67 @@
                 type="text"
                 placeholder="Mission Title"
               />-->
-              <select [(ngModel)]="missionToSave.titre" id="inputTitre" name="titre" class="form-control">
+              <select
+                (change)="onServiceChange(selectedDeliveryService)"
+                [(ngModel)]="selectedDeliveryService"
+                id="inputServ" name="serv" class="form-control">
                 <option [ngValue]="undefined" selected disabled>Select Service</option>
-                <option *ngFor="let sd of allServiceDelivery" [ngValue]="sd.title">{{ sd.title }}</option>
+                <option *ngFor="let sd of allServiceDelivery" [ngValue]="sd">{{ sd.title }}</option>
               </select>
+              <label for="inputServ">Select Service <span class="required">*</span></label>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input
+                [(ngModel)]="missionToSave.titre"
+                name="titre"
+                class="form-control"
+                id="inputTitre"
+                type="text"
+                placeholder="Mission Title"
+              />
               <label for="inputTitre">Title<span class="required">*</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mission-details">
+      <div class="card-body">
+        <h5 class="section-title">
+          <i class="bi bi-info-circle me-2"></i>Mission Details
+        </h5>
+
+        <div class="row g-4">
+          <div class="col-md-4">
+
+            <div class="form-floating">
+              <input
+                [(ngModel)]="missionToSave.dateDebut"
+                name="datedebut"
+                class="form-control"
+                id="inputStartDate"
+                type="datetime-local"
+                placeholder="Start Date"
+              />
+              <label for="inputStartDate">Start Date<span class="required">*</span></label>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-floating">
+              <input
+                [(ngModel)]="missionToSave.dateFin"
+                name="dateFin"
+                class="form-control"
+                id="inputEndDate"
+                type="datetime-local"
+                placeholder="End Date"
+              />
+              <label for="inputEndDate">End Date<span class="required">*</span></label>
             </div>
           </div>
 
@@ -44,20 +100,6 @@
                 placeholder="Volume"
               />
               <label for="inputVolume">Volume (m³)<span class="required">*</span></label>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="form-floating">
-              <input
-                [(ngModel)]="missionToSave.dateDebut"
-                name="datedebut"
-                class="form-control"
-                id="inputdateDebut"
-                type="datetime-local"
-                placeholder="Start Date"
-              />
-              <label for="inputdateDebut">Start Date<span class="required">*</span></label>
             </div>
           </div>
         </div>
@@ -89,13 +131,15 @@
 
             <div class="col-md-4">
               <div class="form-floating">
-                <input
+                <select
                   formControlName="lieuArrivee"
                   class="form-control"
                   id="inputLieuArrivee"
-                  type="text"
                   placeholder="Destination"
-                />
+                >
+                  <option [ngValue]="undefined" selected disabled>Select Deliv. Point</option>
+                  <option *ngFor="let dp of deliveryPointsByCity" [ngValue]="dp.name">{{ dp.name }}</option>
+                </select>
                 <label for="inputLieuArrivee">Destination<span class="required">*</span></label>
               </div>
             </div>
@@ -103,13 +147,13 @@
             <div class="col-md-3">
               <div class="form-floating">
                 <input
-                  formControlName="dateDepart"
+                  formControlName="scheduledDeliveryTime"
                   class="form-control"
-                  id="inputdateDepart"
-                  type="datetime-local"
-                  placeholder="Departure Date"
+                  id="inputDeliveryTime"
+                  type="time"
+                  placeholder="Scheduled D-Time"
                 />
-                <label for="inputdateDepart">Departure Date<span class="required">*</span></label>
+                <label for="inputDeliveryTime">Scheduled D-Time<span class="required">*</span></label>
               </div>
             </div>
 
@@ -124,7 +168,6 @@
             </div>
           </div>
         </form>
-
         <!-- Stages List -->
         <div class="stages-list mt-4">
           <div class="stage-item" *ngFor="let etape of etapeDtos; let i = index">
@@ -144,7 +187,7 @@
               </div>
               <div class="stage-date">
                 <i class="bi bi-calendar-event me-2"></i>
-                {{etape.dateDepart | date:'medium'}}
+                {{etape.scheduledDeliveryTime}}
               </div>
             </div>
             <button class="btn btn-icon btn-danger" (click)="deleteEtape(i)">

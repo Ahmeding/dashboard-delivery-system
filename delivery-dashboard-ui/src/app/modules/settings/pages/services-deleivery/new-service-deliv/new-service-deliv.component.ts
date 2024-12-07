@@ -27,8 +27,8 @@ export class NewServiceDelivComponent implements OnInit{
   loadDeliveryPoints(): void {
     // Implement API call to load delivery points
     this.deliveryPoints = [
-      { id: 1, name: 'Point 1', city: 'Paris', deliveryPointType: 'SHOP' },
-      { id: 2, name: 'Point 2', city: 'Lyon', deliveryPointType: 'DEPOT' }
+      { id: 1, name: 'Point 1',  deliveryPointType: 'SHOP' },
+      { id: 2, name: 'Point 2',  deliveryPointType: 'DEPOT' }
     ];
   }
 

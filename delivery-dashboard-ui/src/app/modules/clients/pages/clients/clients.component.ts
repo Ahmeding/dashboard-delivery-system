@@ -62,7 +62,7 @@ export class ClientsComponent implements OnInit{
     const updatedStatus = !isActive;
     if (client_id === undefined) {
       console.log("mission_id : "+ client_id);
-      this.alertService.alertError('Mission ID is missing. Unable to desactivate Client.');
+      this.alertService.alertError('Mission ID is missing. Unable to deactivate Client.');
       return;
     }
     this.confirmBoxService.customFour(`Are you sure you want to ${action} this client?`, '', 'Confirme', 'Cancel').subscribe(
@@ -93,7 +93,7 @@ export class ClientsComponent implements OnInit{
     this.confirmBoxService.customFour('Are you sure you want to delete this client?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.clientService.delete12({id:client_id}).subscribe(() => {
+          this.clientService.delete14({id:client_id}).subscribe(() => {
             this.getAllClients();
             this.alertService.alertSuccess('Deletion successfully completed');
           });

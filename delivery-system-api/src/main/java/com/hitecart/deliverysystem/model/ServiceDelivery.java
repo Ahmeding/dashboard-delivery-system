@@ -21,6 +21,9 @@ public class ServiceDelivery extends AbstractEntity{
 
     @Column(name = "reference",unique = true,nullable = false)
     private String reference;
+    private String color;
+    @Column(name = "pick_up_location")
+    private String pickUpLocation;
     @Column(name = "destination_city")
     private String destinationCity;
     @Column(name = "distance")

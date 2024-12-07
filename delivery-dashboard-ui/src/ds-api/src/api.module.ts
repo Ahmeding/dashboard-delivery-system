@@ -8,6 +8,7 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { VehiculeService } from './services/vehicule.service';
 import { ServiceDeliveryService } from './services/service-delivery.service';
+import { DeliveryPointService } from './services/delivery-point.service';
 import { DeliveryPointsService } from './services/delivery-points.service';
 import { ClientService } from './services/client.service';
 import { ChauffeurService } from './services/chauffeur.service';
@@ -17,7 +18,9 @@ import { PiecesDeRechangeService } from './services/pieces-de-rechange.service';
 import { MissionService } from './services/mission.service';
 import { FraisDeMissionService } from './services/frais-de-mission.service';
 import { EntrepriseControllerService } from './services/entreprise-controller.service';
+import { DeliveryPointCategoriesService } from './services/delivery-point-categories.service';
 import { DevisService } from './services/devis.service';
+import { DeliveryDestinationService } from './services/delivery-destination.service';
 import { ContratService } from './services/contrat.service';
 import { CommandeClientService } from './services/commande-client.service';
 import { AuthenticationEnregistrementService } from './services/authentication-enregistrement.service';
@@ -34,6 +37,7 @@ import { AdminControllerService } from './services/admin-controller.service';
   providers: [
     VehiculeService,
     ServiceDeliveryService,
+    DeliveryPointService,
     DeliveryPointsService,
     ClientService,
     ChauffeurService,
@@ -43,7 +47,9 @@ import { AdminControllerService } from './services/admin-controller.service';
     MissionService,
     FraisDeMissionService,
     EntrepriseControllerService,
+    DeliveryPointCategoriesService,
     DevisService,
+    DeliveryDestinationService,
     ContratService,
     CommandeClientService,
     AuthenticationEnregistrementService,

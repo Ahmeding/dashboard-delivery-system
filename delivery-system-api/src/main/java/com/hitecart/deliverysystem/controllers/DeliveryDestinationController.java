@@ -39,7 +39,6 @@ public class DeliveryDestinationController implements DeliveryDestinationApi {
         );
     }
 
-
     @Override
     public ResponseEntity<List<DeliveryDestinationDto>> findAll() {
         return ResponseEntity.ok(

@@ -1,3 +1,9 @@
+// Import base styles
+@use 'sass:map';
+@use 'sass:color';
+
+// Core variables and mixins
+@import '../../../../../../styles/variables';
 .mission-form {
   padding: 2rem;
   background-color: var(--bg-color);

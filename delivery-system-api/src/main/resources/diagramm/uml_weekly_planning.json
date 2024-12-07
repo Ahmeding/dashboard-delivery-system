@@ -1,0 +1,60 @@
+{
+    "classes": [
+        {
+            "name": "WeeklyPlanning",
+            "attributes": [
+                {
+                    "name": "Title",
+                    "type": "String",
+                    "visibility": "private"
+                },
+                {
+                    "name": "weekStartDate",
+                    "type": "LocalDate",
+                    "visibility": "private"
+                },
+                {
+                    "name": "weekEndDate",
+                    "type": "LocalDate",
+                    "visibility": "private"
+                },
+                {
+                    "name": "daysPlan",
+                    "type": "List<DayPlan>",
+                    "visibility": "private"
+                }
+            ],
+            "methods": []
+        },
+        {
+            "name": "DayPlan",
+            "attributes": [
+                {
+                    "name": "name",
+                    "type": "String",
+                    "visibility": "private"
+                },
+                {
+                    "name": "date",
+                    "type": "LocalDate",
+                    "visibility": "private"
+                },
+                {
+                    "name": "weeklyPlanning",
+                    "type": "WeeklyPlanning",
+                    "visibility": "private"
+                }
+            ],
+            "methods": []
+        }
+    ],
+    "associations": [
+        {
+            "from": "WeeklyPlanning",
+            "to": "DayPlan",
+            "type": "composition",
+            "multiplicity_from": "1",
+            "multiplicity_to": "0..*"
+        }
+    ]
+}

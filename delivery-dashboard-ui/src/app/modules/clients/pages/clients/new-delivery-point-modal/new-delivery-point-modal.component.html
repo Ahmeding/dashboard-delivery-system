@@ -79,6 +79,7 @@
   </div>
 </div>
 -->
+<!--
 <div class="modal-content">
   <div class="modal-header">
     <h5 class="modal-title">Add New Delivery Point</h5>
@@ -86,10 +87,26 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="deliveryPointForm">
-      <!-- Basic Information Section -->
+      &lt;!&ndash; Basic Information Section &ndash;&gt;
       <div class="section-title mb-3">Basic Information</div>
       <div class="mb-3">
-        <label for="name" class="form-label">Name</label>
+        <label for="destination" class="form-label">Destination</label>
+        <select
+          type="text"
+          class="form-control"
+          id="destination"
+          formControlName="name"
+          [class.is-invalid]="name?.invalid && name?.touched"
+        >
+          <option>Lyon</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="name?.invalid && name?.touched">
+          Name is required
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="name" class="form-label">Name/Brand/Shop</label>
         <input
           type="text"
           class="form-control"
@@ -148,7 +165,7 @@
         </div>
       </div>
 
-      <!-- Contact Information Section -->
+      &lt;!&ndash; Contact Information Section &ndash;&gt;
       <div class="section-title mb-3">Contact Information</div>
       <div formGroupName="contact">
         <div class="row mb-3">
@@ -210,7 +227,7 @@
         </div>
       </div>
 
-      <!-- Address Section -->
+      &lt;!&ndash; Address Section &ndash;&gt;
       <div class="section-title mb-3">Address Information</div>
       <div formGroupName="addressDto">
         <div class="mb-3">
@@ -291,6 +308,316 @@
       [disabled]="!deliveryPointForm.valid"
     >
       Save
+    </button>
+  </div>
+</div>
+-->
+
+
+
+<div class="modal-content delivery-destination-modal">
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <i class="bi bi-geo-alt-fill"></i>
+      New Delivery Destination
+    </h5>
+    <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="destinationForm">
+      <!-- Service Delivery Selection -->
+      <div class="form-group">
+        <select
+          id="serviceDelivery"
+          class="form-select"
+          formControlName="serviceDeliveryId"
+          [class.is-invalid]="destinationForm.get('serviceDeliveryId')?.invalid
+                && destinationForm.get('serviceDeliveryId')?.touched"
+        >
+          <option value="">Select a service delivery</option>
+          <option *ngFor="let service of serviceDeliveries" [value]="service.id">
+            {{service.title}}
+          </option>
+        </select>
+        <label for="serviceDelivery">
+          <i class="bi bi-truck"></i>
+          Service Delivery
+        </label>
+        <div class="error-message" *ngIf="destinationForm.get('serviceDeliveryId')?.invalid
+                && destinationForm.get('serviceDeliveryId')?.touched">
+          Destination City is required
+        </div>
+      </div>
+
+      <!-- Delivery Points Table -->
+      <div class="delivery-points-section" *ngIf="deliveryPoints.length > 0">
+        <h6>
+          <i class="bi bi-pin-map-fill"></i>
+          Delivery Points
+        </h6>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>City</th>
+              <th>Contact</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let point of deliveryPoints; let i = index">
+              <td>{{point.name}}</td>
+              <td>
+                  <span class="badge" [class.bg-primary]="point.deliveryPointType === 'SHOP'" [class.bg-success]="point.deliveryPointType === 'DEPOT'">
+                    {{point.deliveryPointType}}
+                  </span>
+              </td>
+              <td>{{point.addressDto?.ville}}</td>
+              <td>
+                <div class="contact-info">
+                  <span>{{point.contact?.firstname}} {{point.contact?.lastname}}</span>
+                  <small>{{point.contact?.email}}</small>
+                </div>
+              </td>
+              <td>
+                <button class="btn btn-icon text-danger" (click)="removeDeliveryPoint(i)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Add New Point Form -->
+      <div class="add-point-section" *ngIf="currentPointForm">
+        <form [formGroup]="currentPointForm">
+          <div class="section-header">
+            <h6>
+              <i class="bi bi-plus-circle-fill"></i>
+              Add Delivery Point
+            </h6>
+          </div>
+
+          <div class="row">
+            <!-- Basic Info -->
+            <div class="col-md-3">
+              <div class="form-group">
+                <input type="text" id ="name" class="form-control" placeholder="" [class.is-invalid]="currentPointForm.get('name')?.invalid
+                && currentPointForm.get('name')?.touched" formControlName="name">
+                <label for="name">
+                  <i class="bi bi-building text-info"></i>
+                  Name
+                </label>
+                <div class="error-message" *ngIf="currentPointForm.get('name')?.invalid
+                && currentPointForm.get('name')?.touched">
+                  Delivery Point Name is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <select class="form-select" id="dpCategory" [class.is-invalid]="currentPointForm.get('deliveryPointCategoryId')?.invalid
+                && currentPointForm.get('deliveryPointCategoryId')?.touched" formControlName="deliveryPointCategoryId">
+                  <option value="" disabled selected>Select Categroy</option>
+                  <option *ngFor="let dpCat of dpCategories" [value]="dpCat.id" >{{ dpCat.name }}</option>
+                </select>
+                <label for="dpCategory">
+                  <i class="bi bi-stars text-warning"></i>
+                  Catergory
+                </label>
+                <div class="error-message" *ngIf="currentPointForm.get('deliveryPointCategoryId')?.invalid
+                && currentPointForm.get('deliveryPointCategoryId')?.touched">
+                  Delivery Point Category is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <select class="form-select" id="dpType" [class.is-invalid]="currentPointForm.get('deliveryPointType')?.invalid
+                && currentPointForm.get('deliveryPointType')?.touched" formControlName="deliveryPointType">
+                  <option value="" disabled selected>Select type</option>
+                  <option value="SHOP">Shop</option>
+                  <option value="DEPOT">Depot</option>
+                </select>
+                <label for="dpType">
+                  <i class="bi bi-tags text-info"></i>
+                  Type
+                </label>
+                <div class="error-message" *ngIf="currentPointForm.get('deliveryPointType')?.invalid
+                && currentPointForm.get('deliveryPointType')?.touched">
+                  Delivery Point Type is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <input type="time" id ="scheduletime" class="form-control" placeholder="" [class.is-invalid]="currentPointForm.get('schedule')?.invalid
+                && currentPointForm.get('schedule')?.touched" formControlName="schedule">
+                <label for="scheduletime">
+                  <i class="bi bi-clock text-info"></i>
+                  Schedule
+                </label>
+                <div class="error-message" *ngIf="currentPointForm.get('schedule')?.invalid
+                && currentPointForm.get('schedule')?.touched">
+                  Schedule Time is required
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Contact -->
+          <div formGroupName="contact" class="contact-section">
+            <h6>
+              <i class="bi bi-person"></i>
+              Contact Information
+            </h6>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input (click)="inputFillDataOnClick()" type="text" class="form-control" id="firstname" placeholder="" [class.is-invalid]="currentPointForm.get('contact.firstname')?.invalid
+                  && currentPointForm.get('contact.firstname')?.touched" formControlName="firstname">
+                  <label for="firstname">First Name</label>
+                  <div class="error-message" *ngIf="currentPointForm.get('contact.firstname')?.invalid
+                  && currentPointForm.get('contact.firstname')?.touched">
+                    Firstname is required
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="lastname" placeholder="" [class.is-invalid]="currentPointForm.get('contact.lastname')?.invalid
+                  && currentPointForm.get('contact.lastname')?.touched" formControlName="lastname">
+                  <label for="lastname">Last Name</label>
+                  <div class="error-message" *ngIf="currentPointForm.get('contact.lastname')?.invalid
+                  && currentPointForm.get('contact.lastname')?.touched">
+                    Lastname is required
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input type="email" class="form-control" id="email" placeholder="" [class.is-invalid]="currentPointForm.get('contact.email')?.invalid
+                  && currentPointForm.get('contact.email')?.touched" formControlName="email">
+                  <label for="email">Email</label>
+                  <div class="error-message" *ngIf="currentPointForm.get('contact.email')?.invalid
+                  && currentPointForm.get('contact.email')?.touched">
+                    Email is required
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input type="tel" class="form-control" id="phonenum" placeholder="" [class.is-invalid]="currentPointForm.get('contact.phoneNum')?.invalid
+                  && currentPointForm.get('contact.phoneNum')?.touched" formControlName="phoneNum">
+                  <label for="phonenum">Phone</label>
+                  <div class="error-message" *ngIf="currentPointForm.get('contact.phoneNum')?.invalid
+                  && currentPointForm.get('contact.phoneNum')?.touched">
+                    Phone N° is required
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Address -->
+          <div formGroupName="addressDto" class="address-section">
+            <h6>
+              <i class="bi bi-geo-alt"></i>
+              Address
+            </h6>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="" placeholder="" [class.is-invalid]="currentPointForm.get('addressDto.adresse1')?.invalid
+                   && currentPointForm.get('addressDto.adresse1')?.touched" formControlName="adresse1">
+                  <label >Address Line 1</label>
+                  <div class="error-message" *ngIf="currentPointForm.get('addressDto.adresse1')?.invalid
+                   && currentPointForm.get('addressDto.adresse1')?.touched">
+                    Address Line 1 is required
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="address2" placeholder="" [class.is-invalid]="" formControlName="adresse2">
+                  <label for="address2">Address Line 2</label>
+
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="postalcode" placeholder="" [class.is-invalid]="currentPointForm.get('addressDto.codepostal')?.invalid
+                && currentPointForm.get('addressDto.codepostal')?.touched" formControlName="codepostal">
+                  <label for="postalcode">Postal Code</label>
+                  <div class="error-message" *ngIf="currentPointForm.get('addressDto.codepostal')?.invalid
+                && currentPointForm.get('addressDto.codepostal')?.touched">
+                    Postal Code is required
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="city" placeholder="" [class.is-invalid]="currentPointForm.get('addressDto.ville')?.invalid
+                && currentPointForm.get('addressDto.ville')?.touched" formControlName="ville">
+                  <label for="city">City</label>
+                  <div class="error-message" *ngIf="currentPointForm.get('addressDto.ville')?.invalid
+                && currentPointForm.get('addressDto.ville')?.touched">
+                    City is required
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="country" placeholder="" [class.is-invalid]="currentPointForm.get('addressDto.pays')?.invalid
+                && currentPointForm.get('addressDto.pays')?.touched" formControlName="pays">
+                  <label for="country">Country</label>
+                  <div class="error-message" *ngIf="currentPointForm.get('addressDto.pays')?.invalid
+                && currentPointForm.get('addressDto.pays')?.touched">
+                    Country is required
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline-secondary" (click)="currentPointForm = null">
+              <i class="bi bi-x-circle"></i>
+              Cancel
+            </button>
+            <button type="button" class="btn btn-primary" (click)="addDeliveryPoint()" [disabled]="!currentPointForm.valid">
+              <i class="bi bi-plus-circle"></i>
+              Add Point
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Add Point Button -->
+      <div class="add-point-button" *ngIf="!currentPointForm">
+        <button type="button" class="btn btn-outline-primary" (click)="createDeliveryPoint()">
+          <i class="bi bi-plus-lg"></i>
+          Add New Delivery Point
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="activeModal.dismiss()">
+      <i class="bi bi-x-lg"></i>
+      Cancel
+    </button>
+    <button type="button" class="btn btn-primary" (click)="save()" [disabled]="!destinationForm.valid || deliveryPoints.length === 0">
+      <i class="bi bi-check-lg"></i>
+      Save Destination
     </button>
   </div>
 </div>

@@ -1,11 +1,13 @@
 package com.hitecart.deliverysystem.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 
 @Entity
@@ -21,10 +23,10 @@ public class Etape extends AbstractEntity{
     private String titre;
     @Column(name = "commentaire")
     private String commentaire;
-    @Column(name = "heurelivprevu")
-    private LocalDateTime heureLivPrevu;
-    @Column(name = "heurelivreel")
-    private LocalDateTime heureLivReel;
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime scheduledDeliveryTime ;
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime actualDeliveryTime;
     @Column(name = "datedepart")
     private LocalDate dateDepart;
     @Column(name = "datearrivee")

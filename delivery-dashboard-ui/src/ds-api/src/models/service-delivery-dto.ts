@@ -4,17 +4,15 @@
 
 import { CreatedByUserDto } from '../models/created-by-user-dto';
 export interface ServiceDeliveryDto {
+  basicTripCost?: number;
   createdBy?: number;
   createdByUser?: CreatedByUserDto;
-  deliveryPointName?: string;
   description?: string;
   destinationCity?: string;
   distance?: number;
   enabled?: boolean;
   id?: number;
-  priceTTC?: number;
+  pickUpLocation?: string;
   reference?: string;
   title?: string;
-  tva?: number;
-  unitPriceHT?: number;
 }

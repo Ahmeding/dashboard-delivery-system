@@ -1,0 +1,288 @@
+<div  class="mission-stepper">
+  <div class="stepper-header">
+    <div class="stepper-title">
+      <h1>Create New Mission</h1>
+      <p class="text-muted">Complete all steps to create a new mission</p>
+    </div>
+
+    <div class="steps-progress">
+      <div class="step" *ngFor="let step of steps; let i = index"
+           [class.active]="currentStep === i"
+           [class.completed]="currentStep > i">
+        <div class="step-icon">
+          <i [class]="step.icon"></i>
+          <div class="step-line" *ngIf="i < steps.length - 1"></div>
+        </div>
+        <div class="step-label">{{step.label}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stepper-content mb-3">
+    <div class="step-content">
+      <div class="card">
+        <div class="card-body">
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="form-floating">
+                <select
+
+                  (change)="onServiceChange(selectedDeliveryService)"
+                  [(ngModel)]="selectedDeliveryService"
+                  class="form-select">
+                  <option value=""><i class="bi bi-info-circle-fill text-primary me-2"></i> Select Service</option>
+                  <option *ngFor="let service of allServiceDelivery" [ngValue]="service">
+                    {{service.title}}
+                  </option>
+                </select>
+                <label>Service<span class="required">*</span></label>
+                <div class="invalid-feedback">
+                  Please select a service
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="stepper-content" [ngSwitch]="currentStep">
+    <!-- Step 1: Basic Details -->
+    <div class="step-content" *ngSwitchCase="0">
+      <div [formGroup]="missionForm">
+
+        <div class="card">
+          <div class="card-body">
+            <h5 class="section-title">
+              <i class="bi bi-info-circle-fill text-primary me-2"></i>Basic Mission Details
+            </h5>
+
+            <div class="row g-4">
+              <div class="col-md-6">
+                <div class="form-floating">
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <input
+                    formControlName="titre"
+                    class="form-control"
+                    [class.is-invalid]="isFieldInvalid('titre')"
+                    type="text"
+                    placeholder="Mission Title"/>
+                  <label>Title<span class="required">*</span></label>
+                  <div class="invalid-feedback" *ngIf="isFieldInvalid('titre')">
+                    Title is required
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <input
+                    formControlName="dateDebut"
+                    class="form-control"
+                    [class.is-invalid]="isFieldInvalid('dateDebut')"
+                    type="datetime-local"
+                    placeholder="Start Date"/>
+                  <label>Start Date<span class="required">*</span></label>
+                  <div class="invalid-feedback" *ngIf="isFieldInvalid('dateDebut')">
+                    Start date is required
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <input
+                    formControlName="dateFin"
+                    class="form-control"
+                    [class.is-invalid]="isFieldInvalid('dateFin')"
+                    type="datetime-local"
+                    placeholder="End Date"/>
+                  <label>End Date<span class="required">*</span></label>
+                  <div class="invalid-feedback" *ngIf="isFieldInvalid('dateFin')">
+                    End date is required
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <input
+                    formControlName="volume"
+                    class="form-control"
+                    [class.is-invalid]="isFieldInvalid('volume')"
+                    type="number"
+                    min="0"
+                    placeholder="Volume"/>
+                  <label>Volume (m³)<span class="required">*</span></label>
+                  <div class="invalid-feedback" *ngIf="isFieldInvalid('volume')">
+                    Valid volume is required
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Stages -->
+    <div class="step-content" *ngSwitchCase="1">
+      <!--<app-stage-form [parentForm]="missionForm"></app-stage-form>-->
+      <div class="card">
+        <div class="card-body">
+          <h5 class="section-title">
+            <i class="bi bi-info-circle-fill text-primary me-2"></i>Stage Details
+          </h5>
+
+          <form [formGroup]="stageForm" class="stage-form">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="form-floating">
+              <input
+                formControlName="lieuDepart"
+                class="form-control"
+                id="inputLieuDepart"
+                type="text"
+                placeholder="Departure"
+              />
+              <label for="inputLieuDepart">Departure<span class="required">*</span></label>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-floating">
+              <select
+                formControlName="lieuArrivee"
+                class="form-control"
+                id="inputLieuArrivee"
+              >
+                <option [ngValue]="undefined" selected disabled>Select Deliv. Point</option>
+                <option *ngFor="let dp of deliveryPointsByCity" [ngValue]="dp.name">{{ dp.name }}</option>
+              </select>
+              <label for="inputLieuArrivee">Destination<span class="required">*</span></label>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="form-floating">
+              <input
+                formControlName="scheduledDeliveryTime"
+                class="form-control"
+                id="inputDeliveryTime"
+                type="time"
+                placeholder="Scheduled D-Time"
+              />
+              <label for="inputDeliveryTime">Scheduled D-Time<span class="required">*</span></label>
+            </div>
+          </div>
+
+          <div class="col-md-1 d-flex align-items-center">
+            <button
+              class="btn btn-primary w-100"
+              [disabled]="stageForm.invalid || isFormEtapeLoading"
+              (click)="addEtape()"
+            >
+              <i class="bi bi-plus-lg"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+      <!-- Stages List -->
+      <div class="stages-list mt-4">
+        <div class="stage-item" *ngFor="let etape of etapeDtos; let i = index">
+          <div class="stage-content">
+            <div class="stage-route">
+              <div class="location departure">
+                <i class="bi bi-geo-alt-fill text-primary"></i>
+                <span>{{etape.lieuDepart}}</span>
+              </div>
+              <div class="route-line">
+                <i class="bi bi-arrow-right"></i>
+              </div>
+              <div class="location destination">
+                <i class="bi bi-geo-alt-fill text-success"></i>
+                <span>{{etape.lieuArrivee}}</span>
+              </div>
+            </div>
+            <div class="stage-date">
+              <i class="bi bi-calendar-event me-2"></i>
+              {{etape.scheduledDeliveryTime}}
+            </div>
+          </div>
+          <button class="btn btn-icon btn-danger" (click)="deleteEtape(i)">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Vehicles & Drivers -->
+    <div class="step-content" *ngSwitchCase="2">
+      <app-vehicle-form [parentForm]="missionForm"></app-vehicle-form>
+    </div>
+
+    <!-- Step 4: Comments -->
+    <div class="step-content" *ngSwitchCase="3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="section-title">
+            <i class="bi bi-chat-left-text-fill text-primary me-2"></i>Additional Comments
+          </h5>
+
+          <div class="form-floating">
+            <textarea
+              formControlName="commentaire"
+              class="form-control"
+              style="height: 120px"
+              placeholder="Add your comments"></textarea>
+            <label>Comments</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5: Review -->
+    <div class="step-content" *ngSwitchCase="4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="section-title">
+            <i class="bi bi-check-circle-fill text-success me-2"></i>Review Mission Details
+          </h5>
+
+          <app-review-mission [missionData]="missionForm.value"></app-review-mission>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stepper-actions">
+    <button class="btn btn-outline-primary"
+            *ngIf="currentStep > 0"
+            (click)="previousStep()">
+      <i class="bi bi-arrow-left me-2"></i>Back
+    </button>
+
+    <button class="btn btn-primary"
+            *ngIf="currentStep < steps.length - 1"
+            (click)="nextStep()"
+            [disabled]="!canProceed()">
+      Next<i class="bi bi-arrow-right ms-2"></i>
+    </button>
+
+    <button class="btn btn-success"
+            *ngIf="currentStep === steps.length - 1"
+            (click)="saveMission()"
+            [disabled]="!missionForm.valid">
+      <i class="bi bi-check-lg me-2"></i>Create Mission
+    </button>
+  </div>
+</div>

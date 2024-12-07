@@ -32,7 +32,7 @@ public class EtapeValidator {
        if(dto.getDateDepart()==null){
            errors.add("Veuillez renseigner la date de depart de l' etape !");
        }
-       if(dto.getHeureLivPrevu()==null){
+       if(dto.getScheduledDeliveryTime()==null){
            errors.add("Veuillez renseigner l'heure de la livraison prevu de l' etape !");
        }
     return errors;

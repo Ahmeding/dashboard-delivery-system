@@ -146,21 +146,38 @@ input, textarea, select, button {
     padding: 1rem 0.75rem 0.5rem;  // Adjust padding for better label positioning
     border: 1px solid #ced4da;
     border-radius: 0;
-    background-color: #fff;
+    //background-color: #fff;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     font-size: 1rem;
     outline: none;  // Remove default outline
     box-shadow: none;  // Remove Bootstrap focus shadow
     transition: border-color 0.2s ease;
 
     &:focus {
-      border-color: var(--primary-color);  // Customize focus border color
+      //border-color: var(--primary-color);
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);// Customize focus border color
+    }
+
+    &.is-invalid {
+      border-color: var(--danger-color);
+
+      &:focus {
+        box-shadow: 0 0 0 2px rgba(var(--danger-rgb), 0.1);
+      }
     }
   }
 
   // Remove default focus styles from Bootstrap components
   input:focus, textarea:focus, select:focus {
+   /* outline: none;
+    box-shadow: none;*/
+
     outline: none;
-    box-shadow: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
   }
 
   // Label styling and animation for floating effect
@@ -180,11 +197,12 @@ input, textarea, select, button {
   textarea:focus ~ label,
   textarea:not(:placeholder-shown) ~ label,
   select:focus ~ label,
+
   select:not([value=""]) ~ label {
     top: -0.5rem;  // Position label slightly above the input field
     font-size: 0.85rem;
     color: var(--primary-color);
-    background-color: #fff;  // Add background to prevent overlap with input border
+    background-color: var(--bg-color);  // Add background to prevent overlap with input border
     padding: 0 0.25rem;  // Small padding for floating label background
   }
 }

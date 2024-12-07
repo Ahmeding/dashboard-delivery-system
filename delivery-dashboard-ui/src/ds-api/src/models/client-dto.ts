@@ -5,7 +5,7 @@
 import { AdresseDto } from '../models/adresse-dto';
 import { CommandeClientDto } from '../models/commande-client-dto';
 import { CreatedByUserDto } from '../models/created-by-user-dto';
-import { DeliveryPointDto } from '../models/delivery-point-dto';
+import { DeliveryDestinationDto } from '../models/delivery-destination-dto';
 import { DevisDto } from '../models/devis-dto';
 export interface ClientDto {
   accountLocked?: boolean;
@@ -14,7 +14,7 @@ export interface ClientDto {
   createdAt?: string;
   createdBy?: number;
   createdByUser?: CreatedByUserDto;
-  deliveryPointDtos?: Array<DeliveryPointDto>;
+  deliveryDestinationsDto?: Array<DeliveryDestinationDto>;
   description?: string;
   devisDtos?: Array<DevisDto>;
   email?: string;

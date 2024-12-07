@@ -1,0 +1,67 @@
+.mission-review {
+  .review-section {
+    margin-bottom: 2rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .review-title {
+      color: var(--text-color);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .review-content {
+      padding: 0.5rem;
+    }
+  }
+
+  .review-item {
+    display: flex;
+    margin-bottom: 0.5rem;
+
+    .label {
+      width: 120px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .value {
+      color: var(--text-color);
+      flex: 1;
+    }
+  }
+
+  .stage-item {
+    background: var(--bg-color);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+
+    .stage-number {
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .vehicle-item {
+    background: var(--bg-color);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .comments {
+    color: var(--text-color);
+    font-style: italic;
+    margin: 0;
+    padding: 1rem;
+    background: var(--bg-color);
+    border-radius: 8px;
+  }
+}
