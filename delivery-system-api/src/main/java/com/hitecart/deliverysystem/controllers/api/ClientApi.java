@@ -140,7 +140,7 @@ public interface ClientApi {
     void delete(@PathVariable("id") Integer id);
 
     @GetMapping(value =FIND_ALL_CLIENT_PAGEABLE_ENDPOINT,
-            produces =MediaType.APPLICATION_JSON_VALUE  )
+            produces =MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<PageResponse<ClientDto>> findAllClients(
       @RequestParam(name = "page",defaultValue = "1", required = false) int page,
       @RequestParam(name = "size",defaultValue = "10", required = false) int size

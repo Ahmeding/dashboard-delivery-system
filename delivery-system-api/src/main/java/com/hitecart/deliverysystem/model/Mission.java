@@ -18,6 +18,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper=true)
 @Table(name = "mission")
 public class Mission extends AbstractEntity {
+
     private String reference;
     @Column(name = "titre")
     private String titre;
@@ -51,6 +52,9 @@ public class Mission extends AbstractEntity {
     @OneToOne
     @JoinColumn(name = "idfraismission", referencedColumnName = "id")
     private FraisMission fraisMission;
+    @ManyToOne
+    @JoinColumn(name = "id_delivery_destination")
+    private DeliveryDestination deliveryDestination;
 
     @PrePersist
     private void generateReference() {

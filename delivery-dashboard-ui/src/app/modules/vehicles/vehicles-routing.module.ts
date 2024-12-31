@@ -4,15 +4,22 @@ import {RepairesComponent} from "./pages/repaires/repaires.component";
 import {VehiclesComponent} from "./pages/vehicles/vehicles.component";
 import {NewRepaireComponent} from "./pages/repaires/new-repaire/new-repaire.component";
 import {NewVehicleComponent} from "./pages/vehicles/new-vehicle/new-vehicle.component";
+import {authGuard} from "../../services/guard/auth.guard";
 
 const routes: Routes = [
 
-  { path: 'all', component: VehiclesComponent },
-  { path: 'new-vehicle', component: NewVehicleComponent },
-  { path: 'edit-vehicle/:id', component: NewVehicleComponent },
-  { path: 'repairs', component: RepairesComponent },
-  { path: 'new-repair', component: NewRepaireComponent },
-  { path: 'edit-repair/:id', component: NewRepaireComponent },
+  { path: 'all', component: VehiclesComponent,
+        canActivate:[authGuard] },
+  { path: 'new-vehicle', component: NewVehicleComponent,
+        canActivate:[authGuard] },
+  { path: 'edit-vehicle/:id', component: NewVehicleComponent,
+        canActivate:[authGuard] },
+  { path: 'repairs', component: RepairesComponent,
+        canActivate:[authGuard] },
+  { path: 'new-repair', component: NewRepaireComponent,
+        canActivate:[authGuard] },
+  { path: 'edit-repair/:id', component: NewRepaireComponent,
+        canActivate:[authGuard] },
 
 ];
 

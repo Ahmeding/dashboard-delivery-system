@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
+@Access(AccessType.FIELD)
 @EntityListeners(AuditingEntityListener.class)// maj db chaque fois elle trouve les champs updatedat et createdat
 public class AbstractEntity implements Serializable {
     @Id

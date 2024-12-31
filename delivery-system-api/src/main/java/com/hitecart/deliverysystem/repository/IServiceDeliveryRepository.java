@@ -20,4 +20,5 @@ public interface IServiceDeliveryRepository extends JpaRepository<ServiceDeliver
 
     List<ServiceDelivery> findAllByEnabled(boolean enabled);
 
+    ServiceDelivery findServiceDeliveryByDestinationCityAndAndDestinationCountry(String destinationCity, String destinationCountry);
 }

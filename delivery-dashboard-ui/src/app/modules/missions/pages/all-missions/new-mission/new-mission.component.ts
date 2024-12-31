@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import {find} from "rxjs";
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MissionDto} from "../../../../../../ds-api/src/models/mission-dto";
@@ -18,98 +18,139 @@ import {DeliveryPointsService} from "../../../../../../ds-api/src/services/deliv
 import {et} from "@fullcalendar/core/internal-common";
 import {LocalTime} from "../../../../../../ds-api/src/models/local-time";
 import {CreatedByUserDto} from "../../../../../../ds-api/src/models/created-by-user-dto";
+import {ActivatedRoute, Router} from "@angular/router";
+import {DeliveryDestinationDto} from "../../../../../../ds-api/src/models/delivery-destination-dto";
+import {DeliveryDestinationResponse} from "../../../../../../ds-api/src/models/delivery-destination-response";
+import {DeliveryDestinationService} from "../../../../../../ds-api/src/services/delivery-destination.service";
+
+import flatpickr from "flatpickr";
+import {addHours, endOfWeek, format, isAfter, isBefore, isToday, parseISO} from "date-fns";
 
 @Component({
   selector: 'app-new-mission',
   templateUrl: './new-mission.component.html',
   styleUrls: ['./new-mission.component.scss']
 })
-export class NewMissionComponent implements OnInit {
+export class NewMissionComponent implements OnInit{
 
-  missionToSave: MissionDto={};
-  etapeToSave: EtapeDto={};
-  allEtapesToSave: EtapeDto[]=[];
+    /*mission related data*/
+
+  missionToSave: MissionDto={missionVehiclesDtos:[]}; // why init like htis.??
+  etapeDtos: EtapeDto[] = [];//why any?
+  selectedVehicle: VehiculeDto | null=null; // why not ={}
+  selectedDrivers: ChauffeurVehicleDto[] = [];
+  selectedDeliveryDestination!: DeliveryDestinationDto | undefined ;//why must put on undefined
   availableVehicles: Array<VehiculeDto> = [];
   availableDrivers: Array<ChauffeurDto> = [];
-  etapeDtos: EtapeDto[] = [];
+  allDeliveryDestination: DeliveryDestinationResponse []=[];
+  deliveryPointsByCity: DeliveryPointDto[]=[];// why must put to any
+  isFormEtapeLoading:boolean=false;
+
   etapeDto: EtapeDto = {};
-  etapeForm!: FormGroup;
-  isFormEtapeLoading: boolean = false;
-  //selectedDrivers: ChauffeurDto[] = [];
-  //selectedVehicles: VehiculeDto[] = [];
-  //selectedDrivers: ChauffeurDto[] = [];
-  selectedDrivers: ChauffeurVehicleDto[] = [];
   selectedMissionVehicle: MissionVehicleDto = {};
-  selectedDriverVehicule: ChauffeurDto = {};
 
-  etapes: EtapeDto[] = [];
-
+  // Arrays to store selected vehicles and associated drivers
   selectedVehicles: {vehicleDto:VehiculeDto,chauffeursVehicleDto: ChauffeurVehicleDto[]}[]=[];
-  selectedVehicle: VehiculeDto={};
   selectedMissionVehicles: MissionVehicleDto[] = [];
-  allServiceDelivery: ServiceDeliveryDto[]=[];
 
+  /*form group */
+  missionForm:FormGroup = new FormGroup({});
+  etapeForm!: FormGroup;
   //
-  deliveryPointsByCity: DeliveryPointDto[]=[];
-  selectedDeliveryService!: ServiceDeliveryDto;
+  dateDay!: string;
+  minDate: string = new Date().toISOString().split('T')[0];
   private pickUpLocation: string="";
   selectedDpoint: DeliveryPointDto={}/*deliveryPointDto={}*/;
 
-
-  missionForm: FormGroup = new FormGroup({});
-
   constructor(
+    private router:Router,
+    private activeRouter:ActivatedRoute,
     private fb:FormBuilder,
-    private servDeliveryService:ServiceDeliveryService,
+    private deliveryDestinationService:DeliveryDestinationService,
     private missionService:MissionService,
     private dpService:DeliveryPointsService,
     private alertService: AlertService,
     private vehicleService: VehiculeService,
     private driversService: ChauffeurService
-  ) {
-
-  }
+  ) {}
   ngOnInit(): void {
-    this.findAllServicesDelivery()
-    this.findAllVehicles();
-    this.findAllDrivers();
-    this.initEtapeForm();
+    this.initForms();
+    this.loadInitialData();
+    this.getDateDay();
   }
 
+  initForms(){
+    this.etapeForm = this.fb.group({
+      lieuDepart: new FormControl('', Validators.required),
+      lieuArrivee: new FormControl('', Validators.required),
+      scheduledDeliveryTime: new FormControl('', Validators.required)
+    });
+    this.missionForm = this.fb.group({
+      titre: new FormControl('', Validators.required),
+      dateDebut: new FormControl('', Validators.required),
+      dateFin: new FormControl('', Validators.required),
+      volume: new FormControl('', [Validators.required, Validators.min(1)])
+    });
 
-  private findAllVehicles() {
-    this.vehicleService.findAll().subscribe({
+  }
+  loadInitialData(){
+    this.loadVehicles();
+    this.loadDrivers();
+    this.loadDestinationsDelivery();
+  }
+  private handleErrors(type:string,error:any){
+    console.error(`Failed to load ${type}`,error);
+    this.alertService.alertError(`Error loading ${type}. Please refresh and try again.`);
+
+  }
+  private loadVehicles() {
+    this.vehicleService.findAll1().subscribe({
       next: (res) => {
         this.availableVehicles = res;
       },
       error: (err) => {
-
+        this.handleErrors("vehicles",err)
       }
     });
   }
-  private findAllDrivers() {
-    this.driversService.findAll15().subscribe({
-      next: (res) => {
-        this.availableDrivers = res;
+  private loadDrivers() {
+    this.driversService.findAll17().subscribe({
+      next: (drivers) => {
+        this.availableDrivers = drivers;
       },
       error: (err) => {
+        this.handleErrors("drivers",err)
       }
     });
   }
-
-
-  initEtapeForm() {
-    this.etapeForm = new FormGroup({
-      lieuDepart: new FormControl(),
-      lieuArrivee: new FormControl(),
-      scheduledDeliveryTime: new FormControl(),
-
+  private loadDestinationsDelivery() {
+    this.deliveryDestinationService.findAll12().subscribe({
+      next:(dDestinationResponse)=>{
+        this.allDeliveryDestination=dDestinationResponse;
+      },error:(err)=>{
+        this.handleErrors("Destinations delivery",err)
+      }
     })
   }
 
+  onDDestinationChange(selectedDeliveryDestination: DeliveryDestinationResponse) {
+    if(selectedDeliveryDestination){
+      this.selectedDeliveryDestination = selectedDeliveryDestination;
+      this.missionToSave.titre= "Mission - "+ selectedDeliveryDestination.serviceDelivery?.destinationCity;
+      this.missionToSave.idDeliveryDestination=selectedDeliveryDestination.id;
+      this.etapeForm.get('lieuDepart')?.setValue(selectedDeliveryDestination.serviceDelivery?.pickUpLocation);
+      this.etapeDto.lieuDepart = this.etapeForm.value.lieuDepart;
+      this.etapeForm.get('lieuArrivee')?.reset();
+      this.findAllDeliveryPointsByCity(selectedDeliveryDestination.serviceDelivery?.destinationCity!);
+    }else{
+      this.etapeForm.get('lieuDepart')?.setValue('');
+    }
+  }
+
   addEtape(): EtapeDto {
+    console.log(this.selectedDpoint.name);
     const newDeparture = this.etapeForm.value.lieuDepart;
-    const newArrival = this.etapeForm.value.lieuArrivee;
+    const newArrival = this.selectedDpoint; //this.etapeForm.value.lieuArrivee;
 
     const newTimeString = this.etapeForm.value.scheduledDeliveryTime;
 
@@ -149,6 +190,7 @@ export class NewMissionComponent implements OnInit {
 
     if(newDeparture && newArrival && newTimeString){
       this.etapeDto = this.etapeForm.value;
+      this.etapeDto.lieuArrivee=this.selectedDpoint.name;
       this.etapeDtos.push(this.etapeDto);
       //this.stageForm.reset();
       return this.etapeDto;
@@ -157,21 +199,15 @@ export class NewMissionComponent implements OnInit {
       return {};
     }
   }
-
-
   deleteEtape(i: number) {
     this.etapeDtos.splice(i, 1);
   }
-
-
-
 
   addVehicle() {
     if(this.selectedVehicle && this.selectedDrivers.length<=2 && this.selectedDrivers.length>0){
 
       this.selectedVehicles.push({
         vehicleDto: this.selectedVehicle,
-        //chauffeursVehicleDto:[...this.selectedDrivers]
         chauffeursVehicleDto:this.selectedDrivers.map(driver => ({
           chauffeurDto: driver
         }))
@@ -190,10 +226,18 @@ export class NewMissionComponent implements OnInit {
       this.alertService.alertError("You must select vehicle(s) and driver(s)")
     }
   }
-
   removeVehicle(index:number){
-    this.selectedVehicles.splice(index,1)
+    this.selectedVehicles.splice(index,1);
+    this.selectedMissionVehicles.splice(index,1);
   }
+  getDateDay(){
+    this.dateDay= this.activeRouter.snapshot.params['dateDay'];
+    if(this.dateDay){
+      const parseDate = parseISO(this.dateDay);
+      this.dateDay =format(parseDate,'yyyy-MM-dd HH:mm');
+      this.missionToSave.dateDebut = this.dateDay;
+    }
+    }
 
   createMission(): MissionDto{
     this.missionToSave.etatMission="EN_COURS";
@@ -204,44 +248,15 @@ export class NewMissionComponent implements OnInit {
 
   saveMission() {
     console.log(this.createMission());
-    this.missionService.save5({
+    this.missionService.save6({
       body:this.missionToSave
-    }).subscribe({
-      next:()=>{
-        this.alertService.alertSuccess("Saved OK!!")
-      },
-      error:(err)=>{
+    }).subscribe({next:()=>{
+        this.alertService.alertSuccess("Saved OK!!");
+        this.router.navigate(['missions','w-planning']);
+      }, error:(err)=>{
         this.alertService.alertWaring(err.error.httpCode+ " ERROR :: "+ err.error.msg)
-      }
-    });
+      }});
   }
-
-
-/*
-  addVehicle(vehicle: any, drivers:any[]){
-    if(drivers.length===0||drivers.length>2){
-      this.alertService.alertWaring('Please select only 1 or 2 drivers.')
-      return;
-    }
-
-    this.missionVehiclesDtos.push(
-      this.fb.group({
-        vehicleDto:[vehicle,Validators.required],
-        chauffeursVehicleDto:this.fb.array(
-          drivers.map((driver)=>{
-            chauffeurDto:[driver]
-          })
-        ),
-      })
-    );
-  }
-
-  // Remove a Vehicle
-  removeVehicle(index: number) {
-    this.missionVehiclesDtos.removeAt(index);
-  }*/
-
-
 
   // Helper methods
   private markFormGroupTouched(formGroup: FormGroup) {
@@ -253,66 +268,9 @@ export class NewMissionComponent implements OnInit {
       }
     });
   }
-/*
-
-  addVehicle() {
-    if(this.selectedVehicle && this.selectedDrivers.length<=2 && this.selectedDrivers.length>0){
-
-    this.selectedVehicles.push({
-      vehicleDto: this.selectedVehicle,
-      //chauffeursVehicleDto:[...this.selectedDrivers]
-      chauffeursVehicleDto:this.selectedDrivers.map(driver => ({
-        chauffeurDto: driver
-      }))
-      });
-      this.selectedMissionVehicle.vehicleDto=this.selectedVehicle;
-      this.selectedMissionVehicle.chauffeursVehicleDto=this.selectedDrivers.map(d=>({
-        chauffeurDto: d
-      }));
-      console.log(this.selectedMissionVehicle);
-
-      this.selectedMissionVehicles.push(this.selectedMissionVehicle);
-      this.selectedVehicle = {} as VehiculeDto;
-      this.selectedMissionVehicle={} as MissionVehicleDto;
-      this.selectedDrivers=[];
-    }else{
-      this.alertService.alertError("You must select vehicle(s) and driver(s)")
-    }
-  }
-*/
-
-/*
-  removeVehicle(index:number){
-    this.selectedVehicles.splice(index,1)
-  }
-*/
-
-/*  saveMission() {
-    console.log(this.createMission());
-    this.missionService.save5({
-      body:this.missionToSave
-    }).subscribe({
-      next:()=>{
-        this.alertService.alertSuccess("Saved OK!!")
-      },
-      error:(err)=>{
-         this.alertService.alertWaring(err.error.httpCode+ " ERROR :: "+ err.error.msg)
-    }
-    });
-  }*/
-
-  private findAllServicesDelivery() {
-    this.servDeliveryService.findAll2().subscribe({
-      next:(sdResponse)=>{
-        this.allServiceDelivery=sdResponse;
-      },error:(error)=>{
-        console.log(error);
-      }
-    })
-  }
 
   private findAllDeliveryPointsByCity(selectedCity :string){
-    if(this.selectedDeliveryService){
+    if(this.selectedDeliveryDestination){
 
     this.dpService.findAllByCity({city:selectedCity}).subscribe({
       next:(rep)=>{
@@ -325,22 +283,41 @@ export class NewMissionComponent implements OnInit {
     }
   }
 
-  onServiceChange(selectedDeliveryService: ServiceDeliveryDto) {
-    if(selectedDeliveryService && selectedDeliveryService.pickUpLocation!==null){
-      this.selectedDeliveryService = selectedDeliveryService;
-      this.missionToSave.titre= "Mission - "+ selectedDeliveryService.destinationCity;
-      this.etapeForm.get('lieuDepart')?.setValue(selectedDeliveryService.pickUpLocation);
-      this.etapeDto.lieuDepart = this.etapeForm.value.lieuDepart;
-      this.findAllDeliveryPointsByCity(selectedDeliveryService.destinationCity!);
+  onDeliveryPointChange(selectedDpoint: DeliveryPointDto) {
+    console.log(selectedDpoint.schedule);
+    this.etapeForm.get('scheduledDeliveryTime')?.setValue(selectedDpoint.schedule);
+  }
+
+
+  validateStartDate() {
+    if(!this.missionToSave.dateDebut){
+      return;
+    }
+    const selectedDate= new Date(this.missionToSave.dateDebut);
+    const dateDay= new Date(this.dateDay);
+    if(!isBefore(selectedDate.getDate(),dateDay.getDate()) && !isAfter(selectedDate.getDate(),dateDay.getDate())){
+      console.log("valid date selected : ", selectedDate);
     }else{
-      this.etapeForm.get('lieuDepart')?.setValue('');
+      console.log("Invalid date selected , it must be today");
+      alert(`the satrt Date must be equal to  date day ${dateDay}` );
     }
   }
 
-  onDeliveryPointChange(selectedDpoint: DeliveryPointDto) {
-    console.log(selectedDpoint);
-    this.etapeForm.value.scheduledDeliveryTime= selectedDpoint.schedule
-  }
+  validateEndDate() {
+    if(!this.missionToSave.dateFin){
+      return;
+    }
+    const selectedEndDate= new Date(this.missionToSave.dateFin);
+    const miminumDate = addHours(new Date(),7);
+    const endOfCurrentWeek= endOfWeek(new Date(),{weekStartsOn:1});
+    if(isAfter(selectedEndDate, miminumDate)&& isBefore(selectedEndDate,endOfCurrentWeek)){
+      console.log("Valide Date");
 
+    }else{
+      console.log('Invalid end date.');
+      alert('The end date must be at least 7 hours from now and less than the end of this week.');
+
+    }
+  }
 }
 

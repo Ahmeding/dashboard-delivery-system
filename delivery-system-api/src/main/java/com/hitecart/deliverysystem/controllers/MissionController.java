@@ -3,6 +3,8 @@ package com.hitecart.deliverysystem.controllers;
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.MissionApi;
 import com.hitecart.deliverysystem.dto.MissionDto;
+import com.hitecart.deliverysystem.dto.MissionResponse;
+import com.hitecart.deliverysystem.exception.InvalidOperationException;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
 import com.hitecart.deliverysystem.services.MissionService;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +52,7 @@ public class MissionController implements MissionApi {
     }
 
     @Override
-    public ResponseEntity<List<MissionDto>> findAll() {
+    public ResponseEntity<List<MissionResponse>> findAll() {
 
         return ResponseEntity.ok(missionService.findAll());
     }
@@ -68,5 +70,25 @@ public class MissionController implements MissionApi {
     @Override
     public ResponseEntity<PageResponse<MissionDto>> findAllMissionsByDriverId(int page, int size, Authentication connectedUser) {
         return ResponseEntity.ok(missionService.findAllMissionsByDriverId(page,size,connectedUser));
+    }
+
+    @Override
+    public ResponseEntity<?> checkOverlappingVehicles(MissionDto dto) {
+        try {
+            missionService.checkOverlappingVehicles(dto);
+            return ResponseEntity.ok("No conflicts found for the given mission.");
+        } catch (InvalidOperationException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> checkOverlappingDrivers(MissionDto dto) {
+        try {
+            missionService.checkOverlappingDrivers(dto);
+            return ResponseEntity.ok("No conflicts found for the given mission.");
+        } catch (InvalidOperationException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

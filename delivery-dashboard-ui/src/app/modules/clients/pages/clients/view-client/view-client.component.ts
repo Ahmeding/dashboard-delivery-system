@@ -50,7 +50,7 @@ export class ViewClientComponent implements OnInit{
     return this.client.firstname+" "+this.client.lastname;
   }
   private getClient() {
-    this.serviceClient.findById14({id:this.id_client}).subscribe({
+    this.serviceClient.findById16({id:this.id_client}).subscribe({
       next:(clientResp)=>{
         this.client=clientResp;
       },error:(err)=>{

@@ -2,7 +2,10 @@ package com.hitecart.deliverysystem.controllers.api;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.DeliveryDestinationDto;
+import com.hitecart.deliverysystem.dto.DeliveryDestinationResponse;
+import com.hitecart.deliverysystem.dto.MissionResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -105,12 +108,14 @@ public interface DeliveryDestinationApi {
                             responseCode = "200",
                             description = "DeliveryPoints retrouvés ",
                             content = @Content(
-                                    mediaType = "application/json"
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = DeliveryDestinationResponse.class))
+
                             )
                     )
             }
     )
-    ResponseEntity<List<DeliveryDestinationDto>> findAll();
+    ResponseEntity<List<DeliveryDestinationResponse>> findAll();
 
     @DeleteMapping(value = DELETE_DELIVERY_DESTINATION_ENDPOINT)
     @Operation(

@@ -1,35 +1,42 @@
 package com.hitecart.deliverysystem.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.hitecart.deliverysystem.controllers.api.DayPlanApi;
+import com.hitecart.deliverysystem.dto.DayPlanDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.hitecart.deliverysystem.models.DayPlan;
 import com.hitecart.deliverysystem.services.DayPlanService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/dayplans")
-public class DayPlanController {
-    @Autowired
-    private DayPlanService service;
+@RequiredArgsConstructor
+public class DayPlanController implements DayPlanApi {
 
-    @GetMapping
-    public List<DayPlan> getAll() {
-        return service.findAll();
+    private final DayPlanService dayPlanService;
+
+    @Override
+    public ResponseEntity<DayPlanDto> save(DayPlanDto dto) {
+        return ResponseEntity.ok(dayPlanService.save(dto));
     }
 
-    @GetMapping("/{id}")
-    public DayPlan getById(@PathVariable Long id) {
-        return service.findById(id);
+    @Override
+    public ResponseEntity<DayPlanDto> findById(Integer id) {
+        return ResponseEntity.ok(dayPlanService.findById(id));
     }
 
-    @PostMapping
-    public DayPlan create(@RequestBody DayPlan dayplan) {
-        return service.save(dayplan);
+    @Override
+    public ResponseEntity<List<DayPlanDto>> findAll() {
+        return ResponseEntity.ok(dayPlanService.findAll());
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.deleteById(id);
+    @Override
+    public ResponseEntity<List<DayPlanDto>> findAllByWeeklyPlanningId(Integer weeklyPlanningId) {
+        return ResponseEntity.ok(dayPlanService.findAllByWeeklyPlanningId(weeklyPlanningId));
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        dayPlanService.deleteById(id);
     }
 }

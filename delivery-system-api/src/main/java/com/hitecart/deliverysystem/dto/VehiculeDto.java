@@ -20,6 +20,7 @@ import java.util.List;
 @Setter
 @Builder
 public class VehiculeDto {
+    private Integer id;
 
     private String logo;
     private String reference;
@@ -37,7 +38,6 @@ public class VehiculeDto {
     private List<ReparationDto> reparationsDtos;
     private Boolean isActive;
     private boolean isAssigned;
-    private Integer id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer createdBy;

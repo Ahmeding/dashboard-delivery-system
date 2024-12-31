@@ -2,9 +2,12 @@ package com.hitecart.deliverysystem.controllers.api;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.ClientDto;
+import com.hitecart.deliverysystem.dto.CommandeClientResponse;
 import com.hitecart.deliverysystem.dto.MissionDto;
+import com.hitecart.deliverysystem.dto.MissionResponse;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -43,7 +46,6 @@ public interface MissionApi {
             })
     ResponseEntity<MissionDto> save(@RequestBody MissionDto request);
 
-
     @PatchMapping(value = UPDATE_ETAT_MISSION_ENDPOINT)
 
     @Operation(
@@ -63,6 +65,7 @@ public interface MissionApi {
                             content = @Content(mediaType = "application/json"))
             })
     ResponseEntity<MissionDto> updateEtatMission(@PathVariable("id") Integer idMission,@PathVariable("etatMission") EtatMission etatMission);
+
     @PatchMapping(value = UPDATE_KILOMETRATGE_MISSION_ENDPOINT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 
     @Operation(
@@ -82,6 +85,7 @@ public interface MissionApi {
                             content = @Content(mediaType = "application/json"))
             })
     ResponseEntity<MissionDto> updateKilometrage(@PathVariable("flag") String flag, @PathVariable("id") Integer idMission,@PathVariable("kilometrage") double kilometrage);
+
     @GetMapping(value = FIND_MISSION_BY_ID_ENDPOINT, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             description = "Supprimer une Mission par ID! Cette methode permet de suprimmer une mission par son ID",
@@ -103,6 +107,7 @@ public interface MissionApi {
             }
     )
     ResponseEntity<MissionDto> findById(@PathVariable("id") Integer id);
+
     @GetMapping(value = FIND_MISSION_BY_DATE_ENDPOINT, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             description = "Rechercher une Mission par date! Cette methode permet de chercher une mission par une date",
@@ -125,6 +130,7 @@ public interface MissionApi {
             }
     )
     ResponseEntity<List<MissionDto>> findAllByDate(@PathVariable("dateMission") Instant dateMission);
+
     @GetMapping(value = FIND_ALL_MISSION_ENDPOINT, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             description = "Rechercher tout les Missions! Cette methode permet de retouner toutes les missions",
@@ -133,12 +139,14 @@ public interface MissionApi {
                             responseCode = "200",
                             description = "Missions retrouvées ",
                             content = @Content(
-                                    mediaType = "application/json"
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = MissionResponse.class))
                             )
                     )
             }
     )
-    ResponseEntity<List<MissionDto>> findAll();
+    ResponseEntity<List<MissionResponse>> findAll();
+
     @DeleteMapping(value = DELETE_MISSION_ENDPOINT)
     @Operation(
             description = "Supprimer une Mission par ID! Cette methode permet de suprimmer une mission par son ID",
@@ -175,4 +183,10 @@ public interface MissionApi {
        @RequestParam(name = "size",defaultValue = "10",required = false)int size,
        Authentication connectedUser
     ) ;
+
+
+    @PostMapping(value =CHECK_OVERLAPPING_VEHICLES_ENDPOINT )
+    ResponseEntity<?> checkOverlappingVehicles(@RequestBody MissionDto dto);
+    @PostMapping(value =CHECK_OVERLAPPING_DRIVERS_ENDPOINT )
+    ResponseEntity<?> checkOverlappingDrivers(@RequestBody MissionDto dto);
 }

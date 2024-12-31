@@ -7,16 +7,24 @@ import {NewClientComponent} from "./pages/clients/new-client/new-client.componen
 import {NewOrderComponent} from "./pages/orders/new-order/new-order.component";
 import {NewQuoteComponent} from "./pages/quotes/new-quote/new-quote.component";
 import {ViewClientComponent} from "./pages/clients/view-client/view-client.component";
+import {authGuard} from "../../services/guard/auth.guard";
 
 const routes: Routes = [
-  { path: 'all', component: ClientsComponent },
-  { path: 'new-client', component: NewClientComponent },
-  { path: 'view-client/:id', component: ViewClientComponent },
-  { path: 'edit-client/:id', component: NewClientComponent },
-  { path: 'orders', component: OrdersComponent },
-  { path: 'new-order', component: NewOrderComponent },
-  { path: 'quotes', component: QuotesComponent },
-  { path: 'new-quote', component: NewQuoteComponent },
+  { path: 'all', component: ClientsComponent,canActivate:[authGuard] },
+  { path: 'new-client', component: NewClientComponent,
+        canActivate:[authGuard] },
+  { path: 'view-client/:id', component: ViewClientComponent,
+        canActivate:[authGuard] },
+  { path: 'edit-client/:id', component: NewClientComponent,
+        canActivate:[authGuard] },
+  { path: 'orders', component: OrdersComponent,
+        canActivate:[authGuard] },
+  { path: 'new-order', component: NewOrderComponent,
+        canActivate:[authGuard] },
+  { path: 'quotes', component: QuotesComponent,
+        canActivate:[authGuard] },
+  { path: 'new-quote', component: NewQuoteComponent,
+        canActivate:[authGuard] },
 
 ];
 

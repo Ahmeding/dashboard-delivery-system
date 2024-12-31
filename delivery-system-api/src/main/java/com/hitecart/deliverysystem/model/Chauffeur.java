@@ -14,6 +14,7 @@ import java.util.List;
 @Entity
 @SuperBuilder
 @Table(name = "chauffeur")
+@Access(AccessType.FIELD)
 public class Chauffeur extends Utilisateur{
 
 

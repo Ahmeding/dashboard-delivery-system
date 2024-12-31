@@ -61,7 +61,7 @@ export class NewServiceDelivComponent implements OnInit{
 
 
   saveNewDeliveryService(formValue: ServiceDeliveryDto){
-    this.serviceDlvService.save2({body:formValue}).subscribe({
+    this.serviceDlvService.save3({body:formValue}).subscribe({
       next:(response)=>{
         console.log(response);
         this.router.navigate(['settings','services']);

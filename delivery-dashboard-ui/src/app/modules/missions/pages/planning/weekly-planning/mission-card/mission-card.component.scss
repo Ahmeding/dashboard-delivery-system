@@ -1,0 +1,258 @@
+.mission-card {
+  background: var(--card-bg);
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  padding: 0.5rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+  }
+
+  .mission-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+
+    .time-destination {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .time {
+        font-weight: 600;
+        color: var(--text-color);
+      }
+
+      .destination-tag {
+        font-size: 0.7rem;
+        font-weight: 500;
+      }
+    }
+
+    .status {
+      i {
+        font-size: 0.85rem;
+      }
+    }
+  }
+
+  .mission-content {
+    .title {
+      margin: 0;
+      font-size: 0.75rem;
+      color: var(--text-color);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .resources {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.25rem;
+
+      .vehicles, .drivers {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: var(--text-muted);
+        font-size: 0.7rem;
+
+        i {
+          font-size: 0.8rem;
+        }
+
+        .count {
+          font-weight: 500;
+        }
+      }
+
+      .actions {
+        margin-left: auto;
+
+        .action-btn {
+          padding: 0;
+          background: none;
+          border: none;
+          color: var(--text-muted);
+          cursor: pointer;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 4px;
+
+          &:hover {
+            background: var(--bg-color);
+            color: var(--primary-color);
+          }
+
+          i {
+            font-size: 0.85rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Dark theme adjustments
+:host-context(.dark-theme) {
+  .mission-card {
+    background: var(--bg-color);
+  }
+}
+
+/*
+.mission-card {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);a
+
+  .mission-actions {
+    opacity: 1;
+  }
+  }
+
+  .mission-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+
+    .mission-time-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+
+      .status-indicator {
+        font-size: 0.9rem;
+      }
+
+      .mission-time {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+      }
+
+      .mission-tag {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 12px;
+        font-weight: 500;
+      }
+    }
+
+    .mission-actions {
+      display: flex;
+      gap: 0.25rem;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+
+      .btn-action {
+        padding: 0.25rem;
+        border: none;
+        background: transparent;
+        color: var(--text-muted);
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:hover {
+          color: var(--primary-color);
+          background: rgba(var(--primary-rgb), 0.1);
+        }
+
+        i {
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+
+  .mission-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mission-resources {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .resources-section {
+      .resources-header {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-bottom: 0.25rem;
+
+        i {
+          font-size: 0.85rem;
+        }
+      }
+
+      .resources-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+
+        .chip {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          padding: 0.15rem 0.5rem;
+          background: var(--bg-color);
+          border-radius: 12px;
+          font-size: 0.7rem;
+          color: var(--text-color);
+          border: 1px solid var(--border-color);
+
+          i {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+          }
+
+          &.plate-number {
+            font-family: monospace;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Dark theme adjustments
+:host-context(.dark-theme) {
+  .mission-card {
+    background: var(--bg-color);
+
+    .resources-chips .chip {
+      background: var(--card-bg);
+    }
+  }
+}
+*/

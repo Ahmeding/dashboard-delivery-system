@@ -10,11 +10,8 @@ import com.hitecart.deliverysystem.model.*;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
 import com.hitecart.deliverysystem.model.enums.NotificationStatus;
 import com.hitecart.deliverysystem.repository.*;
-import com.hitecart.deliverysystem.services.IMissionVehicleService;
-import com.hitecart.deliverysystem.services.INotificationService;
-import com.hitecart.deliverysystem.services.MissionService;
-import com.hitecart.deliverysystem.services.UtilisateurService;
-import com.hitecart.deliverysystem.services.security.IChauffeurVehicleService;
+import com.hitecart.deliverysystem.services.*;
+import com.hitecart.deliverysystem.services.IChauffeurVehicleService;
 import com.hitecart.deliverysystem.specification.MissionSpecification;
 import com.hitecart.deliverysystem.validator.MissionValidator;
 import jakarta.transaction.Transactional;
@@ -51,20 +48,26 @@ public class MissionServiceImpl implements MissionService {
     private final VehiculeRepository vehiculeRepository;
     private final View error;
     private final UtilisateurService utilisateurServiceImpl;
+    private final IDeliveryDestinationService deliveryDestinationService;
 
 
     @Override
     public MissionDto save(MissionDto dto) {
         checkDto(dto, "Mission n'est pas valide",
                 "la Mission n'est pas valide", ErrorCodes.MISSION_NOT_VALID_OPERATION);
-
-
         if (dto.getId() != null && dto.isMissionAccomplished()) {
             throw new InvalidOperationException("Impossible de modifier la mission lorsqu'elle est accompli",
                     ErrorCodes.MISSION_NOT_VALID_OPERATION);
         }
 
+        log.error("start check");
+        checkOverlapping(dto);
+        log.error("end check");
+
+        DeliveryDestinationDto deliveryDestinationDto = deliveryDestinationService.findById(dto.getIdDeliveryDestination());
+
         Mission savedMission = MissionDto.toEntity(dto);
+        savedMission.setDeliveryDestination(DeliveryDestinationDto.toEntity(deliveryDestinationDto));
         savedMission = missionRepository.save(savedMission);
             List<Etape> savedetapes = new ArrayList<>();
 
@@ -117,6 +120,41 @@ public class MissionServiceImpl implements MissionService {
         MissionDto savedMissionDto= MissionDto.fromEntity(savedMission);
         return savedMissionDto;
 
+    }
+
+    private void checkOverlapping(MissionDto dto) {
+        checkOverlappingVehicles(dto);
+        checkOverlappingDrivers(dto);
+
+    }
+    @Override
+    public void checkOverlappingVehicles(MissionDto dto) {
+        List<Integer> vehiclesIds= dto.getMissionVehiclesDtos().stream()
+                .map(dtoMV->dtoMV.getVehicleDto().getId())
+                .collect(Collectors.toList());
+        log.error(vehiclesIds.size()+" vehiclesIds");
+        List<Integer> unavailableVehiclesIds = missionVehicleService.findUnavailableVehicles(vehiclesIds,dto.getDateDebut(),dto.getDateFin());
+        log.error(unavailableVehiclesIds.size()+" unavailableVehiclesIds");
+        if(!unavailableVehiclesIds.isEmpty()){
+            List<String> errorsUnavailableVs = unavailableVehiclesIds.stream().map(String::valueOf).toList();
+
+            throw new InvalidOperationException("Some vehicles are already assigned to another mission.",ErrorCodes.MISSION_NOT_VALID_OPERATION,errorsUnavailableVs);
+        }
+    }
+    @Override
+    public void checkOverlappingDrivers(MissionDto dto) {
+
+        List<Integer> driverIds= dto.getMissionVehiclesDtos()
+                .stream().flatMap(dtoMV->dtoMV.getChauffeursVehicleDto().stream())
+                .map(cvDto->cvDto.getChauffeurDto().getId())
+                .collect(Collectors.toList());
+        List<Integer> unavailableDriverIds = chauffeurVehicleService.findUnavailableDrivers(driverIds,dto.getDateDebut(),dto.getDateFin());
+
+        if(!unavailableDriverIds.isEmpty()){
+
+            List<String> errorsUnavailableDs = unavailableDriverIds.stream().map(String::valueOf).toList();
+            throw new InvalidOperationException("Some drivers are already assigned to another mission.",ErrorCodes.MISSION_NOT_VALID_OPERATION,errorsUnavailableDs);
+        }
     }
 
     @Override
@@ -209,10 +247,10 @@ public class MissionServiceImpl implements MissionService {
     }
 
     @Override
-    public List<MissionDto> findAll() {
+    public List<MissionResponse> findAll() {
         return missionRepository.findAll().stream()
                 //.map(MissionDto::fromEntity)
-                .map(this::updatedResponse)
+                .map(this::updatedMissionResponse)
                 .collect(Collectors.toList());
     }
 
@@ -299,11 +337,19 @@ public class MissionServiceImpl implements MissionService {
     private void setCreatedByUser(MissionDto response){
         UtilisateurDto uDto = getCreatedBy(response.getCreatedBy());
         response.setCreatedByUser(CreatedByUserDto.builder().id(uDto.getId()).fullname(uDto.getFullname()).build());
+    }    private void setCreatedByUserResponse(MissionResponse response){
+        UtilisateurDto uDto = getCreatedBy(response.getCreatedBy());
+        response.setCreatedByUser(CreatedByUserDto.builder().id(uDto.getId()).fullname(uDto.getFullname()).build());
     }
 
     private MissionDto updatedResponse(Mission mission) {
         MissionDto mDto=MissionDto.fromEntity(mission);
         setCreatedByUser(mDto);
+        return mDto;
+    }
+    private MissionResponse updatedMissionResponse(Mission mission) {
+        MissionResponse mDto=MissionResponse.fromEntity(mission);
+        setCreatedByUserResponse(mDto);
         return mDto;
     }
 }

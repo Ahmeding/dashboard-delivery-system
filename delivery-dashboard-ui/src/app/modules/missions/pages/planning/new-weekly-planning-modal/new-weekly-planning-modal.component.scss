@@ -1,60 +1,70 @@
-/*
-host {
-  display: block;
-}
+
 
 .modal-content {
   background-color: var(--card-bg);
   color: var(--text-color);
   border: 1px solid var(--border-color);
-}
+  border-radius: 0.5rem;
 
-.modal-header {
-  border-bottom: 1px solid var(--border-color);
-}
-
-.modal-footer {
-  border-top: 1px solid var(--border-color);
-}
-
-.form-control, .form-select {
-  background-color: var(--bg-color);
-  border: 1px solid var(--border-color);
-  color: var(--text-color);
-
-  &::placeholder {
-    color: var(--text-muted);
+  .modal-header {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-bottom: 1px solid var(--border-color);
   }
 
-  option {
-    background-color: var(--bg-color);
-    color: var(--text-color);
+  .modal-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+
+  .btn-close {
+    filter: brightness(80%);
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    input, select {
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      background-color: var(--bg-color);
+      border-radius: 0.25rem;
+      padding: 0.75rem;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.25);
+    }
+
+    label {
+      color: var(--text-muted);
+    }
+  }
+
+  .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+
+    &:hover {
+      background-color: rgba(var(--primary-rgb), 0.9);
+      border-color: rgba(var(--primary-rgb), 0.9);
+    }
+  }
+
+  .btn-secondary {
+    background-color: var(--dark-color);
+    border-color: var(--dark-color);
+
+    &:hover {
+      background-color: rgba(var(--primary-rgb), 0.9);
+      border-color: rgba(var(--primary-rgb), 0.9);
+    }
   }
 }
 
-.form-control:focus, .form-select:focus {
-  background-color: var(--bg-color);
-  border-color: var(--primary-color);
-  color: var(--text-color);
-  box-shadow: none;
-}
 
-.form-label {
-  color: var(--text-color);
-}
-
-.btn-close {
-  filter: invert(var(--bs-dark-rgb));
-}
-
-.modal-title {
-  color: var(--text-color);
-}
-
-.invalid-feedback {
-  color: var(--danger-color);
-}
-*/
+/*
 .delivery-destination-modal {
   background-color: var(--card-bg);
   color: var(--text-color);
@@ -84,7 +94,7 @@ host {
     padding: 1.5rem;
     max-height: 70vh;
     overflow-y: auto;
-    /*
+    !*
         .form-group {
           margin-bottom: 1.25rem;
 
@@ -116,7 +126,7 @@ host {
               color: var(--text-muted);
             }
           }
-        }*/
+        }*!
     .days-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -363,3 +373,4 @@ host {
     }
   }
 }
+*/

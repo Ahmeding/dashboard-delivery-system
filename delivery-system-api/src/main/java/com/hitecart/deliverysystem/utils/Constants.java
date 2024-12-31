@@ -90,6 +90,19 @@ public interface Constants {
     String FIND_ALL_CONTRAT_ENDPOINT= "/all";
     String DELETE_CONTRAT_ENDPOINT= "/delete/{id}";
 /////////////////////////////////////////////////////////////////////////
+    String DAY_PLAN_ENDPOINT= "/dayplans";
+    String CREATE_DAY_PLAN_ENDPOINT= "/create";
+    String FIND_DAY_PLAN_BY_ID_ENDPOINT= "/by-id/{id}";
+    String FIND_ALL_DAY_PLAN_BY_WEEKLY_PLANNING_ID_ENDPOINT= "/by-weekly-p/{weekly_pId}";
+    String FIND_ALL_DAY_PLAN_ENDPOINT= "/all";
+    String DELETE_DAY_PLAN_ENDPOINT= "/delete/{id}";
+/////////////////////////////////////////////////////////////////////////
+    String WEEKLY_PLANNING_ENDPOINT= "/weekly-plannings";
+    String CREATE_WEEKLY_PLANNING_ENDPOINT= "/create";
+    String FIND_WEEKLY_PLANNING_BY_ID_ENDPOINT= "/weekly-planning/{id}";
+    String FIND_ALL_WEEKLY_PLANNING_ENDPOINT= "/all";
+    String DELETE_WEEKLY_PLANNING_ENDPOINT= "/delete/{id}";
+/////////////////////////////////////////////////////////////////////////
     String DEVIS_ENDPOINT= "/devis";
     String CREATE_DEVIS_ENDPOINT= "/create";
     String FIND_DEVIS_BY_ID_ENDPOINT= "/devis/by-id/{id}";
@@ -112,6 +125,8 @@ String MISSION_ENDPOINT= "/missions";
     String FIND_MISSION_BY_DATE_ENDPOINT= "/date/{dateMission}";
     String FIND_ALL_MISSION_ENDPOINT= "/all";
     String DELETE_MISSION_ENDPOINT= "/delete/{id}";
+    String CHECK_OVERLAPPING_DRIVERS_ENDPOINT= "/drivers-check";
+    String CHECK_OVERLAPPING_VEHICLES_ENDPOINT= "/vehicles-check";
 /////////////////////////////////////////////////////////////////////////
 String PIECE_RECHANGE_ENDPOINT= "/piecerenchanges";
     String CREATE_PIECE_RECHANGE_ENDPOINT= "/create";

@@ -16,6 +16,7 @@ public class ServiceDeliveryDto {
     private String reference;
     private String color;
     private String destinationCity;
+    private String destinationCountry;
     private String pickUpLocation;
     private double distance;
     private String title;
@@ -34,6 +35,7 @@ public class ServiceDeliveryDto {
                 .reference(serviceDelivery.getReference())
                 .color(serviceDelivery.getColor())
                 .destinationCity(serviceDelivery.getDestinationCity())
+                .destinationCountry(serviceDelivery.getDestinationCountry())
                 .pickUpLocation(serviceDelivery.getPickUpLocation())
                 .distance(serviceDelivery.getDistance())
                 .title(serviceDelivery.getTitle())
@@ -51,6 +53,7 @@ public class ServiceDeliveryDto {
                 .reference(serviceDeliveryDto.getReference())
                 .color(serviceDeliveryDto.getColor())
                 .destinationCity(serviceDeliveryDto.getDestinationCity())
+                .destinationCountry(serviceDeliveryDto.getDestinationCountry())
                 .pickUpLocation(serviceDeliveryDto.getPickUpLocation())
                 .distance(serviceDeliveryDto.getDistance())
                 .title(serviceDeliveryDto.getTitle())

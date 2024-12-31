@@ -1,6 +1,7 @@
 package com.hitecart.deliverysystem.repository;
 
 
+import com.hitecart.deliverysystem.dto.DeliveryDestinationDto;
 import com.hitecart.deliverysystem.model.DeliveryDestination;
 import com.hitecart.deliverysystem.model.DeliveryPoint;
 import org.springframework.data.domain.Page;
@@ -29,5 +30,16 @@ public interface DeliveryDestinationRepository extends JpaRepository<DeliveryDes
             WHERE ds.client.id = :clientId
         """)
     List<DeliveryDestination> findAllByClientId(Integer clientId);
+
+
+
+
+    @Query("""
+            SELECT dd
+            FROM DeliveryDestination dd
+            WHERE dd.client.id = :clientId
+            AND dd.serviceDelivery.id = :serviceDeliveryId
+        """)
+    DeliveryDestination findDeliveryDestinationsByServiceDeliveryId(Integer clientId, Integer serviceDeliveryId);
 
 }

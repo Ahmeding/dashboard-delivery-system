@@ -27,7 +27,7 @@ export class NewDpCategoryModalComponent implements OnInit{
   this.dpCategoryValue=this.dpCategoryForm.value;
     console.log(this.dpCategoryValue);
 
-    this.dpCategoryService.save8({body:this.dpCategoryValue}).subscribe({
+    this.dpCategoryService.save9({body:this.dpCategoryValue}).subscribe({
       next:(rep)=>{
         console.log(rep);
         this.activeModal.close(this.dpCategoryForm.value)

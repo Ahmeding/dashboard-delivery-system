@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.model;
 
+import com.hitecart.deliverysystem.model.enums.DayName;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -15,7 +16,8 @@ import java.util.*;
 @Entity
 public class DayPlan extends AbstractEntity {
 
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private DayName name;
     private LocalDate date;
     @ManyToOne
     @JoinColumn(name = "id_weekly_planning")

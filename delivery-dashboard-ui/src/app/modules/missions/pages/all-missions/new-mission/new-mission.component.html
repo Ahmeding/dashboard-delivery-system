@@ -11,7 +11,7 @@
     <div class="card mission-details">
       <div class="card-body">
         <h5 class="section-title">
-          <i class="bi bi-info-circle me-2"></i>Mission Details
+          <i class="bi bi-info-circle me-2"></i> Date Day : {{ dateDay }} Mission Details
         </h5>
 
         <div class="row g-4">
@@ -26,11 +26,14 @@
                 placeholder="Mission Title"
               />-->
               <select
-                (change)="onServiceChange(selectedDeliveryService)"
-                [(ngModel)]="selectedDeliveryService"
+                (change)="onDDestinationChange(selectedDeliveryDestination!)"
+                [(ngModel)]="selectedDeliveryDestination"
                 id="inputServ" name="serv" class="form-control">
                 <option [ngValue]="undefined" selected disabled>Select Service</option>
-                <option *ngFor="let sd of allServiceDelivery" [ngValue]="sd">{{ sd.title }}</option>
+                <option *ngFor="let dDestination of allDeliveryDestination"
+                        [ngValue]="dDestination">
+                  {{ dDestination.serviceDelivery?.destinationCity}}
+                </option>
               </select>
               <label for="inputServ">Select Service <span class="required">*</span></label>
             </div>
@@ -53,59 +56,6 @@
       </div>
     </div>
 
-    <div class="card mission-details">
-      <div class="card-body">
-        <h5 class="section-title">
-          <i class="bi bi-info-circle me-2"></i>Mission Details
-        </h5>
-
-        <div class="row g-4">
-          <div class="col-md-4">
-
-            <div class="form-floating">
-              <input
-                [(ngModel)]="missionToSave.dateDebut"
-                name="datedebut"
-                class="form-control"
-                id="inputStartDate"
-                type="datetime-local"
-                placeholder="Start Date"
-              />
-              <label for="inputStartDate">Start Date<span class="required">*</span></label>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="form-floating">
-              <input
-                [(ngModel)]="missionToSave.dateFin"
-                name="dateFin"
-                class="form-control"
-                id="inputEndDate"
-                type="datetime-local"
-                placeholder="End Date"
-              />
-              <label for="inputEndDate">End Date<span class="required">*</span></label>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="form-floating">
-              <input
-                [(ngModel)]="missionToSave.volume"
-                name="volume"
-                class="form-control"
-                id="inputVolume"
-                type="number"
-                placeholder="Volume"
-              />
-              <label for="inputVolume">Volume (m³)<span class="required">*</span></label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Stages Section -->
     <div class="card stages-section">
       <div class="card-body">
@@ -113,7 +63,6 @@
           <i class="bi bi-geo-alt me-2"></i>Mission Stages
           <span class="badge bg-primary ms-2">{{etapeDtos.length}} stages</span>
         </h5>
-
         <form [formGroup]="etapeForm" class="stage-form">
           <div class="row g-3">
             <div class="col-md-4">
@@ -132,13 +81,14 @@
             <div class="col-md-4">
               <div class="form-floating">
                 <select
+                  (change)="onDeliveryPointChange(selectedDpoint)"
+                  [(ngModel)]="selectedDpoint"
                   formControlName="lieuArrivee"
                   class="form-control"
                   id="inputLieuArrivee"
-                  placeholder="Destination"
                 >
-                  <option [ngValue]="undefined" selected disabled>Select Deliv. Point</option>
-                  <option *ngFor="let dp of deliveryPointsByCity" [ngValue]="dp.name">{{ dp.name }}</option>
+                  <option  [ngValue]="undefined" [selected]="true" disabled>Select Delivery Point</option>
+                  <option *ngFor="let dp of deliveryPointsByCity" [ngValue]="dp">{{ dp.name }} - {{ dp.addressDto?.ville }}</option>
                 </select>
                 <label for="inputLieuArrivee">Destination<span class="required">*</span></label>
               </div>
@@ -198,6 +148,62 @@
       </div>
     </div>
 
+
+    <div class="card mission-details">
+      <div class="card-body">
+        <h5 class="section-title">
+          <i class="bi bi-info-circle me-2"></i>Mission Details
+        </h5>
+
+        <div class="row g-4">
+          <div class="col-md-4">
+
+            <div class="form-floating">
+              <input
+                [(ngModel)]="missionToSave.dateDebut"
+                name="datedebut"
+                class="form-control"
+                id="inputStartDate"
+                placeholder="Start Date"
+                type="datetime-local"
+                [min]="minDate"
+                (change)="validateStartDate()"
+              />
+              <label for="inputStartDate">Start Date<span class="required">*</span></label>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-floating">
+              <input
+                [(ngModel)]="missionToSave.dateFin"
+                name="dateFin"
+                class="form-control"
+                id="inputEndDate"
+                type="datetime-local"
+                placeholder="End Date"
+                (change)="validateEndDate()"
+              />
+              <label for="inputEndDate">End Date<span class="required">*</span></label>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-floating">
+              <input
+                [(ngModel)]="missionToSave.volume"
+                name="volume"
+                class="form-control"
+                id="inputVolume"
+                type="number"
+                placeholder="Volume"
+              />
+              <label for="inputVolume">Volume (m³)<span class="required">*</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Vehicles and Drivers Section -->
     <div class="card vehicles-section">
       <div class="card-body">
@@ -304,4 +310,10 @@
       </div>
     </div>
   </div>
+
+  <header class="form-header">
+    <button class="btn btn-primary" (click)="saveMission()">
+      <i class="bi bi-save me-2"></i>Save Mission
+    </button>
+  </header>
 </div>

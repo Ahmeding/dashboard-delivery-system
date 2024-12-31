@@ -2,6 +2,7 @@ package com.hitecart.deliverysystem.services;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.MissionDto;
+import com.hitecart.deliverysystem.dto.MissionResponse;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
 import org.springframework.security.core.Authentication;
 
@@ -20,9 +21,11 @@ public interface MissionService {
 //    FraisMissionDto updateX(Integer idMF, Integer idLFM, BigDecimal qte);
     MissionDto findById(Integer id);
     List<MissionDto> findAllByDate(Instant dateMission);
-    List<MissionDto> findAll();
+    List<MissionResponse> findAll();
     void delete(Integer id);
 
+    void checkOverlappingVehicles(MissionDto dto);
+    void checkOverlappingDrivers(MissionDto dto);
     PageResponse<MissionDto> findAllMissions(int page, int size);
     PageResponse<MissionDto> findAllMissionsByDriverId(int page, int size, Authentication connectedUser);
 }

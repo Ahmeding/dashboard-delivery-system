@@ -16,6 +16,9 @@ import { AddMissionComponent } from './pages/all-missions/add-mission/add-missio
 import { ReviewMissionComponent } from './pages/all-missions/add-mission/review-mission/review-mission.component';
 import { WeeklyPlanningComponent } from './pages/planning/weekly-planning/weekly-planning.component';
 import { NewWeeklyPlanningModalComponent } from './pages/planning/new-weekly-planning-modal/new-weekly-planning-modal.component';
+import { MissionCardComponent } from './pages/planning/weekly-planning/mission-card/mission-card.component';
+import {PlanningService} from "./pages/planning/weekly-planning/services/planning-service";
+import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
 
 
 @NgModule({
@@ -32,23 +35,26 @@ import { NewWeeklyPlanningModalComponent } from './pages/planning/new-weekly-pla
     ReviewMissionComponent,
     WeeklyPlanningComponent,
     NewWeeklyPlanningModalComponent,
+    MissionCardComponent,
   ],
-  imports: [
-    CommonModule,
-    MissionsRoutingModule,
-    FormsModule,
-    NgForOf,
-    NgIf,
-    ReactiveFormsModule,
-    RouterLink,
-    FormsModule,
-    NgForOf,
-    NgIf,
-    ReactiveFormsModule,
-    RouterLink,
-    RouterModule.forChild([
-      { path: 'new', component: AddMissionComponent }
-    ])
-  ]
+    imports: [
+        CommonModule,
+        MissionsRoutingModule,
+        FormsModule,
+        NgForOf,
+        NgIf,
+        ReactiveFormsModule,
+        RouterLink,
+        FormsModule,
+        NgForOf,
+        NgIf,
+        ReactiveFormsModule,
+        RouterLink,
+        RouterModule.forChild([
+            {path: 'new', component: AddMissionComponent}
+        ]),
+        BsDatepickerModule
+    ],
+  providers: [PlanningService]
 })
 export class MissionsModule { }

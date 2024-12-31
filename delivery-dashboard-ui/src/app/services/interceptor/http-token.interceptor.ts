@@ -18,25 +18,48 @@ export class HttpTokenInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const token:string =this.tokenService.token;
     console.log("interceptor start ");
+    let authReq = request;
     if(token){
-      const authReq=request.clone({
+       authReq=request.clone({
+
         headers : new HttpHeaders({
           'Content-type' : 'application/json',
           Accept : 'application/json',
           Authorization : 'Bearer '+ token
         })
       })
-      return next.handle(authReq);
-    }else{
+
+      console.log("interceptor : Bearer + token");
+
+    }
+    return next.handle(authReq).pipe(
+      catchError((err)=>{
+
+        console.log("Interceptor error", err);
+        if(err.status === 401 || err.status === 403){
+          console.log("Unauthorized or forbiden: Redirecting to login");
+          this.tokenService.logout();
+          this.router.navigate(['login']);
+        }
+
+        return throwError(()=>err);
+
+      })
+
+    );
+    /*else{
       return next.handle(request).pipe(catchError(
         (err)=>{
+          console.log(err);
           if(err.status === 401 || err.status === 403 ){
-            this.router.navigate(['']);
+            this.router.navigate(['login']);
+            console.log(err.status);
+            this.tokenService.logout();
           }
           return throwError(()=>err);
         }
       ));
-    }
+    }*/
 
   }
 }

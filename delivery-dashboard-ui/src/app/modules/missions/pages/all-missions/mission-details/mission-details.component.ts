@@ -23,9 +23,10 @@ export class MissionDetailsComponent implements OnInit{
   vehicles:VehiculeDto[]=[];
   driversNdCars:any[]= [];
 
-constructor(private activeRouter:ActivatedRoute,
-              private missionService:MissionService,
-              private alertService:AlertService,
+constructor(
+            private activeRouter:ActivatedRoute,
+            private missionService:MissionService,
+            private alertService:AlertService,
             private dateUtil: DateUtilsService) {
   }
   ngOnInit(): void {
@@ -68,7 +69,7 @@ constructor(private activeRouter:ActivatedRoute,
   }*/
 
   loadMission(){
-    this.missionService.findById5({id:this.id}).subscribe(
+    this.missionService.findById6({id:this.id}).subscribe(
       {
         next:(loadedMission)=>{
           this.mission=loadedMission;

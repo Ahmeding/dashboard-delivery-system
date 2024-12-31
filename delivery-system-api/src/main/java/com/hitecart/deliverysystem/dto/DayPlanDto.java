@@ -4,6 +4,7 @@ package com.hitecart.deliverysystem.dto;
 
 import com.hitecart.deliverysystem.model.DayPlan;
 import com.hitecart.deliverysystem.model.Mission;
+import com.hitecart.deliverysystem.model.enums.DayName;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @Builder
 public class DayPlanDto {
     private Integer id;
-    private String name;
+    private DayName name;
     private LocalDate date;
     private Integer idWeeklyPlanning;
     private List<MissionDto> missionsDto;

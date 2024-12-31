@@ -1,9 +1,6 @@
 package com.hitecart.deliverysystem.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.hitecart.deliverysystem.model.Client;
-import com.hitecart.deliverysystem.model.DeliveryDestination;
-import com.hitecart.deliverysystem.model.DeliveryPoint;
-import com.hitecart.deliverysystem.model.ServiceDelivery;
+import com.hitecart.deliverysystem.model.*;
 import com.hitecart.deliverysystem.model.enums.DeliveryPointType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -15,6 +12,7 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +25,7 @@ public class DeliveryDestinationDto {
     private Integer id;
     private String reference;
 
+    private List<MissionDto> missionsDto;
     private List<DeliveryPointDto> deliveryPointsDto;
     private Integer clientId;
     private Integer serviceDeliveryId;
@@ -48,6 +47,9 @@ public class DeliveryDestinationDto {
 
                         .clientId(deliveryDestination.getClient()!=null ? deliveryDestination.getClient().getId() : null)
                         .serviceDeliveryId(deliveryDestination.getServiceDelivery()!=null ? deliveryDestination.getServiceDelivery().getId() : null)
+                        .missionsDto(deliveryDestination.getMissions()!=null ?
+                                deliveryDestination.getMissions().stream()
+                                        .map(MissionDto::fromEntity).collect(Collectors.toList()):null)
                         .deliveryPointsDto(
                                 deliveryDestination.getDeliveryPoints()!=null?
                                         deliveryDestination.getDeliveryPoints().stream()
@@ -69,6 +71,10 @@ public class DeliveryDestinationDto {
         return DeliveryDestination.builder()
                 .id(dto.getId())
                 .reference(dto.getReference())
+                .missions(dto.missionsDto!=null?
+                        dto.missionsDto.stream()
+                            .map(MissionDto::toEntity)
+                            .collect(Collectors.toList()) : null)
                 .deliveryPoints(
                         dto.getDeliveryPointsDto()!=null?
                                 dto.getDeliveryPointsDto().stream()

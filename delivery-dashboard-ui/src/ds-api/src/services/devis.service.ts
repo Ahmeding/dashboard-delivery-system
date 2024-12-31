@@ -15,17 +15,17 @@ import { delete9 } from '../fn/devis/delete-9';
 import { Delete9$Params } from '../fn/devis/delete-9';
 import { DevisDto } from '../models/devis-dto';
 import { DevisDtoResponse } from '../models/devis-dto-response';
-import { findAll9 } from '../fn/devis/find-all-9';
-import { FindAll9$Params } from '../fn/devis/find-all-9';
+import { findAll10 } from '../fn/devis/find-all-10';
+import { FindAll10$Params } from '../fn/devis/find-all-10';
 import { findAllDevis } from '../fn/devis/find-all-devis';
 import { FindAllDevis$Params } from '../fn/devis/find-all-devis';
 import { findByCode } from '../fn/devis/find-by-code';
 import { FindByCode$Params } from '../fn/devis/find-by-code';
-import { findById9 } from '../fn/devis/find-by-id-9';
-import { FindById9$Params } from '../fn/devis/find-by-id-9';
+import { findById10 } from '../fn/devis/find-by-id-10';
+import { FindById10$Params } from '../fn/devis/find-by-id-10';
 import { PageResponseDevisDtoResponse } from '../models/page-response-devis-dto-response';
-import { save9 } from '../fn/devis/save-9';
-import { Save9$Params } from '../fn/devis/save-9';
+import { save10 } from '../fn/devis/save-10';
+import { Save10$Params } from '../fn/devis/save-10';
 
 @Injectable({ providedIn: 'root' })
 export class DevisService extends BaseService {
@@ -33,60 +33,60 @@ export class DevisService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `save9()` */
-  static readonly Save9Path = '/devis/create';
+  /** Path part for operation `save10()` */
+  static readonly Save10Path = '/devis/create';
 
   /**
    * Ajouter/Modifier un devis, cette methode permet d'enregistrer ou modifier un devis
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save9()` instead.
+   * To access only the response body, use `save10()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save9$Response(params: Save9$Params, context?: HttpContext): Observable<StrictHttpResponse<DevisDto>> {
-    return save9(this.http, this.rootUrl, params, context);
+  save10$Response(params: Save10$Params, context?: HttpContext): Observable<StrictHttpResponse<DevisDto>> {
+    return save10(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier un devis, cette methode permet d'enregistrer ou modifier un devis
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save9$Response()` instead.
+   * To access the full response (for headers, for example), `save10$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save9(params: Save9$Params, context?: HttpContext): Observable<DevisDto> {
-    return this.save9$Response(params, context).pipe(
+  save10(params: Save10$Params, context?: HttpContext): Observable<DevisDto> {
+    return this.save10$Response(params, context).pipe(
       map((r: StrictHttpResponse<DevisDto>): DevisDto => r.body)
     );
   }
 
-  /** Path part for operation `findById9()` */
-  static readonly FindById9Path = '/devis/devis/by-id/{id}';
+  /** Path part for operation `findById10()` */
+  static readonly FindById10Path = '/devis/devis/by-id/{id}';
 
   /**
    * Rechercher un Devis par ID! Cette methode permet de chercher un devis par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById9()` instead.
+   * To access only the response body, use `findById10()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById9$Response(params: FindById9$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DevisDtoResponse>>> {
-    return findById9(this.http, this.rootUrl, params, context);
+  findById10$Response(params: FindById10$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DevisDtoResponse>>> {
+    return findById10(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher un Devis par ID! Cette methode permet de chercher un devis par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById9$Response()` instead.
+   * To access the full response (for headers, for example), `findById10$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById9(params: FindById9$Params, context?: HttpContext): Observable<Array<DevisDtoResponse>> {
-    return this.findById9$Response(params, context).pipe(
+  findById10(params: FindById10$Params, context?: HttpContext): Observable<Array<DevisDtoResponse>> {
+    return this.findById10$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<DevisDtoResponse>>): Array<DevisDtoResponse> => r.body)
     );
   }
@@ -120,31 +120,31 @@ export class DevisService extends BaseService {
     );
   }
 
-  /** Path part for operation `findAll9()` */
-  static readonly FindAll9Path = '/devis/all';
+  /** Path part for operation `findAll10()` */
+  static readonly FindAll10Path = '/devis/all';
 
   /**
    * Rechercher tout les Devis! Cette methode permet de retouner tous les devis
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll9()` instead.
+   * To access only the response body, use `findAll10()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll9$Response(params?: FindAll9$Params, context?: HttpContext): Observable<StrictHttpResponse<DevisDtoResponse>> {
-    return findAll9(this.http, this.rootUrl, params, context);
+  findAll10$Response(params?: FindAll10$Params, context?: HttpContext): Observable<StrictHttpResponse<DevisDtoResponse>> {
+    return findAll10(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les Devis! Cette methode permet de retouner tous les devis
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll9$Response()` instead.
+   * To access the full response (for headers, for example), `findAll10$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll9(params?: FindAll9$Params, context?: HttpContext): Observable<DevisDtoResponse> {
-    return this.findAll9$Response(params, context).pipe(
+  findAll10(params?: FindAll10$Params, context?: HttpContext): Observable<DevisDtoResponse> {
+    return this.findAll10$Response(params, context).pipe(
       map((r: StrictHttpResponse<DevisDtoResponse>): DevisDtoResponse => r.body)
     );
   }

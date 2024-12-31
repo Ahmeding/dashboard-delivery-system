@@ -14,17 +14,17 @@ import { StrictHttpResponse } from '../strict-http-response';
 import { ChauffeurDto } from '../models/chauffeur-dto';
 import { delete1 } from '../fn/utilisateur/delete-1';
 import { Delete1$Params } from '../fn/utilisateur/delete-1';
-import { findAll1 } from '../fn/utilisateur/find-all-1';
-import { FindAll1$Params } from '../fn/utilisateur/find-all-1';
+import { findAll2 } from '../fn/utilisateur/find-all-2';
+import { FindAll2$Params } from '../fn/utilisateur/find-all-2';
 import { findAllUtilisateurs } from '../fn/utilisateur/find-all-utilisateurs';
 import { FindAllUtilisateurs$Params } from '../fn/utilisateur/find-all-utilisateurs';
 import { findByEmail } from '../fn/utilisateur/find-by-email';
 import { FindByEmail$Params } from '../fn/utilisateur/find-by-email';
-import { findById1 } from '../fn/utilisateur/find-by-id-1';
-import { FindById1$Params } from '../fn/utilisateur/find-by-id-1';
+import { findById2 } from '../fn/utilisateur/find-by-id-2';
+import { FindById2$Params } from '../fn/utilisateur/find-by-id-2';
 import { PageResponseUtilisateurDto } from '../models/page-response-utilisateur-dto';
-import { save1 } from '../fn/utilisateur/save-1';
-import { Save1$Params } from '../fn/utilisateur/save-1';
+import { save2 } from '../fn/utilisateur/save-2';
+import { Save2$Params } from '../fn/utilisateur/save-2';
 
 @Injectable({ providedIn: 'root' })
 export class UtilisateurService extends BaseService {
@@ -32,60 +32,60 @@ export class UtilisateurService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `save1()` */
-  static readonly Save1Path = '/utilisateurs/create';
+  /** Path part for operation `save2()` */
+  static readonly Save2Path = '/utilisateurs/create';
 
   /**
    * Ajouter/Modifier un utilisateur, cette methode permet d'enregistrer ou modifier un utilisateur
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save1()` instead.
+   * To access only the response body, use `save2()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save1$Response(params: Save1$Params, context?: HttpContext): Observable<StrictHttpResponse<ChauffeurDto>> {
-    return save1(this.http, this.rootUrl, params, context);
+  save2$Response(params: Save2$Params, context?: HttpContext): Observable<StrictHttpResponse<ChauffeurDto>> {
+    return save2(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier un utilisateur, cette methode permet d'enregistrer ou modifier un utilisateur
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save1$Response()` instead.
+   * To access the full response (for headers, for example), `save2$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save1(params: Save1$Params, context?: HttpContext): Observable<ChauffeurDto> {
-    return this.save1$Response(params, context).pipe(
+  save2(params: Save2$Params, context?: HttpContext): Observable<ChauffeurDto> {
+    return this.save2$Response(params, context).pipe(
       map((r: StrictHttpResponse<ChauffeurDto>): ChauffeurDto => r.body)
     );
   }
 
-  /** Path part for operation `findById1()` */
-  static readonly FindById1Path = '/utilisateurs/user/by-id/{id}';
+  /** Path part for operation `findById2()` */
+  static readonly FindById2Path = '/utilisateurs/user/by-id/{id}';
 
   /**
    * Rechercher un Utilisateur par ID! Cette methode permet de chercher un utilisateur par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById1()` instead.
+   * To access only the response body, use `findById2()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById1$Response(params: FindById1$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findById1(this.http, this.rootUrl, params, context);
+  findById2$Response(params: FindById2$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findById2(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher un Utilisateur par ID! Cette methode permet de chercher un utilisateur par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById1$Response()` instead.
+   * To access the full response (for headers, for example), `findById2$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById1(params: FindById1$Params, context?: HttpContext): Observable<any> {
-    return this.findById1$Response(params, context).pipe(
+  findById2(params: FindById2$Params, context?: HttpContext): Observable<any> {
+    return this.findById2$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
@@ -119,31 +119,31 @@ export class UtilisateurService extends BaseService {
     );
   }
 
-  /** Path part for operation `findAll1()` */
-  static readonly FindAll1Path = '/utilisateurs/all';
+  /** Path part for operation `findAll2()` */
+  static readonly FindAll2Path = '/utilisateurs/all';
 
   /**
    * Rechercher tout les Utilisateur! Cette methode permet de retouner tous les chauffeurs
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll1()` instead.
+   * To access only the response body, use `findAll2()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll1$Response(params?: FindAll1$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findAll1(this.http, this.rootUrl, params, context);
+  findAll2$Response(params?: FindAll2$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findAll2(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les Utilisateur! Cette methode permet de retouner tous les chauffeurs
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll1$Response()` instead.
+   * To access the full response (for headers, for example), `findAll2$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll1(params?: FindAll1$Params, context?: HttpContext): Observable<any> {
-    return this.findAll1$Response(params, context).pipe(
+  findAll2(params?: FindAll2$Params, context?: HttpContext): Observable<any> {
+    return this.findAll2$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

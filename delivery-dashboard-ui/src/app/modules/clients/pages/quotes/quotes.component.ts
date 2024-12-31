@@ -129,7 +129,7 @@ export class QuotesComponent implements OnInit{
   }
 
   private getAllClients() {
-    this.clientService.findAll14().subscribe({
+    this.clientService.findAll16().subscribe({
       next:(clientsResponse)=>{
         this.allClients=clientsResponse;
       }
@@ -143,7 +143,7 @@ export class QuotesComponent implements OnInit{
     this.newQuote.ligneDevisDtos=this.orderlines;
     this.newQuote.etatDevis= "PENDING_APPROVAL"
     console.log(this.newQuote);
-    this.devisService.save9({body:this.newQuote}).subscribe({
+    this.devisService.save10({body:this.newQuote}).subscribe({
       next:(resp)=>{
         this.getAllQuotes();
         this.resetForm(form);
@@ -163,7 +163,7 @@ export class QuotesComponent implements OnInit{
   }
 
   private getAllServDelivery() {
-    this.servDeliveryService.findAll2().subscribe({
+    this.servDeliveryService.findAll3().subscribe({
       next:(allSDResponse)=>{
         this.allServiceDeliveries=allSDResponse;
       },
@@ -223,7 +223,7 @@ export class QuotesComponent implements OnInit{
   }
 
   editQuote(id: number | undefined) {
-    this.devisService.findById9({id:id as number}).subscribe({
+    this.devisService.findById10({id:id as number}).subscribe({
       next:(quote)=>{
         this.selectedToEditQuote = quote as DevisDto;
         this.orderlines = this.selectedToEditQuote.ligneDevisDtos as Array<DevisDto>;

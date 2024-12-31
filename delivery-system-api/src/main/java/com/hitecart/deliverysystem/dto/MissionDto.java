@@ -25,6 +25,7 @@ public class MissionDto {
     private String commentaire;
     private BigDecimal volume;
     private Integer idDayPlan;
+    private Integer idDeliveryDestination;
     private LocalDateTime dateDebut;
     private LocalDateTime dateFin;
     private EtatMission etatMission;
@@ -49,6 +50,8 @@ public class MissionDto {
                 .reference(mission.getReference())
                 .titre(mission.getTitre())
                 .idDayPlan(mission.getDayPlan()!=null?mission.getDayPlan().getId():null)
+                    .idDeliveryDestination(mission.getDeliveryDestination()!=null?
+                            mission.getDeliveryDestination().getId():null)
                 .commentaire(mission.getCommentaire())
                 .volume(mission.getVolume())
                 .dateDebut(mission.getDateDebut())

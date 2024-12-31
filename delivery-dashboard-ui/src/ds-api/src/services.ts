@@ -8,6 +8,7 @@ export { DeliveryPointService } from './services/delivery-point.service';
 export { DeliveryPointsService } from './services/delivery-points.service';
 export { ClientService } from './services/client.service';
 export { ChauffeurService } from './services/chauffeur.service';
+export { WeeklyPlanningService } from './services/weekly-planning.service';
 export { UtilisateurService } from './services/utilisateur.service';
 export { ReparationService } from './services/reparation.service';
 export { PiecesDeRechangeService } from './services/pieces-de-rechange.service';
@@ -17,6 +18,7 @@ export { EntrepriseControllerService } from './services/entreprise-controller.se
 export { DeliveryPointCategoriesService } from './services/delivery-point-categories.service';
 export { DevisService } from './services/devis.service';
 export { DeliveryDestinationService } from './services/delivery-destination.service';
+export { DayPlanService } from './services/day-plan.service';
 export { ContratService } from './services/contrat.service';
 export { CommandeClientService } from './services/commande-client.service';
 export { AuthenticationEnregistrementService } from './services/authentication-enregistrement.service';

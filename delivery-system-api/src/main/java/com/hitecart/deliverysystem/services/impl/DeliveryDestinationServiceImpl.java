@@ -5,6 +5,7 @@ import com.hitecart.deliverysystem.dto.*;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
+import com.hitecart.deliverysystem.exception.InvalidOperationException;
 import com.hitecart.deliverysystem.model.Client;
 import com.hitecart.deliverysystem.model.DeliveryDestination;
 import com.hitecart.deliverysystem.model.DeliveryPoint;
@@ -17,6 +18,7 @@ import com.hitecart.deliverysystem.services.IServiceDeliveryService;
 import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.services.IDeliveryDestinationService;
 import com.hitecart.deliverysystem.validator.DeliveryDestinationValidator;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,7 +27,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -40,6 +45,7 @@ public class DeliveryDestinationServiceImpl implements IDeliveryDestinationServi
     private final UtilisateurService utilisateurService;
     private final ClientService clientService;
 
+    @Transactional
     @Override
     public DeliveryDestinationDto save(DeliveryDestinationDto dto) {
         log.error( dto.toString());
@@ -47,29 +53,73 @@ public class DeliveryDestinationServiceImpl implements IDeliveryDestinationServi
 
         DeliveryDestination ddToSave = DeliveryDestinationDto.toEntity(dto);
 
-        Client client
-                = ClientDto.toEntity(clientService.findById(dto.getClientId()));
+        DeliveryDestination checkDelivDestination = deliveryDestinationExists(dto);
+        Client client = ClientDto.toEntity(clientService.findById(dto.getClientId()));
         ddToSave.setClient(client);
 
-        ServiceDelivery sdToSave
-                = ServiceDeliveryDto.toEntity(serviceDeliveryService.findById(dto.getServiceDeliveryId()));
-        ddToSave.setServiceDelivery(sdToSave);
-
-        DeliveryDestination deliveryDestinationToSave
-                     = deliveryDestinationRepository.save(ddToSave);
-
-        if(!dto.getDeliveryPointsDto().isEmpty()){
-            dto.getDeliveryPointsDto()
-                    .forEach(dp->{
-                        DeliveryPoint deliveryPointToSave = DeliveryPointDto.toEntity(dp);
-                deliveryPointToSave.setDeliveryDestination(deliveryDestinationToSave);
-                deliveryPointRepository.save(deliveryPointToSave);
-                    });
+        if(checkDelivDestination!=null){
+            ddToSave.setId(checkDelivDestination.getId());
+        }else{
+            ServiceDelivery sdToSave
+                    = ServiceDeliveryDto.toEntity(serviceDeliveryService.findById(dto.getServiceDeliveryId()));
+            ddToSave.setServiceDelivery(sdToSave);
+           ddToSave= deliveryDestinationRepository.save(ddToSave);
         }
+
+
+        setAllDeliveryPoints(dto,ddToSave);
+
         DeliveryDestinationDto deliveryDestinationSaved=
-                DeliveryDestinationDto.fromEntity( deliveryDestinationToSave);
+                DeliveryDestinationDto.fromEntity( ddToSave);
 
         return deliveryDestinationSaved;
+    }
+
+
+
+    private void validateAllDeliveryPoints(List<DeliveryPointDto> deliveryPointsDto, Set<String> existingPointNames) {
+        List<String> duplicateNames = deliveryPointsDto.stream()
+                .filter(dp -> existingPointNames.contains(dp.getName()))
+                .map(DeliveryPointDto::getName)
+                .collect(Collectors.toList());
+
+        if (!duplicateNames.isEmpty()) {
+            throw new InvalidOperationException(
+                    "Les points suivants existent déjà pour ce client: " + String.join(", ", duplicateNames),
+                    ErrorCodes.DELIVERY_POINT_NOT_VALID_OPERATION
+            );
+        }
+    }
+
+
+    private void setAllDeliveryPoints(DeliveryDestinationDto dto,DeliveryDestination ddToSave) {
+       if(dto.getDeliveryPointsDto().isEmpty()){
+           return;
+       }
+
+       List<DeliveryPoint> existingPoints =
+               deliveryPointRepository.findByClientAndServiceDelivery(dto.getClientId(), dto.getServiceDeliveryId());
+
+       Set<String> existingPointNames = existingPoints.stream()
+               .map(DeliveryPoint::getName)
+               .collect(Collectors.toSet());
+
+        // Validate all delivery points before saving any of them
+        validateAllDeliveryPoints(dto.getDeliveryPointsDto(), existingPointNames);
+
+
+            dto.getDeliveryPointsDto()
+                    .forEach(dp->{
+                       DeliveryPoint deliveryPointToSave = DeliveryPointDto.toEntity(dp);
+                       deliveryPointToSave.setDeliveryDestination(ddToSave);
+                       deliveryPointRepository.save(deliveryPointToSave);
+                    });
+
+    }
+
+
+    private DeliveryDestination deliveryDestinationExists(DeliveryDestinationDto dd) {
+        return deliveryDestinationRepository.findDeliveryDestinationsByServiceDeliveryId(dd.getClientId(), dd.getServiceDeliveryId());
     }
 
     @Override
@@ -108,12 +158,14 @@ public class DeliveryDestinationServiceImpl implements IDeliveryDestinationServi
 
 
     @Override
-    public List<DeliveryDestinationDto> findAll() {
+    public List<DeliveryDestinationResponse> findAll() {
 
         return deliveryDestinationRepository.findAll().stream()
-                .map(this::updatedResponse)
+                .map(this::updatedDDResponse)
                 .toList();
     }
+
+
 
     @Override
     public void delete(Integer id) {
@@ -168,10 +220,6 @@ public class DeliveryDestinationServiceImpl implements IDeliveryDestinationServi
             throw new InvalidEntityException(msgException, ErrorCodes.DELIVERY_POINT_NOT_FOUND,errors);
         }
     }
-    private void setCreatedByUser(DeliveryDestinationDto response){
-        UtilisateurDto uDto = getCreatedBy(response.getCreatedBy());
-        response.setCreatedByUser(CreatedByUserDto.builder().id(uDto.getId()).fullname(uDto.getFullname()).build());
-    }
 
     private UtilisateurDto getCreatedBy(Integer userid) {
         return utilisateurService.findById(userid);
@@ -181,6 +229,19 @@ public class DeliveryDestinationServiceImpl implements IDeliveryDestinationServi
         DeliveryDestinationDto deliveryDestinationDto =DeliveryDestinationDto.fromEntity(deliveryDestination);
         setCreatedByUser(deliveryDestinationDto);
         return deliveryDestinationDto;
+    }
+    private DeliveryDestinationResponse updatedDDResponse(DeliveryDestination deliveryDestination) {
+        DeliveryDestinationResponse deliveryDestinationRes =DeliveryDestinationResponse.fromEntity(deliveryDestination);
+        setCreatedByUser(deliveryDestinationRes);
+        return deliveryDestinationRes;
+    }
+    private void setCreatedByUser(DeliveryDestinationResponse response){
+        UtilisateurDto uDto = getCreatedBy(response.getCreatedBy());
+        response.setCreatedByUser(CreatedByUserDto.builder().id(uDto.getId()).fullname(uDto.getFullname()).build());
+    }
+    private void setCreatedByUser(DeliveryDestinationDto response){
+        UtilisateurDto uDto = getCreatedBy(response.getCreatedBy());
+        response.setCreatedByUser(CreatedByUserDto.builder().id(uDto.getId()).fullname(uDto.getFullname()).build());
     }
 
 }

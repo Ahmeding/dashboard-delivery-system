@@ -15,17 +15,17 @@ import { CommandeClientDto } from '../models/commande-client-dto';
 import { CommandeClientResponse } from '../models/commande-client-response';
 import { delete13 } from '../fn/commande-client/delete-13';
 import { Delete13$Params } from '../fn/commande-client/delete-13';
-import { findAll13 } from '../fn/commande-client/find-all-13';
-import { FindAll13$Params } from '../fn/commande-client/find-all-13';
+import { findAll15 } from '../fn/commande-client/find-all-15';
+import { FindAll15$Params } from '../fn/commande-client/find-all-15';
 import { findAllCommandeClients } from '../fn/commande-client/find-all-commande-clients';
 import { FindAllCommandeClients$Params } from '../fn/commande-client/find-all-commande-clients';
 import { findByCode1 } from '../fn/commande-client/find-by-code-1';
 import { FindByCode1$Params } from '../fn/commande-client/find-by-code-1';
-import { findById13 } from '../fn/commande-client/find-by-id-13';
-import { FindById13$Params } from '../fn/commande-client/find-by-id-13';
+import { findById15 } from '../fn/commande-client/find-by-id-15';
+import { FindById15$Params } from '../fn/commande-client/find-by-id-15';
 import { PageResponseCommandeClientResponse } from '../models/page-response-commande-client-response';
-import { save13 } from '../fn/commande-client/save-13';
-import { Save13$Params } from '../fn/commande-client/save-13';
+import { save15 } from '../fn/commande-client/save-15';
+import { Save15$Params } from '../fn/commande-client/save-15';
 
 @Injectable({ providedIn: 'root' })
 export class CommandeClientService extends BaseService {
@@ -33,60 +33,60 @@ export class CommandeClientService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `save13()` */
-  static readonly Save13Path = '/cmdclients/create';
+  /** Path part for operation `save15()` */
+  static readonly Save15Path = '/cmdclients/create';
 
   /**
    * Ajouter/Modifier un commande client , cette methode permet d'enregistrer ou modifier un chauffreur
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save13()` instead.
+   * To access only the response body, use `save15()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save13$Response(params: Save13$Params, context?: HttpContext): Observable<StrictHttpResponse<CommandeClientDto>> {
-    return save13(this.http, this.rootUrl, params, context);
+  save15$Response(params: Save15$Params, context?: HttpContext): Observable<StrictHttpResponse<CommandeClientDto>> {
+    return save15(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier un commande client , cette methode permet d'enregistrer ou modifier un chauffreur
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save13$Response()` instead.
+   * To access the full response (for headers, for example), `save15$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save13(params: Save13$Params, context?: HttpContext): Observable<CommandeClientDto> {
-    return this.save13$Response(params, context).pipe(
+  save15(params: Save15$Params, context?: HttpContext): Observable<CommandeClientDto> {
+    return this.save15$Response(params, context).pipe(
       map((r: StrictHttpResponse<CommandeClientDto>): CommandeClientDto => r.body)
     );
   }
 
-  /** Path part for operation `findById13()` */
-  static readonly FindById13Path = '/cmdclients/cmdclient/by-id/{id}';
+  /** Path part for operation `findById15()` */
+  static readonly FindById15Path = '/cmdclients/cmdclient/by-id/{id}';
 
   /**
    * Rechercher un CommandeClient  par ID! Cette methode permet de chercher un commande client  par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById13()` instead.
+   * To access only the response body, use `findById15()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById13$Response(params: FindById13$Params, context?: HttpContext): Observable<StrictHttpResponse<CommandeClientResponse>> {
-    return findById13(this.http, this.rootUrl, params, context);
+  findById15$Response(params: FindById15$Params, context?: HttpContext): Observable<StrictHttpResponse<CommandeClientResponse>> {
+    return findById15(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher un CommandeClient  par ID! Cette methode permet de chercher un commande client  par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById13$Response()` instead.
+   * To access the full response (for headers, for example), `findById15$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById13(params: FindById13$Params, context?: HttpContext): Observable<CommandeClientResponse> {
-    return this.findById13$Response(params, context).pipe(
+  findById15(params: FindById15$Params, context?: HttpContext): Observable<CommandeClientResponse> {
+    return this.findById15$Response(params, context).pipe(
       map((r: StrictHttpResponse<CommandeClientResponse>): CommandeClientResponse => r.body)
     );
   }
@@ -120,31 +120,31 @@ export class CommandeClientService extends BaseService {
     );
   }
 
-  /** Path part for operation `findAll13()` */
-  static readonly FindAll13Path = '/cmdclients/all';
+  /** Path part for operation `findAll15()` */
+  static readonly FindAll15Path = '/cmdclients/all';
 
   /**
    * Rechercher tout les CommandeClient ! Cette methode permet de retouner toutes les commandes clients
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll13()` instead.
+   * To access only the response body, use `findAll15()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll13$Response(params?: FindAll13$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CommandeClientResponse>>> {
-    return findAll13(this.http, this.rootUrl, params, context);
+  findAll15$Response(params?: FindAll15$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CommandeClientResponse>>> {
+    return findAll15(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les CommandeClient ! Cette methode permet de retouner toutes les commandes clients
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll13$Response()` instead.
+   * To access the full response (for headers, for example), `findAll15$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll13(params?: FindAll13$Params, context?: HttpContext): Observable<Array<CommandeClientResponse>> {
-    return this.findAll13$Response(params, context).pipe(
+  findAll15(params?: FindAll15$Params, context?: HttpContext): Observable<Array<CommandeClientResponse>> {
+    return this.findAll15$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<CommandeClientResponse>>): Array<CommandeClientResponse> => r.body)
     );
   }

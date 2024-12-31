@@ -11,22 +11,27 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { checkOverlappingDrivers } from '../fn/mission/check-overlapping-drivers';
+import { CheckOverlappingDrivers$Params } from '../fn/mission/check-overlapping-drivers';
+import { checkOverlappingVehicles } from '../fn/mission/check-overlapping-vehicles';
+import { CheckOverlappingVehicles$Params } from '../fn/mission/check-overlapping-vehicles';
 import { delete5 } from '../fn/mission/delete-5';
 import { Delete5$Params } from '../fn/mission/delete-5';
-import { findAll5 } from '../fn/mission/find-all-5';
-import { FindAll5$Params } from '../fn/mission/find-all-5';
+import { findAll6 } from '../fn/mission/find-all-6';
+import { FindAll6$Params } from '../fn/mission/find-all-6';
 import { findAllByDate } from '../fn/mission/find-all-by-date';
 import { FindAllByDate$Params } from '../fn/mission/find-all-by-date';
 import { findAllMissions } from '../fn/mission/find-all-missions';
 import { FindAllMissions$Params } from '../fn/mission/find-all-missions';
 import { findAllMissionsByDriverId } from '../fn/mission/find-all-missions-by-driver-id';
 import { FindAllMissionsByDriverId$Params } from '../fn/mission/find-all-missions-by-driver-id';
-import { findById5 } from '../fn/mission/find-by-id-5';
-import { FindById5$Params } from '../fn/mission/find-by-id-5';
+import { findById6 } from '../fn/mission/find-by-id-6';
+import { FindById6$Params } from '../fn/mission/find-by-id-6';
 import { MissionDto } from '../models/mission-dto';
+import { MissionResponse } from '../models/mission-response';
 import { PageResponseMissionDto } from '../models/page-response-mission-dto';
-import { save5 } from '../fn/mission/save-5';
-import { Save5$Params } from '../fn/mission/save-5';
+import { save6 } from '../fn/mission/save-6';
+import { Save6$Params } from '../fn/mission/save-6';
 import { updateEtatMission } from '../fn/mission/update-etat-mission';
 import { UpdateEtatMission$Params } from '../fn/mission/update-etat-mission';
 import { updateKilometrage } from '../fn/mission/update-kilometrage';
@@ -38,31 +43,89 @@ export class MissionService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `save5()` */
-  static readonly Save5Path = '/missions/create';
+  /** Path part for operation `checkOverlappingVehicles()` */
+  static readonly CheckOverlappingVehiclesPath = '/missions/vehicles-check';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `checkOverlappingVehicles()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  checkOverlappingVehicles$Response(params: CheckOverlappingVehicles$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+}>> {
+    return checkOverlappingVehicles(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `checkOverlappingVehicles$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  checkOverlappingVehicles(params: CheckOverlappingVehicles$Params, context?: HttpContext): Observable<{
+}> {
+    return this.checkOverlappingVehicles$Response(params, context).pipe(
+      map((r: StrictHttpResponse<{
+}>): {
+} => r.body)
+    );
+  }
+
+  /** Path part for operation `checkOverlappingDrivers()` */
+  static readonly CheckOverlappingDriversPath = '/missions/drivers-check';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `checkOverlappingDrivers()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  checkOverlappingDrivers$Response(params: CheckOverlappingDrivers$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+}>> {
+    return checkOverlappingDrivers(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `checkOverlappingDrivers$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  checkOverlappingDrivers(params: CheckOverlappingDrivers$Params, context?: HttpContext): Observable<{
+}> {
+    return this.checkOverlappingDrivers$Response(params, context).pipe(
+      map((r: StrictHttpResponse<{
+}>): {
+} => r.body)
+    );
+  }
+
+  /** Path part for operation `save6()` */
+  static readonly Save6Path = '/missions/create';
 
   /**
    * Ajouter/Modifier une mission, cette methode permet d'enregistrer ou modifier une mission
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save5()` instead.
+   * To access only the response body, use `save6()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save5$Response(params: Save5$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return save5(this.http, this.rootUrl, params, context);
+  save6$Response(params: Save6$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return save6(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier une mission, cette methode permet d'enregistrer ou modifier une mission
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save5$Response()` instead.
+   * To access the full response (for headers, for example), `save6$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save5(params: Save5$Params, context?: HttpContext): Observable<any> {
-    return this.save5$Response(params, context).pipe(
+  save6(params: Save6$Params, context?: HttpContext): Observable<any> {
+    return this.save6$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
@@ -125,31 +188,31 @@ export class MissionService extends BaseService {
     );
   }
 
-  /** Path part for operation `findById5()` */
-  static readonly FindById5Path = '/missions/mission/{id}';
+  /** Path part for operation `findById6()` */
+  static readonly FindById6Path = '/missions/mission/{id}';
 
   /**
    * Supprimer une Mission par ID! Cette methode permet de suprimmer une mission par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById5()` instead.
+   * To access only the response body, use `findById6()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById5$Response(params: FindById5$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findById5(this.http, this.rootUrl, params, context);
+  findById6$Response(params: FindById6$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findById6(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Supprimer une Mission par ID! Cette methode permet de suprimmer une mission par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById5$Response()` instead.
+   * To access the full response (for headers, for example), `findById6$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById5(params: FindById5$Params, context?: HttpContext): Observable<any> {
-    return this.findById5$Response(params, context).pipe(
+  findById6(params: FindById6$Params, context?: HttpContext): Observable<any> {
+    return this.findById6$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
@@ -208,32 +271,32 @@ export class MissionService extends BaseService {
     );
   }
 
-  /** Path part for operation `findAll5()` */
-  static readonly FindAll5Path = '/missions/all';
+  /** Path part for operation `findAll6()` */
+  static readonly FindAll6Path = '/missions/all';
 
   /**
    * Rechercher tout les Missions! Cette methode permet de retouner toutes les missions
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll5()` instead.
+   * To access only the response body, use `findAll6()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll5$Response(params?: FindAll5$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findAll5(this.http, this.rootUrl, params, context);
+  findAll6$Response(params?: FindAll6$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<MissionResponse>>> {
+    return findAll6(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les Missions! Cette methode permet de retouner toutes les missions
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll5$Response()` instead.
+   * To access the full response (for headers, for example), `findAll6$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll5(params?: FindAll5$Params, context?: HttpContext): Observable<any> {
-    return this.findAll5$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
+  findAll6(params?: FindAll6$Params, context?: HttpContext): Observable<Array<MissionResponse>> {
+    return this.findAll6$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<MissionResponse>>): Array<MissionResponse> => r.body)
     );
   }
 

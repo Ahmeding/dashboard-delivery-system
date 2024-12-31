@@ -9,10 +9,6 @@ import {ServiceDeliveryDto} from "../../../../../../ds-api/src/models/service-de
 import {ServiceDeliveryService} from "../../../../../../ds-api/src/services/service-delivery.service";
 import {DeliveryPointCategoryDto} from "../../../../../../ds-api/src/models/delivery-point-category-dto";
 import {DeliveryPointCategoriesService} from "../../../../../../ds-api/src/services/delivery-point-categories.service";
-import {CreatedByUserDto} from "../../../../../../ds-api/src/models/created-by-user-dto";
-import {AdresseDto} from "../../../../../../ds-api/src/models/adresse-dto";
-import {DeliveryPointContactDto} from "../../../../../../ds-api/src/models/delivery-point-contact-dto";
-import {LocalTime} from "../../../../../../ds-api/src/models/local-time";
 import {DeliveryDestinationService} from "../../../../../../ds-api/src/services/delivery-destination.service";
 import {InputFillUtilsService} from "../../../../../services/input-fill-utils/input-fill-utils.service";
 
@@ -22,7 +18,7 @@ import {InputFillUtilsService} from "../../../../../services/input-fill-utils/in
   templateUrl: './new-delivery-point-modal.component.html',
   styleUrls: ['./new-delivery-point-modal.component.scss']
 })
-export class NewDeliveryPointModalComponent implements OnInit,AfterViewInit{
+export class NewDeliveryPointModalComponent implements OnInit{
 
 
   @Input() clientId!: number;
@@ -118,7 +114,7 @@ export class NewDeliveryPointModalComponent implements OnInit,AfterViewInit{
 
 
   getDeliveryPointById(){
-    this.deliveryPointsService.findById10({id:this.dpointId}).subscribe({
+    this.deliveryPointsService.findById11({id:this.dpointId}).subscribe({
       next:(dpResp)=>{
         this.selectedDeliveryPoint=dpResp;
         console.log(this.selectedDeliveryPoint);
@@ -171,7 +167,7 @@ export class NewDeliveryPointModalComponent implements OnInit,AfterViewInit{
     if (this.destinationForm.valid) {
       const deliveryDest=this.destinationForm.getRawValue();
       console.log( );
-      this.dDestinationService.save11({body:deliveryDest}).subscribe({
+      this.dDestinationService.save12({body:deliveryDest}).subscribe({
         next:(dpResp)=>{
           console.log(dpResp);
           this.activeModal.close(this.destinationForm.value);
@@ -183,12 +179,10 @@ export class NewDeliveryPointModalComponent implements OnInit,AfterViewInit{
     }
   }
 
-  ngAfterViewInit(): void {
 
-  }
 
   private getAllServiceDelivery() {
-    this.serviceDeliveryService.findAll2().subscribe({
+    this.serviceDeliveryService.findAll3().subscribe({
       next:(response)=>{
         this.serviceDeliveries=response;
       }
@@ -197,7 +191,7 @@ export class NewDeliveryPointModalComponent implements OnInit,AfterViewInit{
   }
 
   private getAllCategories() {
-    this.dpCategoryService.findAll8().subscribe({
+    this.dpCategoryService.findAll9().subscribe({
       next:(dpCatRep)=>{
         this.dpCategories=dpCatRep;
       },error:(err)=>{

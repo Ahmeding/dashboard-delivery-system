@@ -45,7 +45,7 @@ export class NewRepaireComponent implements OnInit{
   }
 
   private getAllVehicles() {
-    this.vehiculeService.findAll().subscribe({
+    this.vehiculeService.findAll1().subscribe({
       next:(allVehiclesRep)=>{
         this.allVehicles=allVehiclesRep;
         this.repairForm.patchValue({
@@ -72,7 +72,7 @@ export class NewRepaireComponent implements OnInit{
   }
 
   loadRepairToEdit(rId:number){
-    this.repairService.findById3({id:rId}).subscribe({
+    this.repairService.findById4({id:rId}).subscribe({
       next:(repairToEditResponse)=>{
         this.repairValue= repairToEditResponse;
    /*     if(this.repairValue.dateDebut){
@@ -126,7 +126,7 @@ export class NewRepaireComponent implements OnInit{
   }
 
   saveRepair(repairData: ReparationDto, successMsg: string, errorMsg: string){
-  this.repairService.save3({body:repairData}).subscribe({
+  this.repairService.save4({body:repairData}).subscribe({
     next:(response)=>{
       this.alertService.alertSuccess(successMsg+" completed successfully!")
       this.router.navigate(['vehicles/repairs']);

@@ -15,6 +15,8 @@ export interface MissionDto {
   etapeDtos?: Array<EtapeDto>;
   etatMission?: 'EN_COURS' | 'ACCOMPLI' | 'ANNULEE' | 'TERMINIEE';
   id?: number;
+  idDayPlan?: number;
+  idDeliveryDestination?: number;
   kmDebut?: number;
   kmFin?: number;
   lastModifiedBy?: number;

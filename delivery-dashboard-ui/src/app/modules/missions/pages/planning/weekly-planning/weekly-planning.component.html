@@ -3,7 +3,7 @@
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h4 class="lead">
     </h4>
-    <a class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" (click)="openModalNewWeeklyPlanning()"><i
+    <a class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
       class="fas fa-plus fa-sm text-white-50"></i>&nbsp;New Weekly Planning</a>
   </div>
 
@@ -29,8 +29,16 @@
           <span class="day-name">{{ formatDayName(day.date) }}</span>
           <span class="day-date">{{ formatDate(day.date) }}</span>
         </div>
-
-        <div class="missions-container">
+        <div *ngIf="isLoading" class="spinner-border spinner-border-sm text-warning" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <app-mission-card
+          *ngFor="let mission of day.missions"
+          [mission]="mission"
+          (edit)="onEditMission($event)"
+          (delete)="onDeleteMission($event)">
+        </app-mission-card>
+        <div class="missions-container"><!--
           <div class="mission-card" *ngFor="let mission of day.missions">
             <div class="mission-header">
               <div class="mission-time-status">
@@ -59,17 +67,18 @@
                 <span>{{ mission.vehicle }}</span>
               </div>
             </div>
-          </div>
+          </div>-->
 
           <div class="empty-state" *ngIf="day.missions.length === 0">
             <i class="bi bi-calendar-x"></i>
             <span>No missions</span>
           </div>
 
-          <button *ngIf="isNotOldDay(day.date)" class="btn-new-mission" (click)="addNewMission(day.date)">
+          <button *ngIf="isNotOldDay(day.date)" class="btn-new-mission" (click)="navigateToNewMissionByDate(day.date)">
             <i class="bi bi-plus-lg"></i>
             <span>New Mission</span>
           </button>
+
         </div>
       </div>
     </div>

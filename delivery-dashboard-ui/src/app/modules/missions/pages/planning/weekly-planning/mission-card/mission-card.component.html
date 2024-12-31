@@ -1,0 +1,84 @@
+<!--
+<div class="mission-card" [style.borderLeft]="'4px solid ' + getDestinationColor()">
+  <div class="mission-header">
+    <div class="mission-time-status">
+      <i [class]="'status-indicator bi ' + getStatusIcon()"></i>
+      <span class="mission-time">{{ mission.startTime }} - {{ mission.endTime }}</span>
+      <span class="mission-tag" [style.background]="getDestinationColor() + '20'" [style.color]="getDestinationColor()">
+        {{ mission.destination }}
+      </span>
+    </div>
+    <div class="mission-actions">
+      <button class="btn-action" title="Edit" (click)="onEdit()">
+        <i class="bi bi-pencil"></i>
+      </button>
+      <button class="btn-action" title="Delete" (click)="onDelete()">
+        <i class="bi bi-trash"></i>
+      </button>
+    </div>
+  </div>
+
+  <h3 class="mission-title">{{ mission.title }}</h3>
+
+  <div class="mission-resources">
+    &lt;!&ndash; Vehicles &ndash;&gt;
+    <div class="resources-section">
+      <div class="resources-header">
+        <i class="bi bi-truck"></i>
+        <span>Vehicles</span>
+      </div>
+      <div class="resources-chips">
+        <div class="chip" *ngFor="let vehicle of mission.vehicles">
+          <span class="plate-number">{{ vehicle.plateNumber }}</span>
+        </div>
+      </div>
+    </div>
+
+    &lt;!&ndash; Drivers &ndash;&gt;
+    <div class="resources-section">
+      <div class="resources-header">
+        <i class="bi bi-people"></i>
+        <span>Drivers</span>
+      </div>
+      <div class="resources-chips">
+        <div class="chip" *ngFor="let driver of mission.drivers">
+          <i class="bi bi-person-circle"></i>
+          <span>{{ driver.name }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+-->
+<div class="mission-card" [style.borderLeft]="'4px solid ' + getDestinationColor()">
+  <div class="mission-header">
+    <div class="time-destination">
+      <span class="time">{{ getStartTime() }}</span>
+      <span class="destination-tag" [style.color]="getDestinationColor()">
+        {{ mission.deliveryDestinationResponse?.serviceDelivery?.destinationCity }}
+      </span>
+    </div>
+    <div class="status">
+      <i [class]="'bi ' + getStatusIcon()" [title]="mission.etatMission"></i>
+    </div>
+  </div>
+
+  <div class="mission-content">
+    <p class="title">{{ mission.titre }}</p>
+    <div class="resources">
+      <div class="vehicles" *ngIf="mission.missionVehiclesDtos?.length">
+        <i class="bi bi-truck-front"></i>
+        <span class="count">{{ mission.missionVehiclesDtos?.length }}</span>
+      </div>
+      <div class="drivers" *ngIf="mission.missionVehiclesDtos?.length">
+        <i class="bi bi-person"></i>
+        <span class="count">{{ getNumbersOfDrivers() }}</span>
+      </div>
+      <div class="actions">
+        <button class="action-btn" (click)="onEdit()">
+          <i class="bi bi-three-dots"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

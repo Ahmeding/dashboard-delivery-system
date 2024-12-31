@@ -6,14 +6,21 @@ import {ServicesDeleiveryComponent} from "./pages/services-deleivery/services-de
 import {NewServiceDelivComponent} from "./pages/services-deleivery/new-service-deliv/new-service-deliv.component";
 import {NewUserComponent} from "./pages/users/new-user/new-user.component";
 import {DeliveryPointCategoryComponent} from "./pages/delivery-point-category/delivery-point-category.component";
+import {authGuard} from "../../services/guard/auth.guard";
 
 const routes: Routes = [
-  { path: 'profile', component: MyProfileComponent },
-  { path: 'users', component: UsersComponent },
-  { path: 'new-user', component: NewUserComponent },
-  { path: 'services', component: ServicesDeleiveryComponent },
-  { path: 'categories', component: DeliveryPointCategoryComponent },
-  { path: 'new-service-deliv', component: NewServiceDelivComponent},
+  { path: 'profile', component: MyProfileComponent,
+        canActivate:[authGuard] },
+  { path: 'users', component: UsersComponent,
+        canActivate:[authGuard] },
+  { path: 'new-user', component: NewUserComponent,
+        canActivate:[authGuard] },
+  { path: 'services', component: ServicesDeleiveryComponent,
+        canActivate:[authGuard] },
+  { path: 'categories', component: DeliveryPointCategoryComponent,
+        canActivate:[authGuard] },
+  { path: 'new-service-deliv', component: NewServiceDelivComponent,
+        canActivate:[authGuard]},
 ];
 
 @NgModule({

@@ -3,6 +3,7 @@ package com.hitecart.deliverysystem.controllers;
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.DeliveryDestinationApi;
 import com.hitecart.deliverysystem.dto.DeliveryDestinationDto;
+import com.hitecart.deliverysystem.dto.DeliveryDestinationResponse;
 import com.hitecart.deliverysystem.services.IDeliveryDestinationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class DeliveryDestinationController implements DeliveryDestinationApi {
     }
 
     @Override
-    public ResponseEntity<List<DeliveryDestinationDto>> findAll() {
+    public ResponseEntity<List<DeliveryDestinationResponse>> findAll() {
         return ResponseEntity.ok(
                 deliveryDestinationService.findAll()
                 );

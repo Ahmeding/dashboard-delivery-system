@@ -147,7 +147,7 @@ export class NewQuoteComponent implements OnInit{
   }
 
   private getAllClients() {
-    this.clientService.findAll14().subscribe({
+    this.clientService.findAll16().subscribe({
       next:(clientsResponse)=>{
         this.allClients=clientsResponse;
       }
@@ -161,7 +161,7 @@ export class NewQuoteComponent implements OnInit{
     this.newQuote.ligneCommandeClientsDtos=this.orderlines;
     this.newQuote.etatCommande= "IN_PROGRESS"
     console.log(this.newQuote);
-    this.cmdClientService.save13({body:this.newQuote}).subscribe({
+    this.cmdClientService.save15({body:this.newQuote}).subscribe({
       next:(resp)=>{
         this.getAllQuotes();
         this.resetForm(form);
@@ -181,7 +181,7 @@ export class NewQuoteComponent implements OnInit{
   }
 
   private getAllServDelivery() {
-    this.servDeliveryService.findAll2().subscribe({
+    this.servDeliveryService.findAll3().subscribe({
       next:(allSDResponse)=>{
         this.allServiceDeliveries=allSDResponse;
       },
@@ -243,7 +243,7 @@ export class NewQuoteComponent implements OnInit{
   }
 
   editQuote(id: number | undefined) {
-    this.cmdClientService.findById13({id:id as number}).subscribe({
+    this.cmdClientService.findById15({id:id as number}).subscribe({
       next:(order)=>{
         this.selectedToEditQuote = order;
         this.orderlines = this.selectedToEditQuote.ligneCommandeClientsDtos as Array<CommandeClientDto>;

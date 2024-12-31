@@ -14,17 +14,18 @@ import { StrictHttpResponse } from '../strict-http-response';
 import { delete11 } from '../fn/delivery-destination/delete-11';
 import { Delete11$Params } from '../fn/delivery-destination/delete-11';
 import { DeliveryDestinationDto } from '../models/delivery-destination-dto';
-import { findAll11 } from '../fn/delivery-destination/find-all-11';
-import { FindAll11$Params } from '../fn/delivery-destination/find-all-11';
+import { DeliveryDestinationResponse } from '../models/delivery-destination-response';
+import { findAll12 } from '../fn/delivery-destination/find-all-12';
+import { FindAll12$Params } from '../fn/delivery-destination/find-all-12';
 import { findAllByClientId } from '../fn/delivery-destination/find-all-by-client-id';
 import { FindAllByClientId$Params } from '../fn/delivery-destination/find-all-by-client-id';
 import { findAllDeliveryDestinations } from '../fn/delivery-destination/find-all-delivery-destinations';
 import { FindAllDeliveryDestinations$Params } from '../fn/delivery-destination/find-all-delivery-destinations';
-import { findById11 } from '../fn/delivery-destination/find-by-id-11';
-import { FindById11$Params } from '../fn/delivery-destination/find-by-id-11';
+import { findById12 } from '../fn/delivery-destination/find-by-id-12';
+import { FindById12$Params } from '../fn/delivery-destination/find-by-id-12';
 import { PageResponseDeliveryDestinationDto } from '../models/page-response-delivery-destination-dto';
-import { save11 } from '../fn/delivery-destination/save-11';
-import { Save11$Params } from '../fn/delivery-destination/save-11';
+import { save12 } from '../fn/delivery-destination/save-12';
+import { Save12$Params } from '../fn/delivery-destination/save-12';
 
 @Injectable({ providedIn: 'root' })
 export class DeliveryDestinationService extends BaseService {
@@ -32,60 +33,60 @@ export class DeliveryDestinationService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `save11()` */
-  static readonly Save11Path = '/delivery-destinations/create';
+  /** Path part for operation `save12()` */
+  static readonly Save12Path = '/delivery-destinations/create';
 
   /**
    * Ajouter/Modifier une delivery_destination, cette methode permet d'enregistrer ou modifier une delivery_destination
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save11()` instead.
+   * To access only the response body, use `save12()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save11$Response(params: Save11$Params, context?: HttpContext): Observable<StrictHttpResponse<DeliveryDestinationDto>> {
-    return save11(this.http, this.rootUrl, params, context);
+  save12$Response(params: Save12$Params, context?: HttpContext): Observable<StrictHttpResponse<DeliveryDestinationDto>> {
+    return save12(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier une delivery_destination, cette methode permet d'enregistrer ou modifier une delivery_destination
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save11$Response()` instead.
+   * To access the full response (for headers, for example), `save12$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save11(params: Save11$Params, context?: HttpContext): Observable<DeliveryDestinationDto> {
-    return this.save11$Response(params, context).pipe(
+  save12(params: Save12$Params, context?: HttpContext): Observable<DeliveryDestinationDto> {
+    return this.save12$Response(params, context).pipe(
       map((r: StrictHttpResponse<DeliveryDestinationDto>): DeliveryDestinationDto => r.body)
     );
   }
 
-  /** Path part for operation `findById11()` */
-  static readonly FindById11Path = '/delivery-destinations/ddestination/by-id/{id}';
+  /** Path part for operation `findById12()` */
+  static readonly FindById12Path = '/delivery-destinations/ddestination/by-id/{id}';
 
   /**
    * Rechercher un DeliveryPoint par ID! Cette methode permet de chercher une delivery_destination par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById11()` instead.
+   * To access only the response body, use `findById12()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById11$Response(params: FindById11$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findById11(this.http, this.rootUrl, params, context);
+  findById12$Response(params: FindById12$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findById12(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher un DeliveryPoint par ID! Cette methode permet de chercher une delivery_destination par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById11$Response()` instead.
+   * To access the full response (for headers, for example), `findById12$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById11(params: FindById11$Params, context?: HttpContext): Observable<any> {
-    return this.findById11$Response(params, context).pipe(
+  findById12(params: FindById12$Params, context?: HttpContext): Observable<any> {
+    return this.findById12$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
@@ -119,32 +120,32 @@ export class DeliveryDestinationService extends BaseService {
     );
   }
 
-  /** Path part for operation `findAll11()` */
-  static readonly FindAll11Path = '/delivery-destinations/all';
+  /** Path part for operation `findAll12()` */
+  static readonly FindAll12Path = '/delivery-destinations/all';
 
   /**
    * Rechercher tout les DeliveryPoint! Cette methode permet de retouner tous les delivery_destinations
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll11()` instead.
+   * To access only the response body, use `findAll12()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll11$Response(params?: FindAll11$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findAll11(this.http, this.rootUrl, params, context);
+  findAll12$Response(params?: FindAll12$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DeliveryDestinationResponse>>> {
+    return findAll12(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les DeliveryPoint! Cette methode permet de retouner tous les delivery_destinations
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll11$Response()` instead.
+   * To access the full response (for headers, for example), `findAll12$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll11(params?: FindAll11$Params, context?: HttpContext): Observable<any> {
-    return this.findAll11$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
+  findAll12(params?: FindAll12$Params, context?: HttpContext): Observable<Array<DeliveryDestinationResponse>> {
+    return this.findAll12$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<DeliveryDestinationResponse>>): Array<DeliveryDestinationResponse> => r.body)
     );
   }
 

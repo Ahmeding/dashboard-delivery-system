@@ -8,17 +8,28 @@ import {NewMissionComponent} from "./pages/all-missions/new-mission/new-mission.
 import {MissionDetailsComponent} from "./pages/all-missions/mission-details/mission-details.component";
 import {AddMissionComponent} from "./pages/all-missions/add-mission/add-mission.component";
 import {WeeklyPlanningComponent} from "./pages/planning/weekly-planning/weekly-planning.component";
+import {authGuard} from "../../services/guard/auth.guard";
 
 const routes: Routes = [
-  { path: 'all', component: AllMissionsComponent },
-  { path: 'new-mission', component: NewMissionComponent },
-  { path: 'add-mission', component: AddMissionComponent },
-  { path: 'mission-details/:id', component: MissionDetailsComponent },
+  { path: 'all', component: AllMissionsComponent,
+        canActivate:[authGuard] },
+  { path: 'new-mission', component: NewMissionComponent,
+        canActivate:[authGuard] },
+  { path: 'new-mission/:dateDay', component: NewMissionComponent,
+        canActivate:[authGuard] },
+  { path: 'add-mission', component: AddMissionComponent,
+        canActivate:[authGuard] },
+  { path: 'mission-details/:id', component: MissionDetailsComponent,
+        canActivate:[authGuard] },
 
-  { path: 'planning', component: PlanningComponent },
-  { path: 'w-planning', component: WeeklyPlanningComponent },
-  { path: 'expenses', component: ExpensesComponent },
-  { path: 'new-expense', component: NewExpenseComponent },
+  { path: 'planning', component: PlanningComponent,
+        canActivate:[authGuard] },
+  { path: 'w-planning', component: WeeklyPlanningComponent,
+        canActivate:[authGuard] },
+  { path: 'expenses', component: ExpensesComponent,
+        canActivate:[authGuard] },
+  { path: 'new-expense', component: NewExpenseComponent,
+        canActivate:[authGuard] },
   ];
 
 @NgModule({

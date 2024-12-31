@@ -4,6 +4,7 @@
 
 import { CreatedByUserDto } from '../models/created-by-user-dto';
 import { DeliveryPointDto } from '../models/delivery-point-dto';
+import { MissionDto } from '../models/mission-dto';
 export interface DeliveryDestinationDto {
   clientId?: number;
   createdAt?: string;
@@ -12,6 +13,7 @@ export interface DeliveryDestinationDto {
   deliveryPointsDto?: Array<DeliveryPointDto>;
   id?: number;
   lastModifiedBy?: number;
+  missionsDto?: Array<MissionDto>;
   reference?: string;
   serviceDeliveryId?: number;
   updatedAt?: string;

@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {DeliveryDestinationDto} from "../../../../../../ds-api/src/models/delivery-destination-dto";
+import {Component, Input, OnInit} from '@angular/core';
+import {NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ServiceDeliveryDto} from "../../../../../../ds-api/src/models/service-delivery-dto";
+
 
 @Component({
   selector: 'app-new-weekly-planning-modal',
@@ -13,29 +13,38 @@ export class NewWeeklyPlanningModalComponent implements OnInit{
   wPlanningForm!: FormGroup;
   allDestinations: ServiceDeliveryDto[]=[];
 
+  @Input()
+  dateDay!: Date;
 
   constructor(
-    public activeModal: NgbActiveModal,
-    private fb: FormBuilder)  {
+              public activeModal: NgbActiveModal,
+              private fb: FormBuilder) {
+
   }
+
 
   saveWeeklyPlanning() {
 
   }
 
-  ngOnInit(): void {
-    // Initialize the form
-    this.wPlanningForm = this.fb.group({
-      title: [null, Validators.required],
-      delveryDestination: [null, Validators.required],
-      // Initialize the checkboxes as form controls with default value
-      day1: [false],
-      day2: [false],
-      day3: [false],
-      day4: [false],
-      day5: [false],
-      day6: [false],
-      day7: [false],
+
+  ngOnInit(): void {}
+
+
+
+
+
+
+
+
+  // Helper methods
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
     });
   }
 }

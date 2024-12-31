@@ -1,16 +1,16 @@
 package com.hitecart.deliverysystem.services.impl;
 
-import com.hitecart.deliverysystem.dto.ContratDto;
-import com.hitecart.deliverysystem.dto.CreatedByUserDto;
-import com.hitecart.deliverysystem.dto.DayPlanDto;
-import com.hitecart.deliverysystem.dto.UtilisateurDto;
+import com.hitecart.deliverysystem.dto.*;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
+import com.hitecart.deliverysystem.exception.InvalidOperationException;
 import com.hitecart.deliverysystem.model.Contrat;
+import com.hitecart.deliverysystem.model.WeeklyPlanning;
 import com.hitecart.deliverysystem.repository.UtilisateurRepository;
 import com.hitecart.deliverysystem.services.DayPlanService;
 import com.hitecart.deliverysystem.services.UtilisateurService;
+import com.hitecart.deliverysystem.services.WeeklyPlanningService;
 import com.hitecart.deliverysystem.validator.ContratValidator;
 import com.hitecart.deliverysystem.validator.DayPlanValidator;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,21 @@ import java.util.stream.Collectors;
 public class DayPlanServiceImpl implements DayPlanService {
 
     private final DayPlanRepository dayPlanRepository;
+    private final WeeklyPlanningService WeeklyPlanRepository;
     private final UtilisateurService utilisateurServiceImpl;
+
+    @Override
+    public List<DayPlanDto> findAllByWeeklyPlanningId(Integer weeklyPlanningId) {
+        CheckParmasUtil.checkID(
+                weeklyPlanningId,
+                "ID WeeklyPlanning est null",
+                "Immpossible de trouver un WeeklyPlanning avec un id null",
+                ErrorCodes.WEEKLYPLANNING_NOT_FOUND);
+
+        return dayPlanRepository.findAllByWeeklyPlanningId(weeklyPlanningId).stream()
+                .map(this::updatedResponse)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public List<DayPlanDto> findAll() {
@@ -47,14 +61,11 @@ public class DayPlanServiceImpl implements DayPlanService {
                 "Immpossible de trouver un DayPlan avec un id null",
                 ErrorCodes.DAYPLAN_NOT_VALID_OPERATION);
 
-        Optional<DayPlan> dayPlanOp = dayPlanRepository.findById(id);
+        DayPlan dayPlan = dayPlanRepository.findById(id).orElseThrow(()->new EntityNotFoundException(
+                "Aucun DayPlan avec L'ID "+id+"n'a ete trouvé dans la base des données",
+                ErrorCodes.DAYPLAN_NOT_FOUND));
 
-        DayPlanDto dayPlanDto =  Optional.of(DayPlanDto.fromEntity(dayPlanOp.get()))
-                .orElseThrow(
-                        ()->new EntityNotFoundException(
-                                "Aucun DayPlan avec L'ID "+id+"n'a ete trouvé dans la base des données",
-                                ErrorCodes.DAYPLAN_NOT_FOUND)
-                );
+        DayPlanDto dayPlanDto =  (DayPlanDto.fromEntity(dayPlan));
 
         setCreatedByUser(dayPlanDto);
         return dayPlanDto;
@@ -69,7 +80,27 @@ public class DayPlanServiceImpl implements DayPlanService {
                 "DayPlan n'est pas valid",
                 "Le DayPlan n'est pa valide ",
                 ErrorCodes.DAYPLAN_NOT_VALID);
-        return DayPlanDto.fromEntity(dayPlanRepository.save(DayPlanDto.toEntity(dto)));
+        CheckParmasUtil.checkID(
+                dto.getIdWeeklyPlanning(),
+                "ID WeekPlanning est null",
+                "Immpossible de trouver un WeeklyPlanning avec un id null",
+                ErrorCodes.WEEKLYPLANNING_NOT_VALID_OPERATION);
+        WeeklyPlanning weeklyPlanning= WeeklyPlanningDto.toEntity(
+                WeeklyPlanRepository.findById(dto.getIdWeeklyPlanning()));
+        if(weeklyPlanning==null){
+            throw new EntityNotFoundException("Aucun WeeklyPalnning trouvées",
+                    ErrorCodes.WEEKLYPLANNING_NOT_FOUND);
+        }
+        var dayExist = weeklyPlanning.getDaysPlan().stream().map(DayPlan::getName).anyMatch(dto.getName()::equals);
+
+        if(dayExist){
+            throw new InvalidOperationException("le nom du jour est deja existe pour le weeklyPanning",
+                    ErrorCodes.DAYPLAN_NOT_VALID_OPERATION);
+        }
+        DayPlan dayPlanToSave = DayPlanDto.toEntity(dto);
+
+        dayPlanToSave.setWeeklyPlanning(weeklyPlanning);
+        return DayPlanDto.fromEntity(dayPlanRepository.save(dayPlanToSave));
 
 
 
@@ -78,7 +109,8 @@ public class DayPlanServiceImpl implements DayPlanService {
     @Override
     public void deleteById(Integer id) {
         CheckParmasUtil.checkID(id,"l'ID du DayPlan à supprimer est null",
-                "Impossible de supprimer un DayPlan avec un ID null",ErrorCodes.DAYPLAN_NOT_VALID_OPERATION);
+                "Impossible de supprimer un DayPlan avec un ID null",
+                ErrorCodes.DAYPLAN_NOT_VALID_OPERATION);
 
         dayPlanRepository.deleteById(id);
     }

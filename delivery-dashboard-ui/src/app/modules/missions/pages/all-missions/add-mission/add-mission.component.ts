@@ -59,7 +59,7 @@ export class AddMissionComponent implements OnInit {
     })
   }
   private findAllServicesDelivery() {
-    this.servDeliveryService.findAll2().subscribe({
+    this.servDeliveryService.findAll3().subscribe({
       next:(sdResponse)=>{
         this.allServiceDelivery=sdResponse;
       },error:(error)=>{

@@ -45,14 +45,11 @@ public class WeeklyPlanningServiceImpl implements WeeklyPlanningService {
                 "Immpossible de trouver un WeeklyPlanning avec un id null",
                 ErrorCodes.WEEKLYPLANNING_NOT_VALID_OPERATION);
 
-        Optional<WeeklyPlanning> weeklyPlanning = weeklyPlanningRepository.findById(id);
+        WeeklyPlanning weeklyPlanning = weeklyPlanningRepository.findById(id).orElseThrow( ()->new EntityNotFoundException(
+                "Aucun weeklyPlanning avec L'ID "+id+"n'a ete trouvé dans la base des données",
+                ErrorCodes.WEEKLYPLANNING_NOT_FOUND));
 
-        WeeklyPlanningDto weeklyPlanningDto =  Optional.of(WeeklyPlanningDto.fromEntity(weeklyPlanning.get()))
-                .orElseThrow(
-                        ()->new EntityNotFoundException(
-                                "Aucun weeklyPlanning avec L'ID "+id+"n'a ete trouvé dans la base des données",
-                                ErrorCodes.WEEKLYPLANNING_NOT_FOUND)
-                );
+        WeeklyPlanningDto weeklyPlanningDto =  (WeeklyPlanningDto.fromEntity(weeklyPlanning));
 
         setCreatedByUser(weeklyPlanningDto);
         return weeklyPlanningDto;

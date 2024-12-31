@@ -12,6 +12,7 @@ import { DeliveryPointService } from './services/delivery-point.service';
 import { DeliveryPointsService } from './services/delivery-points.service';
 import { ClientService } from './services/client.service';
 import { ChauffeurService } from './services/chauffeur.service';
+import { WeeklyPlanningService } from './services/weekly-planning.service';
 import { UtilisateurService } from './services/utilisateur.service';
 import { ReparationService } from './services/reparation.service';
 import { PiecesDeRechangeService } from './services/pieces-de-rechange.service';
@@ -21,6 +22,7 @@ import { EntrepriseControllerService } from './services/entreprise-controller.se
 import { DeliveryPointCategoriesService } from './services/delivery-point-categories.service';
 import { DevisService } from './services/devis.service';
 import { DeliveryDestinationService } from './services/delivery-destination.service';
+import { DayPlanService } from './services/day-plan.service';
 import { ContratService } from './services/contrat.service';
 import { CommandeClientService } from './services/commande-client.service';
 import { AuthenticationEnregistrementService } from './services/authentication-enregistrement.service';
@@ -41,6 +43,7 @@ import { AdminControllerService } from './services/admin-controller.service';
     DeliveryPointsService,
     ClientService,
     ChauffeurService,
+    WeeklyPlanningService,
     UtilisateurService,
     ReparationService,
     PiecesDeRechangeService,
@@ -50,6 +53,7 @@ import { AdminControllerService } from './services/admin-controller.service';
     DeliveryPointCategoriesService,
     DevisService,
     DeliveryDestinationService,
+    DayPlanService,
     ContratService,
     CommandeClientService,
     AuthenticationEnregistrementService,

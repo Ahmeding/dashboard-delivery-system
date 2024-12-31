@@ -26,6 +26,8 @@ public class ServiceDelivery extends AbstractEntity{
     private String pickUpLocation;
     @Column(name = "destination_city")
     private String destinationCity;
+    @Column(name = "destination_country")
+    private String destinationCountry;
     @Column(name = "distance")
     private double distance;
     @Column(name = "title")
