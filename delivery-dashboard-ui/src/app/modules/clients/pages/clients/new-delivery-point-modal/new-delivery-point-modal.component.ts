@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+  import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {DeliveryPointDto} from "../../../../../../ds-api/src/models/delivery-point-dto";
@@ -25,18 +25,17 @@ export class NewDeliveryPointModalComponent implements OnInit{
   @Input() dpointId!: number;
 
   deliveryDestination:DeliveryDestinationDto={};
-  destinationForm!: FormGroup;
-
   deliveryPoint:DeliveryPointDto={};
-  deliveryPointForm!: FormGroup;
 
   selectedDeliveryPoint:DeliveryPointDto={};
-  currentPointForm: FormGroup | null = null;
-
-
   serviceDeliveries: ServiceDeliveryDto[]=[];
   deliveryPoints: DeliveryPointDto[]=[];
   dpCategories:DeliveryPointCategoryDto[]=[];
+
+
+  destinationForm!: FormGroup;
+  deliveryPointForm!: FormGroup;
+  currentPointForm: FormGroup | null = null;
 
   constructor(
     private fillInputService: InputFillUtilsService,
@@ -70,7 +69,6 @@ export class NewDeliveryPointModalComponent implements OnInit{
     if(this.dpointId){
         this.getDeliveryPointById();
     }
-   // this.initForm();
     this.destinationForm.patchValue({clientId: this.clientId})
     //this.deliveryPointForm.patchValue({ clientId: this.clientId });
   }

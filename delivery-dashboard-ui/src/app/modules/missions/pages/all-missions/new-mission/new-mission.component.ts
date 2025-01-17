@@ -101,7 +101,6 @@ export class NewMissionComponent implements OnInit{
   private handleErrors(type:string,error:any){
     console.error(`Failed to load ${type}`,error);
     this.alertService.alertError(`Error loading ${type}. Please refresh and try again.`);
-
   }
   private loadVehicles() {
     this.vehicleService.findAll1().subscribe({
@@ -230,6 +229,7 @@ export class NewMissionComponent implements OnInit{
     this.selectedVehicles.splice(index,1);
     this.selectedMissionVehicles.splice(index,1);
   }
+
   getDateDay(){
     this.dateDay= this.activeRouter.snapshot.params['dateDay'];
     if(this.dateDay){
@@ -318,6 +318,10 @@ export class NewMissionComponent implements OnInit{
       alert('The end date must be at least 7 hours from now and less than the end of this week.');
 
     }
+  }
+
+  onsubmit(){
+
   }
 }
 

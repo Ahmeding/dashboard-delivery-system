@@ -1,15 +1,23 @@
 import {Component, OnInit} from '@angular/core';
-import {MissionDto} from "../../../../../../ds-api/src/models/mission-dto";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {ServiceDeliveryDto} from "../../../../../../ds-api/src/models/service-delivery-dto";
-import {DeliveryPointDto} from "../../../../../../ds-api/src/models/delivery-point-dto";
-import {ServiceDeliveryService} from "../../../../../../ds-api/src/services/service-delivery.service";
-import {DeliveryPointsService} from "../../../../../../ds-api/src/services/delivery-points.service";
-import {EtapeDto} from "../../../../../../ds-api/src/models/etape-dto";
-import {MissionService} from "../../../../../../ds-api/src/services/mission.service";
-import {AlertService} from "../../../../../services/alert/alert.service";
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {VehiculeService} from "../../../../../../ds-api/src/services/vehicule.service";
 import {ChauffeurService} from "../../../../../../ds-api/src/services/chauffeur.service";
+import {DeliveryDestinationService} from "../../../../../../ds-api/src/services/delivery-destination.service";
+import {AlertService} from "../../../../../services/alert/alert.service";
+import {DeliveryDestinationResponse} from "../../../../../../ds-api/src/models/delivery-destination-response";
+import {VehiculeDto} from "../../../../../../ds-api/src/models/vehicule-dto";
+import {ChauffeurDto} from "../../../../../../ds-api/src/models/chauffeur-dto";
+import {MissionDto} from "../../../../../../ds-api/src/models/mission-dto";
+import {CreatedByUserDto} from "../../../../../../ds-api/src/models/created-by-user-dto";
+import {EtapeDto} from "../../../../../../ds-api/src/models/etape-dto";
+import {MissionVehicleDto} from "../../../../../../ds-api/src/models/mission-vehicle-dto";
+import {ActivatedRoute, Router} from "@angular/router";
+import {addHours, differenceInDays, differenceInHours, endOfWeek, format, isAfter, isBefore, parseISO} from "date-fns";
+import {DeliveryDestinationDto} from "../../../../../../ds-api/src/models/delivery-destination-dto";
+import {DeliveryPointDto} from "../../../../../../ds-api/src/models/delivery-point-dto";
+import {DeliveryPointsService} from "../../../../../../ds-api/src/services/delivery-points.service";
+import {et} from "@fullcalendar/core/internal-common";
+import {ChauffeurVehicleDto} from "../../../../../../ds-api/src/models/chauffeur-vehicle-dto";
 
 @Component({
   selector: 'app-add-mission',
@@ -17,62 +25,249 @@ import {ChauffeurService} from "../../../../../../ds-api/src/services/chauffeur.
   styleUrls: ['./add-mission.component.scss']
 })
 export class AddMissionComponent implements OnInit {
-  currentStep = 0;
-  missionForm: FormGroup= new FormGroup({});
-  allServiceDelivery: any[] = []; // Add your service type here
-  stageForm : FormGroup = new FormGroup({});
-  steps = [
-    { label: 'Basic Details', icon: 'bi-info-circle-fill' },
-    { label: 'Stages', icon: 'bi-geo-alt-fill' },
-    { label: 'Vehicles & Drivers', icon: 'bi-truck' },
-    { label: 'Comments', icon: 'bi-chat-left-text-fill' },
-    { label: 'Review', icon: 'bi-check-circle-fill' }
-  ];
-  deliveryPointsByCity: DeliveryPointDto[] =[];
-  selectedDeliveryService: ServiceDeliveryDto={}
-  etapeDto : EtapeDto={};
-  isFormEtapeLoading: boolean = false;
-  etapeDtos: EtapeDto[] = [];
 
-  constructor(
-    private servDeliveryService:ServiceDeliveryService,
-    private dpService:DeliveryPointsService,
-    private missionService:MissionService,
-    private alertService: AlertService,
-    private vehicleService: VehiculeService,
-    private driversService: ChauffeurService,
-    private fb: FormBuilder) {
-    this.initForm();
-    this.initStageForm();
-  }
 
+  dateDay!: string;
+  startDate!: string
+  endDate!: string
+
+  selectedDeliveryDestination: DeliveryDestinationResponse={};
+  /** populate data */
+  allDeliveryDestinations: DeliveryDestinationResponse[]=[];
+  allVehicles: VehiculeDto[]=[];
+  allDrivers: ChauffeurDto[]=[];
+  allDeliveryPointsByCity: DeliveryPointDto[]=[];
+  /** **/
+  minDate: string = "";
+  invalidSartDate: boolean=false;
+  invalidEndDate!: boolean;
+  difference:{days:number;hours:number}|null=null;
+  /* forms */
+
+  missionForm: FormGroup = new FormGroup({});
+  currentEtapeForm!: FormGroup;
+  currentMissionVForm!: FormGroup;
+
+  /* new list*/
+  etapes: EtapeDto[]=[];
+  missionVcls: MissionVehicleDto[]=[];
+  vehicleDrivers:ChauffeurDto[] =[];
+  /* to add to list*/
+  etape:EtapeDto={};
+  selectedDPoint!: DeliveryPointDto;
+
+  missonVehicle: MissionVehicleDto={};
+  selectedVehicle:VehiculeDto={};
+
+
+  selectedDrivers:ChauffeurDto[]=[];
+
+  selectedVehicles:VehiculeDto[]=[];
+
+ constructor(
+   private router:Router,
+   private activeRouter:ActivatedRoute,
+   private fb:FormBuilder,
+   private vehiclesService:VehiculeService,
+   private driversService:ChauffeurService,
+   private deliveryDestinationService: DeliveryDestinationService,
+   private alertService:AlertService,
+   private deliveryPointService:DeliveryPointsService) {
+ }
   ngOnInit() {
-    this.loadInitialData();
+   this.initMissionForm();
+   this.getDateDay();
+   this.loadInitialData();
+ }
+
+  private initMissionForm(){
+    this.missionForm = this.fb.group({
+      id:[''],
+      titre:['',Validators.required],
+      idDeliveryDestination:[null,Validators.required],
+      dateDebut:['',Validators.required],
+      dateFin:['',Validators.required],
+      volume:['',[Validators.required,Validators.min(1),Validators.max(100)]],
+      etapeDtos:this.fb.array([]),
+      missionVehiclesDtos:this.fb.array([]),
+      commentaire:[],
+    })
+    this.createEtape();
+    this.createMissionVehicle();
   }
 
-  initStageForm() {
-    this.stageForm = new FormGroup({
-      lieuDepart: new FormControl(),
-      lieuArrivee: new FormControl(),
-      scheduledDeliveryTime: new FormControl(),
+  get missionVehiclesDtoArray():FormArray{
+    return this.missionForm.get('missionVehiclesDtos') as FormArray;
+  }
 
-    })
+  createMissionVehicle(): FormGroup{
+  return this.currentMissionVForm = this.fb.group({
+     id:[''] ,
+     vehicleDto: ['',Validators.required],
+     chauffeursVehicleDto: this.fb.array([]),
+   })
   }
-  private findAllServicesDelivery() {
-    this.servDeliveryService.findAll3().subscribe({
-      next:(sdResponse)=>{
-        this.allServiceDelivery=sdResponse;
-      },error:(error)=>{
-        console.log(error);
-      }
-    })
+
+
+  addMissionVehicle(){
+   if(this.currentMissionVForm && this.currentMissionVForm.valid){
+     this.currentMissionVForm.get('vehicleDto')?.setValue(this.selectedVehicle);
+     console.log(this.currentMissionVForm.get('vehicleDto')?.value);
+     this.currentMissionVForm.patchValue({
+         vehicleDto: this.selectedVehicle,
+         chauffeursVehicleDto: this.vehicleDrivers.map(driver=>({ chauffeurDto: driver}))
+       });
+
+   console.log(this.currentMissionVForm.get('chauffeursVehicleDto')?.value);
+     this.missionVehiclesDtoArray.push(this.currentMissionVForm);
+     this.missonVehicle=this.currentMissionVForm.value;
+     this.missionVcls.push(this.missonVehicle);
+     this.selectedVehicles.push(this.selectedVehicle);
+   }
   }
+
+
+  removeVehicle(index: number) {
+    this.missionVehiclesDtoArray.removeAt(index);
+    this.missionVcls.splice(index,1);
+  }
+  get etapeDtosArray():FormArray{
+    return this.missionForm.get('etapeDtos') as FormArray;
+  }
+
+  createEtape(){
+   this.currentEtapeForm=this.fb.group({
+     id:[''],
+     lieuDepart: ['', Validators.required],
+     lieuArrivee: ['', Validators.required],
+     scheduledDeliveryTime: ['', Validators.required]
+   })
+
+  }
+  addEtape(): EtapeDto {
+  if(this.currentEtapeForm && this.currentEtapeForm.valid && this.selectedDPoint.name){
+
+    const newDepature= this.currentEtapeForm.value.lieuDepart;
+    const newArrival= this.selectedDPoint.name;
+    const newTimeString = this.currentEtapeForm.value.scheduledDeliveryTime;
+
+    if(this.isEtapeDuplicate(newDepature,newArrival,newTimeString)){
+      this.alertService.alertWaring('This departure, destination, and time combination already exists.');
+      return {};
+    }
+
+    if(!newTimeString){
+      this.alertService.alertWaring('Schedule time departure is required.');
+      return{};
+    }
+
+    if(this.hasInvalidTimeDifference(newTimeString)){
+      this.alertService.alertWaring("The time difference between stages must be at least 30 minutes.")
+      return {};
+    }
+
+    if(newDepature&&newArrival&&newTimeString){
+    this.etapeDtosArray.push(this.currentEtapeForm);
+    this.etape = this.currentEtapeForm.value;
+    this.etape.lieuArrivee = this.selectedDPoint.name;
+    this.etape.dateDepart=this.startDate;
+    this.etape.dateArrivee=this.endDate;
+
+    this.etapes.push(this.etape);
+      return this.etape;
+    }else{
+      this.alertService.alertError("All filler are mandatory")
+      return {};
+    }
+  }return {};
+  }
+
+  removeEtape(index: number){
+    this.etapeDtosArray.removeAt(index);
+    this.etapes.splice(index,1);
+  }
+
+  private isEtapeDuplicate(newDepature: string, newArrival: string , newTimeString: string) :boolean{
+    const isDuplicate = this.etapes.some(etape=>
+      etape.lieuDepart === newDepature &&
+      etape.lieuArrivee === newArrival &&
+      etape.scheduledDeliveryTime === newTimeString);
+
+    return isDuplicate;
+  }
+
+  private hasInvalidTimeDifference(newTimeString: string):boolean {
+    const newScheduledDeliveryTimeParts = newTimeString.split(':').map(Number);
+    const newScheduledDeliveryTime = new Date();
+    newScheduledDeliveryTime.setHours(newScheduledDeliveryTimeParts[0], newScheduledDeliveryTimeParts[1], 0, 0);
+
+    const hasInvalidTimeDifference = this.etapes.some(e=>{
+      const [existingHours, existingMinutes] =
+        (e.scheduledDeliveryTime as string).split(':').map(Number);
+      const existingScheduleDeliveryTime = new Date();
+      existingScheduleDeliveryTime.setHours(existingHours,existingMinutes,0,0);
+
+      return Math.abs(newScheduledDeliveryTime.getTime() - existingScheduleDeliveryTime.getTime())<30*60*1000;
+    });
+
+    return hasInvalidTimeDifference;
+  }
+
+
+  private handleErrors(type:string,error:any){
+    console.error(`Failed to load ${type}`,error);
+    this.alertService.alertError(`Error loading ${type}. Please refresh and try again.`);
+  }
+  private getDateDay(){
+   this.dateDay=this.activeRouter.snapshot.params['dateDay'];
+   if(this.dateDay){
+     const parseDateDay= parseISO(this.dateDay);
+     this.dateDay=format(parseDateDay,'yyyy-MM-dd HH:mm');
+     this.missionForm.get('dateDebut')?.setValue(this.dateDay);
+     this.minDate = parseDateDay.toISOString().split('T')[0]
+   }
+ }
+
+ private loadInitialData() {
+    this.loadDeliveryDestinations();
+    this.loadVehicles();
+    this.loadDrivers();
+    this.initDate();
+  }
+  private loadDeliveryDestinations(){
+    this.deliveryDestinationService.findAll12().subscribe({next:(deliveryDestination)=>{
+        this.allDeliveryDestinations=deliveryDestination
+      },
+      error:(err)=>{
+        this.handleErrors("Delivery Destination",err);
+      }});
+  }
+
+  private loadVehicles(){
+   this.vehiclesService.findAll1().subscribe({next:(vehicles)=>{
+     this.allVehicles=vehicles
+     },
+     error:(err)=>{
+       this.handleErrors("Vehicles",err);
+     }});
+  }
+
+  private loadDrivers(){
+   this.driversService.findAll17().subscribe({
+     next:(drivers)=>{
+       this.allDrivers=drivers;
+     },
+     error:(err)=>{
+       this.handleErrors("Drivers",err);
+     }
+   })
+  }
+
   private findAllDeliveryPointsByCity(selectedCity :string){
-    if(this.selectedDeliveryService){
-
-      this.dpService.findAllByCity({city:selectedCity}).subscribe({
-        next:(rep)=>{
-          this.deliveryPointsByCity=rep;
+    if(selectedCity){
+      this.deliveryPointService.findAllByCity({city:selectedCity}).subscribe({
+        next:(deliveryPointsByCity)=>{
+          this.allDeliveryPointsByCity=deliveryPointsByCity;
         },
         error:(err)=>{
           console.log(err);
@@ -81,155 +276,133 @@ export class AddMissionComponent implements OnInit {
     }
   }
 
-  private initForm() {
-    this.missionForm = this.fb.group({
-      titre: ['', Validators.required],
-      volume: ['', [Validators.required, Validators.min(0)]],
-      dateDebut: ['', Validators.required],
-      dateFin: ['', Validators.required],
-      commentaire: [''],
-      etapeDtos: this.fb.array([]),
-      missionVehiclesDtos: this.fb.array([]),
-      deliveryService:['']
-    });
-  }
+  onDDestinationChange(event: Event) {
+    const selectDD = this.missionForm.get('idDeliveryDestination')?.value;
+    this.selectedDeliveryDestination = selectDD as DeliveryDestinationResponse ;
+    if(this.selectedDeliveryDestination) {
+      const city = this.selectedDeliveryDestination.serviceDelivery?.destinationCity as string;
+    this.missionForm.get("titre")?.setValue("Mission " + this.selectedDeliveryDestination.serviceDelivery?.destinationCity);
+    this.currentEtapeForm.get('lieuDepart')?.setValue(this.selectedDeliveryDestination.serviceDelivery?.pickUpLocation);
+    this.findAllDeliveryPointsByCity(city);
+    this.currentEtapeForm.get('lieuArrivee')?.setValue(undefined);
+  }else{
+      this.etapeDtosArray.get('lieuDepart')?.setValue('');
+    }
+ }
 
-  onServiceChange(selectedDeliveryService : ServiceDeliveryDto) {
-/*    const select = event.target as HTMLSelectElement;
-    const selectedService = this.allServiceDelivery.find(s => s.id === select.value);
-    if (selectedService) {
-      // Handle service selection
-      console.log('Selected service:', selectedService);
-    }*/
-    console.log(selectedDeliveryService);
-    if(selectedDeliveryService && selectedDeliveryService.pickUpLocation!==null){
-      this.selectedDeliveryService = selectedDeliveryService;
-      this.missionForm.get('titre')?.setValue("Mission - "+ selectedDeliveryService.destinationCity);
-      this.stageForm.get('lieuDepart')?.setValue(selectedDeliveryService.pickUpLocation);
-      this.etapeDto.lieuDepart = this.stageForm.value.lieuDepart;
-      this.findAllDeliveryPointsByCity(selectedDeliveryService.destinationCity!);
+  onDeliveryPointChange() {
+    if(this.currentEtapeForm){
+      const deliveryPoint = this.currentEtapeForm?.get('lieuArrivee')?.value as DeliveryPointDto;
+      this.selectedDPoint=deliveryPoint;
+      console.log(this.selectedDPoint);
+      this.currentEtapeForm?.get('scheduledDeliveryTime')!.setValue(deliveryPoint.schedule)
     }else{
-      this.stageForm.get('lieuDepart')?.setValue('');
+      console.warn('No current stage form selected.');
     }
   }
 
-  nextStep() {
-    if (this.canProceed()) {
-      this.currentStep++;
-    }
+  onsubmit(){
+
   }
 
-  previousStep() {
-    if (this.currentStep > 0) {
-      this.currentStep--;
-    }
+  isFieldInvalid(currentForm: FormGroup,fieldName: string):boolean {
+   const field=currentForm.get(fieldName);
+    return field ?
+           (field.invalid && (field.dirty|| field.touched))
+           : false;
   }
 
-  canProceed(): boolean {
-    const form = this.missionForm;
+  validateStartDate() {
+    if(!this.missionForm.get('dateDebut')?.value){
+      return;
+    }
+    const selectedDate = new Date(this.missionForm.get('dateDebut')?.value);
+    const dateDay=new Date(this.dateDay)
+    if(isBefore(selectedDate.getDate(),dateDay.getDate()) || isAfter(selectedDate.getDate(),dateDay.getDate())){
+      this.alertService.alertWaring(`the satrt Date must be equal to  date day ${dateDay}`);
+      this.invalidSartDate=true;
+    }else{
+      this.calculateDifference(this.missionForm.get('dateDebut')?.value,
+        this.missionForm.get('dateFin')?.value);
 
-    switch (this.currentStep) {
-      case 0: {
-        const titre = form.get('titre');
-        const volume = form.get('volume');
-        const dateDebut = form.get('dateDebut');
-        const dateFin = form.get('dateFin');
-
-        return !!(
-          titre?.valid &&
-          volume?.valid &&
-          dateDebut?.valid &&
-          dateFin?.valid
-        );
+      this.startDate=this.missionForm.get('dateDebut')?.value;
+      if(this.etapes){
+        this.etapes.map((etape)=>{
+          etape.dateDepart=this.startDate;
+        })
       }
-      case 1: {
-/*        const etapeDtos = form.get('etapeDtos');
-        return !!(etapeDtos?.value?.length > 0);*/
-        const etapes = this.etapeDtos;
-        return !!(etapes?.length > 0);
+      this.invalidSartDate=false;
+    }
+  }
+
+  validateEndDate() {
+    if(!this.missionForm.get('dateFin')?.value){
+      return;
+    }
+    const selectedEndDate= new Date(this.missionForm.get('dateFin')?.value);
+    const miminumDate = addHours(new Date(),7);
+    const endOfCurrentWeek= endOfWeek(new Date(),{weekStartsOn:1});
+    if(isAfter(selectedEndDate, miminumDate)&& isBefore(selectedEndDate,endOfCurrentWeek)){
+      this.calculateDifference(this.missionForm.get('dateDebut')?.value,
+        this.missionForm.get('dateFin')?.value);
+      console.log("Valide Date");
+      this.invalidEndDate= false;
+      this.endDate=this.missionForm.get('dateFin')?.value;
+      if(this.etapes){
+        this.etapes.map((etape)=>{
+          etape.dateArrivee=this.endDate;
+        })
       }
-      case 2: {
-        const missionVehiclesDtos = form.get('missionVehiclesDtos');
-        return !!(missionVehiclesDtos?.value?.length > 0);
-      }
-      case 3:
-        return true; // Comments are optional
-      default:
-        return false;
+    }else{
+      console.log('Invalid end date.');
+      this.invalidEndDate= true;
+      this.difference=null;
+      this.alertService.alertWaring('The end date must be at least 7 hours from now and less than the end of this week.');
+
     }
+
+  }
+
+  calculateDifference(start:string,end:string):void{
+   if(start && end){
+     const starDate=new Date(start);
+     const endDate=new Date(end);
+     const totalHours= differenceInHours(endDate,starDate);
+     const days = differenceInDays(endDate,starDate);
+     const hours= totalHours - days * 24;
+     this.difference ={days,hours};
+   }else{
+     console.log("null date");
+     this.difference=null;
+   }
   }
 
 
-  isFieldInvalid(fieldName: string): boolean {
-    const field = this.missionForm.get(fieldName);
-    return field ? field.invalid && (field.dirty || field.touched) : false;
+  private initDate() {
+    this.startDate=this.dateDay;
+    this.endDate=this.dateDay;
+  }
+  convertToDate(dateString: string):string{
+   const dateParsed= parseISO(dateString);
+   return format(dateParsed,"dd-MM-yyyy");
   }
 
-  saveMission() {
-    if (this.missionForm.valid) {
-      const missionData: MissionDto = this.missionForm.value;
-      console.log('Saving mission:', missionData);
-      // Implement your save logic here
-    }
+  convertToTime(dateString: string):string{
+    const dateParsed= parseISO(dateString);
+    return format(dateParsed,"HH:mm");
   }
 
-  private loadInitialData() {
-    // Load your initial data here (services, vehicles, drivers, etc.)
-    this.findAllServicesDelivery();
-  }
+  onDriverChange($event: Event) {
 
-  addEtape(): EtapeDto {
-    const newDeparture = this.stageForm.value.lieuDepart;
-    const newArrival = this.stageForm.value.lieuArrivee;
+    const selectElement = event?.target as HTMLSelectElement;
+    const selectedOptions = Array.from(selectElement.selectedOptions).map(
+      (option: HTMLOptionElement) => JSON.parse(option.value)
+    );
 
-    const newTimeString = this.stageForm.value.scheduledDeliveryTime;
+    const chauffeursArray = this.currentMissionVForm.get('chauffeursVehicleDto') as FormArray;
+   // chauffeursArray.clear(); // Clear existing drivers
 
-    if (!newTimeString) {
-      this.alertService.alertError("Date departure is required.");
-      return {};
-    }
+    selectedOptions.forEach((driver) => chauffeursArray.push(this.fb.control(driver)))
 
-    const isDuplicate=this.etapeDtos.some(etape=>
-      etape.lieuDepart === newDeparture &&
-      etape.lieuArrivee === newArrival &&
-      etape.scheduledDeliveryTime === newTimeString);
-
-    if(isDuplicate){
-      this.alertService.alertWaring("This departure, destination, and time combination already exists.");
-      return {};
-    }
-
-    const newScheduledDeliveryTimeParts = newTimeString.split(':').map(Number); // ["12", "44"] -> [12, 44]
-    const newScheduledDeliveryTime = new Date();
-    newScheduledDeliveryTime.setHours(newScheduledDeliveryTimeParts[0], newScheduledDeliveryTimeParts[1], 0, 0);
-
-    const hasInvalidTimeDifference = this.etapeDtos.some(etape => {
-      const [existingHours, existingMinutes] = (etape.scheduledDeliveryTime as string).split(':').map(Number);
-      const existingScheduledDeliveryTime = new Date();
-      existingScheduledDeliveryTime.setHours(existingHours, existingMinutes, 0, 0);
-
-      return Math.abs(newScheduledDeliveryTime.getTime() - existingScheduledDeliveryTime.getTime()) < 30 * 60 * 1000;
-    });
-
-    if(hasInvalidTimeDifference){
-      this.alertService.alertWaring("The time difference between stages must be at least 30 minutes.")
-      return {};
-    }
-
-
-
-    if(newDeparture && newArrival && newTimeString){
-      this.etapeDto = this.stageForm.value;
-      this.etapeDtos.push(this.etapeDto);
-      //this.stageForm.reset();
-      return this.etapeDto;
-    } else{
-      this.alertService.alertError("All filler are mandatory")
-      return {};
-    }
-  }
-
-  deleteEtape(index: number) {
-      this.etapeDtos.splice(index,1);
   }
 }

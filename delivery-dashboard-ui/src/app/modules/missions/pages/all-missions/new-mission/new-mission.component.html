@@ -5,8 +5,8 @@
       <i class="bi bi-save me-2"></i>Save Mission
     </button>
   </header>
-
-  <div class="form-container">
+  <form [formGroup]="missionForm" (ngSubmit)="onsubmit()">
+    <div class="form-container">
     <!-- Main Mission Details -->
     <div class="card mission-details">
       <div class="card-body">
@@ -310,10 +310,10 @@
       </div>
     </div>
   </div>
-
   <header class="form-header">
     <button class="btn btn-primary" (click)="saveMission()">
       <i class="bi bi-save me-2"></i>Save Mission
     </button>
   </header>
+  </form>
 </div>

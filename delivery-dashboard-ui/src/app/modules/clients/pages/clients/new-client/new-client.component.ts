@@ -124,7 +124,6 @@ export class NewClientComponent implements OnInit {
     })
   }
   isFieldInvalid(fieldName: string): boolean {
-
     const field = this.clientForm.get(fieldName);
     return field ? (field.invalid && (field.dirty || field.touched)) : false;
   }

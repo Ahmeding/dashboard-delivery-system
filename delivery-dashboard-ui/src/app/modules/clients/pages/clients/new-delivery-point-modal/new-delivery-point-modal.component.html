@@ -407,8 +407,14 @@
             <!-- Basic Info -->
             <div class="col-md-3">
               <div class="form-group">
-                <input type="text" id ="name" class="form-control" placeholder="" [class.is-invalid]="currentPointForm.get('name')?.invalid
-                && currentPointForm.get('name')?.touched" formControlName="name">
+                <input
+                  type="text"
+                  id ="name"
+                  class="form-control"
+                  placeholder=""
+                  [class.is-invalid]="currentPointForm.get('name')?.invalid
+                && currentPointForm.get('name')?.touched"
+                  formControlName="name">
                 <label for="name">
                   <i class="bi bi-building text-info"></i>
                   Name
@@ -599,7 +605,6 @@
           </div>
         </form>
       </div>
-
       <!-- Add Point Button -->
       <div class="add-point-button" *ngIf="!currentPointForm">
         <button type="button" class="btn btn-outline-primary" (click)="createDeliveryPoint()">
@@ -607,6 +612,7 @@
           Add New Delivery Point
         </button>
       </div>
+
     </form>
   </div>
 

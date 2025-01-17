@@ -17,7 +17,7 @@ const routes: Routes = [
         canActivate:[authGuard] },
   { path: 'new-mission/:dateDay', component: NewMissionComponent,
         canActivate:[authGuard] },
-  { path: 'add-mission', component: AddMissionComponent,
+  { path: 'add-mission/:dateDay', component: AddMissionComponent,
         canActivate:[authGuard] },
   { path: 'mission-details/:id', component: MissionDetailsComponent,
         canActivate:[authGuard] },
