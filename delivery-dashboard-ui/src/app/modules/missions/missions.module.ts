@@ -19,6 +19,7 @@ import { NewWeeklyPlanningModalComponent } from './pages/planning/new-weekly-pla
 import { MissionCardComponent } from './pages/planning/weekly-planning/mission-card/mission-card.component';
 import {PlanningService} from "./pages/planning/weekly-planning/services/planning-service";
 import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
+import {NgSelectModule} from "@ng-select/ng-select";
 
 
 @NgModule({
@@ -37,24 +38,25 @@ import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
     NewWeeklyPlanningModalComponent,
     MissionCardComponent,
   ],
-    imports: [
-        CommonModule,
-        MissionsRoutingModule,
-        FormsModule,
-        NgForOf,
-        NgIf,
-        ReactiveFormsModule,
-        RouterLink,
-        FormsModule,
-        NgForOf,
-        NgIf,
-        ReactiveFormsModule,
-        RouterLink,
-        RouterModule.forChild([
-            {path: 'new', component: AddMissionComponent}
-        ]),
-        BsDatepickerModule
-    ],
+  imports: [
+    CommonModule,
+    MissionsRoutingModule,
+    FormsModule,
+    NgForOf,
+    NgIf,
+    ReactiveFormsModule,
+    RouterLink,
+    FormsModule,
+    NgForOf,
+    NgIf,
+    ReactiveFormsModule,
+    RouterLink,
+    RouterModule.forChild([
+      {path: 'new', component: AddMissionComponent}
+    ]),
+    BsDatepickerModule,
+    NgSelectModule
+  ],
   providers: [PlanningService]
 })
 export class MissionsModule { }

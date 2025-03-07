@@ -74,21 +74,16 @@ public class MissionController implements MissionApi {
 
     @Override
     public ResponseEntity<?> checkOverlappingVehicles(MissionDto dto) {
-        try {
-            missionService.checkOverlappingVehicles(dto);
-            return ResponseEntity.ok("No conflicts found for the given mission.");
-        } catch (InvalidOperationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+
+            return ResponseEntity.ok(missionService.checkOverlappingVehicles(dto));
+
+
     }
 
     @Override
     public ResponseEntity<?> checkOverlappingDrivers(MissionDto dto) {
-        try {
-            missionService.checkOverlappingDrivers(dto);
-            return ResponseEntity.ok("No conflicts found for the given mission.");
-        } catch (InvalidOperationException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+
+        return ResponseEntity.ok( missionService.checkOverlappingDrivers(dto));
+
     }
 }

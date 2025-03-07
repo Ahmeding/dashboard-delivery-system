@@ -10,37 +10,37 @@
         <!-- Row 1: Marque/Model and Date PMC -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Full Name:</span> {{ selectedClient?.firstname }} {{ selectedClient?.lastname }}
+            <span class="text-primary">Full Name:</span> {{ selectedClient.firstname }} {{ selectedClient.lastname }}
           </div>
           <div class="col-md-6">
-            <span class="text-primary">Email:</span> {{ selectedClient?.email }}
+            <span class="text-primary">Email:</span> {{ selectedClient.email }}
           </div>
         </div>
 
         <!-- Row 2: Immatriculation and Capacity -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Phone. N°:</span> {{ selectedClient?.phoneNum }}
+            <span class="text-primary">Phone. N°:</span> {{ selectedClient.phoneNum }}
           </div>
           <div class="col-md-6">
-            <span class="text-primary">Created By :</span> {{ selectedClient?.createdByUser?.fullname }}
+            <span class="text-primary">Created By :</span> {{ selectedClient.createdByUser?.fullname }}
           </div>
         </div>
 
         <!-- Row 3: Milage and Vin -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Description:</span> {{ selectedClient?.description }}
+            <span class="text-primary">Description:</span> {{ selectedClient.description }}
           </div>
           <div class="col-md-6">
-            <span class="text-primary">Siret N°:</span> {{ selectedClient?.siret }}
+            <span class="text-primary">Siret N°:</span> {{ selectedClient.siret }}
           </div>
         </div>
 
         <!-- Row 4: Fuel Type and Number of Missions -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Siren:</span> {{ selectedClient?.siren }}
+            <span class="text-primary">Siren:</span> {{ selectedClient.siren }}
           </div>
           <div class="col-md-6">
             <span class="text-primary">Number of Orders:</span> <!--{{ selectedClient?.ordersCount || 'N/A' }}-->

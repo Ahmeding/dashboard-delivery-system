@@ -5,7 +5,6 @@
 import { CreatedByUserDto } from '../models/created-by-user-dto';
 import { ServiceDeliveryDto } from '../models/service-delivery-dto';
 export interface DeliveryDestinationResponse {
-  clientId?: number;
   createdAt?: string;
   createdBy?: number;
   createdByUser?: CreatedByUserDto;

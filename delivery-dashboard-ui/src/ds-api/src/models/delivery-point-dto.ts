@@ -8,6 +8,7 @@ import { DeliveryPointContactDto } from '../models/delivery-point-contact-dto';
 import { LocalTime } from '../models/local-time';
 export interface DeliveryPointDto {
   addressDto?: AdresseDto;
+  clientId?: number;
   contact?: DeliveryPointContactDto;
   createdAt?: string;
   createdBy?: number;

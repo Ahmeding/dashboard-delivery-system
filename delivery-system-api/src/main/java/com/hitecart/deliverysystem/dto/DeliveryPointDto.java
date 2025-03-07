@@ -22,6 +22,7 @@ public class DeliveryPointDto {
     private DeliveryPointType deliveryPointType;
 
     private Integer delivDestinationId;
+    private Integer clientId;
     private Integer deliveryPointCategoryId;
     private DeliveryPointContactDto contact;
     @JsonFormat(pattern = "HH:mm")
@@ -50,6 +51,9 @@ public class DeliveryPointDto {
                         .contact(DeliveryPointContactDto.fromEntity(deliveryPoint.getContact()))
                         .delivDestinationId(deliveryPoint.getDeliveryDestination()!=null ?
                                 deliveryPoint.getDeliveryDestination().getId()
+                                : null)
+                        .clientId(deliveryPoint.getClient()!=null ?
+                                deliveryPoint.getClient().getId()
                                 : null)
                         .deliveryPointCategoryId(deliveryPoint.getDeliveryPointCategory()!= null ? deliveryPoint.getDeliveryPointCategory().getId():null)
                         .enabled(deliveryPoint.isEnabled())

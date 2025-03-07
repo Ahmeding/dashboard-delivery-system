@@ -21,7 +21,6 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     let authReq = request;
     if(token){
        authReq=request.clone({
-
         headers : new HttpHeaders({
           'Content-type' : 'application/json',
           Accept : 'application/json',
@@ -34,14 +33,12 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     }
     return next.handle(authReq).pipe(
       catchError((err)=>{
-
         console.log("Interceptor error", err);
-        if(err.status === 401 || err.status === 403){
+/*        if(err.status === 401 || err.status === 403){
           console.log("Unauthorized or forbiden: Redirecting to login");
           this.tokenService.logout();
           this.router.navigate(['login']);
-        }
-
+        }*/
         return throwError(()=>err);
 
       })

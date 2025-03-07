@@ -43,6 +43,7 @@ public class SecurityConfiguration {
                         "/ws/**")
                 .permitAll()
                 .anyRequest().authenticated())
+                //.exceptionHandling(exception->exception.authenticationEntryPoint(new JwtErrorHelper()))
                 .sessionManagement(manager->manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthentificationFilter, UsernamePasswordAuthenticationFilter.class);

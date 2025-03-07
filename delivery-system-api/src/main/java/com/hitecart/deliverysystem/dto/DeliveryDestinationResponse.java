@@ -18,7 +18,6 @@ public class DeliveryDestinationResponse {
 
     private Integer id;
     private String reference;
-    private Integer clientId;
     private ServiceDeliveryDto serviceDelivery;
 
     private LocalDateTime createdAt;
@@ -36,7 +35,6 @@ public class DeliveryDestinationResponse {
                         .id(deliveryDestination.getId())
                         .reference(deliveryDestination.getReference())
 
-                        .clientId(deliveryDestination.getClient()!=null ? deliveryDestination.getClient().getId() : null)
                         .serviceDelivery(deliveryDestination.getServiceDelivery()!=null ?
                                ServiceDeliveryDto.fromEntity(deliveryDestination.getServiceDelivery()) : null)
                         .createdAt(deliveryDestination.getCreatedAt())

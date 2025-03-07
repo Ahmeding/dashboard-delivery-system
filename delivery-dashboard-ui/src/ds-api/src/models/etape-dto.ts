@@ -15,4 +15,3 @@ export interface EtapeDto {
   scheduledDeliveryTime?: LocalTime;
   titre?: string;
 }
-

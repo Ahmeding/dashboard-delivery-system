@@ -9,30 +9,47 @@
 
   <form [formGroup]="serviceDeliveryForm" (ngSubmit)="onSubmit()" class="form-content">
     <div class="form-grid">
-      <!-- Reference -->
+
+      <!-- Destination Country -->
       <div class="form-field">
-        <label for="reference">Reference</label>
+        <label for="destinationCountry">Destination Country</label>
+        <div class="input-container location-container">
+          <i class="bi bi-map"></i>
+          <input
+            id="destinationCountry"
+            type="text"
+            formControlName="destinationCountry"
+            [class.is-invalid]="serviceDeliveryForm.get('destinationCountry')?.invalid && serviceDeliveryForm.get('destinationCountry')?.touched"
+            placeholder="Enter Destination Country">
+        </div>
+        <div class="error-message" *ngIf="serviceDeliveryForm.get('destinationCountry')?.invalid && serviceDeliveryForm.get('destinationCountry')?.touched">
+          Destination Country is required
+        </div>
+      </div>
+      <!-- Title (Delivery Point) -->
+      <div class="form-field">
+        <label for="destinationCity">Destination City</label>
         <div class="input-container">
           <i class="bi bi-hash"></i>
           <input
-            id="reference"
+            id="destinationCity"
             type="text"
-            formControlName="reference"
-            [class.is-invalid]="serviceDeliveryForm.get('reference')?.invalid && serviceDeliveryForm.get('reference')?.touched"
+            formControlName="destinationCity"
+            [class.is-invalid]="serviceDeliveryForm.get('destinationCity')?.invalid && serviceDeliveryForm.get('destinationCity')?.touched"
           >
         </div>
-        <div class="error-message" *ngIf="serviceDeliveryForm.get('reference')?.invalid && serviceDeliveryForm.get('reference')?.touched">
-          Reference is required
+        <div class="error-message" *ngIf="serviceDeliveryForm.get('destinationCity')?.invalid && serviceDeliveryForm.get('destinationCity')?.touched">
+          Destination-City is required
         </div>
       </div>
 
       <!-- Title (Delivery Point Selection) -->
-      <div class="form-field">
-        <label for="title">Delivery Point</label>
+      <!--<div class="form-field">
+        <label for="titled">Delivery Point</label>
         <div class="input-container">
           <i class="bi bi-geo-alt"></i>
           <select
-            id="title"
+            id="titled"
             formControlName="title"
             [class.is-invalid]="serviceDeliveryForm.get('title')?.invalid && serviceDeliveryForm.get('title')?.touched"
           >
@@ -44,6 +61,46 @@
         </div>
         <div class="error-message" *ngIf="serviceDeliveryForm.get('title')?.invalid && serviceDeliveryForm.get('title')?.touched">
           Delivery point is required
+        </div>
+      </div>-->
+      <!-- Pickup Location -->
+      <div class="form-field">
+        <label for="pickUpLocation">Pickup Location</label>
+        <div class="input-container location-container">
+          <i class="bi bi-truck"></i>
+          <input
+            id="pickUpLocation"
+            type="text"
+            formControlName="pickUpLocation"
+            [class.is-invalid]="serviceDeliveryForm.get('pickUpLocation')?.invalid && serviceDeliveryForm.get('pickUpLocation')?.touched"
+            placeholder="Enter pickup location"
+          >
+          <button type="button" class="location-btn">
+            <i class="bi bi-geo-alt-fill"></i>
+          </button>
+        </div>
+        <div class="error-message" *ngIf="serviceDeliveryForm.get('pickUpLocation')?.invalid && serviceDeliveryForm.get('pickUpLocation')?.touched">
+          Pickup location is required
+        </div>
+      </div>
+
+      <!-- Distance -->
+      <div class="form-field">
+        <label for="distance">Distance (km)</label>
+        <div class="input-container distance-container">
+          <i class="bi bi-signpost-split"></i>
+          <input
+            id="distance"
+            type="number"
+            step="0.1"
+            formControlName="distance"
+            [class.is-invalid]="serviceDeliveryForm.get('distance')?.invalid && serviceDeliveryForm.get('distance')?.touched"
+            placeholder="Enter distance"
+          >
+          <span class="distance-unit">km</span>
+        </div>
+        <div class="error-message" *ngIf="serviceDeliveryForm.get('distance')?.invalid && serviceDeliveryForm.get('distance')?.touched">
+          Valid distance is required
         </div>
       </div>
 
@@ -63,10 +120,9 @@
           Description is required
         </div>
       </div>
-
       <!-- Unit Price HT -->
       <div class="form-field">
-        <label for="unitPriceHT">Price (HT)</label>
+        <label for="unitPriceHT">Basic Trip Cost (HT)</label>
         <div class="input-container">
           <i class="bi bi-currency-euro"></i>
           <input
@@ -78,10 +134,9 @@
           >
         </div>
         <div class="error-message" *ngIf="serviceDeliveryForm.get('unitPriceHT')?.invalid && serviceDeliveryForm.get('unitPriceHT')?.touched">
-          Valid price is required
+          Basic Trip Cost is required
         </div>
       </div>
-
       <!-- TVA -->
       <div class="form-field">
         <label for="tva">TVA (%)</label>
@@ -99,19 +154,33 @@
           TVA must be between 0 and 100
         </div>
       </div>
-
       <!-- Price TTC (Read-only) -->
       <div class="form-field">
-        <label for="priceTTC">Price (TTC)</label>
+        <label for="basicTripCost">Basic Trip Cost (TTC)</label>
         <div class="input-container">
           <i class="bi bi-currency-euro"></i>
           <input
-            id="priceTTC"
+            id="basicTripCost"
             type="number"
-            formControlName="priceTTC"
+            formControlName="basicTripCost"
             readonly
             class="readonly"
           >
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="color">Color</label>
+        <div class="input-container">
+          <i class="bi bi-palette"></i>
+          <input
+            id="color"
+            type="color"
+            formControlName="color"
+            [class.is-invalid]="serviceDeliveryForm.get('color')?.invalid && serviceDeliveryForm.get('color')?.touched"
+          >
+        </div>
+        <div class="error-message" *ngIf="serviceDeliveryForm.get('color')?.invalid && serviceDeliveryForm.get('color')?.touched">
+          Color is required
         </div>
       </div>
     </div>

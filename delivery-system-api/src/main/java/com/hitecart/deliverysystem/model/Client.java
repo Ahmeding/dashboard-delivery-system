@@ -31,7 +31,7 @@ public class Client extends Utilisateur{
     @OneToMany(mappedBy = "client")
     private List<Devis> devis;
     @OneToMany(mappedBy = "client")
-    private List<DeliveryDestination>  deliveryDestinations;
+    private List<DeliveryPoint>  deliveryPoints;
 
 
     @PrePersist

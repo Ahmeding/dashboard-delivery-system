@@ -11,6 +11,7 @@ import {DeliveryPointCategoryDto} from "../../../../../../ds-api/src/models/deli
 import {DeliveryPointCategoriesService} from "../../../../../../ds-api/src/services/delivery-point-categories.service";
 import {DeliveryDestinationService} from "../../../../../../ds-api/src/services/delivery-destination.service";
 import {InputFillUtilsService} from "../../../../../services/input-fill-utils/input-fill-utils.service";
+  import {AlertService} from "../../../../../services/alert/alert.service";
 
 
 @Component({
@@ -31,7 +32,7 @@ export class NewDeliveryPointModalComponent implements OnInit{
   serviceDeliveries: ServiceDeliveryDto[]=[];
   deliveryPoints: DeliveryPointDto[]=[];
   dpCategories:DeliveryPointCategoryDto[]=[];
-
+  selectedDeliveryService!:ServiceDeliveryDto;
 
   destinationForm!: FormGroup;
   deliveryPointForm!: FormGroup;
@@ -41,18 +42,17 @@ export class NewDeliveryPointModalComponent implements OnInit{
     private fillInputService: InputFillUtilsService,
     private dpCategoryService:DeliveryPointCategoriesService,
     private serviceDeliveryService:ServiceDeliveryService,
-    private clientService:ClientService,
     private deliveryPointsService:DeliveryPointsService,
     private dDestinationService:DeliveryDestinationService,
     public activeModal: NgbActiveModal,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private alertService: AlertService
   ){this.initDestForm();}
 
 
   initDestForm(){
     this.destinationForm = this.fb.group({
       id:[''],
-      clientId: [''],
       serviceDeliveryId: ['', Validators.required],
       deliveryPointsDto: this.fb.array([])
     });
@@ -76,6 +76,7 @@ export class NewDeliveryPointModalComponent implements OnInit{
   createDeliveryPoint(){
     this.currentPointForm=this.fb.group({
       id:[''],
+      clientId: [''],
       name:['', Validators.required],
       deliveryPointType:['', Validators.required],
       deliveryPointCategoryId:['', Validators.required],
@@ -99,6 +100,7 @@ export class NewDeliveryPointModalComponent implements OnInit{
 
   addDeliveryPoint(){
     if(this.currentPointForm && this.currentPointForm.valid){
+      this.currentPointForm.get("clientId")?.setValue(this.clientId);
       this.deliveryPointsArray.push(this.currentPointForm);
       this.deliveryPoints.push(this.currentPointForm.value);
       this.currentPointForm=null;
@@ -163,14 +165,18 @@ export class NewDeliveryPointModalComponent implements OnInit{
 
   save() {
     if (this.destinationForm.valid) {
+      this.destinationForm.get("serviceDeliveryId")?.setValue(this.selectedDeliveryService.id)
       const deliveryDest=this.destinationForm.getRawValue();
       console.log( );
       this.dDestinationService.save12({body:deliveryDest}).subscribe({
         next:(dpResp)=>{
           console.log(dpResp);
+
+          this.alertService.alertSuccess("New Delivery Point added successfully!");
           this.activeModal.close(this.destinationForm.value);
         },error:(err)=>{
-          console.log(err);
+          this.alertService.alertWaring("An error occurred while adding the new delivery point. ["+ err.error.msg+"]");
+          console.log(err.error.msg);
         }
       })
       console.log("save !!!! ");
@@ -213,9 +219,17 @@ export class NewDeliveryPointModalComponent implements OnInit{
       this.currentPointForm.get('addressDto.adresse1')?.setValue(numNameStreet)
 
       const randomCity = this.fillInputService.generateRandomCityAndPostalCode();
-      this.currentPointForm.get('addressDto.codepostal')?.setValue(randomCity.postalCode)
-      this.currentPointForm.get('addressDto.ville')?.setValue(randomCity.city)
-      this.currentPointForm.get('addressDto.pays')?.setValue("France")
+      if(this.selectedDeliveryService){
+        this.currentPointForm.get('addressDto.codepostal')?.setValue(randomCity.postalCode)
+        this.currentPointForm.get('addressDto.ville')?.setValue(this.selectedDeliveryService.destinationCity)
+        this.currentPointForm.get('addressDto.pays')?.setValue(this.selectedDeliveryService.destinationCountry)
+      }
+
     }
+  }
+
+  setAddressLocation(selectedDeliveryService: ServiceDeliveryDto) {
+   this.selectedDeliveryService = this.destinationForm.get("serviceDeliveryId")?.value;
+    console.log(selectedDeliveryService.destinationCity+"----------------");
   }
 }

@@ -50,6 +50,7 @@ private getAllVehicles() {
     });
   }
   formatDateDDMMYYYY(datePMC: string | undefined) : string{
+    if (!datePMC) return '';
     const dateString= JSON.stringify(datePMC);
     const dateArray=JSON.parse(dateString);
     const year=dateArray[0];

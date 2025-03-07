@@ -27,7 +27,6 @@ public class DeliveryDestinationDto {
 
     private List<MissionDto> missionsDto;
     private List<DeliveryPointDto> deliveryPointsDto;
-    private Integer clientId;
     private Integer serviceDeliveryId;
 
     private LocalDateTime createdAt;
@@ -44,8 +43,6 @@ public class DeliveryDestinationDto {
                 return DeliveryDestinationDto.builder()
                         .id(deliveryDestination.getId())
                         .reference(deliveryDestination.getReference())
-
-                        .clientId(deliveryDestination.getClient()!=null ? deliveryDestination.getClient().getId() : null)
                         .serviceDeliveryId(deliveryDestination.getServiceDelivery()!=null ? deliveryDestination.getServiceDelivery().getId() : null)
                         .missionsDto(deliveryDestination.getMissions()!=null ?
                                 deliveryDestination.getMissions().stream()

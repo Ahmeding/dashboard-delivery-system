@@ -1,5 +1,8 @@
 package com.hitecart.deliverysystem.exception;
 
+import lombok.Getter;
+
+@Getter
 public class DuplicateDrivingLicenseException extends RuntimeException {
 
     private ErrorCodes errorCodes;

@@ -11,6 +11,7 @@ import {ViewClientModalComponent} from "./view-client-modal/view-client-modal.co
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {DeliveryPointDto} from "../../../../../ds-api/src/models/delivery-point-dto";
 import {NewDeliveryPointModalComponent} from "./new-delivery-point-modal/new-delivery-point-modal.component";
+import {Client} from "stompjs";
 
 @Component({
   selector: 'app-clients',
@@ -163,6 +164,10 @@ export class ClientsComponent implements OnInit{
     this.router.navigate(['clients','edit-client',id]);
   }
 
+/*  totalDeliveryPointsByClient(client :ClientDto) :number{
+    if(!client.deliveryDestinationsDto)return 0;
+    return client.deliveryDestinationsDto.reduce((sum,dest)=>sum+(dest.deliveryPointsDto?.length||0),0);
+  }*/
   openAddNewDPModal(client: any) {
     const modalRef = this.modalService.open(NewDeliveryPointModalComponent, {
       size: 'lg',

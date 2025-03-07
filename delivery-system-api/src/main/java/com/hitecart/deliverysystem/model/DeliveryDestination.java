@@ -18,16 +18,18 @@ import java.util.List;
 public class DeliveryDestination extends AbstractEntity {
 
     private String reference;
+
     @OneToMany(mappedBy = "deliveryDestination")
     private List<DeliveryPoint> deliveryPoints =new ArrayList<>();
-    @ManyToOne
-    @JoinColumn(name = "client_id",nullable = false)
-    private Client client;
+
     @ManyToOne
     @JoinColumn(name = "service_delivery_id",nullable = false)
     private ServiceDelivery serviceDelivery;
+
     @OneToMany(mappedBy = "deliveryDestination")
     private List<Mission> missions =new ArrayList<>();
+
+
     @PrePersist
     private void generateReference() {
         if(this.reference == null || this.reference.isEmpty()){

@@ -15,7 +15,7 @@
             <div class="col-md-4">
               <div class="form-floating mb-3 mb-md-0">
                 <input  [(ngModel)]="newQuote.code"
-                        [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['code']?.invalid}"
+                        [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['code'].invalid}"
                         name="code"  class="form-control" id="inputCode" type="text" placeholder="Code"  required/>
                 <label for="inputCode">Code</label>
                 <small *ngIf="isFormAddNewSubmitted && form.controls['code']?.invalid" class="text-danger">Code is required</small>
@@ -37,7 +37,7 @@
             <div class="col-md-4">
               <div class="form-floating mb-3 mb-md-0">
                 <input  [(ngModel)]="newQuote.dateCommnde"
-                        [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['orderdate']?.invalid}"
+                        [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['orderdate'].invalid}"
                         name="orderdate" class="form-control" id="inputQuoteDate" type="datetime-local" placeholder="Date"  required/>
                 <label for="inputQuoteDate">Date</label>
                 <small *ngIf="isFormAddNewSubmitted && form.controls['orderdate']?.invalid" class="text-danger">Date is required</small>

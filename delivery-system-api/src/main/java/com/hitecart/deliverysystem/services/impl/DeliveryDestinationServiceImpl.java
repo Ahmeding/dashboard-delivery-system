@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -54,10 +55,15 @@ public class DeliveryDestinationServiceImpl implements IDeliveryDestinationServi
         DeliveryDestination ddToSave = DeliveryDestinationDto.toEntity(dto);
 
         DeliveryDestination checkDelivDestination = deliveryDestinationExists(dto);
-        Client client = ClientDto.toEntity(clientService.findById(dto.getClientId()));
-        ddToSave.setClient(client);
+
+
+
 
         if(checkDelivDestination!=null){
+/*            if(Objects.equals(checkDelivDestination.getClient().getId(), client.getId())){
+                throw new InvalidOperationException("Delivery Destion alreday existe for this client",
+                        ErrorCodes.DELIVERY_POINT_NOT_VALID_OPERATION);
+            }*/
             ddToSave.setId(checkDelivDestination.getId());
         }else{
             ServiceDelivery sdToSave
@@ -77,7 +83,12 @@ public class DeliveryDestinationServiceImpl implements IDeliveryDestinationServi
 
 
 
+    private DeliveryDestination deliveryDestinationExists(DeliveryDestinationDto dd) {
+        return deliveryDestinationRepository.findDeliveryDestinationsByClientIdAndServiceDeliveryId(dd.getServiceDeliveryId());
+    }
+
     private void validateAllDeliveryPoints(List<DeliveryPointDto> deliveryPointsDto, Set<String> existingPointNames) {
+
         List<String> duplicateNames = deliveryPointsDto.stream()
                 .filter(dp -> existingPointNames.contains(dp.getName()))
                 .map(DeliveryPointDto::getName)
@@ -91,19 +102,19 @@ public class DeliveryDestinationServiceImpl implements IDeliveryDestinationServi
         }
     }
 
-
     private void setAllDeliveryPoints(DeliveryDestinationDto dto,DeliveryDestination ddToSave) {
+
        if(dto.getDeliveryPointsDto().isEmpty()){
            return;
        }
 
        List<DeliveryPoint> existingPoints =
-               deliveryPointRepository.findByClientAndServiceDelivery(dto.getClientId(), dto.getServiceDeliveryId());
+               deliveryPointRepository.findByClientAndServiceDelivery(dto.getServiceDeliveryId());
 
        Set<String> existingPointNames = existingPoints.stream()
                .map(DeliveryPoint::getName)
                .collect(Collectors.toSet());
-
+        Client client = ClientDto.toEntity(clientService.findById(dto.getDeliveryPointsDto().get(0).getClientId()));
         // Validate all delivery points before saving any of them
         validateAllDeliveryPoints(dto.getDeliveryPointsDto(), existingPointNames);
 
@@ -112,14 +123,10 @@ public class DeliveryDestinationServiceImpl implements IDeliveryDestinationServi
                     .forEach(dp->{
                        DeliveryPoint deliveryPointToSave = DeliveryPointDto.toEntity(dp);
                        deliveryPointToSave.setDeliveryDestination(ddToSave);
+                       deliveryPointToSave.setClient( client);
                        deliveryPointRepository.save(deliveryPointToSave);
                     });
 
-    }
-
-
-    private DeliveryDestination deliveryDestinationExists(DeliveryDestinationDto dd) {
-        return deliveryDestinationRepository.findDeliveryDestinationsByServiceDeliveryId(dd.getClientId(), dd.getServiceDeliveryId());
     }
 
     @Override
@@ -145,7 +152,7 @@ public class DeliveryDestinationServiceImpl implements IDeliveryDestinationServi
         CheckParmasUtil.checkID(clientId,"Le parametre ID est null",
                 "Impossible de trouver un Delivery Destination avec un parametre id client  null",ErrorCodes.DELIVERY_DESTINATION_NOT_VALID_OPERATION);
 
-      List<DeliveryDestination> deliveryDestinations = deliveryDestinationRepository.findAllByClientId(clientId);
+      List<DeliveryDestination> deliveryDestinations = deliveryDestinationRepository.findAll();
 
       if(deliveryDestinations.isEmpty()) {
           throw new EntityNotFoundException("Opps! Aucun Delivery Destination avec l'id client :" + clientId + "n'a ete trouvé dans la base de donnée",

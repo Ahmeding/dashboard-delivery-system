@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=true)
 @Table(name = "etape")
+@SuperBuilder
 @ToString(callSuper=true)
 public class Etape extends AbstractEntity{
 

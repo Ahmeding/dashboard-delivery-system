@@ -23,6 +23,20 @@
     }
   }
 
+  .form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+
+    h1 {
+      color: var(--text-color);
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin: 0;
+    }
+  }
+
   .form-container {
     display: flex;
     flex-direction: column;

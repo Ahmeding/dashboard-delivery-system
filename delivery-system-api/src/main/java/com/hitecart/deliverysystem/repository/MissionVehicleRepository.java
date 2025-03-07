@@ -23,7 +23,7 @@ public interface MissionVehicleRepository extends JpaRepository<MissionVehicle, 
             FROM MissionVehicle mv
             JOIN Mission m ON mv.mission.id = m.id
                 WHERE mv.vehicule.id IN :vehicleIds
-                AND (:startDateTime < m.dateFin AND :endDateTime > m.dateDebut )
+                 AND (:startDateTime < m.dateFin AND :endDateTime > m.dateDebut )
             """)
     List<Integer> findUnavailableVehicles(
             @Param("vehicleIds") List<Integer> vehicleIds,

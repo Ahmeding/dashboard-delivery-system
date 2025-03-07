@@ -1,6 +1,7 @@
 package com.hitecart.deliverysystem.config;
 
 import com.hitecart.deliverysystem.services.security.JwtService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,8 +49,22 @@ public class JwtAuthentificationFilter extends OncePerRequestFilter {
         }
 
         jwt= authHeader.substring(7);
-        userEmail= jwtService.extractUsername(jwt);
 
+        try{
+            userEmail= jwtService.extractUsername(jwt);
+        }catch (ExpiredJwtException ex){
+            // If the token is expired, send a 401 response with a clear message.
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Session expired. Please login again.\"}");
+            return;
+        }catch  (Exception ex) {
+            // For any other JWT-related errors, send a generic unauthorized error.
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Invalid JWT token.\"}");
+            return;
+        }
         if(StringUtils.hasLength(userEmail) &&
                 SecurityContextHolder.getContext().getAuthentication()== null){
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);

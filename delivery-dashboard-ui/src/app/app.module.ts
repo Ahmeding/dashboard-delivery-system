@@ -21,6 +21,7 @@ import {
 } from "@costlydeveloper/ngx-awesome-popup";
 import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {NgSelectModule} from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     LoginComponent,
   ],
   imports: [
+
     BrowserModule,
     CommonModule,
     AppRoutingModule,
@@ -48,7 +50,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       positionClass:'toast-top-right',
       timeOut:8000
     }),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgSelectModule
   ],
   providers: [
     ThemeService,

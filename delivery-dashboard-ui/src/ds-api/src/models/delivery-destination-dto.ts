@@ -6,7 +6,6 @@ import { CreatedByUserDto } from '../models/created-by-user-dto';
 import { DeliveryPointDto } from '../models/delivery-point-dto';
 import { MissionDto } from '../models/mission-dto';
 export interface DeliveryDestinationDto {
-  clientId?: number;
   createdAt?: string;
   createdBy?: number;
   createdByUser?: CreatedByUserDto;

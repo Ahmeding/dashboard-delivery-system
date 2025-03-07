@@ -290,7 +290,9 @@ export class WeeklyPlanningComponent implements  OnInit {
 
 
   navigateToNewMissionByDate(dateDay: Date) {
+
     const dateDayString= formatDateDay(dateDay);
+    console.log("---- "+dateDayString+" ----");
     this.router.navigate(['missions',"add-mission",dateDayString]);
   }
 }

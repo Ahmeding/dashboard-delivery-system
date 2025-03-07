@@ -20,6 +20,10 @@
             "outputPath": "dist/delivery-dashboard-ui",
             "index": "src/index.html",
             "main": "src/main.ts",
+            "progress": false,
+            "verbose": false,
+            "sourceMap": false,
+            "vendorChunk": false,
             "polyfills": [
               "zone.js"
             ],
@@ -36,6 +40,12 @@
           },
           "configurations": {
             "production": {
+              "optimization": {
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": true
+                }
+              },
               "budgets": [
                 {
                   "type": "initial",

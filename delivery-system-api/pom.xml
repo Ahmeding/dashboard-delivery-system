@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.hitecart</groupId>
 	<artifactId>deliverysystem</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>deliverysystem</name>
 	<description>Delivery System project for Spring Boot</description>
 	<properties>
@@ -29,6 +29,12 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-messaging</artifactId>
 			<version>6.2.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>

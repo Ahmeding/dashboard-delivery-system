@@ -25,10 +25,9 @@ public interface DeliveryPointRepository extends JpaRepository<DeliveryPoint, In
  @Query("""
             SELECT deliveryPoint
             FROM DeliveryPoint deliveryPoint
-            WHERE deliveryPoint.deliveryDestination.client.id = :clientId
-            AND deliveryPoint.deliveryDestination.serviceDelivery.id = :serviceDeliveryId
+            WHERE  deliveryPoint.deliveryDestination.serviceDelivery.id = :serviceDeliveryId
         """)
-    List<DeliveryPoint> findByClientAndServiceDelivery(Integer clientId, Integer serviceDeliveryId);
+    List<DeliveryPoint> findByClientAndServiceDelivery(Integer serviceDeliveryId);
 }
 /*
 

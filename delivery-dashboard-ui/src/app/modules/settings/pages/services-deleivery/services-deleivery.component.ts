@@ -114,12 +114,47 @@ export class ServicesDeleiveryComponent implements OnInit{
   }
 
   private confirmDeliting(id_service: number) {
-    this.serviceDeliveryService.delete2({id:id_service}).subscribe({
-      next:(resp)=>{
-        this.alertService.alertInfo("deleting successfull")
+    console.log(id_service);
+        this.serviceDeliveryService.delete2({id:id_service}).subscribe({
+          next:(resp)=>{
+            this.alertService.alertInfo("deleting successfull")
+            this.getAllServiceDel();
+          },error:()=>{
+            this.alertService.alertError("deleting failed")
+          }
+        });
+  }
+
+  handleServiceDeliveryActivation(idServDelivery: number, isActive: boolean) {
+    console.log("===========before=========== "+ isActive);
+    const action = isActive? "disable" : "enable"; const updateIsActive : boolean = !(isActive);
+    if (idServDelivery === undefined) {
+      this.alertService.alertError('Delivery Service ID is missing. Unable to delete.');
+      return;
+    }
+    this.confirmBoxService.customFour(`Are you sure you want to ${action} this Delivery Service?`, 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
+      resp => {
+        console.log("============updateIsActive========== "+ updateIsActive);
+
+        this.updateDeliveryServiceStatus(idServDelivery,updateIsActive);
+      },
+      (err) => {
+        this.alertService.alertError(err.error !== null ? err.error.message : `Unable to ${action} Delivery Service`);
+      }
+    )
+  }
+
+  private updateDeliveryServiceStatus(idServDelivery: number, updateIsActive: boolean) {
+    this.serviceDeliveryService.updateEnabled({
+      id:idServDelivery,isenabled:updateIsActive
+    }).subscribe({
+      next:(res)=>{
+
         this.getAllServiceDel();
-      },error:()=>{
-        this.alertService.alertError("deleting failed")
+        this.alertService.alertSuccess("Delivery Service successfully deactivated");
+      },
+      error:(err)=>{
+        this.alertService.alertWaring("Delivery Service deactivation failed");
       }
     })
   }

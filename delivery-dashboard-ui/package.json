@@ -1,6 +1,6 @@
 {
   "name": "delivery-dashboard-ui",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "npm cache clean --force & ng serve",
@@ -32,6 +32,7 @@
     "@fullcalendar/interaction": "^6.1.10",
     "@fullcalendar/timegrid": "^6.1.10",
     "@ng-bootstrap/ng-bootstrap": "^15.1.2",
+    "@ng-select/ng-select": "^11.0.0",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.2",
     "chart.js": "^3.9.1",
@@ -62,6 +63,9 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "postcss": "^8.5.3",
+    "postcss-purgecss": "^5.0.0",
+    "sass": "^1.69.5",
     "typescript": "~5.1.3"
   }
 }

@@ -1,7 +1,7 @@
 <div class="mission-form">
   <header class="form-header">
     <h1>Create New Mission</h1>
-    <button class="btn btn-primary">
+    <button class="btn btn-primary" (click)="saveMission()">
       <i class="bi bi-save me-2"></i>Save Mission
     </button>
   </header>
@@ -256,8 +256,8 @@
                   </div>
                 </div>
               </div>
-              <button class="btn btn-icon btn-danger" (click)="removeEtape(i)">
-                <i class="bi bi-trash"></i>
+              <button class="btn btn-icon" (click)="removeEtape(i)">
+                <i class="bi bi-x-circle text-danger"></i>
               </button>
             </div>
           </div>
@@ -276,31 +276,58 @@
               <div class="col-md-5">
                 <div class="form-floating">
                   <select
+                    [class.is-invalid]="isFieldInvalid(currentMissionVForm,'vehicleDto')||isVehicleNotAvailable"
+                    (change)="setSelectedVehicle()"
                     id="vehicleSelect"
                     formControlName="vehicleDto"
                     class="form-select">
-                    <option [ngValue]="undefined" disabled>Select a vehicle</option>
-                    <option *ngFor="let vehicle of allVehicles" [ngValue]="vehicle">
+                    <option [ngValue]="undefined" disabled> Select a vehicle </option>
+                    <option *ngFor="let vehicle of allVehicles" [ngValue]=vehicle>
                       {{vehicle.immatriculation}} - {{vehicle.marque}} ({{vehicle.volume}}m³)
                     </option>
                   </select>
                   <label for="vehicleSelect">Vehicle<span class="required">*</span></label>
+                  <small *ngIf="isFieldInvalid(currentMissionVForm,'vehicleDto')" class="required">Select a vehicle</small>
+                  <span *ngIf="checkVehicleAvailability" class="spinner-border spinner-border-sm text-danger"></span>
+                  <small *ngIf="checkVehicleAvailability" class="required">Check for availability...</small>
+                  <small *ngIf="assinedVehicleError" class="required">Vehicle already assigned for the selected start date</small>
                 </div>
               </div>
 
               <div class="col-md-5">
                 <div class="form-floating">
-                  <select
-                    formArrayName="chauffeursVehicleDto"
-                    class="form-select"
-                    multiple
-                    [size]="2"
-                    >
-                    <option *ngFor="let driver of allDrivers" [ngValue]="driver">
-                      {{driver.firstname}} {{driver.lastname}}
-                    </option>
-                  </select>
-                  <label>Drivers (max 2)<span class="required">*</span></label>
+                  <ng-select
+                    [items]="allDrivers"
+                    [bindLabel]="'firstname'"
+                    [multiple]="true"
+                    [maxSelectedItems]="2"
+                    [closeOnSelect]="true"
+                    [clearable]="false"
+                    [appendTo]="'body'"
+                    formControlName="chauffeursVehicleDto"
+                    (change)="setSelectedDrivers()"
+                    [class.is-invalid]="isFieldInvalid(currentMissionVForm,'chauffeursVehicleDto') || isDriverNotAvailable"
+                    placeholder="Select drivers"
+                  >
+                    <ng-template ng-option-tmp let-item="item">
+                      <i class="bi bi-person-circle me-2"></i>
+                      {{item.firstname}} {{item.lastname}}
+                    </ng-template>
+                    <!-- Template for selected items (tags) -->
+                    <ng-template ng-label-tmp let-item="item"  let-clear="clear">
+                      <span> <i class="bi bi-person-circle me-2"></i>
+                        {{item.firstname}} {{item.lastname}}
+                      </span>
+                      <span class="ng-value-icon" (click)="clear(item)" aria-hidden="true">×</span>
+                    </ng-template>
+                  </ng-select>
+                  <label><!--Drivers (max 2)<span class="required">*</span>--></label>
+                  <small *ngIf="isFieldInvalid(currentMissionVForm,'chauffeursVehicleDto')" class="required">
+                    Select at least one driver
+                  </small>
+                  <span *ngIf="checkDriverAvailability" class="spinner-border spinner-border-sm text-danger"></span>
+                  <small *ngIf="checkDriverAvailability" class="required">Check for availability...</small>
+                  <small *ngIf="assignedDriverError" class="required">Driver already assigned for the selected start date</small>
                 </div>
               </div>
 
@@ -308,14 +335,13 @@
                 <button
                   type="button"
                   class="btn btn-primary w-100"
-                  (click)="addMissionVehicle()"
-                >
+                  (click)="addMissionVehicle()">
                   <i class="bi bi-plus-lg me-2"></i>Add
                 </button>
               </div>
             </div>
           </form>
-
+          <!--<pre>{{ missionVehiclesDtoArray | json }}</pre>-->
           <!-- Selected Vehicles List -->
           <div class="vehicles-list mt-4">
             <div class="vehicle-item" *ngFor="let v of missionVcls; let i = index">
@@ -337,8 +363,8 @@
                 </div>
               </div>
 
-              <button class="btn btn-icon btn-danger" (click)="removeVehicle(i)">
-                <i class="bi bi-trash"></i>
+              <button class="btn btn-icon" (click)="removeVehicle(i)">
+                <i class="bi bi-x-circle text-danger"></i>
               </button>
             </div>
           </div>
@@ -365,11 +391,13 @@
         </div>
       </div>
     </div>
-    <header class="form-header">
-      <button class="btn btn-primary">
-        <i class="bi bi-save me-2"></i>Save Mission
-      </button>
-    </header>
   </form>
 
+
+  <footer class="form-footer">
+    <button class="btn btn-primary" (click)="saveMission()">
+      <i class="bi bi-save me-2"></i>Save Mission
+    </button>
+  </footer>
 </div>
+

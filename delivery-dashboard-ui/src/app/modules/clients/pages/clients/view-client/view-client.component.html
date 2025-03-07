@@ -76,7 +76,7 @@
               <i class="bi bi-geo-alt"></i>
               <div class="info-content">
                 <label>Total Delivery Points</label>
-                <span>{{client.deliveryDestinationsDto?.length}}</span>
+                <span>{{client.deliveryPointDtos?.length}}</span>
               </div>
             </div>
 
@@ -132,9 +132,8 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngIf="client.deliveryDestinationsDto?.length===0"><td colspan="7" align="center">No Delivery Point Saved Yet</td></tr>
-          <ng-container *ngFor=" let destination of client.deliveryDestinationsDto">
-          <tr *ngFor="let point of destination.deliveryPointsDto">
+          <tr *ngIf="client.deliveryPointDtos?.length===0"><td colspan="7" align="center">No Delivery Point Saved Yet</td></tr>
+          <tr *ngFor="let point of client.deliveryPointDtos">
             <td>{{point.name}}</td>
             <td>{{point.addressDto?.ville}}</td>
             <td>
@@ -173,7 +172,6 @@
               </div>
             </td>
           </tr>
-          </ng-container>
           </tbody>
         </table>
       </div>

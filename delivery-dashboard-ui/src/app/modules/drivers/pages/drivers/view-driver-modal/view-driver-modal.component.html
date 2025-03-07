@@ -10,50 +10,50 @@
         <!-- Row 1: Marque/Model and Date PMC -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Full Name:</span> {{ selectedDriver?.firstname }} {{ selectedDriver?.lastname }}
+            <span class="text-primary">Full Name:</span> {{ selectedDriver.firstname }} {{ selectedDriver.lastname }}
           </div>
           <div class="col-md-6">
-            <span class="text-primary">Email:</span> {{ selectedDriver?.email }}
+            <span class="text-primary">Email:</span> {{ selectedDriver.email }}
           </div>
         </div>
 
         <!-- Row 2: Immatriculation and Capacity -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Phone. N°:</span> {{ selectedDriver?.phoneNum }}
+            <span class="text-primary">Phone. N°:</span> {{ selectedDriver.phoneNum }}
           </div>
           <div class="col-md-6">
-            <span class="text-primary">Created By :</span> {{ selectedDriver?.createdByUser?.fullname }} m<sup>3</sup>
+            <span class="text-primary">Created By :</span> {{ selectedDriver.createdByUser?.fullname}} m<sup>3</sup>
           </div>
         </div>
 
         <!-- Row 3: Milage and Vin -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Birth Date:</span> {{ selectedDriver?.dateOfBirth }}
+            <span class="text-primary">Birth Date:</span> {{ selectedDriver.dateOfBirth }}
           </div>
           <div class="col-md-6">
-            <span class="text-primary">Driving License N°:</span> {{ selectedDriver?.drivinglicenseNbr }}
+            <span class="text-primary">Driving License N°:</span> {{ selectedDriver.drivinglicenseNbr }}
           </div>
         </div>
 
         <!-- Row 4: Fuel Type and Number of Missions -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Driving License Type:</span> {{ selectedDriver?.drivingLicenseType }}
+            <span class="text-primary">Driving License Type:</span> {{ selectedDriver.drivingLicenseType }}
           </div>
           <div class="col-md-6">
-            <span class="text-primary">Number of Missions:</span> <!--{{ selectedDriver?.missionCount || 'N/A' }}-->
+            <span class="text-primary">Number of Missions:</span> <!--{{ selectedDriver.missionCount || 'N/A' }}-->
           </div>
         </div>
 
         <!-- Row 5: Number of Repairs and Next Oil Change Date -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Number of Repairs:</span> <!--{{ selectedDriver?.repairCount || 'N/A' }}-->
+            <span class="text-primary">Number of Repairs:</span> <!--{{ selectedDriver.repairCount || 'N/A' }}-->
           </div>
           <div class="col-md-6">
-            <span class="text-primary">Next Oil Change Date:</span> <!--{{ selectedDriver?.nextOilChangeDate || 'N/A' }}-->
+            <span class="text-primary">Next Oil Change Date:</span> <!--{{ selectedDriver.nextOilChangeDate || 'N/A' }}-->
           </div>
         </div>
 

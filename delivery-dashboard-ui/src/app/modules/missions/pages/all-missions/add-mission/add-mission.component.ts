@@ -16,8 +16,7 @@ import {addHours, differenceInDays, differenceInHours, endOfWeek, format, isAfte
 import {DeliveryDestinationDto} from "../../../../../../ds-api/src/models/delivery-destination-dto";
 import {DeliveryPointDto} from "../../../../../../ds-api/src/models/delivery-point-dto";
 import {DeliveryPointsService} from "../../../../../../ds-api/src/services/delivery-points.service";
-import {et} from "@fullcalendar/core/internal-common";
-import {ChauffeurVehicleDto} from "../../../../../../ds-api/src/models/chauffeur-vehicle-dto";
+import {MissionService} from "../../../../../../ds-api/src/services/mission.service";
 
 @Component({
   selector: 'app-add-mission',
@@ -50,7 +49,7 @@ export class AddMissionComponent implements OnInit {
 
   /* new list*/
   etapes: EtapeDto[]=[];
-  missionVcls: MissionVehicleDto[]=[];
+  missionVcls: MissionVehicleDto[]=[]; // table after add
   vehicleDrivers:ChauffeurDto[] =[];
   /* to add to list*/
   etape:EtapeDto={};
@@ -59,12 +58,21 @@ export class AddMissionComponent implements OnInit {
   missonVehicle: MissionVehicleDto={};
   selectedVehicle:VehiculeDto={};
 
-
-  selectedDrivers:ChauffeurDto[]=[];
-
   selectedVehicles:VehiculeDto[]=[];
+  private missionToSave: MissionDto={};
+
+  private unavailableVehicleIds: number[] =[]
+  private unavailableDriversIds: number[] =[]
+
+  checkVehicleAvailability : boolean = false;
+  isVehicleNotAvailable : boolean = false;
+  assinedVehicleError : boolean = false;
+  checkDriverAvailability : boolean = false;
+  isDriverNotAvailable : boolean = false;
+  assignedDriverError : boolean = false;
 
  constructor(
+   private missionService: MissionService,
    private router:Router,
    private activeRouter:ActivatedRoute,
    private fb:FormBuilder,
@@ -96,6 +104,24 @@ export class AddMissionComponent implements OnInit {
     this.createMissionVehicle();
   }
 
+  saveMission() {
+    this.missionForm.markAllAsTouched();
+    const idDD = this.selectedDeliveryDestination.id;
+    this.missionForm.get("idDeliveryDestination")?.setValue(idDD);
+    const mission = this.missionForm.value as MissionDto;
+    console.log(mission);
+    this.missionToSave = mission;
+    this.missionToSave.etatMission="EN_COURS";
+    this.missionService.save6({
+      body:this.missionToSave
+    }).subscribe({next:()=>{
+        this.alertService.alertSuccess("Saved OK!!");
+        this.router.navigate(['missions','w-planning']);
+      }, error:(err)=>{
+        console.log(JSON.stringify(mission) );
+        this.alertService.alertWaring(err.error.httpCode+ " ERROR :: "+ err.error.msg)
+      }});
+  }
   get missionVehiclesDtoArray():FormArray{
     return this.missionForm.get('missionVehiclesDtos') as FormArray;
   }
@@ -104,33 +130,175 @@ export class AddMissionComponent implements OnInit {
   return this.currentMissionVForm = this.fb.group({
      id:[''] ,
      vehicleDto: ['',Validators.required],
-     chauffeursVehicleDto: this.fb.array([]),
+     chauffeursVehicleDto: [[],Validators.required],
    })
   }
 
+  setSelectedVehicle() {
+   const v = this.currentMissionVForm.get('vehicleDto')?.value as VehiculeDto;
+   const startDate = this.missionForm.get('dateDebut')?.value;
+   const endDate = this.missionForm.get('dateFin')?.value ;
+   const currentVehicule = {
+                       body:{
+                         dateDebut: startDate,
+                         dateFin: endDate,
+                         missionVehiclesDtos:[
+                           {vehicleDto:{id: v.id}
+                           }]}
+                          }
+    console.log(currentVehicule);
+    this.checkVehicleAvailability=true;
+    this.missionService.checkOverlappingVehicles(currentVehicule).subscribe({
+      next:(rep)=>{
+        console.log(rep);
+        this.unavailableVehicleIds= [];
+        this.unavailableVehicleIds =rep as number[];
+        if(this.unavailableVehicleIds.length>0){
+          this.isVehicleNotAvailable=true;
+          this.assinedVehicleError = true;
+        }else{
+          this.isVehicleNotAvailable = false;
+          this.assinedVehicleError = false;
+        }
+        this.checkVehicleAvailability=false;
 
-  addMissionVehicle(){
-   if(this.currentMissionVForm && this.currentMissionVForm.valid){
-     this.currentMissionVForm.get('vehicleDto')?.setValue(this.selectedVehicle);
-     console.log(this.currentMissionVForm.get('vehicleDto')?.value);
-     this.currentMissionVForm.patchValue({
-         vehicleDto: this.selectedVehicle,
-         chauffeursVehicleDto: this.vehicleDrivers.map(driver=>({ chauffeurDto: driver}))
-       });
-
-   console.log(this.currentMissionVForm.get('chauffeursVehicleDto')?.value);
-     this.missionVehiclesDtoArray.push(this.currentMissionVForm);
-     this.missonVehicle=this.currentMissionVForm.value;
-     this.missionVcls.push(this.missonVehicle);
-     this.selectedVehicles.push(this.selectedVehicle);
-   }
+      },error:(err)=>{
+        console.log(""+err);
+    }
+    })
+    this.selectedVehicle= v;
   }
 
+  setSelectedDrivers() {
+    const selectedDrivers: ChauffeurDto[] =
+      this.currentMissionVForm.get('chauffeursVehicleDto')?.value;
+    const startDate = this.missionForm.get('dateDebut')?.value;
+    const endDate = this.missionForm.get('dateFin')?.value ;
+    const currentDiver = {
+      body:{
+        dateDebut: startDate,
+        dateFin: endDate,
+        missionVehiclesDtos:[
+        {
+          chauffeursVehicleDto:  selectedDrivers.map(d=>({chauffeurDto: { id : d.id } }))
+          }
+         ]
+      }
+    }
+    console.log(currentDiver);
+
+    this.checkDriverAvailability=true;
+    this.missionService.checkOverlappingDrivers(currentDiver).subscribe({
+      next:(rep)=>{
+        console.log(rep);
+        this.unavailableDriversIds= [];
+        this.unavailableDriversIds =rep as number[];
+        if(this.unavailableDriversIds.length>0){
+          this.isDriverNotAvailable=true;
+          this.assignedDriverError = true;
+        }else{
+          this.assignedDriverError = false;
+          this.isDriverNotAvailable=false;
+        }
+        this.checkDriverAvailability=false;
+
+      },error:(err)=>{
+        console.log(""+err);
+      }
+    })
+
+    this.vehicleDrivers= selectedDrivers ;
+  }
+
+  private isVehicleDuplicat(selectedV:VehiculeDto):boolean{
+   const isDuplicated = this.missionVcls.some(mv=>
+     mv.vehicleDto?.id === selectedV.id);
+   return isDuplicated;
+  }
+
+  private isDuplicateDrivers(newDrivers: any[]):boolean{
+      for (const newDriver of newDrivers) {
+        const driverAlreadyAssigned = this.missionVcls.some(vehicle => {
+          // mission.chauffeursVehicleDto is an array of objects: { chauffeurDto: driver }
+          return vehicle.chauffeursVehicleDto?.some(
+            assignedDriver => assignedDriver.chauffeurDto?.id=== newDriver.id
+          );
+        });
+        if (driverAlreadyAssigned) {
+          this.alertService.alertError(
+            `Driver ${newDriver.firstname || newDriver.id} is already assigned to another vehicle.`
+          );
+          return true;
+        }
+      }
+      return false;
+    }
+
+    get missionVehiclesDtos(): FormArray {
+    return this.missionForm.get('missionVehiclesDtos') as FormArray;
+  }
+
+  addMissionVehicle(){
+    this.currentMissionVForm.markAllAsTouched();
+    if(this.currentMissionVForm && this.currentMissionVForm.valid){
+
+      const vehicleData =  this.currentMissionVForm.value;
+      const selectedV : VehiculeDto= vehicleData.vehicleDto;
+      const selectedDs : ChauffeurDto[] = vehicleData.chauffeursVehicleDto;
+
+      if (this.isVehicleDuplicat(selectedV)){
+        this.alertService.alertError("This Vehicule already selected");
+        return {};
+      }
+     if(this.isDuplicateDrivers(this.vehicleDrivers)){
+        return {};
+     }
+
+     const tmpVehiclesDrivers : MissionVehicleDto={
+       vehicleDto:selectedV,
+       chauffeursVehicleDto:this.vehicleDrivers.map(d=>({chauffeurDto:d}))
+     }
+     const newMissionVehicle: MissionVehicleDto ={
+       vehicleDto: {id:selectedV.id},
+       chauffeursVehicleDto: this.vehicleDrivers.map(driver => ({ chauffeurDto: {id:driver.id} }))
+     }
+      // Push a new FormGroup to the missionVehiclesDtos FormArray
+
+      this.missionVehiclesDtoArray.push(
+        this.fb.group({
+          vehicleDto: [newMissionVehicle.vehicleDto, Validators.required],
+          chauffeursVehicleDto: [newMissionVehicle.chauffeursVehicleDto, Validators.required]
+        })
+      );
+      console.log( this.missionVehiclesDtoArray.value);
+      /*     this.currentMissionVForm.patchValue({
+               vehicleDto: this.selectedVehicle,
+               chauffeursVehicleDto: this.vehicleDrivers.map(driver=>(
+                 { chauffeurDto: driver}
+               )),
+             });*/
+
+
+/*        const missionVehicleValue= this.currentMissionVForm.value;
+        this.missionVehiclesDtos.push(this.fb.group({...missionVehicleValue}));
+        console.log("+++++++++++++++"+
+          JSON.stringify(this.missionVehiclesDtos.value));*/
+       //this.missonVehicle=this.currentMissionVForm.value;
+       this.missionVcls.push(tmpVehiclesDrivers);
+       this.selectedVehicles.push(tmpVehiclesDrivers);
+       this.currentMissionVForm = this.createMissionVehicle();
+   }else{
+      this.alertService.alertError("All filler are mandatory")
+      return {};
+    }
+    return {};
+  }
 
   removeVehicle(index: number) {
     this.missionVehiclesDtoArray.removeAt(index);
     this.missionVcls.splice(index,1);
   }
+
   get etapeDtosArray():FormArray{
     return this.missionForm.get('etapeDtos') as FormArray;
   }
@@ -144,7 +312,10 @@ export class AddMissionComponent implements OnInit {
    })
 
   }
+
   addEtape(): EtapeDto {
+    this.currentEtapeForm.markAllAsTouched();
+
   if(this.currentEtapeForm && this.currentEtapeForm.valid && this.selectedDPoint.name){
 
     const newDepature= this.currentEtapeForm.value.lieuDepart;
@@ -213,17 +384,17 @@ export class AddMissionComponent implements OnInit {
     return hasInvalidTimeDifference;
   }
 
-
   private handleErrors(type:string,error:any){
     console.error(`Failed to load ${type}`,error);
     this.alertService.alertError(`Error loading ${type}. Please refresh and try again.`);
   }
+
   private getDateDay(){
    this.dateDay=this.activeRouter.snapshot.params['dateDay'];
    if(this.dateDay){
      const parseDateDay= parseISO(this.dateDay);
      this.dateDay=format(parseDateDay,'yyyy-MM-dd HH:mm');
-     this.missionForm.get('dateDebut')?.setValue(this.dateDay);
+     //this.missionForm.get('dateDebut')?.setValue(this.dateDay);
      this.minDate = parseDateDay.toISOString().split('T')[0]
    }
  }
@@ -277,6 +448,7 @@ export class AddMissionComponent implements OnInit {
   }
 
   onDDestinationChange(event: Event) {
+
     const selectDD = this.missionForm.get('idDeliveryDestination')?.value;
     this.selectedDeliveryDestination = selectDD as DeliveryDestinationResponse ;
     if(this.selectedDeliveryDestination) {
@@ -377,7 +549,6 @@ export class AddMissionComponent implements OnInit {
    }
   }
 
-
   private initDate() {
     this.startDate=this.dateDay;
     this.endDate=this.dateDay;
@@ -390,19 +561,5 @@ export class AddMissionComponent implements OnInit {
   convertToTime(dateString: string):string{
     const dateParsed= parseISO(dateString);
     return format(dateParsed,"HH:mm");
-  }
-
-  onDriverChange($event: Event) {
-
-    const selectElement = event?.target as HTMLSelectElement;
-    const selectedOptions = Array.from(selectElement.selectedOptions).map(
-      (option: HTMLOptionElement) => JSON.parse(option.value)
-    );
-
-    const chauffeursArray = this.currentMissionVForm.get('chauffeursVehicleDto') as FormArray;
-   // chauffeursArray.clear(); // Clear existing drivers
-
-    selectedOptions.forEach((driver) => chauffeursArray.push(this.fb.control(driver)))
-
   }
 }

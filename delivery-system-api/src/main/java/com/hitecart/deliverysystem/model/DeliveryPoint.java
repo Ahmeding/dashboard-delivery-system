@@ -32,6 +32,9 @@ public class DeliveryPoint extends AbstractEntity{
     @ManyToOne
     @JoinColumn(name = "delivery_distination_id")
     private DeliveryDestination deliveryDestination;
+    @ManyToOne
+    @JoinColumn(name = "client_id",nullable = false)
+    private Client client;
     private boolean enabled;
     @ManyToOne
     @JoinColumn(name = "id_delivery_point_category")

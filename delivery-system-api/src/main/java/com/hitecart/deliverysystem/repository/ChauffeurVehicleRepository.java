@@ -20,7 +20,7 @@ public interface ChauffeurVehicleRepository extends JpaRepository<ChauffeurVehic
         JOIN MissionVehicle mv ON cv.missionVehicle.id= mv.id
         JOIN Mission m ON mv.mission.id = m.id
             WHERE cv.chauffeur.id IN :chauffeurIds
-            AND(:startDateTime <= m.dateFin AND :endDateTime >= m.dateDebut)
+            AND(:startDateTime < m.dateFin AND :endDateTime > m.dateDebut)
         """)
     List<Integer> findUnavailableDrivers(
             List<Integer> chauffeurIds,

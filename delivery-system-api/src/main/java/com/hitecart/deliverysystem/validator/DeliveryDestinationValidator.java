@@ -19,9 +19,6 @@ public class DeliveryDestinationValidator {
             errors.add("Veuillez renseigner l'email'");
             return errors;
         }
-        if (dto.getClientId()==null) {
-            errors.add("Veuillez renseigner le client");
-        }
         if (dto.getServiceDeliveryId()== null) {
             errors.add("Veuillez renseigner le service'");
         }

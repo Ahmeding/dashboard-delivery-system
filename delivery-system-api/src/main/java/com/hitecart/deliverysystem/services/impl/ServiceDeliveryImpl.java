@@ -41,6 +41,7 @@ public class ServiceDeliveryImpl implements IServiceDeliveryService {
            throw new InvalidOperationException("Delivery service vers la ville "+dto.getDestinationCity()
                    +" et le pays " +dto.getDestinationCountry() +" est deja enregistré",ErrorCodes.SERVICE_DELIVERY_NOT_VALID_OPERATION);
        }
+        serviceDeliveryToSave.setTitle(dto.getDestinationCity());
         return ServiceDeliveryDto.fromEntity(serviceDeliveryRepository.save(serviceDeliveryToSave));
     }
 

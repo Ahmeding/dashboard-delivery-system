@@ -66,7 +66,7 @@
           </td>
           <td>
               <span class="title">
-                <i class="bi bi-geo-alt text-info"></i>
+               <i class="bi bi-geo-alt" [style.color]="service_delivery.color" ></i>
                 {{ service_delivery.title }}
               </span>
           </td>
@@ -92,10 +92,15 @@
             </div>
           </td>
           <td>
-              <span class="status-badge" [class.active]="service_delivery.enabled">
-                <i [class]="service_delivery.enabled ? 'bi bi-check-circle' : 'bi bi-x-circle'"></i>
-                {{ service_delivery.enabled ? 'Active' : 'Inactive' }}
-              </span>
+
+            <i
+              [ngClass]="service_delivery.enabled
+                            ? 'bi bi-toggle2-on text-success toggle-icon ml-3 mr-3'
+                            : 'bi bi-toggle2-off text-danger toggle-icon ml-3 mr-3'"
+              title="{{ service_delivery.enabled ? 'Deactivate' : 'Activate' }}"
+              (click)="handleServiceDeliveryActivation(service_delivery.id!, service_delivery.enabled!)">
+            </i>
+
           </td>
           <td>
             <div class="action-buttons">

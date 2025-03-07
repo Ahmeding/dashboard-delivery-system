@@ -15,9 +15,6 @@ public class MissionValidator {
            errors.add("Veuillez renseigner le titre de la mission !");
            errors.add("Veuillez renseigner la date de debut de la mission !");
            errors.add("Veuillez renseigner le volume demmandé pour cette mission !");
-           errors.add("Veuillez renseigner le(s) etape(s) pour cette mission !");
-           errors.add("Veuillez renseigner un chauffeur pour cette mission !");
-           errors.add("Veuillez renseigner le vehicule adequat pour cette mission !");
            return errors;
         }
        if(!StringUtils.hasLength(dto.getTitre())){
@@ -29,9 +26,7 @@ public class MissionValidator {
        if(dto.getVolume()==null){
            errors.add("Veuillez renseigner le volume demmandé pour cette mission !");
        }
-        if(dto.getMissionVehiclesDtos() == null){
-            errors.add("Veuillez renseigner le vehicule adequat pour cette mission !");
-        }
+
     return errors;
     }
 }
