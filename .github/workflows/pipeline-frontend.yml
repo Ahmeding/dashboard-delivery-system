@@ -3,7 +3,7 @@ name: DS-Frontend-Pipeline
 on:
   push:
     branches:
-      - ci/pipeline
+      - create-backend-pipeline
     paths:
       - delivery-dashboard-ui/**
       - docker/frontend/**
@@ -19,7 +19,6 @@ on:
           uses: actions/checkout@v4
           with:
             fetch-depth: 0
-
         - name: Extarct Prohject FE Version
           id: extract_version
           run: |
