@@ -19,4 +19,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
+      - name: Extarct Prohject FE Version
+        id: extract_version
+        run: |
+          cd delivery-dashboard-ui
+          # apt install jq
+          echo "VERSION = $(jq -r '.verion' package.json)" >> $GITHUB_OUTPUT
