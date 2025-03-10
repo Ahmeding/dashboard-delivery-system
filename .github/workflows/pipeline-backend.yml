@@ -37,7 +37,7 @@ jobs:
 
 
   unit-tests: # this is a second jobs , we can put it in the 1stjob as a step, but we prefer optiimise the
-    run-on: self-hosted
+    runs-on: self-hosted
     name: Unit tests
     steps:
       - name: Checkout code
