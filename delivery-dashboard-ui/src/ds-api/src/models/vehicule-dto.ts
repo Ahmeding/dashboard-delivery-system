@@ -19,6 +19,7 @@ export interface VehiculeDto {
   marque?: string;
   modele?: string;
   numVin?: string;
+  reference?: string;
   typecarburant?: 'GASOIL' | 'ESSENCE' | 'ELECTRIC' | 'HYBRIDE';
   updatedAt?: string;
   vehicleType?: 'VAN' | 'TRUCK';

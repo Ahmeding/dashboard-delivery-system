@@ -50,6 +50,7 @@ private getAllVehicles() {
     });
   }
   formatDateDDMMYYYY(datePMC: string | undefined) : string{
+    if (!datePMC) return '';
     const dateString= JSON.stringify(datePMC);
     const dateArray=JSON.parse(dateString);
     const year=dateArray[0];
@@ -152,7 +153,7 @@ private resetForm(form: NgForm) {
 
   }*/
 private saveVehicle(vehicleToSave: VehiculeDto, form: NgForm) {
-    this.vehicleService.save({
+    this.vehicleService.save1({
       body:vehicleToSave
     }).subscribe({
       next:(res)=>{

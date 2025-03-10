@@ -8,6 +8,8 @@ import { ServicesDeleiveryComponent } from './pages/services-deleivery/services-
 import { NewServiceDelivComponent } from './pages/services-deleivery/new-service-deliv/new-service-deliv.component';
 import { NewUserComponent } from './pages/users/new-user/new-user.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { DeliveryPointCategoryComponent } from './pages/delivery-point-category/delivery-point-category.component';
+import { NewDpCategoryModalComponent } from './pages/delivery-point-category/new-dp-category-modal/new-dp-category-modal.component';
 
 
 @NgModule({
@@ -16,7 +18,9 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     UsersComponent,
     ServicesDeleiveryComponent,
     NewServiceDelivComponent,
-    NewUserComponent
+    NewUserComponent,
+    DeliveryPointCategoryComponent,
+    NewDpCategoryModalComponent
   ],
   imports: [
     CommonModule,

@@ -39,7 +39,7 @@ $button-hover-color: darken($primary-color, 10%);
         label {
           font-weight: bold;
           font-size: 0.875rem;
-          color: darken($background-color, 30%);
+          color: darken($background-color, 30%) ;
         }
 
         input {

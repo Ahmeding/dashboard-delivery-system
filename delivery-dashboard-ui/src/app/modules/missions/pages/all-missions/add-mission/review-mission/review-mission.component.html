@@ -1,0 +1,71 @@
+<div class="mission-review">
+  <div class="review-section">
+    <h6 class="review-title">Basic Details</h6>
+    <div class="review-content">
+      <div class="review-item">
+        <span class="label">Title:</span>
+        <span class="value">{{missionData.titre}}</span>
+      </div>
+      <div class="review-item">
+        <span class="label">Volume:</span>
+        <span class="value">{{missionData.volume}} m³</span>
+      </div>
+      <div class="review-item">
+        <span class="label">Start Date:</span>
+        <span class="value">{{missionData.dateDebut | date:'medium'}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <h6 class="review-title">Stages</h6>
+    <div class="review-content">
+      <div class="stage-item" *ngFor="let stage of missionData.etapeDtos; let i = index">
+        <div class="stage-number">Stage {{i + 1}}</div>
+        <div class="stage-details">
+          <div class="review-item">
+            <span class="label">From:</span>
+            <span class="value">{{stage.lieuDepart}}</span>
+          </div>
+          <div class="review-item">
+            <span class="label">To:</span>
+            <span class="value">{{stage.lieuArrivee}}</span>
+          </div>
+          <div class="review-item">
+            <span class="label">Time:</span>
+            <span class="value">{{stage.scheduledDeliveryTime}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <h6 class="review-title">Vehicles & Drivers</h6>
+    <div class="review-content">
+      <div class="vehicle-item" *ngFor="let vehicle of missionData.missionVehiclesDtos">
+        <div class="vehicle-details">
+          <div class="review-item">
+            <span class="label">Vehicle:</span>
+            <span class="value">{{vehicle.vehicleDto?.immatriculation}} - {{vehicle.vehicleDto?.marque}}</span>
+          </div>
+          <div class="review-item">
+            <span class="label">Drivers:</span>
+            <span class="value">
+              <span *ngFor="let driver of vehicle.chauffeursVehicleDto; let last = last">
+                {{driver.chauffeurDto?.firstname}} {{driver.chauffeurDto?.lastname}}{{!last ? ', ' : ''}}
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="review-section" *ngIf="missionData.commentaire">
+    <h6 class="review-title">Comments</h6>
+    <div class="review-content">
+      <p class="comments">{{missionData.commentaire}}</p>
+    </div>
+  </div>
+</div>

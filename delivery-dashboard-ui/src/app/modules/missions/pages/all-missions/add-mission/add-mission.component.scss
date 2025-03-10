@@ -1,0 +1,390 @@
+// Import base styles
+@use 'sass:map';
+@use 'sass:color';
+
+// Core variables and mixins
+@import '../../../../../../styles/variables';
+.mission-form {
+  padding: 2rem;
+  background-color: var(--bg-color);
+  min-height: 100vh;
+
+  .form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    h1 {
+      color: var(--text-color);
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin: 0;
+    }
+  }
+
+  .form-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 2rem;
+
+  }
+
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+
+    .card-body {
+      padding: 1.5rem;
+    }
+  }
+
+  .section-title {
+    color: var(--text-color);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+
+    i {
+      color: var(--primary-color);
+    }
+  }
+
+  // Form Controls Styling
+  .form-floating {
+    > .form-control,
+    > .form-select {
+      height: calc(3.5rem + 2px);
+      line-height: 1.25;
+      background-color: var(--bg-color);
+      border-color: var(--border-color);
+      color: var(--text-color);
+
+      &:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(var(--primary-rgb), 0.25);
+      }
+      &.is-invalid {
+        border-color: var(--danger-color);
+        box-shadow: 0 0 0 0.2rem rgba(var(--danger-rgb), 0.25);
+      }
+      &::placeholder {
+        color: transparent;
+      }
+    }
+
+    > label {
+      color: var(--text-muted);
+      padding: 1rem 0.75rem;
+    }
+
+    .required {
+      color: var(--danger-color);
+      font-size: 0.7rem;
+      margin-left: 0.25rem;
+    }
+    .info {
+      color: var(--primary-color);
+      font-size: 0.7rem;
+      margin-left: 0.25rem;
+    }
+
+
+  }
+
+  // Stages List Styling
+  .stages-list {
+    .stage-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.25rem;
+      background: var(--bg-color);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+      .stage-content {
+        flex: 1;
+      }
+
+      .stage-route {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        position: relative;
+
+        .location-group {
+          min-width: 200px;
+
+          &.departure {
+            text-align: left;
+          }
+
+          &.arrival {
+            text-align: right;
+
+            .location {
+              justify-content: flex-end;
+            }
+
+            .datetime {
+              padding-right: 1.75rem;
+
+              .date, .time {
+                justify-content: flex-end;
+              }
+            }
+          }
+
+          .location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+
+            i {
+              flex-shrink: 0;
+            }
+
+            .location-text {
+              font-weight: 500;
+              color: var(--text-color);
+              font-size: 1rem;
+            }
+          }
+
+          .datetime {
+            padding-left: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+
+            .date, .time {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              color: var(--text-muted);
+              font-size: 0.75rem;
+
+              i {
+                font-size: 0.875rem;
+              }
+            }
+          }
+        }
+
+        .route-line {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--text-muted);
+          padding: 0 1rem;
+
+          i {
+            color: var(--text-muted);
+          }
+        }
+      }
+    }
+  }
+  /*.stages-list {
+    .stage-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--bg-color);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+
+      .stage-content {
+        flex: 1;
+      }
+      .stage-route {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+
+        .location {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          color: var(--text-color); // Add this to ensure text color changes with theme
+
+          i {
+            font-size: 1.1rem;
+          }
+
+          span {
+            color: var(--text-color); // Explicitly set span color
+          }
+        }
+
+        .route-line {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--text-muted);
+        }
+      }
+
+      .stage-date {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+      }
+    }
+  }*/
+
+  // Vehicles List Styling
+  .vehicles-list {
+    .vehicle-item {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1rem;
+      background: var(--bg-color);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+
+      .vehicle-plate {
+        background: linear-gradient(135deg, #d3d3d3, #f5f5f5);
+        border: 2px solid #000;
+        border-radius: 6px;
+        padding: 0.5rem 1rem;
+        min-width: 150px;
+
+        .plate-content {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.75rem;
+          color: #000;
+
+          i {
+            font-size: 1.2rem;
+          }
+
+          .plate-number {
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 600;
+            letter-spacing: 1px;
+          }
+        }
+      }
+
+      .vehicle-drivers {
+        flex: 1;
+        display: flex;
+        gap: 1rem;
+
+        .driver {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          background: rgba(var(--primary-rgb), 0.1);
+          padding: 0.5rem 1rem;
+          border-radius: 100px;
+
+          .driver-avatar {
+            i {
+              font-size: 1.5rem;
+              color: var(--primary-color);
+            }
+          }
+
+          .driver-info {
+            .driver-name {
+              font-size: 0.875rem;
+              font-weight: 500;
+              color: var(--text-color);
+            }
+          }
+        }
+      }
+    }
+  }
+  invalid-feedback{
+    color: var(--danger-color);
+    margin-left: 0.25rem;
+  }
+  // Dark theme specific styles
+  :host-context(.dark-theme) {
+    .vehicle-plate {
+      background: linear-gradient(135deg, #2d2d2d, #3d3d3d) !important;
+      border-color: #666 !important;
+
+      .plate-content {
+        color: #fff !important;
+      }
+    }
+
+    .stage-item {
+      .location {
+        span {
+          color: var(--text-color) !important; // Force text color in dark theme
+        }
+      }
+    }
+  }
+
+  // Button Styling
+  .btn {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+
+    &-primary {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+
+      &:hover:not(:disabled) {
+        background: darken(#3498db, 10%);
+        border-color: darken(#3498db, 10%);
+      }
+
+      &:disabled {
+        opacity: 0.7;
+      }
+    }
+
+    &-danger {
+      background: var(--danger-color);
+      border-color: var(--danger-color);
+
+      &:hover {
+        background: darken(#e74c3c, 10%);
+        border-color: darken(#e74c3c, 10%);
+      }
+    }
+
+    &-icon {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      i {
+        font-size: 1rem;
+      }
+    }
+  }
+}

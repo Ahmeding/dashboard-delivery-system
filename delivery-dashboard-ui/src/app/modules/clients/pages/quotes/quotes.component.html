@@ -140,10 +140,10 @@
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
                     <input  [(ngModel)]="newQuote.code"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['code']?.invalid}"
+                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['code'].invalid}"
                             name="code"  class="form-control" id="inputCode" type="text" placeholder="Code"  required/>
                     <label for="inputCode">Code</label>
-                    <small *ngIf="isFormAddNewSubmitted && form.controls['code']?.invalid" class="text-danger">Code is required</small>
+                    <small *ngIf="isFormAddNewSubmitted && form.controls['code'].invalid" class="text-danger">Code is required</small>
                   </div>
                 </div>
                 <div class="col-md-4">
@@ -162,7 +162,7 @@
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
                     <input  [(ngModel)]="newQuote.dateDevis"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['orderdate']?.invalid}"
+                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['orderdate'].invalid}"
                             name="orderdate" class="form-control" id="inputQuoteDate" type="datetime-local" placeholder="Date"  required/>
                     <label for="inputQuoteDate">Date</label>
                     <small *ngIf="isFormAddNewSubmitted && form.controls['orderdate']?.invalid" class="text-danger">Date is required</small>
@@ -218,8 +218,8 @@
                       <option [ngValue]="5">5</option>
                       <option [ngValue]="6">6</option>
                     </select></td>
-                    <td>{{ orderL.serviceDeliveryDto?.unitPriceHT }}€</td>
-                    <td>{{ orderL.serviceDeliveryDto?.tva}}%</td>
+                    <td>20.0€</td>
+                    <td>20%</td>
                     <td><i class="fas fa-trash text-danger" (click)="deleteServDelivery(i)"></i></td>
                   </tr>
 
@@ -259,7 +259,7 @@
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
                     <input  [(ngModel)]="selectedToEditQuote.code"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['code']?.invalid}"
+                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['code'].invalid}"
                             name="code"  class="form-control" id="inputEditCode" type="text" placeholder="Code"  required/>
                     <label for="inputCode">Code</label>
                     <small *ngIf="isFormAddNewSubmitted && editForm.controls['code']?.invalid" class="text-danger">Code is required</small>
@@ -281,7 +281,7 @@
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
                     <input  [(ngModel)]="selectedToEditQuote.dateDevis"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['orderdate']?.invalid}"
+                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['orderdate'].invalid}"
                             name="orderdate" class="form-control" id="inputEditQuoteDate" type="datetime-local" placeholder="Date"  required/>
                     <label for="inputQuoteDate">Date</label>
                     <small *ngIf="isFormAddNewSubmitted && editForm.controls['orderdate']?.invalid" class="text-danger">Date is required</small>
@@ -337,8 +337,8 @@
                       <option [ngValue]="5">5</option>
                       <option [ngValue]="6">6</option>
                     </select></td>
-                    <td>{{ orderL.serviceDeliveryDto?.unitPriceHT }}€</td>
-                    <td>{{ orderL.serviceDeliveryDto?.tva}}%</td>
+                    <td>20€</td>
+                    <td>20%</td>
                     <td><i class="fas fa-trash text-danger" (click)="deleteServDelivery(i)"></i></td>
                   </tr>
 
@@ -372,8 +372,8 @@
         <header class="invoice-header">
           <h1>Quote</h1>
           <div class="invoice-meta">
-            <div><strong>Quote No:</strong>{{ selectedQuote?.code }}</div>
-            <div><strong>Date:</strong> <!--{{converteDateTime(selectedQuote?.dateCommnde) | date: "dd-MM-yyyy hh:mm"}}--></div>
+            <div><strong>Quote No:</strong>{{ selectedQuote.code }}</div>
+            <div><strong>Date:</strong> <!--{{converteDateTime(selectedQuote.dateCommnde) | date: "dd-MM-yyyy hh:mm"}}--></div>
           </div>
         </header>
 

@@ -40,7 +40,7 @@ public class DevisDtoResponse{
             return null;
         }
         return DevisDtoResponse.builder()
-                . id(devis.getId())
+                .id(devis.getId())
                 .code(devis.getCode())
                 .dateDevis(devis.getDateDevis())
                 .client(devis.getClient()!=null?ClientDto.fromEntity(devis.getClient()):null)

@@ -1,0 +1,35 @@
+// Theme variables
+:root {
+  // Spacing
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 2rem;
+
+  // Border radius
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+
+  // Colors with RGB values for opacity
+  --primary-rgb: 52, 152, 219;
+  --primary-color: rgb(var(--primary-rgb));
+  --primary-dark: rgb(41, 128, 185);
+
+  --danger-rgb: 231, 76, 60;
+  --danger-color: rgb(var(--danger-rgb));
+  --danger-dark: rgb(192, 57, 43);
+
+  // Theme colors
+  --bg-color: #f8f9fa;
+  --card-bg: #ffffff;
+  --text-color: #2c3e50;
+  --border-color: #dee2e6;
+
+  // Dark theme overrides
+  &.dark-theme {
+    --bg-color: #1a1a1a;
+    --card-bg: #2d2d2d;
+    --text-color: #ffffff;
+    --border-color: #404040;
+  }
+}

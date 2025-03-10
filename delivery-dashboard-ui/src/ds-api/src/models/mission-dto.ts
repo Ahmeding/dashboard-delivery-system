@@ -15,11 +15,14 @@ export interface MissionDto {
   etapeDtos?: Array<EtapeDto>;
   etatMission?: 'EN_COURS' | 'ACCOMPLI' | 'ANNULEE' | 'TERMINIEE';
   id?: number;
+  idDayPlan?: number;
+  idDeliveryDestination?: number;
   kmDebut?: number;
   kmFin?: number;
   lastModifiedBy?: number;
   missionAccomplished?: boolean;
   missionVehiclesDtos?: Array<MissionVehicleDto>;
+  reference?: string;
   titre?: string;
   updatedAt?: string;
   volume?: number;

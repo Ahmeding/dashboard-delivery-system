@@ -68,7 +68,7 @@ export class NewDriverComponent  implements OnInit {
 
   private loadDriverToEditing(vId: number) {
     this.isNewDriver = false;
-    this.driverService.findById13({
+    this.driverService.findById17({
       id: vId
     }).subscribe({
       next: (responseD) => {
@@ -98,7 +98,7 @@ export class NewDriverComponent  implements OnInit {
   }
 
   private saveDriver(driverValue: ChauffeurDto, successMsg: string, errorMesg: string) {
-    this.driverService.save13({body: driverValue}).subscribe({
+    this.driverService.save17({body: driverValue}).subscribe({
       next: (response) => {
         console.log(response);
         this.alertService.alertSuccess(successMsg + " completed successfully!")

@@ -13,18 +13,18 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { delete4 } from '../fn/pieces-de-rechange/delete-4';
 import { Delete4$Params } from '../fn/pieces-de-rechange/delete-4';
-import { findAll4 } from '../fn/pieces-de-rechange/find-all-4';
-import { FindAll4$Params } from '../fn/pieces-de-rechange/find-all-4';
+import { findAll5 } from '../fn/pieces-de-rechange/find-all-5';
+import { FindAll5$Params } from '../fn/pieces-de-rechange/find-all-5';
 import { findAllPieceRechanges } from '../fn/pieces-de-rechange/find-all-piece-rechanges';
 import { FindAllPieceRechanges$Params } from '../fn/pieces-de-rechange/find-all-piece-rechanges';
-import { findById4 } from '../fn/pieces-de-rechange/find-by-id-4';
-import { FindById4$Params } from '../fn/pieces-de-rechange/find-by-id-4';
+import { findById5 } from '../fn/pieces-de-rechange/find-by-id-5';
+import { FindById5$Params } from '../fn/pieces-de-rechange/find-by-id-5';
 import { findByReference } from '../fn/pieces-de-rechange/find-by-reference';
 import { FindByReference$Params } from '../fn/pieces-de-rechange/find-by-reference';
 import { PageResponsePieceRechangeDto } from '../models/page-response-piece-rechange-dto';
 import { PieceRechangeDto } from '../models/piece-rechange-dto';
-import { save4 } from '../fn/pieces-de-rechange/save-4';
-import { Save4$Params } from '../fn/pieces-de-rechange/save-4';
+import { save5 } from '../fn/pieces-de-rechange/save-5';
+import { Save5$Params } from '../fn/pieces-de-rechange/save-5';
 
 @Injectable({ providedIn: 'root' })
 export class PiecesDeRechangeService extends BaseService {
@@ -32,31 +32,31 @@ export class PiecesDeRechangeService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `save4()` */
-  static readonly Save4Path = '/piecerenchanges/create';
+  /** Path part for operation `save5()` */
+  static readonly Save5Path = '/piecerenchanges/create';
 
   /**
    * Ajouter/Modifier une piece de rechange, cette methode permet d'enregistrer ou modifier une piece de rechange
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save4()` instead.
+   * To access only the response body, use `save5()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save4$Response(params: Save4$Params, context?: HttpContext): Observable<StrictHttpResponse<PieceRechangeDto>> {
-    return save4(this.http, this.rootUrl, params, context);
+  save5$Response(params: Save5$Params, context?: HttpContext): Observable<StrictHttpResponse<PieceRechangeDto>> {
+    return save5(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier une piece de rechange, cette methode permet d'enregistrer ou modifier une piece de rechange
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save4$Response()` instead.
+   * To access the full response (for headers, for example), `save5$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save4(params: Save4$Params, context?: HttpContext): Observable<PieceRechangeDto> {
-    return this.save4$Response(params, context).pipe(
+  save5(params: Save5$Params, context?: HttpContext): Observable<PieceRechangeDto> {
+    return this.save5$Response(params, context).pipe(
       map((r: StrictHttpResponse<PieceRechangeDto>): PieceRechangeDto => r.body)
     );
   }
@@ -90,60 +90,60 @@ export class PiecesDeRechangeService extends BaseService {
     );
   }
 
-  /** Path part for operation `findById4()` */
-  static readonly FindById4Path = '/piecerenchanges/piecerenchange/by-id/{id}';
+  /** Path part for operation `findById5()` */
+  static readonly FindById5Path = '/piecerenchanges/piecerenchange/by-id/{id}';
 
   /**
    * Rechercher une PieceRechange par ID! Cette methode permet de chercher une piece de rechange par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById4()` instead.
+   * To access only the response body, use `findById5()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById4$Response(params: FindById4$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findById4(this.http, this.rootUrl, params, context);
+  findById5$Response(params: FindById5$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findById5(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher une PieceRechange par ID! Cette methode permet de chercher une piece de rechange par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById4$Response()` instead.
+   * To access the full response (for headers, for example), `findById5$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById4(params: FindById4$Params, context?: HttpContext): Observable<any> {
-    return this.findById4$Response(params, context).pipe(
+  findById5(params: FindById5$Params, context?: HttpContext): Observable<any> {
+    return this.findById5$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
 
-  /** Path part for operation `findAll4()` */
-  static readonly FindAll4Path = '/piecerenchanges/all';
+  /** Path part for operation `findAll5()` */
+  static readonly FindAll5Path = '/piecerenchanges/all';
 
   /**
    * Rechercher tout les PieceRechanges ! Cette methode permet de retouner tous les pieces de Rechange
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll4()` instead.
+   * To access only the response body, use `findAll5()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll4$Response(params?: FindAll4$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findAll4(this.http, this.rootUrl, params, context);
+  findAll5$Response(params?: FindAll5$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findAll5(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les PieceRechanges ! Cette methode permet de retouner tous les pieces de Rechange
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll4$Response()` instead.
+   * To access the full response (for headers, for example), `findAll5$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll4(params?: FindAll4$Params, context?: HttpContext): Observable<any> {
-    return this.findAll4$Response(params, context).pipe(
+  findAll5(params?: FindAll5$Params, context?: HttpContext): Observable<any> {
+    return this.findAll5$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

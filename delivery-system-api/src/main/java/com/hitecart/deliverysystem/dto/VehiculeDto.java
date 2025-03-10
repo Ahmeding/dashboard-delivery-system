@@ -20,8 +20,10 @@ import java.util.List;
 @Setter
 @Builder
 public class VehiculeDto {
+    private Integer id;
 
     private String logo;
+    private String reference;
     private VehicleType vehicleType;
     private String immatriculation;
     private String marque;
@@ -36,7 +38,6 @@ public class VehiculeDto {
     private List<ReparationDto> reparationsDtos;
     private Boolean isActive;
     private boolean isAssigned;
-    private Integer id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer createdBy;
@@ -49,6 +50,7 @@ public class VehiculeDto {
         }
         return VehiculeDto.builder()
          .id(vehicule.getId())
+                .reference(vehicule.getReference())
          .immatriculation(vehicule.getImmatriculation())
          .marque(vehicule.getMarque())
          .modele(vehicule.getModele())
@@ -77,6 +79,7 @@ public class VehiculeDto {
         }
         Vehicule vh = new Vehicule();
                 vh.setId(dto.getId());
+                vh.setReference(dto.getReference());
                 vh.setImmatriculation(dto.getImmatriculation());
                 vh.setMarque(dto.getMarque());
                 vh.setModele(dto.getModele());

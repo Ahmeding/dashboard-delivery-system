@@ -1,0 +1,90 @@
+<div class="weekly-planning">
+  <!-- Page Heading -->
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h4 class="lead">
+    </h4>
+    <a class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
+      class="fas fa-plus fa-sm text-white-50"></i>&nbsp;New Weekly Planning</a>
+  </div>
+
+  <div class="planning-header">
+    <h2>Weekly Planning</h2>
+    <div class="controls">
+      <button class="btn btn-icon" (click)="previousWeek()">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+      <span class="week-range">
+        {{ formatDate(weekDays[0].date) }} - {{ formatDate(weekDays[6].date) }}
+      </span>
+      <button class="btn btn-icon" (click)="nextWeek()">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="planning-table">
+    <div class="planning-days">
+      <div class="day-column" *ngFor="let day of weekDays" [class.today]="isToday(day.date)">
+        <div class="day-header">
+          <span class="day-name">{{ formatDayName(day.date) }}</span>
+          <span class="day-date">{{ formatDate(day.date) }}</span>
+        </div>
+        <div *ngIf="isLoading" class="spinner-border spinner-border-sm text-warning" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <app-mission-card
+          *ngFor="let mission of day.missions"
+          [mission]="mission"
+          (edit)="onEditMission($event)"
+          (delete)="onDeleteMission($event)">
+        </app-mission-card>
+        <div class="missions-container">
+
+          <!--
+
+
+          <div class="mission-card" *ngFor="let mission of day.missions">
+            <div class="mission-header">
+              <div class="mission-time-status">
+                <i [class]="'status-indicator bi ' + getStatusIcon(mission.status)"></i>
+                <span class="mission-time">{{ mission.startTime }} - {{ mission.endTime }}</span>
+              </div>
+              <div class="mission-actions">
+                <button class="btn-action" title="Edit">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn-action" title="Delete">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+
+            <h3 class="mission-title">{{ mission.title }}</h3>
+
+            <div class="mission-details">
+              <div class="detail-item">
+                <i class="bi bi-person-circle"></i>
+                <span>{{ mission.driver }}</span>
+              </div>
+              <div class="detail-item">
+                <i class="bi bi-truck"></i>
+                <span>{{ mission.vehicle }}</span>
+              </div>
+            </div>
+          </div>-->
+
+          <div class="empty-state" *ngIf="day.missions.length === 0">
+            <i class="bi bi-calendar-x"></i>
+            <span>No missions</span>
+          </div>
+
+          <button *ngIf="isNotOldDay(day.date)" class="btn-new-mission" (click)="navigateToNewMissionByDate(day.date)">
+            <i class="bi bi-plus-lg"></i>
+            <span>New Mission</span>
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

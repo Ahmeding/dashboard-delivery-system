@@ -6,6 +6,7 @@ import com.hitecart.deliverysystem.services.IMissionVehicleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,5 +31,11 @@ public class MissionVehicleServiceImpl implements IMissionVehicleService {
                 .stream()
                 .map(MissionVehicleDto::fromEntity)
                 .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<Integer> findUnavailableVehicles(List<Integer> vehicleIds, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return missionVehicleRepository.findUnavailableVehicles(vehicleIds,startDateTime,endDateTime);
     }
 }

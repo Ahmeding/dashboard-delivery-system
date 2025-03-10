@@ -18,6 +18,12 @@ export class NewServiceDelivComponent implements OnInit{
   deliveryPoints: DeliveryPointDto[] = [];
   isEditing = false;
 
+  constructor(
+    private alertService:AlertService,
+    private router:Router,
+    private fb: FormBuilder,
+    private serviceDlvService:ServiceDeliveryService) {
+  }
   ngOnInit(): void {
     this.initForm();
     // Load delivery points
@@ -27,8 +33,8 @@ export class NewServiceDelivComponent implements OnInit{
   loadDeliveryPoints(): void {
     // Implement API call to load delivery points
     this.deliveryPoints = [
-      { id: 1, name: 'Point 1', city: 'Paris', deliveryPointType: 'SHOP' },
-      { id: 2, name: 'Point 2', city: 'Lyon', deliveryPointType: 'DEPOT' }
+      { id: 1, name: 'SHOP',  deliveryPointType: 'SHOP' },
+      { id: 2, name: 'DEPOT',  deliveryPointType: 'DEPOT' }
     ];
   }
 
@@ -36,12 +42,16 @@ export class NewServiceDelivComponent implements OnInit{
   initForm(){
     this.serviceDeliveryForm = this.fb.group({
       id: [null],
-      reference: ['', Validators.required],
-      title: ['', Validators.required],
-      description: ['', Validators.required],
+      description: [''],
       unitPriceHT: ['', [Validators.required, Validators.min(0)]],
       tva: [20, [Validators.required, Validators.min(0), Validators.max(100)]],
-      priceTTC: [{ value: '', disabled: true }]
+      basicTripCost: [{disabled: true }],
+      color: ['#ffffff',Validators.required],
+      pickUpLocation: ['', Validators.required],
+      distance: ['', [Validators.required, Validators.min(0)]],
+      destinationCountry: ['', Validators.required],
+      destinationCity: ['', Validators.required],
+
     });
 
     // Calculate TTC price when HT price or TVA changes
@@ -52,16 +62,10 @@ export class NewServiceDelivComponent implements OnInit{
       this.calculateTTC();
     });
   }
-  constructor(
-    private alertService:AlertService,
-    private router:Router,
-    private fb: FormBuilder,
-    private serviceDlvService:ServiceDeliveryService) {
-  }
 
 
   saveNewDeliveryService(formValue: ServiceDeliveryDto){
-    this.serviceDlvService.save2({body:formValue}).subscribe({
+    this.serviceDlvService.save3({body:formValue}).subscribe({
       next:(response)=>{
         console.log(response);
         this.router.navigate(['settings','services']);
@@ -78,12 +82,13 @@ export class NewServiceDelivComponent implements OnInit{
     calculateTTC(): void {
       const priceHT = this.serviceDeliveryForm.get('unitPriceHT')?.value || 0;
       const tva = this.serviceDeliveryForm.get('tva')?.value || 0;
-      const priceTTC = priceHT * (1 + tva / 100);
-      this.serviceDeliveryForm.patchValue({ priceTTC }, { emitEvent: false });
+      const basicTripCost = priceHT * (1 + tva / 100);
+      this.serviceDeliveryForm.patchValue({ basicTripCost }, { emitEvent: false });
     }
   onSubmit(): void {
     if (this.serviceDeliveryForm.valid) {
         this.service = this.serviceDeliveryForm.getRawValue();
+      console.log(this.service);
       const formValue =this.service;
       console.log('Form submitted:', formValue);
       // Implement save logic

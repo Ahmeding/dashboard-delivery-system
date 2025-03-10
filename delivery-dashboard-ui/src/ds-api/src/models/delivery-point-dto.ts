@@ -8,12 +8,13 @@ import { DeliveryPointContactDto } from '../models/delivery-point-contact-dto';
 import { LocalTime } from '../models/local-time';
 export interface DeliveryPointDto {
   addressDto?: AdresseDto;
-  city?: string;
   clientId?: number;
   contact?: DeliveryPointContactDto;
   createdAt?: string;
   createdBy?: number;
   createdByUser?: CreatedByUserDto;
+  delivDestinationId?: number;
+  deliveryPointCategoryId?: number;
   deliveryPointType?: 'SHOP' | 'DEPOT';
   enabled?: boolean;
   id?: number;

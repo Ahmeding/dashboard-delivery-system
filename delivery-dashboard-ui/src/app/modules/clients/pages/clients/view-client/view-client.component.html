@@ -132,9 +132,10 @@
           </tr>
           </thead>
           <tbody>
+          <tr *ngIf="client.deliveryPointDtos?.length===0"><td colspan="7" align="center">No Delivery Point Saved Yet</td></tr>
           <tr *ngFor="let point of client.deliveryPointDtos">
             <td>{{point.name}}</td>
-            <td>{{point.city}}</td>
+            <td>{{point.addressDto?.ville}}</td>
             <td>
               <div class="contact-info">
                 <span class="contact-name">{{point.contact?.firstname}}&nbsp;{{point.contact?.lastname}}</span>

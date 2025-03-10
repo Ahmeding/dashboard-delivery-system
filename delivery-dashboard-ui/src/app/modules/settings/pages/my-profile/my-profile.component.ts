@@ -94,7 +94,7 @@ export class MyProfileComponent implements OnInit{
     private userService:UtilisateurService) {
   }
 getUserById(){
-    this.userService.findById1({id:3}).subscribe(
+    this.userService.findById2({id:3}).subscribe(
       {
         next:(userRep)=>{
           this.user=userRep;

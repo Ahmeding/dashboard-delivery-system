@@ -1,0 +1,42 @@
+services:
+  postgres:
+    container_name: postgres-sql-ds
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_DB: delivery_db
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - 5432:5432
+    networks:
+      - delivery-system
+    restart: unless-stopped
+  ds-api:
+    container_name: ds-api
+    image: ds/ds:1.0.0
+    ports:
+      - 8080:8080
+    networks:
+      - delivery-system
+    depends_on:
+      - postgres
+
+  ds-ui:
+    container_name: ds-ui
+    image: ds/ds-ui:1.0.0
+    ports:
+      - 8088:80
+    networks:
+      - delivery-system
+    depends_on:
+      - ds-api
+volumes:
+  postgres:
+    driver: local
+
+networks:
+  delivery-system:
+    driver: bridge

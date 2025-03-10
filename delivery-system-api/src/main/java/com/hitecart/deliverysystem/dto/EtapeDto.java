@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hitecart.deliverysystem.model.Etape;
 import com.hitecart.deliverysystem.model.Etape;
@@ -13,6 +14,7 @@ import lombok.Data;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 @Builder
@@ -21,8 +23,10 @@ public class EtapeDto {
     private Integer id;
     private String titre;
     private String commentaire;
-    private LocalDateTime heureLivPrevu;
-    private LocalDateTime heureLivReel;
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime scheduledDeliveryTime ;
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime actualDeliveryTime;
     private LocalDate dateDepart;
     private LocalDate dateArrivee;
     private String lieuDepart;
@@ -37,8 +41,8 @@ public class EtapeDto {
                 .id(etape.getId())
                 .titre(etape.getTitre())
                 .commentaire(etape.getCommentaire())
-                .heureLivPrevu(etape.getHeureLivPrevu())
-                .heureLivReel(etape.getHeureLivReel())
+                .scheduledDeliveryTime(etape.getScheduledDeliveryTime())
+                .actualDeliveryTime(etape.getActualDeliveryTime())
                 .dateDepart(etape.getDateDepart())
                 .dateArrivee(etape.getDateArrivee())
                 .lieuDepart(etape.getLieuDepart())
@@ -55,8 +59,8 @@ public class EtapeDto {
         etape.setId(dto.getId());
                 etape.setTitre(dto.getTitre());
                 etape.setCommentaire(dto.getCommentaire());
-                etape.setHeureLivPrevu(dto.getHeureLivPrevu());
-                etape.setHeureLivReel(dto.getHeureLivReel());
+                etape.setScheduledDeliveryTime(dto.getScheduledDeliveryTime());
+                etape.setActualDeliveryTime(dto.getActualDeliveryTime());
                 etape.setDateDepart(dto.getDateDepart());
                 etape.setDateArrivee(dto.getDateArrivee());
                 etape.setLieuDepart(dto.getLieuDepart());

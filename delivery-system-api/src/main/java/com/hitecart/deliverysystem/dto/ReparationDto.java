@@ -20,6 +20,8 @@ import java.util.List;
 public class ReparationDto{
 
 
+    private Integer id;
+    private String reference;
     private TypeReparation type;
     private String commentaire;
     private LocalDate dateDebut;
@@ -30,7 +32,6 @@ public class ReparationDto{
     private List<PieceRechangeDto> pieceRechangesDtos;
 
     private VehiculeDto vehiculeDto;
-    private Integer id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer createdBy;
@@ -45,6 +46,7 @@ public class ReparationDto{
 
         return ReparationDto.builder()
                 .id(reparation.getId())
+                .reference(reparation.getReference())
                 .type(reparation.getType())
                 .commentaire(reparation.getCommentaire())
                 .dateDebut(reparation.getDateDebut())
@@ -68,6 +70,7 @@ public class ReparationDto{
            //return null;
         }
             Reparation reparation = new Reparation();
+        reparation.setId(dto.getId());
                     reparation.setId(dto.getId());
                     reparation.setType(dto.getType());
                     reparation.setCommentaire(dto.getCommentaire());

@@ -3,10 +3,11 @@ package com.hitecart.deliverysystem.services.impl;
 import com.hitecart.deliverysystem.dto.ChauffeurVehicleDto;
 import com.hitecart.deliverysystem.model.ChauffeurVehicle;
 import com.hitecart.deliverysystem.repository.ChauffeurVehicleRepository;
-import com.hitecart.deliverysystem.services.security.IChauffeurVehicleService;
+import com.hitecart.deliverysystem.services.IChauffeurVehicleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,5 +40,10 @@ public class ChauffeurVehicleServiceImpl implements IChauffeurVehicleService {
     public void deleteByMissionVehicleId(Integer missionVehicleId) {
         chauffeurVehicleRepository.deleteByMissionVehicleId(missionVehicleId);
 
+    }
+
+    @Override
+    public List<Integer> findUnavailableDrivers(List<Integer> chauffeurIds, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return chauffeurVehicleRepository.findUnavailableDrivers(chauffeurIds,startDateTime,endDateTime);
     }
 }

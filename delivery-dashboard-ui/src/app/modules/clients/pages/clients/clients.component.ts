@@ -11,6 +11,7 @@ import {ViewClientModalComponent} from "./view-client-modal/view-client-modal.co
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {DeliveryPointDto} from "../../../../../ds-api/src/models/delivery-point-dto";
 import {NewDeliveryPointModalComponent} from "./new-delivery-point-modal/new-delivery-point-modal.component";
+import {Client} from "stompjs";
 
 @Component({
   selector: 'app-clients',
@@ -62,7 +63,7 @@ export class ClientsComponent implements OnInit{
     const updatedStatus = !isActive;
     if (client_id === undefined) {
       console.log("mission_id : "+ client_id);
-      this.alertService.alertError('Mission ID is missing. Unable to desactivate Client.');
+      this.alertService.alertError('Mission ID is missing. Unable to deactivate Client.');
       return;
     }
     this.confirmBoxService.customFour(`Are you sure you want to ${action} this client?`, '', 'Confirme', 'Cancel').subscribe(
@@ -93,7 +94,7 @@ export class ClientsComponent implements OnInit{
     this.confirmBoxService.customFour('Are you sure you want to delete this client?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.clientService.delete12({id:client_id}).subscribe(() => {
+          this.clientService.delete14({id:client_id}).subscribe(() => {
             this.getAllClients();
             this.alertService.alertSuccess('Deletion successfully completed');
           });
@@ -163,6 +164,10 @@ export class ClientsComponent implements OnInit{
     this.router.navigate(['clients','edit-client',id]);
   }
 
+/*  totalDeliveryPointsByClient(client :ClientDto) :number{
+    if(!client.deliveryDestinationsDto)return 0;
+    return client.deliveryDestinationsDto.reduce((sum,dest)=>sum+(dest.deliveryPointsDto?.length||0),0);
+  }*/
   openAddNewDPModal(client: any) {
     const modalRef = this.modalService.open(NewDeliveryPointModalComponent, {
       size: 'lg',

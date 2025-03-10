@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Inheritance(strategy = InheritanceType.JOINED)
+@Access(AccessType.FIELD)
 public class Utilisateur extends AbstractEntity implements UserDetails, Principal {
     
     @Column(name = "lastname")

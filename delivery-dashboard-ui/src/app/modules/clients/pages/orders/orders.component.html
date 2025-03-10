@@ -139,7 +139,7 @@
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
                     <input  [(ngModel)]="newOrder.code"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['code']?.invalid}"
+                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['code'].invalid}"
                             name="code"  class="form-control" id="inputCode" type="text" placeholder="Code"  required/>
                     <label for="inputCode">Code</label>
                     <small *ngIf="isFormAddNewSubmitted && form.controls['code']?.invalid" class="text-danger">Code is required</small>
@@ -161,7 +161,7 @@
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
                     <input  [(ngModel)]="newOrder.dateCommnde"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['orderdate']?.invalid}"
+                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['orderdate'].invalid}"
                             name="orderdate" class="form-control" id="inputOrderDate" type="datetime-local" placeholder="Date"  required/>
                     <label for="inputOrderDate">Date</label>
                     <small *ngIf="isFormAddNewSubmitted && form.controls['orderdate']?.invalid" class="text-danger">Date is required</small>
@@ -206,8 +206,8 @@
                   <th>Action</th>
 
                   <tr *ngFor="let orderL of orderlines; let i = index">
-                    <td>{{ orderL.serviceDeliveryDto?.reference }}</td>
-                    <td>{{ orderL.serviceDeliveryDto?.title }} &nbsp; {{ orderL.serviceDeliveryDto?.description }}</td>
+                    <td>{{ orderL.serviceDeliveryDtoId }}</td>
+                    <td>{{ orderL.serviceDeliveryDtoId }} &nbsp;</td>
                     <td><select (change)="onQteChange($event,i)"
                                 id="selectQte" class="form-select qte-select" name="qte">
                       <option [ngValue]="1">1</option>
@@ -217,8 +217,8 @@
                       <option [ngValue]="5">5</option>
                       <option [ngValue]="6">6</option>
                     </select></td>
-                    <td>{{ orderL.serviceDeliveryDto?.unitPriceHT }}€</td>
-                    <td>{{ orderL.serviceDeliveryDto?.tva}}%</td>
+                    <td>00€</td>
+                    <td>20%</td>
                     <td><i class="bi bi-trash text-danger" (click)="deleteServDelivery(i)"></i></td>
                   </tr>
 
@@ -258,7 +258,7 @@
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
                     <input  [(ngModel)]="selectedToEditOrder.code"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['code']?.invalid}"
+                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['code'].invalid}"
                             name="code"  class="form-control" id="inputEditCode" type="text" placeholder="Code"  required/>
                     <label for="inputCode">Code</label>
                     <small *ngIf="isFormAddNewSubmitted && editForm.controls['code']?.invalid" class="text-danger">Code is required</small>
@@ -280,7 +280,7 @@
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
                     <input  [(ngModel)]="selectedToEditOrder.dateCommnde"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['orderdate']?.invalid}"
+                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['orderdate'].invalid}"
                             name="orderdate" class="form-control" id="inputEditOrderDate" type="datetime-local" placeholder="Date"  required/>
                     <label for="inputOrderDate">Date</label>
                     <small *ngIf="isFormAddNewSubmitted && editForm.controls['orderdate']?.invalid" class="text-danger">Date is required</small>
@@ -325,8 +325,8 @@
                   <th>Action</th>
 
                   <tr *ngFor="let orderL of orderlines; let i = index">
-                    <td>{{ orderL.serviceDeliveryDto?.reference }}</td>
-                    <td>{{ orderL.serviceDeliveryDto?.title }} &nbsp; {{ orderL.serviceDeliveryDto?.description }}</td>
+                    <td>{{ orderL.serviceDeliveryDtoId }}</td>
+                    <td>Service name </td>
                     <td><select (change)="onQteChange($event,i)"
                                 id="selectEditQte" class="form-select qte-select" name="qte">
                       <option [ngValue]="1">1</option>
@@ -336,8 +336,8 @@
                       <option [ngValue]="5">5</option>
                       <option [ngValue]="6">6</option>
                     </select></td>
-                    <td>{{ orderL.serviceDeliveryDto?.unitPriceHT }}€</td>
-                    <td>{{ orderL.serviceDeliveryDto?.tva}}%</td>
+                    <td>unit price 00 €</td>
+                    <td>20%</td>
                     <td><i class="bi bi-trash text-danger" (click)="deleteServDelivery(i)"></i></td>
                   </tr>
 
@@ -371,7 +371,7 @@
         <header class="invoice-header">
           <h1>Order</h1>
           <div class="invoice-meta">
-            <div><strong>Order No:</strong>{{ selectedOrder?.code }}</div>
+            <div><strong>Order No:</strong>{{ selectedOrder.code }}</div>
             <div><strong>Date:</strong> <!--{{converteDateTime(selectedOrder?.dateCommnde) | date: "dd-MM-yyyy hh:mm"}}--></div>
           </div>
         </header>
@@ -389,7 +389,7 @@
           </thead>
           <tbody>
           <tr *ngFor="let orderl of selectedOrder?.ligneCommandeClientsDtos">
-            <td>{{ orderl.serviceDeliveryDto?.title }}</td>
+            <td>{{ orderl.serviceDeliveryDtoId }}</td>
             <td>{{ orderl.quantite }}</td>
             <td>{{ orderl.prixUnitaire }}€</td>
             <td>{{ orderl.prixTTC}}€</td>

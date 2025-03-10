@@ -15,19 +15,19 @@
       <div class="profile-header">
         <div class="avatar-wrapper">
           <div class="avatar" [style.background-color]="getAvatarColor(user.fullname)">
-            {{ user.fullname?.[0] }}
+            {{ user.fullname[0] }}
           </div>
           <button class="edit-avatar">
             <i class="bi bi-pencil"></i>
           </button>
         </div>
         <h2 class="user-name">{{ user.fullname }}</h2>
-        <div class="role-badge" [class]="'role-' + user.role?.toLowerCase()">
+        <div class="role-badge" [class]="'role-' + user.role.toLowerCase()">
           {{ user.role }}
         </div>
         <div class="status-badges">
           <span class="status-badge" [class.active]="user.enabled">
-            {{ user.enabled ? 'Active' : 'Inactive' }}
+            {{ user.enabled?  'Active' : 'Inactive' }}
           </span>
           <span class="status-badge lock-badge" [class.locked]="user.accountLocked">
             <i class="bi" [class.bi-lock-fill]="user.accountLocked" [class.bi-unlock-fill]="!user.accountLocked"></i>

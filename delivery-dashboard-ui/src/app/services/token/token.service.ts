@@ -40,5 +40,6 @@ export class TokenService {
   }
   logout(){
     localStorage.clear();
+    console.log("clear storage");
   }
 }

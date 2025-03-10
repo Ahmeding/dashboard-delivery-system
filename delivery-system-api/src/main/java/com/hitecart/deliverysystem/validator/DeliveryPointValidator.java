@@ -17,11 +17,9 @@ public class DeliveryPointValidator {
             errors.add("Veuillez renseigner le type deu point de livraison!");
             errors.addAll(AdresseValidator.validate(null));
         }
-        if(!StringUtils.hasLength(dto.getCity())){
-            errors.add("Veuillez renseigner le nom de la ville !");
-        }
-        if(dto.getClientId()==null){
-            errors.add("Veuillez renseigner le client !");
+
+        if(dto.getDelivDestinationId()==null){
+            errors.add("Veuillez renseigner la destination !");
         }
         if(dto.getSchedule()==null){
             errors.add("Veuillez renseigner l'heure de livraison!");

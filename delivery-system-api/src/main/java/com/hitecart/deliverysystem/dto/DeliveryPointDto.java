@@ -17,10 +17,13 @@ public class DeliveryPointDto {
 
     private Integer id;
     private String name;
-    private String city;
+
     private AdresseDto addressDto;
     private DeliveryPointType deliveryPointType;
+
+    private Integer delivDestinationId;
     private Integer clientId;
+    private Integer deliveryPointCategoryId;
     private DeliveryPointContactDto contact;
     @JsonFormat(pattern = "HH:mm")
     private LocalTime schedule;
@@ -38,15 +41,21 @@ public class DeliveryPointDto {
                 {
                     return null;
                 }
+
                 return DeliveryPointDto.builder()
                         .id(deliveryPoint.getId())
                         .name(deliveryPoint.getName())
-                        .city(deliveryPoint.getCity())
                         .deliveryPointType(deliveryPoint.getDeliveryPointType())
                         .addressDto(AdresseDto.fromEntity(deliveryPoint.getAddress()) )
                         .schedule(deliveryPoint.getSchedule())
                         .contact(DeliveryPointContactDto.fromEntity(deliveryPoint.getContact()))
-                        .clientId(deliveryPoint.getClient()!=null?deliveryPoint.getClient().getId():null)
+                        .delivDestinationId(deliveryPoint.getDeliveryDestination()!=null ?
+                                deliveryPoint.getDeliveryDestination().getId()
+                                : null)
+                        .clientId(deliveryPoint.getClient()!=null ?
+                                deliveryPoint.getClient().getId()
+                                : null)
+                        .deliveryPointCategoryId(deliveryPoint.getDeliveryPointCategory()!= null ? deliveryPoint.getDeliveryPointCategory().getId():null)
                         .enabled(deliveryPoint.isEnabled())
 
                         .createdAt(deliveryPoint.getCreatedAt())
@@ -66,12 +75,12 @@ public class DeliveryPointDto {
         return DeliveryPoint.builder()
                 .id(dto.getId())
                 .name(dto.getName())
-                .city(dto.getCity())
                 .deliveryPointType(dto.getDeliveryPointType())
                 .address(AdresseDto.toEntity(dto.getAddressDto()) )
                 .schedule(dto.getSchedule())
                 .contact(DeliveryPointContactDto.toEntity(dto.getContact()))
                 .enabled(dto.isEnabled())
+
                 .createdAt(dto.getCreatedAt())
                 .updatedAt(dto.getUpdatedAt())
                 .createdBy(dto.getCreatedBy())

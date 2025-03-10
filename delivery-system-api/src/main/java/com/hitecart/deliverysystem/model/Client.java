@@ -19,6 +19,7 @@ import java.util.List;
 @Table(name = "client")
 public class Client extends Utilisateur{
 
+    private String reference;
     @Column(name = "descrition")
     private String description;
     @Column(name = "siret")
@@ -31,4 +32,12 @@ public class Client extends Utilisateur{
     private List<Devis> devis;
     @OneToMany(mappedBy = "client")
     private List<DeliveryPoint>  deliveryPoints;
+
+
+    @PrePersist
+    private void generateReference() {
+        if(this.reference == null || this.reference.isEmpty()){
+            this.reference = "CLI-"+System.currentTimeMillis();
+        }
+    }
 }

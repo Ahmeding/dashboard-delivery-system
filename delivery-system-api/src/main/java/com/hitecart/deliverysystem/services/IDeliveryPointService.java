@@ -10,7 +10,7 @@ public interface IDeliveryPointService {
 
     DeliveryPointDto findById(Integer id);
 
-    DeliveryPointDto findByCity(String city);
+    List<DeliveryPointDto> findAllByCity(String city);
 
     List<DeliveryPointDto> findAll();
 

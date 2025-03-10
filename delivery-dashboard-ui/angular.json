@@ -20,6 +20,10 @@
             "outputPath": "dist/delivery-dashboard-ui",
             "index": "src/index.html",
             "main": "src/main.ts",
+            "progress": false,
+            "verbose": false,
+            "sourceMap": false,
+            "vendorChunk": false,
             "polyfills": [
               "zone.js"
             ],
@@ -39,13 +43,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "4mb",
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "150kb",
+                  "maximumError": "150kb"
                 }
               ],
               "outputHashing": "all"

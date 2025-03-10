@@ -71,7 +71,7 @@ export class NewVehicleComponent implements OnInit{
 
   private loadVehicleToEditing(vId: number) {
     this.isNewVehicle=false;
-    this.vehicleService.findById({
+    this.vehicleService.findById1({
       id:vId
     }).subscribe({
       next:(responseV)=>{
@@ -121,7 +121,7 @@ export class NewVehicleComponent implements OnInit{
   }
 
   private saveVehicle(vehicleValue: VehiculeDto, successMsg: string, errorMesg:string) {
-    this.vehicleService.save({body:vehicleValue}).subscribe({
+    this.vehicleService.save1({body:vehicleValue}).subscribe({
       next:(response)=>{
         console.log(response);
         this.alertService.alertSuccess(successMsg+" completed successfully!")

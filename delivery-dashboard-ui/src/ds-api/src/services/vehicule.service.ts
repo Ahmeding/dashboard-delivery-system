@@ -13,17 +13,17 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { delete$ } from '../fn/vehicule/delete';
 import { Delete$Params } from '../fn/vehicule/delete';
-import { findAll } from '../fn/vehicule/find-all';
-import { FindAll$Params } from '../fn/vehicule/find-all';
+import { findAll1 } from '../fn/vehicule/find-all-1';
+import { FindAll1$Params } from '../fn/vehicule/find-all-1';
 import { findAllVehicules } from '../fn/vehicule/find-all-vehicules';
 import { FindAllVehicules$Params } from '../fn/vehicule/find-all-vehicules';
-import { findById } from '../fn/vehicule/find-by-id';
-import { FindById$Params } from '../fn/vehicule/find-by-id';
+import { findById1 } from '../fn/vehicule/find-by-id-1';
+import { FindById1$Params } from '../fn/vehicule/find-by-id-1';
 import { findByImmatriculation } from '../fn/vehicule/find-by-immatriculation';
 import { FindByImmatriculation$Params } from '../fn/vehicule/find-by-immatriculation';
 import { PageResponseVehiculeDto } from '../models/page-response-vehicule-dto';
-import { save } from '../fn/vehicule/save';
-import { Save$Params } from '../fn/vehicule/save';
+import { save1 } from '../fn/vehicule/save-1';
+import { Save1$Params } from '../fn/vehicule/save-1';
 import { updateIsActive } from '../fn/vehicule/update-is-active';
 import { UpdateIsActive$Params } from '../fn/vehicule/update-is-active';
 import { VehiculeDto } from '../models/vehicule-dto';
@@ -59,31 +59,31 @@ export class VehiculeService extends BaseService {
     );
   }
 
-  /** Path part for operation `save()` */
-  static readonly SavePath = '/vehicules/create';
+  /** Path part for operation `save1()` */
+  static readonly Save1Path = '/vehicules/create';
 
   /**
    * Ajouter/Modifier un vehicule, cette methode permet d'enregistrer ou modifier un vehicule
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save()` instead.
+   * To access only the response body, use `save1()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save$Response(params: Save$Params, context?: HttpContext): Observable<StrictHttpResponse<VehiculeDto>> {
-    return save(this.http, this.rootUrl, params, context);
+  save1$Response(params: Save1$Params, context?: HttpContext): Observable<StrictHttpResponse<VehiculeDto>> {
+    return save1(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier un vehicule, cette methode permet d'enregistrer ou modifier un vehicule
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save$Response()` instead.
+   * To access the full response (for headers, for example), `save1$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save(params: Save$Params, context?: HttpContext): Observable<VehiculeDto> {
-    return this.save$Response(params, context).pipe(
+  save1(params: Save1$Params, context?: HttpContext): Observable<VehiculeDto> {
+    return this.save1$Response(params, context).pipe(
       map((r: StrictHttpResponse<VehiculeDto>): VehiculeDto => r.body)
     );
   }
@@ -117,60 +117,60 @@ export class VehiculeService extends BaseService {
     );
   }
 
-  /** Path part for operation `findById()` */
-  static readonly FindByIdPath = '/vehicules/vehicule/by-id/{id}';
+  /** Path part for operation `findById1()` */
+  static readonly FindById1Path = '/vehicules/vehicule/by-id/{id}';
 
   /**
    * Rechercher un Vehicule par ID! Cette methode permet de chercher un vehicule par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById()` instead.
+   * To access only the response body, use `findById1()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById$Response(params: FindById$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findById(this.http, this.rootUrl, params, context);
+  findById1$Response(params: FindById1$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findById1(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher un Vehicule par ID! Cette methode permet de chercher un vehicule par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById$Response()` instead.
+   * To access the full response (for headers, for example), `findById1$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById(params: FindById$Params, context?: HttpContext): Observable<any> {
-    return this.findById$Response(params, context).pipe(
+  findById1(params: FindById1$Params, context?: HttpContext): Observable<any> {
+    return this.findById1$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
 
-  /** Path part for operation `findAll()` */
-  static readonly FindAllPath = '/vehicules/all';
+  /** Path part for operation `findAll1()` */
+  static readonly FindAll1Path = '/vehicules/all';
 
   /**
    * Rechercher tout les Vehicule! Cette methode permet de retouner tous les vehicules
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll()` instead.
+   * To access only the response body, use `findAll1()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll$Response(params?: FindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findAll(this.http, this.rootUrl, params, context);
+  findAll1$Response(params?: FindAll1$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findAll1(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les Vehicule! Cette methode permet de retouner tous les vehicules
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll$Response()` instead.
+   * To access the full response (for headers, for example), `findAll1$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll(params?: FindAll$Params, context?: HttpContext): Observable<any> {
-    return this.findAll$Response(params, context).pipe(
+  findAll1(params?: FindAll1$Params, context?: HttpContext): Observable<any> {
+    return this.findAll1$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

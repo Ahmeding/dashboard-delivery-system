@@ -16,6 +16,30 @@ import java.util.Collections;
 @RestControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleException(EntityNotFoundException exception,WebRequest webRequest){
+        final HttpStatus notFound = HttpStatus.NOT_FOUND;
+        final ErrorDto errorDto= ErrorDto.builder()
+                .errorCodes(exception.getErrorCodes())
+                .msg(exception.getMessage())
+                .httpCode(notFound.value())
+                .build();
+        return new ResponseEntity<>(errorDto,notFound);
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<ErrorDto> handleException(TokenExpiredException exception, WebRequest request) {
+        final HttpStatus status = HttpStatus.UNAUTHORIZED;
+        final ErrorDto errorDto = ErrorDto.builder()
+                .errorCodes(exception.getErrorCodes())
+                .msg(exception.getMessage())
+                .httpCode(status.value())
+                .errors(Collections.singletonList("Token expired! Renew it!"))
+                .build();
+        return new ResponseEntity<>(errorDto, status);
+    }
+
+
 
     @ExceptionHandler(DuplicateDrivingLicenseException.class)
     public ResponseEntity<ErrorDto> handleException(DuplicateDrivingLicenseException exception,WebRequest request) {
@@ -28,7 +52,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
         return new ResponseEntity<>(errorDto, DuplicateDLException);
     }
-
     @ExceptionHandler(SQLHandlerException.class)
     public ResponseEntity<ErrorDto> handleException(SQLException exception,WebRequest request) {
 
@@ -41,17 +64,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDto, sqlException);
     }
 
-
-    @ExceptionHandler(EntityNotFoundException.class)
- public ResponseEntity<ErrorDto> handleException(EntityNotFoundException exception,WebRequest webRequest){
-        final HttpStatus notFound = HttpStatus.NOT_FOUND;
-         final ErrorDto errorDto= ErrorDto.builder()
-             .errorCodes(exception.getErrorCodes())
-             .msg(exception.getMessage())
-             .httpCode(notFound.value())
-             .build();
-     return new ResponseEntity<>(errorDto,notFound);
- }
 
  @ExceptionHandler(InvalidEntityException.class)
  public ResponseEntity<ErrorDto> handleException(InvalidEntityException exception,WebRequest webRequest){

@@ -19,15 +19,18 @@ import java.util.stream.Collectors;
 public class MissionDto {
 
 
+    private Integer id;
+    private String reference;
     private String titre;
     private String commentaire;
     private BigDecimal volume;
+    private Integer idDayPlan;
+    private Integer idDeliveryDestination;
     private LocalDateTime dateDebut;
     private LocalDateTime dateFin;
     private EtatMission etatMission;
     private List<EtapeDto> etapeDtos;
     private List<MissionVehicleDto> missionVehiclesDtos;
-    private Integer id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer createdBy;
@@ -44,7 +47,11 @@ public class MissionDto {
 
         return MissionDto.builder()
                 .id(mission.getId())
+                .reference(mission.getReference())
                 .titre(mission.getTitre())
+                .idDayPlan(mission.getDayPlan()!=null?mission.getDayPlan().getId():null)
+                    .idDeliveryDestination(mission.getDeliveryDestination()!=null?
+                            mission.getDeliveryDestination().getId():null)
                 .commentaire(mission.getCommentaire())
                 .volume(mission.getVolume())
                 .dateDebut(mission.getDateDebut())
@@ -81,6 +88,7 @@ public class MissionDto {
 
         Mission mission = new Mission();
         mission.setId(dto.getId());
+        mission.setReference(dto.getReference());
         mission.setTitre(dto.getTitre());
         mission.setCommentaire(dto.getCommentaire());
         mission.setVolume(dto.getVolume());

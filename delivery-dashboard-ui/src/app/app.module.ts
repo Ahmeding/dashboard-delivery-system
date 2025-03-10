@@ -19,6 +19,9 @@ import {
   ConfirmBoxEvokeService,
   NgxAwesomePopupModule
 } from "@costlydeveloper/ngx-awesome-popup";
+import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {NgSelectModule} from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -26,6 +29,7 @@ import {
     LoginComponent,
   ],
   imports: [
+
     BrowserModule,
     CommonModule,
     AppRoutingModule,
@@ -45,7 +49,9 @@ import {
       tapToDismiss:true,
       positionClass:'toast-top-right',
       timeOut:8000
-    })
+    }),
+    BrowserAnimationsModule,
+    NgSelectModule
   ],
   providers: [
     ThemeService,

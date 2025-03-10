@@ -10,7 +10,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -25,4 +27,12 @@ public interface ChauffeurRepository extends JpaRepository<Chauffeur,Integer> {
     Page<Chauffeur> findAllChauffeurs(Pageable pageable);
 
     Chauffeur save(Chauffeur requestChauffeur);
+
+    @Modifying
+    @Query("UPDATE Chauffeur c SET c.isAssigned =:isAssigned WHERE c.id IN :ids")
+    void bulkUpdateAssignmentStatus(
+            @Param("ids") List<Integer> ids,
+            @Param("isAssigned") boolean isAssigned);
+
+
 }

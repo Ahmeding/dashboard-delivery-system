@@ -1,0 +1,75 @@
+<div class="modal-content delivery-destination-modal">
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <i class="bi bi-geo-alt-fill"></i>
+      New Delivery Destination
+    </h5>
+    <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+    <!-- -->
+  <form [formGroup]="dpCategoryForm">
+    <div class="form-group mb-4 position-relative">
+      <input
+        type="text"
+        id="categoryName"
+        formControlName="name"
+        class="form-control"
+        placeholder=""
+        [class.is-invalid]="dpCategoryForm.get('name')?.invalid && dpCategoryForm.get('name')?.touched"
+      />
+      <label for="categoryName">
+        <i class="bi bi-card-text text-primary me-1"></i> Category Name
+      </label>
+      <div *ngIf="dpCategoryForm.get('name')?.invalid && dpCategoryForm.get('name')?.touched"
+           class="invalid-feedback">
+        Category name is required.
+      </div>
+    </div>
+    <div class="form-group mb-4 position-relative">
+      <input
+        type="number"
+        id="additionalFees"
+        formControlName="additionalFees"
+        class="form-control"
+        placeholder=" "
+
+        [class.is-invalid]="dpCategoryForm.get('additionalFees')?.invalid && dpCategoryForm.get('additionalFees')?.touched"
+      />
+      <label for="additionalFees">
+        <i class="bi bi-percent text-success me-1"></i> Additional Fees (Max: 3)
+      </label>
+      <div *ngIf="dpCategoryForm.get('additionalFees')?.invalid && dpCategoryForm.get('additionalFees')?.touched"
+           class="invalid-feedback">
+        Additional fees are required and must not exceed 3.
+      </div>
+    </div>
+    <div class="form-group mb-4 position-relative">
+          <textarea
+            id="categoryDescription"
+            formControlName="description"
+            class="form-control"
+            placeholder=" "
+
+          ></textarea>
+      <label for="categoryDescription">
+        <i class="bi bi-card-list text-secondary me-1"></i> Description (Optional)
+      </label>
+    </div>
+  </form>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="activeModal.dismiss()">
+      <i class="bi bi-x-lg"></i>
+      Cancel
+    </button>
+    <button type="button" class="btn btn-primary" (click)="saveDpCategoty()" [disabled]="!dpCategoryForm.valid">
+      <i class="bi bi-check-lg"></i>
+      Save Destination
+    </button>
+  </div>
+</div>
+

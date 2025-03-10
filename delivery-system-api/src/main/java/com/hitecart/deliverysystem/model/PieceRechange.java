@@ -24,4 +24,11 @@ public class PieceRechange extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "idreparation")
     private Reparation reparation;
+
+    @PrePersist
+    private void generateReference() {
+        if(this.reference == null || this.reference.isEmpty()){
+            this.reference = "PR-"+System.currentTimeMillis();
+        }
+    }
 }

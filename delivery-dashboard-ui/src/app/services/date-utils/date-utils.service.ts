@@ -68,7 +68,6 @@ export class DateUtilsService {
 
   formatDateTime(dateTimeString: string | undefined):string {
     const dateTimeStringToArray=JSON.stringify(dateTimeString)
-    console.log("========dateTimeStringToArray================"+dateTimeStringToArray);
     const dateArray =JSON.parse(dateTimeStringToArray);
     // Convert to Date
     const convertedDate = new Date(
@@ -101,6 +100,44 @@ export class DateUtilsService {
     formattedDate = formattedDate.replace(',', '');
 return formattedDate;
   }
+  formatDateTimeForWeekPlanning(dateTimeString: string | undefined):string {
+    const dateTimeStringToArray=JSON.stringify(dateTimeString)
+    const dateArray =JSON.parse(dateTimeStringToArray);
+    // Convert to Date
+    const convertedDate = new Date(
+      dateArray[0],              // Year
+      dateArray[1] - 1,          // Month (JavaScript uses 0-based index)
+      dateArray[2],              // Day
+      dateArray[3],              // Hour
+      dateArray[4],              // Minute
+      /*dateArray[5],              // Second
+      Math.floor(dateArray[6] / 1000000) // Milliseconds (from nanoseconds)*/
+    );
+
+
+    const formatter = new Intl.DateTimeFormat('fr-FR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false, // 24-hour format
+    });
+
+// Format the date and time
+    let formattedDate = formatter.format(convertedDate);
+
+// Replace slashes with dashes
+    formattedDate = formattedDate.replace(/\//g, '-');
+
+// Adjust to match your desired format (DD-MM-YYYY HH:MM)
+    formattedDate = formattedDate.replace(',', '');
+return formattedDate;
+  }
+
+
+
+
 
   formatTime(dateTimeString: string | undefined):string {
     const dateTimeStringToArray=JSON.stringify(dateTimeString)
@@ -144,5 +181,21 @@ return formattedDate;
   }
   private padNumber(value: number) : string{
     return value < 10 ? `0${value}` : value.toString();
+  }
+
+
+  convertArrayDateToString(dateString :string|undefined):string{
+    const dateAsString= JSON.stringify(dateString);
+    // Create a Date object
+    const dateArray= JSON.parse(dateAsString);
+    const date = new Date(dateArray[0], dateArray[1] - 1, dateArray[2], dateArray[3], dateArray[4]);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Add 1 because months are 0-based
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
+    //console.log(formattedDate); // "2024-12-14 12:42"
+    return formattedDate;
   }
 }

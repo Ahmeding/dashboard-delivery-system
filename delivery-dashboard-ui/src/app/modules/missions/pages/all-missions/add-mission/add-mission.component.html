@@ -1,0 +1,403 @@
+<div class="mission-form">
+  <header class="form-header">
+    <h1>Create New Mission</h1>
+    <button class="btn btn-primary" (click)="saveMission()">
+      <i class="bi bi-save me-2"></i>Save Mission
+    </button>
+  </header>
+  <form [formGroup]="missionForm" (ngSubmit)="onsubmit()">
+    <div class="form-container">
+      <!-- Main Mission Details -->
+      <div class="card mission-details">
+        <div class="card-body">
+          <h5 class="section-title">
+            <i class="bi bi-info-circle me-2"></i> Date Day : {{ dateDay }} Mission Details
+          </h5>
+
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="form-floating">
+                <select
+                  (change)="onDDestinationChange($event)"
+                  id="inputServ"
+                  formControlName="idDeliveryDestination"
+                  class="form-control"
+                  [class.is-invalid]="isFieldInvalid(missionForm,'idDeliveryDestination')"
+                >
+                  <option [ngValue]="undefined" selected disabled>Select Service</option>
+                  <option *ngFor="let dDestination of allDeliveryDestinations"
+                          [ngValue]="dDestination">
+                    {{ dDestination.serviceDelivery?.destinationCity}}
+                  </option>
+                </select>
+                <label for="inputServ">Select Service <span class="required">*</span></label>
+                <small *ngIf="isFieldInvalid(missionForm,'idDeliveryDestination')" class="required">Select a delivery destination</small>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-floating">
+                <input
+                  [disabled]="true"
+                  formControlName="titre"
+                  class="form-control"
+                  id="inputTitre"
+                  type="text"
+                  placeholder="Mission Title"
+                  [class.is-invalid]="isFieldInvalid(missionForm,'titre')"
+                />
+                <label for="inputTitre">Title<span class="required">*</span></label>
+                <small *ngIf="isFieldInvalid(missionForm,'titre')" class="required">Mission title is required.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Start and End Date-Time + Volume Section -->
+      <div class="card mission-details">
+        <div class="card-body">
+          <h5 class="section-title">
+            <i class="bi bi-info-circle me-2"></i>Mission Details
+          </h5>
+
+          <div class="row g-4">
+            <div class="col-md-4">
+
+              <div class="form-floating">
+                <input
+                  formControlName="dateDebut"
+                  class="form-control"
+                  id="inputStartDate"
+                  placeholder="Start Date"
+                  type="datetime-local"
+                  [min]="minDate"
+                  (change)="validateStartDate()"
+                  [class.is-invalid]="invalidSartDate"
+                />
+                <label for="inputStartDate">Start Date<span class="required">*</span></label>
+                <small *ngIf="invalidSartDate" class="required" >A valid start Date is required.</small>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-floating">
+                <input
+                  formControlName="dateFin"
+                  class="form-control"
+                  id="inputEndDate"
+                  type="datetime-local"
+                  placeholder="End Date"
+                  (change)="validateEndDate()"
+                  [class.is-invalid]="invalidEndDate || (isFieldInvalid(missionForm,'dateFin'))"
+                />
+                <label for="inputEndDate">End Date<span class="required">*</span></label>
+                <small *ngIf="invalidEndDate || (isFieldInvalid(missionForm,'dateFin'))" class="required" >A valid end Date is required.</small>
+                <small *ngIf="difference" class="info">It will takes '{{difference.days}}' days and '{{difference.hours}}' hours.</small>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-floating">
+                <input
+                  formControlName="volume"
+                  class="form-control"
+                  id="inputVolume"
+                  type="number"
+                  placeholder="Volume"
+                  [class.is-invalid]="isFieldInvalid(missionForm,'volume')"
+                />
+                <label for="inputVolume">Volume (m³)<span class="required">*</span></label>
+                <small *ngIf="invalidEndDate || (isFieldInvalid(missionForm,'volume'))" class="required" >A valid volume is required (m3).</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Stages Section -->
+      <div class="card stages-section">
+        <div class="card-body">
+          <h5 class="section-title">
+            <i class="bi bi-geo-alt me-2"></i>Mission Stages
+            <span class="badge bg-primary ms-2">{{etapeDtosArray.length}} stages</span>
+          </h5>
+          <!--<div *ngIf="currentEtapeForm">-->
+            <form [formGroup]="currentEtapeForm">
+              <div class="stage-form">
+                <div class="row g-3">
+
+                  <div class="col-md-4">
+                    <div class="form-floating">
+                      <input
+                        formControlName="lieuDepart"
+                        class="form-control"
+                        id="inputLieuDepart"
+                        type="text"
+                        placeholder="Departure"
+                        [class.is-invalid]="isFieldInvalid(currentEtapeForm,'lieuDepart')"
+                      />
+                      <label for="inputLieuDepart">Departure<span class="required">*</span></label>
+                      <small *ngIf="isFieldInvalid(currentEtapeForm,'lieuDepart')" class="required">Stage Departure is required.</small>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="form-floating">
+                      <select
+                        (change)="onDeliveryPointChange()"
+                        formControlName="lieuArrivee"
+                        class="form-control"
+                        id="inputLieuArrivee"
+                        [class.is-invalid]="isFieldInvalid(currentEtapeForm,'lieuArrivee')">
+                        <option  [ngValue]="undefined" [selected]="true" disabled>Select Delivery Point</option>
+                        <option *ngFor="let dp of allDeliveryPointsByCity" [ngValue]="dp">{{ dp.name }} - {{ dp.addressDto?.ville }}</option>
+                      </select>
+                      <label for="inputLieuArrivee">Destination<span class="required">*</span></label>
+                      <small *ngIf="isFieldInvalid(currentEtapeForm,'lieuArrivee')" class="required">Stage Arrival is required.</small>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="form-floating">
+                      <input
+                        formControlName="scheduledDeliveryTime"
+                        class="form-control"
+                        id="inputDeliveryTime"
+                        type="time"
+                        placeholder="Scheduled D-Time"
+                        [class.is-invalid]="isFieldInvalid(currentEtapeForm,'scheduledDeliveryTime')"
+                      />
+                      <label for="inputDeliveryTime">Scheduled D-Time<span class="required">*</span></label>
+                      <small *ngIf="isFieldInvalid(currentEtapeForm,'scheduledDeliveryTime')" class="required">Stage Departure is required.</small>
+                    </div>
+                  </div>
+
+                  <div class="col-md-1 d-flex align-items-center">
+                    <button class="btn btn-primary w-100"(click)="addEtape()">
+                      <i class="bi bi-plus-lg"></i>
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </form>
+
+          <!-- Stages List -->
+         <!-- <div class="stages-list mt-4">
+            <div class="stage-item" *ngFor="let etape of etapes; let i = index">
+              <div class="stage-content">
+                <div class="stage-route">
+                  <div class="location departure">
+                    <i class="bi bi-geo-alt-fill text-primary"></i>
+                    <span>{{etape.lieuDepart}}</span>
+                  </div>
+                  <div class="route-line">
+                    <i class="bi bi-arrow-right"></i>
+                  </div>
+                  <div class="location destination">
+                    <i class="bi bi-pin-map-fill text-success"></i>
+                    <span>{{etape.lieuArrivee}}</span>
+                  </div>
+                </div>
+
+                <div class="stage-date">
+                  <i class="bi bi-watch me-2"></i>
+                  {{etape.scheduledDeliveryTime}}
+                </div>
+              </div>
+              <button class="btn btn-icon btn-danger" (click)="removeEtape(i)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </div>-->
+          <div class="stages-list mt-4">
+            <div class="stage-item" *ngFor="let etape of etapes; let i = index">
+              <div class="stage-content">
+                <div class="stage-route">
+                  <!-- Departure -->
+                  <div class="location-group departure">
+                    <div class="location">
+                      <i class="bi bi-geo-alt-fill text-primary fs-5"></i>
+                      <span class="location-text">{{etape.lieuDepart}}</span>
+                    </div>
+                    <div class="datetime">
+                      <small class="date">
+                        <i class="bi bi-calendar3 text-info"></i>
+                        {{convertToDate(etape.dateDepart!)}}
+                      </small>
+                      <small class="time">
+                        <i class="bi bi-clock text-warning"></i>
+                        {{convertToTime(etape.dateDepart!) }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <!-- Arrow -->
+                  <div class="route-line">
+                    <i class="bi bi-arrow-right fs-4"></i>
+                  </div>
+
+                  <!-- Arrival -->
+                  <div class="location-group arrival">
+                    <div class="location">
+                      <span class="location-text">{{etape.lieuArrivee}} </span>
+                      <i class="bi bi-pin-map-fill text-success fs-5"></i>
+                    </div>
+                    <div class="datetime">
+                      <small class="date">
+                        {{convertToDate(etape.dateArrivee!)}}
+                        <i class="bi bi-calendar3 text-info"></i>
+                      </small>
+                      <small class="time">
+                        {{etape.scheduledDeliveryTime }}
+                        <i class="bi bi-clock text-warning"></i>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-icon" (click)="removeEtape(i)">
+                <i class="bi bi-x-circle text-danger"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicles and Drivers Section -->
+      <div class="card vehicles-section">
+        <div class="card-body">
+          <h5 class="section-title">
+            <i class="bi bi-truck me-2"></i>Vehicles & Drivers
+          </h5>
+
+          <form [formGroup]="currentMissionVForm" class="vehicle-form">
+            <div class="row g-3">
+              <div class="col-md-5">
+                <div class="form-floating">
+                  <select
+                    [class.is-invalid]="isFieldInvalid(currentMissionVForm,'vehicleDto')||isVehicleNotAvailable"
+                    (change)="setSelectedVehicle()"
+                    id="vehicleSelect"
+                    formControlName="vehicleDto"
+                    class="form-select">
+                    <option [ngValue]="undefined" disabled> Select a vehicle </option>
+                    <option *ngFor="let vehicle of allVehicles" [ngValue]=vehicle>
+                      {{vehicle.immatriculation}} - {{vehicle.marque}} ({{vehicle.volume}}m³)
+                    </option>
+                  </select>
+                  <label for="vehicleSelect">Vehicle<span class="required">*</span></label>
+                  <small *ngIf="isFieldInvalid(currentMissionVForm,'vehicleDto')" class="required">Select a vehicle</small>
+                  <span *ngIf="checkVehicleAvailability" class="spinner-border spinner-border-sm text-danger"></span>
+                  <small *ngIf="checkVehicleAvailability" class="required">Check for availability...</small>
+                  <small *ngIf="assinedVehicleError" class="required">Vehicle already assigned for the selected start date</small>
+                </div>
+              </div>
+
+              <div class="col-md-5">
+                <div class="form-floating">
+                  <ng-select
+                    [items]="allDrivers"
+                    [bindLabel]="'firstname'"
+                    [multiple]="true"
+                    [maxSelectedItems]="2"
+                    [closeOnSelect]="true"
+                    [clearable]="false"
+                    [appendTo]="'body'"
+                    formControlName="chauffeursVehicleDto"
+                    (change)="setSelectedDrivers()"
+                    [class.is-invalid]="isFieldInvalid(currentMissionVForm,'chauffeursVehicleDto') || isDriverNotAvailable"
+                    placeholder="Select drivers"
+                  >
+                    <ng-template ng-option-tmp let-item="item">
+                      <i class="bi bi-person-circle me-2"></i>
+                      {{item.firstname}} {{item.lastname}}
+                    </ng-template>
+                    <!-- Template for selected items (tags) -->
+                    <ng-template ng-label-tmp let-item="item"  let-clear="clear">
+                      <span> <i class="bi bi-person-circle me-2"></i>
+                        {{item.firstname}} {{item.lastname}}
+                      </span>
+                      <span class="ng-value-icon" (click)="clear(item)" aria-hidden="true">×</span>
+                    </ng-template>
+                  </ng-select>
+                  <label><!--Drivers (max 2)<span class="required">*</span>--></label>
+                  <small *ngIf="isFieldInvalid(currentMissionVForm,'chauffeursVehicleDto')" class="required">
+                    Select at least one driver
+                  </small>
+                  <span *ngIf="checkDriverAvailability" class="spinner-border spinner-border-sm text-danger"></span>
+                  <small *ngIf="checkDriverAvailability" class="required">Check for availability...</small>
+                  <small *ngIf="assignedDriverError" class="required">Driver already assigned for the selected start date</small>
+                </div>
+              </div>
+
+              <div class="col-md-2 d-flex align-items-center">
+                <button
+                  type="button"
+                  class="btn btn-primary w-100"
+                  (click)="addMissionVehicle()">
+                  <i class="bi bi-plus-lg me-2"></i>Add
+                </button>
+              </div>
+            </div>
+          </form>
+          <!--<pre>{{ missionVehiclesDtoArray | json }}</pre>-->
+          <!-- Selected Vehicles List -->
+          <div class="vehicles-list mt-4">
+            <div class="vehicle-item" *ngFor="let v of missionVcls; let i = index">
+              <div class="vehicle-plate">
+                <div class="plate-content">
+                  <i class="bi bi-truck"></i>
+                  <span class="plate-number">{{v.vehicleDto?.immatriculation}}</span>
+                </div>
+              </div>
+
+              <div class="vehicle-drivers">
+                <div class="driver" *ngFor="let driver of v.chauffeursVehicleDto">
+                  <div class="driver-avatar">
+                    <i class="bi bi-person-circle"></i>
+                  </div>
+                  <div class="driver-info">
+                    <span class="driver-name">{{driver.chauffeurDto?.firstname}} {{driver.chauffeurDto?.lastname}}</span>
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn btn-icon" (click)="removeVehicle(i)">
+                <i class="bi bi-x-circle text-danger"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="card comments-section">
+        <div class="card-body">
+          <h5 class="section-title">
+            <i class="bi bi-chat-left-text me-2"></i>Additional Comments
+          </h5>
+
+          <div class="form-floating">
+          <textarea
+            formControlName="commentaire"
+            class="form-control"
+            id="inputComment"
+            placeholder="Add your comments here"
+            style="height: 100px"
+          ></textarea>
+            <label for="inputComment">Comments</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+
+  <footer class="form-footer">
+    <button class="btn btn-primary" (click)="saveMission()">
+      <i class="bi bi-save me-2"></i>Save Mission
+    </button>
+  </footer>
+</div>
+

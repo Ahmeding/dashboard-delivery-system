@@ -14,9 +14,11 @@ import java.util.List;
 @Entity
 @SuperBuilder
 @Table(name = "chauffeur")
+@Access(AccessType.FIELD)
 public class Chauffeur extends Utilisateur{
 
 
+    private String reference;
     @Column(name = "driving_license_nbr",nullable = false,unique = true)
     private String drivinglicenseNbr;
     @Enumerated(EnumType.STRING)  // or EnumType.ORDINAL for integer mapping
@@ -30,4 +32,10 @@ public class Chauffeur extends Utilisateur{
     private List<Contrat> contrats;
     @Column(name="is_assigned")
     private boolean isAssigned;
+    @PrePersist
+    private void generateReference() {
+        if(this.reference == null || this.reference.isEmpty()){
+            this.reference = "DRV-"+System.currentTimeMillis();
+        }
+    }
 }

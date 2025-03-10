@@ -12,21 +12,21 @@ import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
 import { ChauffeurDto } from '../models/chauffeur-dto';
-import { delete13 } from '../fn/chauffeur/delete-13';
-import { Delete13$Params } from '../fn/chauffeur/delete-13';
-import { findAll13 } from '../fn/chauffeur/find-all-13';
-import { FindAll13$Params } from '../fn/chauffeur/find-all-13';
+import { delete15 } from '../fn/chauffeur/delete-15';
+import { Delete15$Params } from '../fn/chauffeur/delete-15';
+import { findAll17 } from '../fn/chauffeur/find-all-17';
+import { FindAll17$Params } from '../fn/chauffeur/find-all-17';
 import { findAllDrivers } from '../fn/chauffeur/find-all-drivers';
 import { FindAllDrivers$Params } from '../fn/chauffeur/find-all-drivers';
 import { findAllIsActive } from '../fn/chauffeur/find-all-is-active';
 import { FindAllIsActive$Params } from '../fn/chauffeur/find-all-is-active';
 import { findByEmail2 } from '../fn/chauffeur/find-by-email-2';
 import { FindByEmail2$Params } from '../fn/chauffeur/find-by-email-2';
-import { findById13 } from '../fn/chauffeur/find-by-id-13';
-import { FindById13$Params } from '../fn/chauffeur/find-by-id-13';
+import { findById17 } from '../fn/chauffeur/find-by-id-17';
+import { FindById17$Params } from '../fn/chauffeur/find-by-id-17';
 import { PageResponseChauffeurDto } from '../models/page-response-chauffeur-dto';
-import { save13 } from '../fn/chauffeur/save-13';
-import { Save13$Params } from '../fn/chauffeur/save-13';
+import { save17 } from '../fn/chauffeur/save-17';
+import { Save17$Params } from '../fn/chauffeur/save-17';
 import { updateIsActive3 } from '../fn/chauffeur/update-is-active-3';
 import { UpdateIsActive3$Params } from '../fn/chauffeur/update-is-active-3';
 
@@ -61,60 +61,60 @@ export class ChauffeurService extends BaseService {
     );
   }
 
-  /** Path part for operation `save13()` */
-  static readonly Save13Path = '/chauffeurs/create';
+  /** Path part for operation `save17()` */
+  static readonly Save17Path = '/chauffeurs/create';
 
   /**
    * Ajouter/Modifier un chauffeur, cette methode permet d'enregistrer ou modifier un chauffreur
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save13()` instead.
+   * To access only the response body, use `save17()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save13$Response(params: Save13$Params, context?: HttpContext): Observable<StrictHttpResponse<ChauffeurDto>> {
-    return save13(this.http, this.rootUrl, params, context);
+  save17$Response(params: Save17$Params, context?: HttpContext): Observable<StrictHttpResponse<ChauffeurDto>> {
+    return save17(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier un chauffeur, cette methode permet d'enregistrer ou modifier un chauffreur
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save13$Response()` instead.
+   * To access the full response (for headers, for example), `save17$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save13(params: Save13$Params, context?: HttpContext): Observable<ChauffeurDto> {
-    return this.save13$Response(params, context).pipe(
+  save17(params: Save17$Params, context?: HttpContext): Observable<ChauffeurDto> {
+    return this.save17$Response(params, context).pipe(
       map((r: StrictHttpResponse<ChauffeurDto>): ChauffeurDto => r.body)
     );
   }
 
-  /** Path part for operation `findById13()` */
-  static readonly FindById13Path = '/chauffeurs/chauffeur/by-id/{id}';
+  /** Path part for operation `findById17()` */
+  static readonly FindById17Path = '/chauffeurs/chauffeur/by-id/{id}';
 
   /**
    * Rechercher un Chauffeur par ID! Cette methode permet de chercher un chauffeur par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById13()` instead.
+   * To access only the response body, use `findById17()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById13$Response(params: FindById13$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findById13(this.http, this.rootUrl, params, context);
+  findById17$Response(params: FindById17$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findById17(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher un Chauffeur par ID! Cette methode permet de chercher un chauffeur par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById13$Response()` instead.
+   * To access the full response (for headers, for example), `findById17$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById13(params: FindById13$Params, context?: HttpContext): Observable<any> {
-    return this.findById13$Response(params, context).pipe(
+  findById17(params: FindById17$Params, context?: HttpContext): Observable<any> {
+    return this.findById17$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
@@ -148,31 +148,31 @@ export class ChauffeurService extends BaseService {
     );
   }
 
-  /** Path part for operation `findAll13()` */
-  static readonly FindAll13Path = '/chauffeurs/all';
+  /** Path part for operation `findAll17()` */
+  static readonly FindAll17Path = '/chauffeurs/all';
 
   /**
    * Rechercher tout les Chauffeur! Cette methode permet de retouner tous les chauffeurs
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll13()` instead.
+   * To access only the response body, use `findAll17()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll13$Response(params?: FindAll13$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findAll13(this.http, this.rootUrl, params, context);
+  findAll17$Response(params?: FindAll17$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findAll17(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les Chauffeur! Cette methode permet de retouner tous les chauffeurs
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll13$Response()` instead.
+   * To access the full response (for headers, for example), `findAll17$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll13(params?: FindAll13$Params, context?: HttpContext): Observable<any> {
-    return this.findAll13$Response(params, context).pipe(
+  findAll17(params?: FindAll17$Params, context?: HttpContext): Observable<any> {
+    return this.findAll17$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
@@ -227,31 +227,31 @@ export class ChauffeurService extends BaseService {
     );
   }
 
-  /** Path part for operation `delete13()` */
-  static readonly Delete13Path = '/chauffeurs/delete/{id}';
+  /** Path part for operation `delete15()` */
+  static readonly Delete15Path = '/chauffeurs/delete/{id}';
 
   /**
    * Supprimer un Chauffeur par ID! Cette methode permet de suprimmer un chauffeur par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete13()` instead.
+   * To access only the response body, use `delete15()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete13$Response(params: Delete13$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return delete13(this.http, this.rootUrl, params, context);
+  delete15$Response(params: Delete15$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return delete15(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Supprimer un Chauffeur par ID! Cette methode permet de suprimmer un chauffeur par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete13$Response()` instead.
+   * To access the full response (for headers, for example), `delete15$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete13(params: Delete13$Params, context?: HttpContext): Observable<any> {
-    return this.delete13$Response(params, context).pipe(
+  delete15(params: Delete15$Params, context?: HttpContext): Observable<any> {
+    return this.delete15$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

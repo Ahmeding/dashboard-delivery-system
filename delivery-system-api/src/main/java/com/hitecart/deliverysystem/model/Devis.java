@@ -37,4 +37,10 @@ public class Devis extends AbstractEntity{
     @Enumerated(EnumType.STRING)
     private QuoteStatus etatDevis;
 
+    @PrePersist
+    private void generateCode() {
+        if(this.code == null || this.code.isEmpty()){
+            this.code = "QT-"+System.currentTimeMillis();
+        }
+    }
 }

@@ -16,5 +16,4 @@ public interface IServiceDeliveryService {
     ServiceDeliveryDto updateEnabled(Integer id, boolean isActive);
     List<ServiceDeliveryDto> findAllEnabled(boolean enabled);
     PageResponse<ServiceDeliveryDto> findAllServicesDelivery(int page, int size);
-
 }

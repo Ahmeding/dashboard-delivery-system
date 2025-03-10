@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Table(name = "contrat")
 public class Contrat extends AbstractEntity{
 
-
+    private String reference;
     @Enumerated(EnumType.STRING)
     private TypeContrat typeContrat;
     @Column(name = "datedebut")
@@ -35,6 +35,11 @@ public class Contrat extends AbstractEntity{
     @JoinColumn(name = "idchauffeur")
     private Chauffeur chauffeur;
 
-
+    @PrePersist
+    private void generateReference() {
+        if(this.reference == null || this.reference.isEmpty()){
+            this.reference = "CTR-"+System.currentTimeMillis();
+        }
+    }
 
 }

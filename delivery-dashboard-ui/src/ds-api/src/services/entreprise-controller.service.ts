@@ -14,17 +14,17 @@ import { StrictHttpResponse } from '../strict-http-response';
 import { delete7 } from '../fn/entreprise-controller/delete-7';
 import { Delete7$Params } from '../fn/entreprise-controller/delete-7';
 import { EntrepriseDto } from '../models/entreprise-dto';
-import { findAll7 } from '../fn/entreprise-controller/find-all-7';
-import { FindAll7$Params } from '../fn/entreprise-controller/find-all-7';
+import { findAll8 } from '../fn/entreprise-controller/find-all-8';
+import { FindAll8$Params } from '../fn/entreprise-controller/find-all-8';
 import { findAllEntreprises } from '../fn/entreprise-controller/find-all-entreprises';
 import { FindAllEntreprises$Params } from '../fn/entreprise-controller/find-all-entreprises';
-import { findById7 } from '../fn/entreprise-controller/find-by-id-7';
-import { FindById7$Params } from '../fn/entreprise-controller/find-by-id-7';
+import { findById8 } from '../fn/entreprise-controller/find-by-id-8';
+import { FindById8$Params } from '../fn/entreprise-controller/find-by-id-8';
 import { findByRaisonSocial } from '../fn/entreprise-controller/find-by-raison-social';
 import { FindByRaisonSocial$Params } from '../fn/entreprise-controller/find-by-raison-social';
 import { PageResponseEntrepriseDto } from '../models/page-response-entreprise-dto';
-import { save7 } from '../fn/entreprise-controller/save-7';
-import { Save7$Params } from '../fn/entreprise-controller/save-7';
+import { save8 } from '../fn/entreprise-controller/save-8';
+import { Save8$Params } from '../fn/entreprise-controller/save-8';
 
 @Injectable({ providedIn: 'root' })
 export class EntrepriseControllerService extends BaseService {
@@ -32,31 +32,31 @@ export class EntrepriseControllerService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `save7()` */
-  static readonly Save7Path = '/entreprises/create';
+  /** Path part for operation `save8()` */
+  static readonly Save8Path = '/entreprises/create';
 
   /**
    * Ajouter/Modifier une entreprise, cette methode permet d'enregistrer ou modifier une entreprise
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save7()` instead.
+   * To access only the response body, use `save8()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save7$Response(params: Save7$Params, context?: HttpContext): Observable<StrictHttpResponse<EntrepriseDto>> {
-    return save7(this.http, this.rootUrl, params, context);
+  save8$Response(params: Save8$Params, context?: HttpContext): Observable<StrictHttpResponse<EntrepriseDto>> {
+    return save8(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier une entreprise, cette methode permet d'enregistrer ou modifier une entreprise
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save7$Response()` instead.
+   * To access the full response (for headers, for example), `save8$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save7(params: Save7$Params, context?: HttpContext): Observable<EntrepriseDto> {
-    return this.save7$Response(params, context).pipe(
+  save8(params: Save8$Params, context?: HttpContext): Observable<EntrepriseDto> {
+    return this.save8$Response(params, context).pipe(
       map((r: StrictHttpResponse<EntrepriseDto>): EntrepriseDto => r.body)
     );
   }
@@ -90,60 +90,60 @@ export class EntrepriseControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `findById7()` */
-  static readonly FindById7Path = '/entreprises/entreprise/by-id/{id}';
+  /** Path part for operation `findById8()` */
+  static readonly FindById8Path = '/entreprises/entreprise/by-id/{id}';
 
   /**
    * Rechercher une Entreprise par ID! Cette methode permet de chercher une entreprise par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById7()` instead.
+   * To access only the response body, use `findById8()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById7$Response(params: FindById7$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findById7(this.http, this.rootUrl, params, context);
+  findById8$Response(params: FindById8$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findById8(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher une Entreprise par ID! Cette methode permet de chercher une entreprise par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById7$Response()` instead.
+   * To access the full response (for headers, for example), `findById8$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById7(params: FindById7$Params, context?: HttpContext): Observable<any> {
-    return this.findById7$Response(params, context).pipe(
+  findById8(params: FindById8$Params, context?: HttpContext): Observable<any> {
+    return this.findById8$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
 
-  /** Path part for operation `findAll7()` */
-  static readonly FindAll7Path = '/entreprises/all';
+  /** Path part for operation `findAll8()` */
+  static readonly FindAll8Path = '/entreprises/all';
 
   /**
    * Rechercher tout les Entreprise! Cette methode permet de retouner tous les entreprises
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll7()` instead.
+   * To access only the response body, use `findAll8()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll7$Response(params?: FindAll7$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findAll7(this.http, this.rootUrl, params, context);
+  findAll8$Response(params?: FindAll8$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findAll8(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les Entreprise! Cette methode permet de retouner tous les entreprises
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll7$Response()` instead.
+   * To access the full response (for headers, for example), `findAll8$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll7(params?: FindAll7$Params, context?: HttpContext): Observable<any> {
-    return this.findAll7$Response(params, context).pipe(
+  findAll8(params?: FindAll8$Params, context?: HttpContext): Observable<any> {
+    return this.findAll8$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

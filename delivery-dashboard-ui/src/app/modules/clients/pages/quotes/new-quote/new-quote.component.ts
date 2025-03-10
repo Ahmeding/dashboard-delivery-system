@@ -31,17 +31,15 @@ export class NewQuoteComponent implements OnInit{
         quantite: 2,
         prixUnitaire: 200,
         tva: 20,
-        serviceDeliveryDto: {
-          id: 2
-        }
+        serviceDeliveryDtoId:  2
+
       },
       {
         quantite: 4,
         prixUnitaire: 700,
         tva: 20,
-        serviceDeliveryDto: {
-          id: 3
-        }
+        serviceDeliveryDtoId : 3
+
       }
     ],
     etatCommande: "IN_PROGRESS"
@@ -149,7 +147,7 @@ export class NewQuoteComponent implements OnInit{
   }
 
   private getAllClients() {
-    this.clientService.findAll12().subscribe({
+    this.clientService.findAll16().subscribe({
       next:(clientsResponse)=>{
         this.allClients=clientsResponse;
       }
@@ -163,7 +161,7 @@ export class NewQuoteComponent implements OnInit{
     this.newQuote.ligneCommandeClientsDtos=this.orderlines;
     this.newQuote.etatCommande= "IN_PROGRESS"
     console.log(this.newQuote);
-    this.cmdClientService.save11({body:this.newQuote}).subscribe({
+    this.cmdClientService.save15({body:this.newQuote}).subscribe({
       next:(resp)=>{
         this.getAllQuotes();
         this.resetForm(form);
@@ -183,7 +181,7 @@ export class NewQuoteComponent implements OnInit{
   }
 
   private getAllServDelivery() {
-    this.servDeliveryService.findAll2().subscribe({
+    this.servDeliveryService.findAll3().subscribe({
       next:(allSDResponse)=>{
         this.allServiceDeliveries=allSDResponse;
       },
@@ -195,7 +193,7 @@ export class NewQuoteComponent implements OnInit{
 
   onServiceDeliveryChange() {
     console.log(this.selectedServiceDelivery);
-    this.orderLine.prixUnitaire=this.selectedServiceDelivery?.unitPriceHT;
+    //this.orderLine.prixUnitaire=this.selectedServiceDelivery?.unitPriceHT;
 
   }
 
@@ -207,19 +205,19 @@ export class NewQuoteComponent implements OnInit{
       this.alertService.alertWaring("Please select a service before adding")
       return;
     }
-    const exists= this.orderlines.some(orderL=>orderL.serviceDeliveryDto?.id===this.selectedServiceDelivery?.id)
+    const exists= this.orderlines.some(orderL=>orderL.serviceDeliveryDtoId===this.selectedServiceDelivery?.id)
     if(exists){
       this.alertService.alertWaring("This service has already been added.")
       return;
     }
     const newOrdeLine :LigneCommandeClientDto = {
-      serviceDeliveryDto : this.selectedServiceDelivery,
+      serviceDeliveryDtoId : this.selectedServiceDelivery.id,
       quantite: 2 as number,
-      prixUnitaire: this.selectedServiceDelivery.unitPriceHT,
-      tva: this.selectedServiceDelivery.tva,
+      prixUnitaire: this.selectedServiceDelivery.basicTripCost,
+      tva: 20,
     }
 
-    this.orderLine.serviceDeliveryDto=this.selectedServiceDelivery;
+    this.orderLine.serviceDeliveryDtoId=this.selectedServiceDelivery.id;
     this.orderlines.push(newOrdeLine);
     this.selectedServiceDelivery = undefined;
   }
@@ -245,7 +243,7 @@ export class NewQuoteComponent implements OnInit{
   }
 
   editQuote(id: number | undefined) {
-    this.cmdClientService.findById11({id:id as number}).subscribe({
+    this.cmdClientService.findById15({id:id as number}).subscribe({
       next:(order)=>{
         this.selectedToEditQuote = order;
         this.orderlines = this.selectedToEditQuote.ligneCommandeClientsDtos as Array<CommandeClientDto>;

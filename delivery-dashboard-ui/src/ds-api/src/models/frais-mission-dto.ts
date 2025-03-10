@@ -15,5 +15,6 @@ export interface FraisMissionDto {
   lignesFraisMissionDto?: Array<LigneFraisMissionDto>;
   missionDto?: MissionDto;
   nom?: string;
+  reference?: string;
   updatedAt?: string;
 }

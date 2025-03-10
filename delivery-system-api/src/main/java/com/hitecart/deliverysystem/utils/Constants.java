@@ -21,6 +21,7 @@ public interface Constants {
     String FIND_SERVICE_DELIVERY_BY_ID_ENDPOINT= "/service-d/by-id/{id}";
     String FIND_ALL_SERVICE_DELIVERY_ENDPOINT= "/all";
     String FIND_ALL_BY_ENABLED_SERVICE_DELIVERY_ENDPOINT= "/sd/all/{isenabled}";
+    String COUNT_ALL_NEW_DELIVERY_SERVICE_ENDPOINT= "/sd/count/new";
     String UPDATE_SERVICE_DELIVERY_ENABLED_ENDPOINT= "/sd/is-enabled/{id}/{isenabled}";
     String FIND_ALL_SERVICE_DELIVERY_PAGEABLE_ENDPOINT= "/";
     /////////////////////////////////////////////////////////////////////
@@ -43,6 +44,25 @@ public interface Constants {
     String FIND_ALL_DELIVERY_POINT_PAGEABLE_ENDPOINT= "/";
     String DELETE_DELIVERY_POINT_ENDPOINT= "/delete/{id}";
     String UPDATE_ISACTIVE_DELIVERY_POINT_ENDPOINT= "/is-active/{id}/{isactive}";
+    /////////////////////////////////////////////////////////////////////
+
+    String DELIVERY_POINT_CATEGORY_ENDPOINT= "/dp-categories";
+    String CREATE_DELIVERY_POINT_CATEGORY_ENDPOINT= "/create";
+    String FIND_DELIVERY_POINT_CATEGORY_BY_ID_ENDPOINT= "/dp-category/by-id/{id}";
+    String FIND_DELIVERY_POINT_CATEGORY_BY_NAME_ENDPOINT= "/dp-category/by-name/{name}";
+    String FIND_ALL_DELIVERY_POINT_CATEGORY_ENDPOINT= "/all";
+    String FIND_ALL_DELIVERY_POINT_CATEGORY_PAGEABLE_ENDPOINT= "/";
+    String DELETE_DELIVERY_POINT_CATEGORY_ENDPOINT= "/delete/{id}";
+    /////////////////////////////////////////////////////////////////////
+
+    String DELIVERY_DESTINATION_ENDPOINT= "/delivery-destinations";
+    String CREATE_DELIVERY_DESTINATION_ENDPOINT= "/create";
+    String FIND_DELIVERY_DESTINATION_BY_ID_ENDPOINT= "/ddestination/by-id/{id}";
+    String FIND_DELIVERY_DESTINATION_BY_CLIENT_ID_ENDPOINT= "/ddestination/by-client/{clientId}";
+    String FIND_DELIVERY_DESTINATION_BY_DELIVERYSERVICE_ID_ENDPOINT= "/ddestination/by-delivery-serv/{deliveryServId}";
+    String FIND_ALL_DELIVERY_DESTINATION_ENDPOINT= "/all";
+    String FIND_ALL_DELIVERY_DESTINATION_PAGEABLE_ENDPOINT= "/";
+    String DELETE_DELIVERY_DESTINATION_ENDPOINT= "/delete/{id}";
 
 /////////////////////////////////////////////////////////////////////////
     String COMMANDE_CLI_ENDPOINT= "/cmdclients";
@@ -70,6 +90,19 @@ public interface Constants {
     String FIND_ALL_CONTRAT_ENDPOINT= "/all";
     String DELETE_CONTRAT_ENDPOINT= "/delete/{id}";
 /////////////////////////////////////////////////////////////////////////
+    String DAY_PLAN_ENDPOINT= "/dayplans";
+    String CREATE_DAY_PLAN_ENDPOINT= "/create";
+    String FIND_DAY_PLAN_BY_ID_ENDPOINT= "/by-id/{id}";
+    String FIND_ALL_DAY_PLAN_BY_WEEKLY_PLANNING_ID_ENDPOINT= "/by-weekly-p/{weekly_pId}";
+    String FIND_ALL_DAY_PLAN_ENDPOINT= "/all";
+    String DELETE_DAY_PLAN_ENDPOINT= "/delete/{id}";
+/////////////////////////////////////////////////////////////////////////
+    String WEEKLY_PLANNING_ENDPOINT= "/weekly-plannings";
+    String CREATE_WEEKLY_PLANNING_ENDPOINT= "/create";
+    String FIND_WEEKLY_PLANNING_BY_ID_ENDPOINT= "/weekly-planning/{id}";
+    String FIND_ALL_WEEKLY_PLANNING_ENDPOINT= "/all";
+    String DELETE_WEEKLY_PLANNING_ENDPOINT= "/delete/{id}";
+/////////////////////////////////////////////////////////////////////////
     String DEVIS_ENDPOINT= "/devis";
     String CREATE_DEVIS_ENDPOINT= "/create";
     String FIND_DEVIS_BY_ID_ENDPOINT= "/devis/by-id/{id}";
@@ -92,6 +125,8 @@ String MISSION_ENDPOINT= "/missions";
     String FIND_MISSION_BY_DATE_ENDPOINT= "/date/{dateMission}";
     String FIND_ALL_MISSION_ENDPOINT= "/all";
     String DELETE_MISSION_ENDPOINT= "/delete/{id}";
+    String CHECK_OVERLAPPING_DRIVERS_ENDPOINT= "/drivers-check";
+    String CHECK_OVERLAPPING_VEHICLES_ENDPOINT= "/vehicles-check";
 /////////////////////////////////////////////////////////////////////////
 String PIECE_RECHANGE_ENDPOINT= "/piecerenchanges";
     String CREATE_PIECE_RECHANGE_ENDPOINT= "/create";

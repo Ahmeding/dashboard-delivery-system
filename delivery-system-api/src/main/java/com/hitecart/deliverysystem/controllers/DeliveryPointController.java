@@ -4,6 +4,7 @@ import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.DeliveryPointApi;
 import com.hitecart.deliverysystem.dto.DeliveryPointDto;
 import com.hitecart.deliverysystem.services.IDeliveryPointService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@Tag( name = "Delivery Point")
 @RequiredArgsConstructor
 public class DeliveryPointController implements DeliveryPointApi {
 
@@ -18,7 +20,9 @@ public class DeliveryPointController implements DeliveryPointApi {
 
     @Override
     public ResponseEntity<DeliveryPointDto> save(DeliveryPointDto dto) {
-        return ResponseEntity.ok(deliveryPointService.save(dto));
+        return ResponseEntity.ok(
+                deliveryPointService.save(dto)
+                );
     }
 
     @Override
@@ -27,8 +31,8 @@ public class DeliveryPointController implements DeliveryPointApi {
     }
 
     @Override
-    public ResponseEntity<DeliveryPointDto> findByCity(String city) {
-        return ResponseEntity.ok(deliveryPointService.findByCity(city));
+    public ResponseEntity<List<DeliveryPointDto>> findAllByCity(String city) {
+        return ResponseEntity.ok(deliveryPointService.findAllByCity(city));
     }
 
     @Override

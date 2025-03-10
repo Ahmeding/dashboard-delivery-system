@@ -1,3 +1,4 @@
+
 /* You can add global styles to this file, and also import other style files */
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons.css";
@@ -7,6 +8,8 @@
 
 @import "ngx-toastr/toastr";
 @import "~node_modules/@costlydeveloper/ngx-awesome-popup/styles/theme.css";
+
+@import "@ng-select/ng-select/themes/default.theme.css";
 
 
 /*@import '@fullcalendar/core/main.css';
@@ -75,6 +78,7 @@
   --fc-event-bg-color: var(--primary-color);
   --fc-event-border-color: var(--primary-color);
   --fc-non-business-color: rgba(255, 255, 255, 0.05);
+
 }
 
 body {
@@ -131,7 +135,7 @@ body {
 
 /* Form Styles */
 // Remove rounded corners
-input, textarea, select, button {
+input, textarea, select,ng-select, button {
   border-radius: 0 !important;
 }
 
@@ -141,26 +145,43 @@ input, textarea, select, button {
   margin-bottom: 1.5rem;
 
   // Customize input styling
-  input, textarea, select {
+  input, textarea, select,ng-select {
     width: 100%;
     padding: 1rem 0.75rem 0.5rem;  // Adjust padding for better label positioning
     border: 1px solid #ced4da;
     border-radius: 0;
-    background-color: #fff;
+    //background-color: #fff;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     font-size: 1rem;
     outline: none;  // Remove default outline
     box-shadow: none;  // Remove Bootstrap focus shadow
     transition: border-color 0.2s ease;
 
     &:focus {
-      border-color: var(--primary-color);  // Customize focus border color
+      //border-color: var(--primary-color);
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);// Customize focus border color
+    }
+
+    &.is-invalid {
+      border-color: var(--danger-color);
+
+      &:focus {
+        box-shadow: 0 0 0 2px rgba(var(--danger-rgb), 0.1);
+      }
     }
   }
 
   // Remove default focus styles from Bootstrap components
-  input:focus, textarea:focus, select:focus {
+  input:focus, textarea:focus, select:focus,ng-select {
+   /* outline: none;
+    box-shadow: none;*/
+
     outline: none;
-    box-shadow: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
   }
 
   // Label styling and animation for floating effect
@@ -180,11 +201,13 @@ input, textarea, select, button {
   textarea:focus ~ label,
   textarea:not(:placeholder-shown) ~ label,
   select:focus ~ label,
+  ng-select:focus ~ label,
+
   select:not([value=""]) ~ label {
     top: -0.5rem;  // Position label slightly above the input field
     font-size: 0.85rem;
     color: var(--primary-color);
-    background-color: #fff;  // Add background to prevent overlap with input border
+    background-color: var(--bg-color);  // Add background to prevent overlap with input border
     padding: 0 0.25rem;  // Small padding for floating label background
   }
 }
@@ -213,5 +236,101 @@ button, .btn {
   &:focus, &:active {
     outline: none !important;
     box-shadow: none !important;
+  }
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Custom ng-select theme */
+.ng-select {
+  &.ng-select-focused:not(.ng-select-opened) > .ng-select-container {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(var(--primary-rgb), 0.25);
+  }
+
+  .ng-select-container {
+    background-color: var(--bg-color);
+    border-color: var(--border-color);
+    color: var(--text-color);
+    min-height: calc(3.5rem + 2px);
+
+    .ng-value-container {
+      padding-top: 0.75rem;
+      padding-left: 0.75rem;
+
+      .ng-placeholder {
+        color: var(--text-muted);
+      }
+
+      .ng-value {
+        background-color: rgba(var(--primary-rgb), 0.1);
+        color: var(--primary-color);
+        border-radius: 100px;
+        padding: 0.25rem 0.75rem;
+        margin: 0.25rem;
+
+        .ng-value-icon {
+          color: var(--danger-color);
+          padding-right: 0.5rem;
+
+          &:hover {
+            background: none;
+          }
+        }
+      }
+    }
+  }
+
+  .ng-dropdown-panel {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+    .ng-dropdown-panel-items {
+      .ng-option {
+        background: var(--card-bg);
+        color: var(--text-color);
+        padding: 0.75rem 1rem;
+
+        &:hover {
+          background: var(--bg-color);
+        }
+
+        &.ng-option-selected {
+          background: rgba(var(--primary-rgb), 0.1);
+          color: var(--primary-color);
+        }
+      }
+    }
+  }
+
+  &.ng-invalid.ng-touched .ng-select-container {
+    border-color: var(--danger-color);
+    box-shadow: 0 0 0 0.2rem rgba(var(--danger-rgb), 0.25);
+  }
+}
+
+/* Dark theme adjustments */
+.dark-theme {
+  .ng-select .ng-select-container {
+    background-color: var(--bg-color);
+    border-color: var(--border-color);
+
+    .ng-value-container .ng-value {
+      background-color: rgba(var(--primary-rgb), 0.2);
+      color: var(--text-color);
+    }
+  }
+
+  .ng-dropdown-panel {
+    background: var(--card-bg);
+    border-color: var(--border-color);
+
+    .ng-dropdown-panel-items .ng-option {
+      &:hover {
+        background: var(--bg-color);
+      }
+    }
   }
 }

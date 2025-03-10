@@ -13,9 +13,14 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <input (click)="inputFillDataOnClick()" type="text" class="form-control" id="firstname"
-                     formControlName="firstname" placeholder=""
-                     [class.is-invalid]="isFieldInvalid('firstname')">
+              <input
+                (click)="inputFillDataOnClick()"
+                type="text"
+                class="form-control"
+                id="firstname"
+                formControlName="firstname"
+                placeholder=""
+                [class.is-invalid]="isFieldInvalid('firstname')">
               <label for="firstname">First Name</label>
               <div class="invalid-feedback" *ngIf="isFieldInvalid('firstname')">
                 First name is required

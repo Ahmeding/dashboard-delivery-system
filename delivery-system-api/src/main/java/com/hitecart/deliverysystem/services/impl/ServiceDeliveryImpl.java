@@ -4,6 +4,7 @@ import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.*;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
+import com.hitecart.deliverysystem.exception.InvalidOperationException;
 import com.hitecart.deliverysystem.model.Chauffeur;
 import com.hitecart.deliverysystem.model.Mission;
 import com.hitecart.deliverysystem.model.ServiceDelivery;
@@ -33,11 +34,22 @@ public class ServiceDeliveryImpl implements IServiceDeliveryService {
     public ServiceDeliveryDto save(ServiceDeliveryDto dto) {
         /* TODO TEST and VALIDATE DTO*/
         ServiceDelivery serviceDeliveryToSave = ServiceDeliveryDto.toEntity(dto);
+       ServiceDelivery checkIsDSExists= serviceDeliveryRepository
+                .findServiceDeliveryByDestinationCityAndAndDestinationCountry(
+                        dto.getDestinationCity(),dto.getDestinationCountry());
+       if(checkIsDSExists!=null){
+           throw new InvalidOperationException("Delivery service vers la ville "+dto.getDestinationCity()
+                   +" et le pays " +dto.getDestinationCountry() +" est deja enregistré",ErrorCodes.SERVICE_DELIVERY_NOT_VALID_OPERATION);
+       }
+        serviceDeliveryToSave.setTitle(dto.getDestinationCity());
         return ServiceDeliveryDto.fromEntity(serviceDeliveryRepository.save(serviceDeliveryToSave));
     }
 
     @Override
     public ServiceDeliveryDto findById(Integer id) {
+        CheckParmasUtil.checkID(id,"Le parametre ID  est null",
+                "Impossible de trouver un Delivery Service avec un ID null",ErrorCodes.SERVICE_DELIVERY_NOT_FOUND);
+
         ServiceDelivery serviceDeliveryToFind = serviceDeliveryRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Service Delivery with ID " + id + " not found",
                         ErrorCodes.SERVICE_DELIVERY_NOT_FOUND));
@@ -95,6 +107,8 @@ public class ServiceDeliveryImpl implements IServiceDeliveryService {
         );
 
     }
+
+
 
 
     private UtilisateurDto getCreatedBy(Integer userid) {

@@ -112,7 +112,10 @@ public class ClientDto {
                         .map(DevisDto::toEntity)
                         .collect(Collectors.toList()):null
                 );
-
+        client.setDeliveryPoints(dto.getDeliveryPointDtos()!=null?
+                dto.getDeliveryPointDtos().stream()
+                        .map(DeliveryPointDto::toEntity)
+                        .collect(Collectors.toList()):null);
         client.setCreatedAt(dto.getCreatedAt());
         client.setUpdatedAt(dto.getUpdatedAt());
         client.setCreatedBy(dto.getCreatedBy());

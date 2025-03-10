@@ -20,6 +20,7 @@ import java.util.List;
 @Table(name = "vehicule")
 public class Vehicule extends AbstractEntity{
 
+    private String reference;
     @Column(name = "logo")
     private String logo;
     @Column(name = "type")
@@ -50,4 +51,11 @@ public class Vehicule extends AbstractEntity{
     private List<Reparation> reparations;
     @Column(name="is_assigned")
     private boolean isAssigned;
+
+    @PrePersist
+    private void generateReference() {
+        if(this.reference == null || this.reference.isEmpty()){
+            this.reference = "DP-"+System.currentTimeMillis();
+        }
+    }
 }

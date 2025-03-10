@@ -19,6 +19,7 @@ import java.util.List;
 @Table(name = "mission")
 public class Mission extends AbstractEntity {
 
+    private String reference;
     @Column(name = "titre")
     private String titre;
     @Column(name = "commentaire")
@@ -45,10 +46,20 @@ public class Mission extends AbstractEntity {
 
     @Column(name = "kmfin")
     private double kmFin;
-
+    @ManyToOne
+    @JoinColumn(name = "id_day_paly")
+    private DayPlan dayPlan;
     @OneToOne
     @JoinColumn(name = "idfraismission", referencedColumnName = "id")
     private FraisMission fraisMission;
+    @ManyToOne
+    @JoinColumn(name = "id_delivery_destination")
+    private DeliveryDestination deliveryDestination;
 
-
+    @PrePersist
+    private void generateReference() {
+        if(this.reference == null || this.reference.isEmpty()){
+            this.reference = "DP-"+System.currentTimeMillis();
+        }
+    }
 }

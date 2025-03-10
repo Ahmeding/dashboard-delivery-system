@@ -15,7 +15,7 @@
             <div class="col-md-4">
               <div class="form-floating mb-3 mb-md-0">
                 <input  [(ngModel)]="newQuote.code"
-                        [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['code']?.invalid}"
+                        [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['code'].invalid}"
                         name="code"  class="form-control" id="inputCode" type="text" placeholder="Code"  required/>
                 <label for="inputCode">Code</label>
                 <small *ngIf="isFormAddNewSubmitted && form.controls['code']?.invalid" class="text-danger">Code is required</small>
@@ -37,7 +37,7 @@
             <div class="col-md-4">
               <div class="form-floating mb-3 mb-md-0">
                 <input  [(ngModel)]="newQuote.dateCommnde"
-                        [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['orderdate']?.invalid}"
+                        [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['orderdate'].invalid}"
                         name="orderdate" class="form-control" id="inputQuoteDate" type="datetime-local" placeholder="Date"  required/>
                 <label for="inputQuoteDate">Date</label>
                 <small *ngIf="isFormAddNewSubmitted && form.controls['orderdate']?.invalid" class="text-danger">Date is required</small>
@@ -82,8 +82,8 @@
               <th>Action</th>
 
               <tr *ngFor="let orderL of orderlines; let i = index">
-                <td>{{ orderL.serviceDeliveryDto?.reference }}</td>
-                <td>{{ orderL.serviceDeliveryDto?.title }} &nbsp; {{ orderL.serviceDeliveryDto?.description }}</td>
+                <td>{{ orderL.serviceDeliveryDtoId }}</td>
+                <td>servile delivery</td>
                 <td><select (change)="onQteChange($event,i)"
                             id="selectQte" class="form-select qte-select" name="qte">
                   <option [ngValue]="1">1</option>
@@ -93,8 +93,8 @@
                   <option [ngValue]="5">5</option>
                   <option [ngValue]="6">6</option>
                 </select></td>
-                <td>{{ orderL.serviceDeliveryDto?.unitPriceHT }}€</td>
-                <td>{{ orderL.serviceDeliveryDto?.tva}}%</td>
+                <td>price service delivery €</td>
+                <td>20%</td>
                 <td><i class="bi bi-trash text-danger" (click)="deleteServDelivery(i)"></i></td>
               </tr>
 
