@@ -1,4 +1,4 @@
-name: DS-Frontend-Pipeline
+name: DS Frontend Pipeline
 
 on:
   push:
