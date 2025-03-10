@@ -23,7 +23,7 @@ jobs:
         id: extract_version
         run: |
           cd delivery-dashboard-ui
-          apt install jq
+          apt-get install jq
           echo "VERSION = $(jq -r '.verion' package.json)" >> $GITHUB_OUTPUT
       - name: Login To Dockerhub
         uses: docker/login-action@v3
