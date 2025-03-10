@@ -9,8 +9,7 @@ on:
       - docker/backend/**
       - 'docker-compose.yml'
       - .github/workflows/*-backend.yml
-      -
- # what must do (jobs)
+
   jobs:
     compile: # action
       runs-on: self-hosted #where , which machine)
