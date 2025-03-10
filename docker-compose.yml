@@ -28,7 +28,7 @@ services:
     container_name: ds-ui
     image: ds/ds-ui:1.0.0
     ports:
-      - 8080:80
+      - 8088:80
     networks:
       - delivery-system
     depends_on:

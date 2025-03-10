@@ -4,7 +4,6 @@ import {AllMissionsComponent} from "./pages/all-missions/all-missions.component"
 import {PlanningComponent} from "./pages/planning/planning.component";
 import {ExpensesComponent} from "./pages/expenses/expenses.component";
 import {NewExpenseComponent} from "./pages/expenses/new-expense/new-expense.component";
-import {NewMissionComponent} from "./pages/all-missions/new-mission/new-mission.component";
 import {MissionDetailsComponent} from "./pages/all-missions/mission-details/mission-details.component";
 import {AddMissionComponent} from "./pages/all-missions/add-mission/add-mission.component";
 import {WeeklyPlanningComponent} from "./pages/planning/weekly-planning/weekly-planning.component";
@@ -12,10 +11,6 @@ import {authGuard} from "../../services/guard/auth.guard";
 
 const routes: Routes = [
   { path: 'all', component: AllMissionsComponent,
-        canActivate:[authGuard] },
-  { path: 'new-mission', component: NewMissionComponent,
-        canActivate:[authGuard] },
-  { path: 'new-mission/:dateDay', component: NewMissionComponent,
         canActivate:[authGuard] },
   { path: 'add-mission/:dateDay', component: AddMissionComponent,
         canActivate:[authGuard] },

@@ -6,12 +6,12 @@ COPY package*.json ./
 
 RUN npm install
 # Install CSS optimizer
-RUN npm install -g clean-css-cli
+#RUN npm install -g clean-css-cli
 
 
 COPY . .
 # Minify SCSS output
-RUN find src/app -name "*.component.scss" -exec cleancss -O2 -o {} {} \;
+#RUN find src/app -name "*.component.scss" -exec cleancss -O2 -o {} {} \;
 
 
 RUN npm run build --prod

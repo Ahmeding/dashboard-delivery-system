@@ -1,0 +1,27 @@
+// postcss.config.js
+const purgecss = require('@fullhuman/postcss-purgecss');
+
+module.exports = {
+  plugins: [
+    require('autoprefixer'), // Keep Angular's default autoprefixer
+    purgecss({
+      content: [
+        // Scan all HTML/TypeScript files in your project
+        './src/**/*.html',
+        './src/**/*.ts',
+      ],
+      defaultExtractor: (content) => {
+        // Extract classes from Angular component styles
+        return content.match(/[\w-/:]+(?<!:)/g) || [];
+      },
+      safelist: [
+        // Add dynamic classes (e.g., Angular animation classes, ng- prefixes)
+        /^ng-/,
+        /-(enter|leave|active)$/,
+        /^(?!cursor-move).+-active$/,
+        /^cdk-/,
+        /mat-/,
+      ],
+    }),
+  ],
+};
