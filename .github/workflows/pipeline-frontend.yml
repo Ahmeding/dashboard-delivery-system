@@ -40,7 +40,6 @@ jobs:
           platforms: linux/amd64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/ds-ui:${{steps.extract_version.outputs.VERSION}},${{ secrets.DOCKERHUB_USERNAME }}/ds-ui:latest
 
-
   deploy:
     name: Deploy Frontend
     runs-on: self-hosted
