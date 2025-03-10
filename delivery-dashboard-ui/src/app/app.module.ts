@@ -22,6 +22,7 @@ import {
 import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {NgSelectModule} from '@ng-select/ng-select';
+import {ApiModule} from "../ds-api/src/api.module";
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import {NgSelectModule} from '@ng-select/ng-select';
       timeOut:8000
     }),
     BrowserAnimationsModule,
-    NgSelectModule
+    NgSelectModule,
+    ApiModule.forRoot({rootUrl:'http://ip-address-vps:8880/api/v1'})
   ],
   providers: [
     ThemeService,
