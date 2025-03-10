@@ -41,22 +41,22 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/ds-ui:${{steps.extract_version.outputs.VERSION}},${{ secrets.DOCKERHUB_USERNAME }}/ds-ui:latest
 
 
-    deploy:
-      name: Deploy Frontend
-      runs-on: self-hosted
-      needs: [ build-image ]
-      steps:
-        - name: Create Deployment Folder
-          run: ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ci-cd"
-        - name: Copy Docker-compose file
-          run: scp docker-compose.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:ci-cd/docker-compose.yml
+  deploy:
+    name: Deploy Frontend
+    runs-on: self-hosted
+    needs: [ build-image ]
+    steps:
+      - name: Create Deployment Folder
+        run: ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ci-cd"
+      - name: Copy Docker-compose file
+        run: scp docker-compose.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:ci-cd/docker-compose.yml
 
-        - name: Set ENV variable and deploy
-          run: |
-            ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}<<EOF
-            cd ci-cd
-            docker-compose -f docker-compose.yml pull -q
-            docker-compose -f docker-compose.yml up -d
-            EOF
+      - name: Set ENV variable and deploy
+        run: |
+          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}<<EOF
+          cd ci-cd
+          docker-compose -f docker-compose.yml pull -q
+          docker-compose -f docker-compose.yml up -d
+          EOF
 
 
