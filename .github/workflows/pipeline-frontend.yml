@@ -23,11 +23,40 @@ jobs:
         id: extract_version
         run: |
           cd delivery-dashboard-ui
-          # apt install jq
+          apt install jq
           echo "VERSION = $(jq -r '.verion' package.json)" >> $GITHUB_OUTPUT
       - name: Login To Dockerhub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          password: ${{ secrets.DOKERHUB_TOKEN }}
+
+      - name: Build & Push to DockerHub
+        uses: docker/build-push-action@v5
+        with:
+          context: delivery-dashboard-ui
+          file: docker/frontend/Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ds-ui:${{steps.extract_version.outputs.VERSION}},${{ secrets.DOCKERHUB_USERNAME }}/ds-ui:latest
+
+
+    deploy:
+      name: Deploy Frontend
+      runs-on: self-hosted
+      needs: [ build-image ]
+      steps:
+        - name: Create Deployment Folder
+          run: ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ci-cd"
+        - name: Copy Docker-compose file
+          run: scp docker-compose.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:ci-cd/docker-compose.yml
+
+        - name: Set ENV variable and deploy
+          run: |
+            ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}<<EOF
+            cd ci-cd
+            docker-compose -f docker-compose.yml pull -q
+            docker-compose -f docker-compose.yml up -d
+            EOF
+
 
