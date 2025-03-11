@@ -80,6 +80,9 @@ jobs:
           java-version: 17
           distribution: 'corretto'
 
+      - name: Grant execute permission to mvnw
+        run: chmod +x delivery-system-api/mvnw
+
       - name: Build Project(build)
         run: |
           cd delivery-system-api
