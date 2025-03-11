@@ -105,16 +105,17 @@ jobs:
           java-version: 17
           distribution: 'corretto'
 
-      - name: Extract Project Version1
-        run: | 
-          cd delivery-system-api
-          echo "VERSION=$(./mvnw -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec)"
+      - name: Grant execute permission to mvnw
+        run: chmod +x delivery-system-api/mvnw
 
       - name: Extract Project Version
         id: extract_version
         run: | 
           cd delivery-system-api
-          echo "VERSION=$(./mvnw -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT
+          echo "VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
+      # echo "VERSION=$(./mvnw -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT
+      #    VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
+      #    echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Login To Dockerhub
         uses: docker/login-action@v3
