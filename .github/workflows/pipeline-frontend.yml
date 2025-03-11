@@ -50,6 +50,12 @@ jobs:
     runs-on: self-hosted
     needs: [ build-image ]
     steps:
+      - name: Add VPS to Know Hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan ${{ secrets.VPS_IP }} >> ~/.ssh/know_hosts
+          chmod 600 ~/.ssh/known_hosts
+
       - name: Create Deployment Folder
         run: ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ci-cd"
       - name: Copy Docker-compose file
@@ -57,7 +63,7 @@ jobs:
 
       - name: Set ENV variable and deploy
         run: |
-          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}<<EOF
+          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} <<EOF
           cd ci-cd
           docker-compose -f docker-compose.yml pull -q
           docker-compose -f docker-compose.yml up -d
