@@ -16,7 +16,7 @@ services:
     restart: unless-stopped
   ds-api:
     container_name: ds-api
-    image: ds/ds:1.0.0
+    image: someun/ds-api:1.0.0
     ports:
       - 8080:8080
     networks:
@@ -26,7 +26,7 @@ services:
 
   ds-ui:
     container_name: ds-ui
-    image: ds/ds-ui:1.0.0
+    image: someun/ds-ui:1.0.0
     ports:
       - 8088:80
     networks:
