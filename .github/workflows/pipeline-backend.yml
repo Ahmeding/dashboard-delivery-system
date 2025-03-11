@@ -28,11 +28,14 @@ jobs:
           java-version: 17
           distribution: 'corretto'
 
+      - name: Grant execute permission to mvnw
+        run: chmod +x delivery-system-api/mvnw
+
       # the 3rd one
       - name: Compile project
         run: |
           cd delivery-system-api
-          ./mvnw clean comple
+          ./mvnw clean compile
 
 
 
@@ -47,7 +50,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup JDK
-        uses: actions/setup-jdk@v4
+        uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: 'corretto'
@@ -69,7 +72,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup JDK(build)
-        uses: actions/setup-jdk@v4
+        uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: 'corretto'
