@@ -30,6 +30,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Debug VERSION
+        run: echo "VERSION is ${{ steps.extract_version.outputs.VERSION }}"
 
       - name: Build & Push to DockerHub
         uses: docker/build-push-action@v5
