@@ -50,7 +50,6 @@ jobs:
     runs-on: self-hosted
     needs: [ build-image ]
     steps:
-
       - name: set up ssh agent
         uses: webfactory/ssh-agent@v0.7.0
         with:
