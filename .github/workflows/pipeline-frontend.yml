@@ -54,7 +54,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan ${{ secrets.VPS_IP }} >> ~/.ssh/know_hosts
-          chmod 600 ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/know_hosts
 
       - name: Create Deployment Folder
         run: ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ci-cd"
