@@ -105,6 +105,12 @@ jobs:
           java-version: 17
           distribution: 'corretto'
 
+      - name: Extract Project Version1
+        id: extract_version
+        run: | 
+          cd delivery-system-api
+          echo "VERSION=$(./mvnw -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec)"
+
       - name: Extract Project Version
         id: extract_version
         run: | 
