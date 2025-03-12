@@ -53,7 +53,7 @@ import {ApiModule} from "../ds-api/src/api.module";
     }),
     BrowserAnimationsModule,
     NgSelectModule,
-    ApiModule.forRoot({rootUrl:'http://20.238.16.155:8088/api/v1'})
+    ApiModule.forRoot({rootUrl:'http://20.238.16.155:8080/api/v1'})
   ],
   providers: [
     ThemeService,
