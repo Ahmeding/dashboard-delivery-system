@@ -6,7 +6,6 @@ RUN mvn dependency:go-offline
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-
 # Runtime stage
 FROM amazoncorretto:17
 # define few things
