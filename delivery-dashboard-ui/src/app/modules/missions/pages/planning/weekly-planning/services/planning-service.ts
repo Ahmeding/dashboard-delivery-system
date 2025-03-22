@@ -31,7 +31,7 @@ export class PlanningService {
         titre: 'Delivery to Client A',
         dateDebut:  "[2024,12,09,10,30]",
         dateFin: '2024-12-09T10:30',
-        etatMission: 'EN_COURS',
+        etatMission: 'PLANNED',
         deliveryDestinationResponse: {serviceDelivery:{destinationCity:"Paris"}},
         missionVehiclesDtos: [
           { id: 1,chauffeursVehicleDto:[{missionVehicleId:1,chauffeurDto:{

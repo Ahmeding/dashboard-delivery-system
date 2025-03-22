@@ -17,7 +17,7 @@ export interface MissionResponse {
   dayPlanDto?: DayPlanDto;
   deliveryDestinationResponse?: DeliveryDestinationResponse;
   etapeDtos?: Array<EtapeDto>;
-  etatMission?: 'EN_COURS' | 'ACCOMPLI' | 'ANNULEE' | 'TERMINIEE';
+  etatMission?: 'PLANNED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED';
   id?: number;
   kmDebut?: number;
   kmFin?: number;

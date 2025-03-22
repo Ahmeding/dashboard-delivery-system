@@ -13,7 +13,7 @@ export interface MissionDto {
   dateDebut?: string;
   dateFin?: string;
   etapeDtos?: Array<EtapeDto>;
-  etatMission?: 'EN_COURS' | 'ACCOMPLI' | 'ANNULEE' | 'TERMINIEE';
+  etatMission?: 'PLANNED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED';
   id?: number;
   idDayPlan?: number;
   idDeliveryDestination?: number;

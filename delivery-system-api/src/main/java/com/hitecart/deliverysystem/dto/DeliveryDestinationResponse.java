@@ -1,6 +1,7 @@
 package com.hitecart.deliverysystem.dto;
 
 import com.hitecart.deliverysystem.model.DeliveryDestination;
+import com.hitecart.deliverysystem.model.DeliveryPoint;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +20,7 @@ public class DeliveryDestinationResponse {
     private Integer id;
     private String reference;
     private ServiceDeliveryDto serviceDelivery;
-
+    private List<DeliveryPointDto> deliveryPoints;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer createdBy;
@@ -37,6 +38,11 @@ public class DeliveryDestinationResponse {
 
                         .serviceDelivery(deliveryDestination.getServiceDelivery()!=null ?
                                ServiceDeliveryDto.fromEntity(deliveryDestination.getServiceDelivery()) : null)
+                        .deliveryPoints(deliveryDestination.getDeliveryPoints()!=null?
+                                deliveryDestination.getDeliveryPoints()
+                                        .stream()
+                                        .map(DeliveryPointDto::fromEntity)
+                                        .collect(Collectors.toList()) : null)
                         .createdAt(deliveryDestination.getCreatedAt())
                         .updatedAt(deliveryDestination.getUpdatedAt())
                         .createdBy(deliveryDestination.getCreatedBy())
@@ -52,6 +58,8 @@ public class DeliveryDestinationResponse {
         return DeliveryDestination.builder()
                 .id(dto.getId())
                 .reference(dto.getReference())
+                .deliveryPoints(dto.deliveryPoints!=null?
+                        dto.deliveryPoints.stream().map(DeliveryPointDto::toEntity).collect(Collectors.toList()) : null)
                 .serviceDelivery(ServiceDeliveryDto.toEntity(dto.getServiceDelivery()))
                 .createdAt(dto.getCreatedAt())
                 .updatedAt(dto.getUpdatedAt())

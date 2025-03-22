@@ -12,7 +12,7 @@ import { MissionDto } from '../../models/mission-dto';
 
 export interface UpdateEtatMission$Params {
   id: number;
-  etatMission: 'EN_COURS' | 'ACCOMPLI' | 'ANNULEE' | 'TERMINIEE';
+  etatMission: 'PLANNED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED';
 }
 
 export function updateEtatMission(http: HttpClient, rootUrl: string, params: UpdateEtatMission$Params, context?: HttpContext): Observable<StrictHttpResponse<MissionDto>> {

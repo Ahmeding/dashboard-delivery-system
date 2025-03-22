@@ -169,6 +169,9 @@ public interface MissionApi {
     )
     void delete(@PathVariable("id") Integer id);
 
+    @GetMapping(value = GENER_MISSION_ENDPOINT)
+    void generateMissions();
+
     @GetMapping(value =FIND_ALL_MISSION_PAGEABLE_ENDPOINT ,
             produces =MediaType.APPLICATION_JSON_VALUE )
     ResponseEntity<PageResponse<MissionDto>> findAllMissions(

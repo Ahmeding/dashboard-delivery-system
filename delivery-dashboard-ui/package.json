@@ -11,8 +11,8 @@
     "start:local": "npm run ds-api && ng serve -- --proxyConfig=proxy.config.json",
     "ds-api": "npm run ds-api:create-dist && npm run ds-api:download && npm run ds-api:extract && npm run ds-api:openapi-gen",
     "ds-api:create-dist": "mkdir -p tools/openapi/dist && mkdir -p tools/openapi/src",
-    "ds-api:download": "cp C:/Users/Asus/Desktop/java-angular-project/delivery-system/delivery-system-api/target/deliverysystem-0.0.1-SNAPSHOT.jar ./tools/openapi/dist && cp C:/Users/Asus/Desktop/java-angular-project/delivery-system/delivery-system-api/target/openapi.json ./tools/openapi/src",
-    "ds-api:extract": "node ./tools/openapi/src/openapi.json 0.0.1-SNAPSHOT",
+    "ds-api:download": "cp C:/Users/Asus/Desktop/java-angular-project/delivery-system/delivery-system-api/target/deliverysystem-1.0.0.jar ./tools/openapi/dist && cp C:/Users/Asus/Desktop/java-angular-project/delivery-system/delivery-system-api/target/openapi.json ./tools/openapi/src",
+    "ds-api:extract": "node ./tools/openapi/src/openapi.json 1.0.0",
     "ds-api:openapi-gen": "./node_modules/.bin/ng-openapi-gen -i ./tools/openapi/src/openapi.json -o src/ds-api/src"
   },
   "private": true,

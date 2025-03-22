@@ -13,11 +13,14 @@ import {DateUtilsService} from "../../../../../../services/date-utils/date-utils
   styleUrls: ['./mission-card.component.scss']
 })
 export class MissionCardComponent {
+
   @Input() mission!: MissionResponse/*MissionCard*/;
   @Output() edit = new EventEmitter<number>();
   @Output() delete = new EventEmitter<number>();
+
   formattedTime: string = '';
   formatTime =formatTime;
+
   constructor(private dateService:DateUtilsService) {
   }
   getStartTime():string{
@@ -31,10 +34,10 @@ export class MissionCardComponent {
 
     //console.log(this.mission.dateDebut);
     const icons = {
-      'EN_COURS': 'bi-play-circle-fill text-primary',
-      'ACCOMPLI': 'bi-check-circle-fill text-success',
-      'ANNULEE': 'bi-x-circle-fill text-danger',
-      'TERMINIEE': 'bi-flag-fill text-info'
+      'PLANNED': 'bi-play-circle-fill text-primary',
+      'COMPLETED': 'bi-check-circle-fill text-success',
+      'CANCELED': 'bi-x-circle-fill text-danger',
+      'IN_PROGRESS': 'bi-flag-fill text-info'
     };
     return icons[this.mission?.etatMission as keyof typeof icons] || 'bi-question-circle-fill';
   }

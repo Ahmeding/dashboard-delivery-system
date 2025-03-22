@@ -1,6 +1,7 @@
 package com.hitecart.deliverysystem.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hitecart.deliverysystem.model.enums.DeliveryDay;
 import com.hitecart.deliverysystem.model.enums.DeliveryPointType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -26,6 +28,10 @@ public class DeliveryPoint extends AbstractEntity{
     private DeliveryPointContact contact;
     @JsonFormat(pattern = "HH:mm")
     private LocalTime schedule;
+
+    @Embedded
+    private RecurrencePattern recurrencePattern;
+
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private DeliveryPointType deliveryPointType;

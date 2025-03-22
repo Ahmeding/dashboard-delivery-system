@@ -22,13 +22,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.View;
 
+import java.time.DayOfWeek;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,8 +54,139 @@ public class MissionServiceImpl implements MissionService {
     private final View error;
     private final UtilisateurService utilisateurServiceImpl;
     private final IDeliveryDestinationService deliveryDestinationService;
+    private final DeliveryPointRepository deliveryPointRepository;
 
-   private List<Integer> extractVehicleIds(MissionDto dto){
+
+    // =============================
+    //
+    // =============================
+
+    @Scheduled(cron = "0 0 2 * * ?")
+    @Transactional
+    public void generateMissions() {
+        log.info("Created mission -generateMissions-" );
+
+        LocalDate currentDate = LocalDate.now();
+        int currentYear = currentDate.getYear();
+
+        deliveryPointRepository.findAllByEnabled(true).forEach(point -> {
+
+            RecurrencePattern pattern = point.getRecurrencePattern();
+           if(pattern !=null){
+               // Determine date range for generation
+               LocalDate startDate = pattern.getStartDate().isAfter(currentDate)?
+                       pattern.getStartDate() : currentDate;
+               LocalDate endDate = pattern.getEndDate()!=null?
+                       pattern.getEndDate() :
+                       LocalDate.of(currentYear,12,31);
+               // only generate if end date is in the future
+               Set<DayOfWeek> patternDayOfWeek = point.getRecurrencePattern().getDaysOfWeek();
+               if (!patternDayOfWeek.isEmpty() && endDate.isAfter(currentDate)) {
+                   generateForPoint(point, startDate, endDate);
+               }
+           }
+           });
+
+    }
+
+    private void generateForPoint(DeliveryPoint point, LocalDate start, LocalDate end) {
+        log.error("Created mission -generateForPoint-" );
+        LocalDate patternStart= point.getRecurrencePattern().getStartDate();
+        int targetWeek = getWeekOfMonth(patternStart);
+
+        start.datesUntil(end.plusDays(1)).forEach(date -> {
+            if(matchesRecurrencePattern(point, date)){
+                log.error("Created mission -matchesRecurrencePattern(point, date)-" );
+                createMissionIfNeeded(point, date);
+            }
+        });
+    }
+
+    private boolean matchesRecurrencePattern(DeliveryPoint point, LocalDate date) {
+        RecurrencePattern pattern = point.getRecurrencePattern();
+
+        // Basic date range validation
+        if(date.isBefore(pattern.getStartDate())||
+                (pattern.getEndDate()!=null &&
+                        date.isAfter(pattern.getEndDate()))){
+            log.error("Created mission -return false-" );
+            return false;
+        }
+
+        // Must match at least one day of week
+        if (!pattern.getDaysOfWeek().contains(date.getDayOfWeek())) {
+            return false;
+        }
+
+        return switch (pattern.getRecurrenceInterval()) {
+            // DAILY: Every day matching daysOfWeek (e.g. Mon/Wed/Fri)
+            case DAILY -> true;
+            // WEEKLY: Every week on these days
+            case WEEKLY ->
+                    ChronoUnit.WEEKS.between(pattern.getStartDate(), date) % 1 == 0;
+            // BIWEEKLY: Every 2 weeks on these days
+            case BIWEEKLY ->
+                    ChronoUnit.WEEKS.between(pattern.getStartDate(), date) % 2 == 0;
+            // MONTHLY: Same week of month as start date
+            case MONTHLY -> {
+                int targetWeek = getWeekOfMonth(pattern.getStartDate());
+                LocalDate nthDay = date.withDayOfMonth(1)
+                        .with(TemporalAdjusters.dayOfWeekInMonth(targetWeek
+                        ,date.getDayOfWeek()));
+                yield nthDay.equals(date);
+
+/*                LocalDate patternStart = pattern.getStartDate();
+                int targetWeek = ((patternStart.getDayOfMonth() - 1) / 7) + 1;
+                LocalDate weekStart = date.withDayOfMonth(1)
+                        .with(TemporalAdjusters.dayOfWeekInMonth(targetWeek, patternStart.getDayOfWeek()));
+                yield date.isAfter(weekStart.minusDays(1)) &&
+                        date.isBefore(weekStart.plusDays(7));*/
+            }
+        };
+
+    }
+    // Get the week of the month (1st, 2nd, 3rd, etc.)
+    private int getWeekOfMonth(LocalDate date) {
+        return ((date.getDayOfMonth() - 1) / 7) + 1;
+    }
+
+    // Get the first day of the target week in a given month
+    private LocalDate getWeekStartInMonth(LocalDate baseDate, int targetWeek, DayOfWeek startDay) {
+        return baseDate
+                .withDayOfMonth(1)
+                .with(TemporalAdjusters.dayOfWeekInMonth(targetWeek, startDay));
+    }
+
+    private void createMissionIfNeeded(DeliveryPoint point, LocalDate date) {
+        log.info("Created mission -createMissionIfNeeded-" );
+
+        // Mission timing (18:00 start, next day 14:00 end)
+        LocalDateTime missionStart = date.atTime(18, 0);
+        LocalDateTime missionEnd = date.plusDays(1).atTime(14, 0);
+
+        boolean exists = missionRepository.existsByDeliveryDestinationAndTimeRange(
+                point.getDeliveryDestination(),
+                missionStart,
+                missionEnd);
+
+
+        if (!exists) {
+            log.info("Created mission -!exists-" );
+
+            Mission newMission = Mission.builder()
+                    .titre("Mission " + point.getAddress().getVille())
+                    .deliveryDestination(point.getDeliveryDestination())
+                    .dateDebut(missionStart)
+                    .dateFin(missionEnd)
+                    .etatMission(EtatMission.PLANNED)
+                    .build();
+            missionRepository.save(newMission);
+            log.info("Created mission for {} on {}", point.getName(), date);
+        }
+    }
+
+
+    private List<Integer> extractVehicleIds(MissionDto dto){
        if (dto.getMissionVehiclesDtos() == null) {
            return Collections.emptyList();
        }
@@ -69,7 +205,6 @@ public class MissionServiceImpl implements MissionService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
    }
-
     private void updateVehicleAndDriverStatus(MissionDto dto,boolean isAssigned){
         List<Integer> vehicleIds = extractVehicleIds(dto);
         List<Integer> driverIds = extractDriverIds(dto);
@@ -77,9 +212,7 @@ public class MissionServiceImpl implements MissionService {
         vehiculeRepository.bulkUpdateAssignmentStatus(vehicleIds, isAssigned);
         chauffeurRepository.bulkUpdateAssignmentStatus(driverIds, isAssigned);
     }
-
     private void createMissionRelationships(MissionDto dto, Mission savedMission){
-
        List<MissionVehicle> missionVehicles = new ArrayList<>();
        List<ChauffeurVehicle> chauffeurVehicles  = new ArrayList<>();
        List<Etape> etapes = new ArrayList<>();
@@ -108,7 +241,6 @@ public class MissionServiceImpl implements MissionService {
             sendNotificationsAsync(savedChauffeurVehicles, savedMission.getId());
 
     }
-
     private Etape createEtape(EtapeDto etp, Mission savedMission) {
        Etape etape = EtapeDto.toEntity(etp);
        etape.setMission(savedMission);
@@ -193,7 +325,7 @@ public class MissionServiceImpl implements MissionService {
                 findById(dto.getIdDeliveryDestination());
 
         Mission mission = MissionDto.toEntity(dto);
-        mission.setEtatMission(EtatMission.EN_COURS);
+        mission.setEtatMission(EtatMission.PLANNED);
         mission.setDeliveryDestination(DeliveryDestinationDto.toEntity(destination));
         return missionRepository.save(mission);
     }
@@ -211,7 +343,7 @@ public class MissionServiceImpl implements MissionService {
 
         // Save mission
         Mission missionToSave = createAndSaveMission(dto);
-        missionToSave.setEtatMission(EtatMission.EN_COURS);
+        missionToSave.setEtatMission(EtatMission.PLANNED);
         // batch update vehicule/ drivers
         updateVehicleAndDriverStatus(dto,true);
         // Batch create relationships

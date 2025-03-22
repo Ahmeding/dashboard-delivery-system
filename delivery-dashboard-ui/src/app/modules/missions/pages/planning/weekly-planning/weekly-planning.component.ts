@@ -32,23 +32,7 @@ import {ChauffeurService} from "../../../../../../ds-api/src/services/chauffeur.
 import {Router} from "@angular/router";
 import {DateUtilsService} from "../../../../../services/date-utils/date-utils.service";
 import {MissionResponse} from "../../../../../../ds-api/src/models/mission-response";
-/*
-interface Mission {
-  id: number;
-  title: string;
-  startTime: string;
-  startDate: string;
-  endTime: string;
-  status: 'EN_COURS' | 'ACCOMPLI' | 'ANNULEE' | 'TERMINIEE';
-  driver: string;
-  vehicle: string;
-}
 
-interface DayPlan {
-  date: Date;
-  missions: Mission[];
-}
-*/
 
 
 @Component({

@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -23,9 +24,11 @@ public class Vehicule extends AbstractEntity{
     private String reference;
     @Column(name = "logo")
     private String logo;
+
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private VehicleType vehicleType;
+
     @Column(name = "immatriculation")
     private String immatriculation;
     @Column(name = "marque")
@@ -48,9 +51,15 @@ public class Vehicule extends AbstractEntity{
     @Column(name="is_active")
     private Boolean isActive;
     @OneToMany(mappedBy = "vehicule")
-    private List<Reparation> reparations;
+    private List<Reparation> reparations = new ArrayList<>();
     @Column(name="is_assigned")
     private boolean isAssigned;
+    @Column(name="is_available")
+    private boolean isAvailable = true;
+
+
+    @OneToMany(mappedBy = "vehicule")
+    private List<MissionVehicle> missionAssignments = new ArrayList<>();
 
     @PrePersist
     private void generateReference() {

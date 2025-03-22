@@ -70,7 +70,6 @@ export class NewDeliveryPointModalComponent implements OnInit{
         this.getDeliveryPointById();
     }
     this.destinationForm.patchValue({clientId: this.clientId})
-    //this.deliveryPointForm.patchValue({ clientId: this.clientId });
   }
 
   createDeliveryPoint(){
@@ -111,7 +110,6 @@ export class NewDeliveryPointModalComponent implements OnInit{
     this.deliveryPointsArray.removeAt(index);
     this.deliveryPoints.splice(index,1)
   }
-
 
   getDeliveryPointById(){
     this.deliveryPointsService.findById11({id:this.dpointId}).subscribe({

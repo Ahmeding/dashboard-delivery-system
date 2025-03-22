@@ -22,10 +22,10 @@ export const getDestinationColor = (destination: string): string => {
 
 export const getMissionStatusIcon = (status: string): string => {
   const icons = {
-    'EN_COURS': 'bi-play-circle-fill text-primary',
-    'ACCOMPLI': 'bi-check-circle-fill text-success',
-    'ANNULEE': 'bi-x-circle-fill text-danger',
-    'TERMINIEE': 'bi-flag-fill text-info'
+    'PLANNED': 'bi-play-circle-fill text-primary',
+    'COMPLETED': 'bi-check-circle-fill text-success',
+    'CANCELED': 'bi-x-circle-fill text-danger',
+    'IN_PROGRESS': 'bi-flag-fill text-info'
   };
   return icons[status as keyof typeof icons] || 'bi-question-circle-fill';
 };

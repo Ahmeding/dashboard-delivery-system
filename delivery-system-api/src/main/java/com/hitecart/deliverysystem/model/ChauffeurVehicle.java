@@ -19,10 +19,14 @@ public class ChauffeurVehicle extends AbstractEntity{
 
 
     @ManyToOne
-    @JoinColumn(name = "chauffeur_id")
+    @JoinColumn(name = "chauffeur_id", nullable = false)
     private Chauffeur chauffeur;
+
     @ManyToOne
-    @JoinColumn(name = "mission_vehicle_id")
+    @JoinColumn(name = "mission_vehicle_id",nullable = false)
     private MissionVehicle missionVehicle;
+
+
     private LocalDateTime assignedAt ;
+
 }

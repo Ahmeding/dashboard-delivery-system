@@ -46,6 +46,7 @@ export { PageResponseServiceDeliveryDto } from './models/page-response-service-d
 export { PageResponseUtilisateurDto } from './models/page-response-utilisateur-dto';
 export { PageResponseVehiculeDto } from './models/page-response-vehicule-dto';
 export { PieceRechangeDto } from './models/piece-rechange-dto';
+export { RecurrencePatternDto } from './models/recurrence-pattern-dto';
 export { RefreshTokenRequest } from './models/refresh-token-request';
 export { ReparationDto } from './models/reparation-dto';
 export { Role } from './models/role';

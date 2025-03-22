@@ -18,7 +18,6 @@ import com.hitecart.deliverysystem.services.IServiceDeliveryService;
 import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.services.IDeliveryDestinationService;
 import com.hitecart.deliverysystem.validator.DeliveryDestinationValidator;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,6 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -130,6 +130,7 @@ public class DeliveryDestinationServiceImpl implements IDeliveryDestinationServi
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DeliveryDestinationDto findById(Integer id) {
         CheckParmasUtil.checkID(id,"Le parametre ID Delivery Destination est null",
                 "Impossible de trouver un Delivery Destination avec un ID null",ErrorCodes.DELIVERY_DESTINATION_NOT_VALID_OPERATION);
