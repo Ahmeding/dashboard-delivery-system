@@ -28,6 +28,8 @@ public interface DeliveryPointRepository extends JpaRepository<DeliveryPoint, In
             WHERE  deliveryPoint.deliveryDestination.serviceDelivery.id = :serviceDeliveryId
         """)
     List<DeliveryPoint> findByClientAndServiceDelivery(Integer serviceDeliveryId);
+
+    List<DeliveryPoint> findAllByEnabled(boolean enabled);
 }
 /*
 

@@ -170,7 +170,7 @@ export class ClientsComponent implements OnInit{
   }*/
   openAddNewDPModal(client: any) {
     const modalRef = this.modalService.open(NewDeliveryPointModalComponent, {
-      size: 'lg',
+      size: 'xl',
       centered: true,
       backdrop: 'static'
     });

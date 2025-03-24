@@ -1,6 +1,8 @@
 package com.hitecart.deliverysystem.model;
 
+import com.hitecart.deliverysystem.model.enums.AssignmentStatus;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
+import com.hitecart.deliverysystem.model.enums.RouteDifficulty;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -8,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -34,8 +37,8 @@ public class Mission extends AbstractEntity {
     @OneToMany(mappedBy = "mission")
     private List<Etape> etapes;
 
-    @OneToMany(mappedBy = "mission")
-    private List<MissionVehicle> missionVehicules;
+    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)
+    private List<MissionVehicle> missionVehicules = new ArrayList<>();
 
     @Column(name = "etatmission")
     @Enumerated(EnumType.STRING)
@@ -56,10 +59,17 @@ public class Mission extends AbstractEntity {
     @JoinColumn(name = "id_delivery_destination")
     private DeliveryDestination deliveryDestination;
 
+    @Enumerated(EnumType.STRING)
+    private RouteDifficulty difficulty; // SIMPLE, MEDIUM, DIFFICULT
+    @Column(name = "assignment_status")
+    @Enumerated(EnumType.STRING)
+    private AssignmentStatus assignmentStatus = AssignmentStatus.PENDING_VOLUME;
+
+
     @PrePersist
     private void generateReference() {
         if(this.reference == null || this.reference.isEmpty()){
-            this.reference = "DP-"+System.currentTimeMillis();
+            this.reference = "MIS-"+System.currentTimeMillis();
         }
     }
 }

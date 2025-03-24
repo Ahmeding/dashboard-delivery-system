@@ -65,6 +65,7 @@
 
   <div class="mission-content">
     <p class="title">{{ mission.titre }}</p>
+    <p class="title">{{ mission.deliveryDestinationResponse?.deliveryPoints?.length}}</p>
     <div class="resources">
       <div class="vehicles" *ngIf="mission.missionVehiclesDtos?.length">
         <i class="bi bi-truck-front"></i>

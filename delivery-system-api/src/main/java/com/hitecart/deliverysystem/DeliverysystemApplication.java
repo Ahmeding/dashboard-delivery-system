@@ -6,6 +6,8 @@ import com.hitecart.deliverysystem.model.Utilisateur;
 import com.hitecart.deliverysystem.repository.IDeliveryPointCategoryRepository;
 import com.hitecart.deliverysystem.repository.RoleRepository;
 import com.hitecart.deliverysystem.repository.UtilisateurRepository;
+import com.hitecart.deliverysystem.services.impl.MissionServiceImpl;
+import com.hitecart.deliverysystem.services.impl.MissionVehicleServiceImpl;
 import com.hitecart.deliverysystem.utils.CodeGeneratorExecutor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -37,6 +39,7 @@ public class DeliverysystemApplication {
 	public CommandLineRunner runner(RoleRepository roleRepository, UtilisateurRepository userRepo,
 									IDeliveryPointCategoryRepository dpcRepository) {
 		return args -> {//CodeGeneratorExecutor.executeCodeGenerator();
+
 			if(roleRepository.findByName("USER").isEmpty()){
 				roleRepository.save(Role.builder().name("USER")
 								.createdBy(1)

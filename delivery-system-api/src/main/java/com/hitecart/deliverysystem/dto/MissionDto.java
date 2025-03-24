@@ -72,7 +72,7 @@ public class MissionDto {
                                         .map(MissionVehicleDto::fromEntity)
                                         .collect(Collectors.toList()):null
                 )
-
+                .idDeliveryDestination(mission.getDeliveryDestination()!=null?mission.getDeliveryDestination().getId():null)
                 .createdAt(mission.getCreatedAt())
                 .updatedAt(mission.getUpdatedAt())
                 .createdBy(mission.getCreatedBy())
@@ -119,6 +119,6 @@ public class MissionDto {
     }
 
     public boolean isMissionAccomplished(){
-        return EtatMission.ACCOMPLI.equals(this.etatMission);
+        return EtatMission.COMPLETED.equals(this.etatMission);
     }
 }

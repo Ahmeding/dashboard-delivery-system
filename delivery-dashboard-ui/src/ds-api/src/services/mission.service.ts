@@ -27,6 +27,8 @@ import { findAllMissionsByDriverId } from '../fn/mission/find-all-missions-by-dr
 import { FindAllMissionsByDriverId$Params } from '../fn/mission/find-all-missions-by-driver-id';
 import { findById6 } from '../fn/mission/find-by-id-6';
 import { FindById6$Params } from '../fn/mission/find-by-id-6';
+import { generateMissions } from '../fn/mission/generate-missions';
+import { GenerateMissions$Params } from '../fn/mission/generate-missions';
 import { MissionDto } from '../models/mission-dto';
 import { MissionResponse } from '../models/mission-response';
 import { PageResponseMissionDto } from '../models/page-response-mission-dto';
@@ -214,6 +216,31 @@ export class MissionService extends BaseService {
   findById6(params: FindById6$Params, context?: HttpContext): Observable<any> {
     return this.findById6$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `generateMissions()` */
+  static readonly GenerateMissionsPath = '/missions/gener-mission';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `generateMissions()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  generateMissions$Response(params?: GenerateMissions$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return generateMissions(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `generateMissions$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  generateMissions(params?: GenerateMissions$Params, context?: HttpContext): Observable<void> {
+    return this.generateMissions$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

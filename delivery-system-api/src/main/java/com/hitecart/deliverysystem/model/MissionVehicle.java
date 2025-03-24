@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -23,12 +24,12 @@ public class MissionVehicle  extends AbstractEntity{
     private Mission mission;
 
     @ManyToOne
-    @JoinColumn(name = "vehicle_id")
+    @JoinColumn(name = "vehicle_id" , nullable = false)
     private Vehicule vehicule;
 
 
-    @OneToMany(mappedBy = "missionVehicle")
-    private List<ChauffeurVehicle> chauffeurVehiculeList;
+    @OneToMany(mappedBy = "missionVehicle", cascade = CascadeType.ALL)
+    private List<ChauffeurVehicle> chauffeurVehiculeList = new ArrayList<>();
 
     private LocalDateTime assignedAt;
 }

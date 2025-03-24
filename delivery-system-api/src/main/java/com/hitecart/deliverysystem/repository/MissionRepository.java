@@ -1,5 +1,7 @@
 package com.hitecart.deliverysystem.repository;
 
+import com.hitecart.deliverysystem.model.DeliveryDestination;
+import com.hitecart.deliverysystem.model.DeliveryPoint;
 import com.hitecart.deliverysystem.model.Devis;
 import com.hitecart.deliverysystem.model.Mission;
 import org.springframework.data.domain.Page;
@@ -7,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -47,4 +50,20 @@ public interface MissionRepository extends JpaRepository<Mission, Integer>, JpaS
             @Param("vehicleIds") List<Integer> vehicleIds,
             @Param("driverIds") List<Integer> driverIds
     );
+
+    boolean existsByDeliveryDestinationAndDateDebut(DeliveryDestination deliveryDestination, LocalDateTime date);
+
+    @Query("""
+            SELECT count(m) >0
+            FROM Mission m
+            WHERE m.deliveryDestination = :destination
+            AND(
+            (m.dateDebut <= :end AND m.dateFin >= :start)OR
+            (m.dateDebut BETWEEN :start AND :end)
+            )
+            """)
+    boolean existsByDeliveryDestinationAndTimeRange(
+            @Param("destination")DeliveryDestination destination,
+            @Param("start")LocalDateTime start,
+            @Param("end") LocalDateTime end);
 }

@@ -111,7 +111,7 @@ export class AddMissionComponent implements OnInit {
     const mission = this.missionForm.value as MissionDto;
     console.log(mission);
     this.missionToSave = mission;
-    this.missionToSave.etatMission="EN_COURS";
+    this.missionToSave.etatMission="PLANNED";
     this.missionService.save6({
       body:this.missionToSave
     }).subscribe({next:()=>{

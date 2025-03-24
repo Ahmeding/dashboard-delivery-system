@@ -6,6 +6,7 @@ import { AdresseDto } from '../models/adresse-dto';
 import { CreatedByUserDto } from '../models/created-by-user-dto';
 import { DeliveryPointContactDto } from '../models/delivery-point-contact-dto';
 import { LocalTime } from '../models/local-time';
+import { RecurrencePatternDto } from '../models/recurrence-pattern-dto';
 export interface DeliveryPointDto {
   addressDto?: AdresseDto;
   clientId?: number;
@@ -20,6 +21,7 @@ export interface DeliveryPointDto {
   id?: number;
   lastModifiedBy?: number;
   name?: string;
+  recurrencePatternDto?: RecurrencePatternDto;
   schedule?: LocalTime;
   updatedAt?: string;
 }

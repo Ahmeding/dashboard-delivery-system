@@ -1,0 +1,163 @@
+name: DS Backend API Pipeline
+# 1St must specifi when triger the pipeline!!
+on:
+  push:
+    branches:
+      - create-backend-pipeline
+    paths:
+      - delivery-system-api/**
+      - docker/backend/**
+      - 'docker-compose.yml'
+      - .github/workflows/*-backend.yml
+
+
+jobs:
+  compile: # action
+    runs-on: self-hosted #  where , which machine
+    name: Compile Project # job name
+    steps: # the 1st one
+      - name: Chekout code  # step's name
+        uses: actions/checkout@v4 # this case wi will run a predifine action , it can be un custom action , an existing action , ower owen action or run a commande
+        with: # some parameter
+          fetch-depth: 0 # I wan't to chechkout the sub branches
+
+      # the 2nd one
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'corretto'
+
+      - name: Grant execute permission to mvnw
+        run: chmod +x delivery-system-api/mvnw
+
+      # the 3rd one
+      - name: Compile project
+        run: |
+          cd delivery-system-api
+          ./mvnw clean compile
+
+
+
+
+  unit-tests: # this is a second jobs , we can put it in the 1stjob as a step, but we prefer optiimise the
+    runs-on: self-hosted
+    name: Unit tests
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'corretto'
+
+      - name: Grant execute permission to mvnw
+        run: chmod +x delivery-system-api/mvnw
+
+      - name: Running Unit Tests
+        run: |
+          cd delivery-system-api
+          ./mvnw clean test
+
+
+  build:
+    runs-on: self-hosted
+    name: Build Backend
+    needs: [compile, unit-tests]
+    steps:
+      - name: Checkout code(build)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup JDK(build)
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'corretto'
+
+      - name: Grant execute permission to mvnw
+        run: chmod +x delivery-system-api/mvnw
+
+      - name: Build Project(build)
+        run: |
+          cd delivery-system-api
+          ./mvnw clean package
+
+ 
+
+  build-image: # build docker image
+    name: Build Docker Image
+    runs-on: self-hosted
+    needs: [build]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'corretto'
+
+      - name: Grant execute permission to mvnw
+        run: chmod +x delivery-system-api/mvnw
+
+      - name: Extract Project Version
+        id: extract_version
+        run: | 
+          cd delivery-system-api
+          echo "VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
+      # echo "VERSION=$(./mvnw -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT
+      #    VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
+      #    echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Login To Dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build & Push to DockerHub
+        uses: docker/build-push-action@v5
+        with:
+          context: delivery-system-api
+          file: docker/backend/Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ds-api:${{steps.extract_version.outputs.VERSION}},${{ secrets.DOCKERHUB_USERNAME }}/ds-api:latest
+          build-args: |
+            PROFILE=dev
+            APP_VERSION=${{steps.extract_version.outputs.VERSION}}
+
+  deploy:
+    name: Deploy Backend
+    runs-on: self-hosted
+    needs: [build-image]
+    steps:
+      - name: set up ssh agent
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Create Deployment Folder
+        run: ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ci-cd"
+
+      - name: Copy Docker-compose file
+        run: scp docker-compose.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:ci-cd/docker-compose.yml
+
+      - name: Set ENV variable and deploy
+        run: |
+          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}<<EOF
+          export EMAIL_HOSTNAME=${{secrets.EMAIL_HOSTNAME}}
+          export EMAIL_USERNAME=${{secrets.EMAIL_USERNAME}}
+          export EMAIL_PASSWORD=${{secrets.EMAIL_PASSWORD}}
+          cd ci-cd
+          docker compose -f docker-compose.yml pull -q
+          docker compose -f docker-compose.yml up -d
+          EOF

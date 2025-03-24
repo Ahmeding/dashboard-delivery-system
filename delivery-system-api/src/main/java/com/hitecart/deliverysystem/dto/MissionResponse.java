@@ -123,6 +123,6 @@ public class MissionResponse {
     }
 
     public boolean isMissionAccomplished(){
-        return EtatMission.ACCOMPLI.equals(this.etatMission);
+        return EtatMission.COMPLETED.equals(this.etatMission);
     }
 }

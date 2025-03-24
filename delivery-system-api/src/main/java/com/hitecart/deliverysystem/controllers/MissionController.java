@@ -63,6 +63,11 @@ public class MissionController implements MissionApi {
     }
 
     @Override
+    public void generateMissions() {
+        missionService.generateMissions();
+    }
+
+    @Override
     public ResponseEntity<PageResponse<MissionDto>> findAllMissions(int page, int size) {
         return ResponseEntity.ok(missionService.findAllMissions(page,size));
     }

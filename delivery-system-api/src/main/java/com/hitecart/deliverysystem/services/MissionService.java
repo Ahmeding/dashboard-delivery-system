@@ -24,6 +24,7 @@ public interface MissionService {
     List<MissionResponse> findAll();
     void delete(Integer id);
 
+    void generateMissions();
     List<Integer> checkOverlappingVehicles(MissionDto dto);
     List<Integer> checkOverlappingDrivers(MissionDto dto);
     PageResponse<MissionDto> findAllMissions(int page, int size);
