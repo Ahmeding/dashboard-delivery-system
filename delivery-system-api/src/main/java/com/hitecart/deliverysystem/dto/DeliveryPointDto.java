@@ -1,6 +1,7 @@
 package com.hitecart.deliverysystem.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hitecart.deliverysystem.model.DeliveryPoint;
+import com.hitecart.deliverysystem.model.DeliveryPointCategory;
 import com.hitecart.deliverysystem.model.enums.DeliveryDay;
 import com.hitecart.deliverysystem.model.enums.DeliveryPointType;
 import lombok.Builder;
@@ -90,7 +91,8 @@ public class DeliveryPointDto {
                 .updatedAt(dto.getUpdatedAt())
                 .createdBy(dto.getCreatedBy())
                 .lastModifiedBy(dto.getLastModifiedBy())
-
+                .deliveryPointCategory(dto.getDeliveryPointCategoryId()!=null?
+                        DeliveryPointCategory.builder().id(dto.getDeliveryPointCategoryId()).build():null)
                 .recurrencePattern(
                         dto.getRecurrencePatternDto() != null ?
                                 RecurrencePatternDto.toEntity(dto.getRecurrencePatternDto()) :

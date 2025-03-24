@@ -28,8 +28,6 @@ public class DeliveryDestination extends AbstractEntity {
 
     @OneToMany(mappedBy = "deliveryDestination")
     private List<Mission> missions =new ArrayList<>();
-
-
     @PrePersist
     private void generateReference() {
         if(this.reference == null || this.reference.isEmpty()){

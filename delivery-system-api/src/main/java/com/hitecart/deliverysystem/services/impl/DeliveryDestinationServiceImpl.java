@@ -27,10 +27,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,9 +52,6 @@ public class DeliveryDestinationServiceImpl implements IDeliveryDestinationServi
         DeliveryDestination ddToSave = DeliveryDestinationDto.toEntity(dto);
 
         DeliveryDestination checkDelivDestination = deliveryDestinationExists(dto);
-
-
-
 
         if(checkDelivDestination!=null){
 /*            if(Objects.equals(checkDelivDestination.getClient().getId(), client.getId())){
@@ -117,16 +111,18 @@ public class DeliveryDestinationServiceImpl implements IDeliveryDestinationServi
         Client client = ClientDto.toEntity(clientService.findById(dto.getDeliveryPointsDto().get(0).getClientId()));
         // Validate all delivery points before saving any of them
         validateAllDeliveryPoints(dto.getDeliveryPointsDto(), existingPointNames);
-
+        List<DeliveryPoint> deliveryPointsToSave= new ArrayList<>();
 
             dto.getDeliveryPointsDto()
                     .forEach(dp->{
+                        log.info(dp.toString());
+
                        DeliveryPoint deliveryPointToSave = DeliveryPointDto.toEntity(dp);
                        deliveryPointToSave.setDeliveryDestination(ddToSave);
                        deliveryPointToSave.setClient( client);
-                       deliveryPointRepository.save(deliveryPointToSave);
+                        deliveryPointsToSave.add(deliveryPointToSave);
                     });
-
+        deliveryPointRepository.saveAll(deliveryPointsToSave);
     }
 
     @Override
