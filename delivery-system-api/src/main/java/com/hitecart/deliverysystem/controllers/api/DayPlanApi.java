@@ -1,6 +1,6 @@
 package com.hitecart.deliverysystem.controllers.api;
 
-import com.hitecart.deliverysystem.dto.DayPlanDto;
+import com.hitecart.deliverysystem.dto.basic.DayPlanDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

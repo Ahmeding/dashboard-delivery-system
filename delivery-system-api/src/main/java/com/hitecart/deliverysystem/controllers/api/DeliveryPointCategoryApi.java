@@ -1,8 +1,7 @@
 package com.hitecart.deliverysystem.controllers.api;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.DeliveryPointCategoryDto;
-import com.hitecart.deliverysystem.dto.DeliveryPointCategoryDto;
+import com.hitecart.deliverysystem.dto.basic.DeliveryPointCategoryDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

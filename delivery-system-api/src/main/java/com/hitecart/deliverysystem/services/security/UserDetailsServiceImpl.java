@@ -1,6 +1,6 @@
 package com.hitecart.deliverysystem.services.security;
 
-import com.hitecart.deliverysystem.repository.UtilisateurRepository;
+import com.hitecart.deliverysystem.dao.UtilisateurRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

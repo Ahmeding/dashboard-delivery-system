@@ -2,7 +2,7 @@ package com.hitecart.deliverysystem.controllers;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.PieceRechangeApi;
-import com.hitecart.deliverysystem.dto.PieceRechangeDto;
+import com.hitecart.deliverysystem.dto.basic.PieceRechangeDto;
 import com.hitecart.deliverysystem.services.PieceRechangeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

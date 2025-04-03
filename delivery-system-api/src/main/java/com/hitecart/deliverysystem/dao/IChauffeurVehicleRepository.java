@@ -1,0 +1,42 @@
+package com.hitecart.deliverysystem.dao;
+
+import com.hitecart.deliverysystem.model.Chauffeur;
+import com.hitecart.deliverysystem.model.ChauffeurVehicle;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Repository
+public interface IChauffeurVehicleRepository extends JpaRepository<ChauffeurVehicle, Integer> {
+    ChauffeurVehicle findByChauffeurId(Integer chauffeurId);
+    List<ChauffeurVehicle> findByMissionVehicleId(Integer missionVehicleId);
+    void deleteByMissionVehicleId(Integer missionVehicleId);
+
+    @Query("""
+        SELECT cv.chauffeur.id
+        FROM ChauffeurVehicle cv
+        JOIN MissionVehicle mv ON cv.missionVehicle.id= mv.id
+        JOIN Mission m ON mv.mission.id = m.id
+            WHERE cv.chauffeur.id IN :chauffeurIds
+            AND(:startDateTime < m.dateFin AND :endDateTime > m.dateDebut)
+        """)
+    List<Integer> findUnavailableDrivers(
+            List<Integer> chauffeurIds,
+            LocalDateTime startDateTime,
+            LocalDateTime endDateTime);
+
+    @Query("""
+            SELECT cv FROM ChauffeurVehicle cv
+            WHERE cv.chauffeur IN :drivers
+            AND cv.missionVehicle.mission.dateDebut < :end
+            AND cv.missionVehicle.mission.dateFin > :start
+            """)
+    List<ChauffeurVehicle> findChauffeurVehiclesByDriversAndDateRange(
+            @Param("drivers") List<Chauffeur> drivers,
+            @Param("start")LocalDateTime start,
+            @Param("end") LocalDateTime end);
+}

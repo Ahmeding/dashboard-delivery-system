@@ -1,7 +1,6 @@
 package com.hitecart.deliverysystem.services;
 
-import com.hitecart.deliverysystem.dto.MissionVehicleDto;
-import com.hitecart.deliverysystem.model.MissionVehicle;
+import com.hitecart.deliverysystem.dto.basic.MissionVehicleDto;
 
 import java.time.LocalDateTime;
 import java.util.List;

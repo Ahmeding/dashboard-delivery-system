@@ -1,7 +1,7 @@
 package com.hitecart.deliverysystem.services;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.ContratDto;
+import com.hitecart.deliverysystem.dto.basic.ContratDto;
 
 import java.util.List;
 

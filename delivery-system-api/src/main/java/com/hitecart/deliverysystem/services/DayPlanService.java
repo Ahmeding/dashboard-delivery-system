@@ -1,7 +1,6 @@
 package com.hitecart.deliverysystem.services;
 
-import com.hitecart.deliverysystem.dto.DayPlanDto;
-import com.hitecart.deliverysystem.model.DayPlan;
+import com.hitecart.deliverysystem.dto.basic.DayPlanDto;
 
 import java.util.List;
 

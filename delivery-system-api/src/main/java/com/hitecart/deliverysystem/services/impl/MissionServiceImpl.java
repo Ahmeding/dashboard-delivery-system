@@ -1,7 +1,7 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.*;
+import com.hitecart.deliverysystem.dto.basic.*;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
@@ -9,12 +9,13 @@ import com.hitecart.deliverysystem.exception.InvalidOperationException;
 import com.hitecart.deliverysystem.model.*;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
 import com.hitecart.deliverysystem.model.enums.NotificationStatus;
-import com.hitecart.deliverysystem.repository.*;
+import com.hitecart.deliverysystem.dao.*;
 import com.hitecart.deliverysystem.services.*;
 import com.hitecart.deliverysystem.services.IChauffeurVehicleService;
 import com.hitecart.deliverysystem.specification.MissionSpecification;
+import com.hitecart.deliverysystem.utils.AssignmentResult;
+import com.hitecart.deliverysystem.utils.TimeSlot;
 import com.hitecart.deliverysystem.validator.MissionValidator;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,13 +26,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.View;
 
-import java.time.DayOfWeek;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
@@ -43,13 +43,14 @@ import java.util.stream.Collectors;
 public class MissionServiceImpl implements MissionService {
 
     private final IChauffeurVehicleService chauffeurVehicleService;
+    private final AvailabilityManager availabilityManager;
     private final IMissionVehicleService missionVehicleService;
-    private final ChauffeurVehicleRepository chauffeurVehicleRepository;
+    private final IChauffeurVehicleRepository chauffeurVehicleRepository;
     private final MissionVehicleRepository missionVehicleRepository;
     private final MissionRepository missionRepository;
     private final EtapeRepository etapeRepository;
     private final INotificationService notificationService;
-    private final ChauffeurRepository chauffeurRepository;
+    private final IChauffeurRepository chauffeurRepository;
     private final VehiculeRepository vehiculeRepository;
     private final View error;
     private final UtilisateurService utilisateurServiceImpl;
@@ -57,6 +58,204 @@ public class MissionServiceImpl implements MissionService {
     private final DeliveryPointRepository deliveryPointRepository;
 
 
+    // =============================
+    //
+    // =============================
+
+
+    @Transactional
+    public void generateWeeklyAssignments() {
+        // 1. Define the week (Monday to Sunday)
+        LocalDateTime weekStart = LocalDateTime.now().with(DayOfWeek.SUNDAY).truncatedTo(ChronoUnit.DAYS);
+        LocalDateTime weekEnd = weekStart.plusDays(6);
+
+        // 2. Fetch missions for the week
+        List<Mission> missions = missionRepository.findMissionsWithVehiclesAndDrivers(weekStart, weekEnd);
+        if (missions.isEmpty()) {
+            log.info("No missions this week!");
+            return;
+        }
+
+        // 3. Sort missions by longest duration first
+        missions.sort(Comparator.comparingLong(
+                (Mission m) -> Duration.between( m.getDateDebut(), m.getDateFin()).toMinutes()
+        ).reversed());
+
+        // 4. Fetch all drivers and vehicles
+        List<Chauffeur> drivers = chauffeurRepository.findAll();
+        List<Vehicule> vehicles = vehiculeRepository.findAll();
+
+        // 5. Initialize availability and mission counters
+        AvailabilityManager availabilityManager = new AvailabilityManager(chauffeurVehicleRepository, missionVehicleRepository);
+        //Map<Chauffeur, List<TimeSlot>> driverAvailability = availabilityManager.initializeDriverAvailability(drivers, weekStart, weekEnd);
+        Map<Vehicule, List<TimeSlot>> vehicleAvailability = availabilityManager.initializeVehicleAvailability(vehicles, weekStart, weekEnd);
+
+        // 6. Initialize mission counter for each driver (NEW)
+        Map<Chauffeur, Integer> chauffeurMissionCount = drivers.stream()
+                .collect(Collectors.toMap(driver -> driver, driver -> 0));
+
+        // 7. Shuffle drivers weekly for fairness
+        long weekNumber = ChronoUnit.WEEKS.between(LocalDate.of(2023, 1, 1).atStartOfDay(), weekStart);
+         Collections.shuffle(drivers, new Random(weekNumber));
+
+        // 8. Prepare assignment tracking
+        List<AssignmentResult> assignments = new ArrayList<>();
+        List<Mission> unassignedMissions = new ArrayList<>();
+
+        for (Mission mission : missions) {
+            TimeSlot missionSlot = new TimeSlot(mission.getDateDebut(),
+                    mission.getDateFin());
+
+
+            // 9. Find suitable vehicle
+            Map<Vehicule, Integer> vehicleAssignmentCounts = new HashMap<>(); // Track weekly assignments per vehicle
+            Vehicule vehicle = findSuitableVehicle(mission, vehicleAvailability,
+                    vehicleAssignmentCounts);
+      // 10. Find available driver with fewest missions (UPDATED)
+            //Chauffeur driver = findAvailableDriver(missionSlot, driverAvailability, chauffeurMissionCount);
+      /*     if (vehicle == null || driver == null) {
+                unassignedMissions.add(mission);
+                continue;
+            }*/
+            // 11. Create and track assignment
+           // AssignmentResult assignment = createAssignment(mission, vehicle, driver);
+            //assignments.add(assignment);
+
+            // 12. Update availability and mission count (NEW)
+          /*  updateTimeSlots(vehicleAvailability, vehicle, missionSlot);
+            updateTimeSlots(driverAvailability, driver, missionSlot);
+            chauffeurMissionCount.put(driver, chauffeurMissionCount.get(driver) + 1);*/ // Increment count
+        }
+
+
+        // 13. Save and log results
+        saveAssignmentsInBatch(assignments);
+        logResults(assignments, unassignedMissions);
+    }
+    private AssignmentResult createAssignment(Mission mission, Vehicule vehicle, List<Chauffeur> drivers) {
+        // Build a temporary "AssignmentResult" object to group mission, vehicle, and driver
+        return new AssignmentResult(mission, vehicle, drivers);
+    }
+    private void saveAssignmentsInBatch(List<AssignmentResult> assignments) {
+        // Convert AssignmentResult objects to database entities
+        List<MissionVehicle> missionVehicles = new ArrayList<>();
+        List<ChauffeurVehicle> chauffeurVehicles = new ArrayList<>();
+
+        for (AssignmentResult assignment : assignments) {
+            // Create MissionVehicle link (mission + vehicle)
+            MissionVehicle mv = MissionVehicle.builder()
+                    .mission(assignment.getMission())
+                    .vehicule(assignment.getVehicle())
+                    .assignedAt(LocalDateTime.now())
+                    .build();
+            missionVehicles.add(mv);
+
+            // Create ChauffeurVehicle link (driver + mission)
+            ChauffeurVehicle cv = ChauffeurVehicle.builder()
+                    .missionVehicle(mv)  // Link to the MissionVehicle
+                    //.chauffeur(assignment.getDrivers())
+                    .assignedAt(LocalDateTime.now())
+                    .build();
+            chauffeurVehicles.add(cv);
+        }
+
+        // Batch save to database
+        missionVehicleRepository.saveAll(missionVehicles);
+        chauffeurVehicleRepository.saveAll(chauffeurVehicles);
+    }
+    private void logResults(List<AssignmentResult> assignments, List<Mission> unassignedMissions) {
+        // Log success stats
+        log.info("Successfully assigned {} missions:", assignments.size());
+        assignments.forEach(assignment ->
+                log.debug("Mission ID {}: Driver {}, Vehicle {}",
+                        assignment.getMission().getId(),
+                        assignment.getDrivers().size(),
+                        assignment.getVehicle().getId())
+        );
+
+        // Log failures
+        if (!unassignedMissions.isEmpty()) {
+            log.warn("Could not assign {} missions:", unassignedMissions.size());
+            unassignedMissions.forEach(mission ->
+                    log.warn("Unassigned Mission ID {} ({} to {})",
+                            mission.getId(),
+                            mission.getDateDebut(),
+                            mission.getDateFin())
+            );
+        }
+    }
+    // Updated driver selection method
+    private Chauffeur findAvailableDriver(TimeSlot slot,
+                                          Map<Chauffeur, List<TimeSlot>> availability,
+                                          Map<Chauffeur, Integer> missionCounts) {
+        return availability.entrySet().stream()
+                .filter(entry -> entry.getValue().stream()
+                        .anyMatch(available -> available.covers(slot))
+                )
+                .min(Comparator.comparingInt(
+                        entry -> missionCounts.getOrDefault(entry.getKey(), 0)
+                ))  // Prefer driver with least missions
+                .map(Map.Entry::getKey)
+                .orElse(null);
+    }
+    // Improved vehicle selection logic
+    private Vehicule findSuitableVehicle(Mission mission,
+                                         Map<Vehicule, List<TimeSlot>> availability,
+                                         Map<Vehicule, Integer> assignmentCounts) {
+        // Create a TimeSlot for the mission
+        TimeSlot missionSlot = new TimeSlot(mission.getDateDebut(), mission.getDateFin());
+        return availability.entrySet().stream()
+                .filter(entry -> {
+                    boolean hasCapacity = entry.getKey().getVolume().compareTo(mission.getVolume()) >= 0;
+                    boolean isAvailable = entry.getValue().stream()
+                            .anyMatch(slot -> slot.covers(missionSlot));
+                    return hasCapacity && isAvailable;
+                })
+                .min(Comparator.comparing(
+                        e -> e.getKey().getVolume(),  // Prefer smallest vehicle
+                        Comparator.nullsLast(Comparator.naturalOrder())
+                ))
+                .map(Map.Entry::getKey)
+                .orElse(null);
+    }
+    // Type-safe availability update
+    private <T> void updateTimeSlots(Map<T, List<TimeSlot>> availability, T resource, TimeSlot bookedSlot) {
+        availability.computeIfPresent(resource, (k, slots) ->
+                slots.stream()
+                        .flatMap(slot -> slot.subtract(bookedSlot).stream())
+                        .collect(Collectors.toList())
+        );
+    }
+    private void rotateDrivers(List<Chauffeur> drivers, LocalDateTime weekStart) {
+        long weekNumber = ChronoUnit.WEEKS.between(LocalDateTime.of(2023, 1, 1, 0, 0), weekStart);
+        Collections.rotate(drivers, (int) (weekNumber % drivers.size()));
+    }
+    private Vehicule assignVehicle(Mission mission, Map<Vehicule, List<TimeSlot>> availability) {
+        TimeSlot missionSlot = new TimeSlot(mission.getDateDebut(), mission.getDateFin());
+        return availability.entrySet().stream()
+                .filter(e -> e.getValue().stream().anyMatch(slot -> slot.covers(missionSlot)))
+                .map(Map.Entry::getKey)
+                .filter(v -> v.getVolume().compareTo(mission.getVolume()) >= 0)
+                .min(Comparator.comparing(Vehicule::getVolume)) // Smallest suitable vehicle
+                .orElse(null);
+    }
+    private Chauffeur assignDriver(Map<Chauffeur, List<TimeSlot>> availability,
+                                   Map<Chauffeur, Integer> missionCounts,
+                                   TimeSlot missionSlot) {
+        return availability.entrySet().stream()
+                .filter(e -> e.getValue().stream().anyMatch(slot -> slot.covers(missionSlot)))
+                .map(Map.Entry::getKey)
+                .min(Comparator.comparing(missionCounts::get)) // Driver with fewest missions
+                .orElse(null);
+    }
+
+
+    private void updateAssignmentStatus(List<MissionVehicle> mvs, List<ChauffeurVehicle> cvs, boolean isAssigned) {
+        List<Integer> vehicleIds = mvs.stream().map(mv -> mv.getVehicule().getId()).collect(Collectors.toList());
+        List<Integer> driverIds = cvs.stream().map(cv -> cv.getChauffeur().getId()).collect(Collectors.toList());
+        vehiculeRepository.bulkUpdateAssignmentStatus(vehicleIds, isAssigned);
+        chauffeurRepository.bulkUpdateAssignmentStatus(driverIds, isAssigned);
+    }
     // =============================
     //
     // =============================
@@ -101,7 +300,6 @@ public class MissionServiceImpl implements MissionService {
             }
         });
     }
-
     private boolean matchesRecurrencePattern(DeliveryPoint point, LocalDate date) {
         RecurrencePattern pattern = point.getRecurrencePattern();
 
@@ -171,13 +369,13 @@ public class MissionServiceImpl implements MissionService {
 
 
         if (!exists) {
-            log.info("Created mission -!exists-" );
 
             Mission newMission = Mission.builder()
                     .titre("Mission " + point.getAddress().getVille())
                     .deliveryDestination(point.getDeliveryDestination())
                     .dateDebut(missionStart)
                     .dateFin(missionEnd)
+                    .volume(new BigDecimal(10))
                     .etatMission(EtatMission.PLANNED)
                     .build();
             missionRepository.save(newMission);

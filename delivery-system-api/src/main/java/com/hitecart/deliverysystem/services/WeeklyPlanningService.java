@@ -1,6 +1,6 @@
 package com.hitecart.deliverysystem.services;
 
-import com.hitecart.deliverysystem.dto.WeeklyPlanningDto;
+import com.hitecart.deliverysystem.dto.basic.WeeklyPlanningDto;
 
 import java.util.List;
 

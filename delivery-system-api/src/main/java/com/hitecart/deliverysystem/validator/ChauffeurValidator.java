@@ -1,12 +1,8 @@
 package com.hitecart.deliverysystem.validator;
 
-import com.hitecart.deliverysystem.dto.AdresseDto;
-import com.hitecart.deliverysystem.dto.ChauffeurDto;
-import com.hitecart.deliverysystem.dto.ContratDto;
-import com.hitecart.deliverysystem.dto.MissionDto;
+import com.hitecart.deliverysystem.dto.basic.ChauffeurDto;
 import org.springframework.util.StringUtils;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 

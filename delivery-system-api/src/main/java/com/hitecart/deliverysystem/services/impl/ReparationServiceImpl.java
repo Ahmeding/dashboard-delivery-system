@@ -1,16 +1,15 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.*;
-import com.hitecart.deliverysystem.dto.ReparationDto;
+import com.hitecart.deliverysystem.dto.basic.*;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.exception.InvalidOperationException;
 import com.hitecart.deliverysystem.model.PieceRechange;
 import com.hitecart.deliverysystem.model.Reparation;
-import com.hitecart.deliverysystem.repository.PieceRechangeRepository;
-import com.hitecart.deliverysystem.repository.ReparationRepository;
+import com.hitecart.deliverysystem.dao.PieceRechangeRepository;
+import com.hitecart.deliverysystem.dao.ReparationRepository;
 import com.hitecart.deliverysystem.services.*;
 import com.hitecart.deliverysystem.validator.ReparationValidator;
 import lombok.RequiredArgsConstructor;

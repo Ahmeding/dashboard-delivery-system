@@ -1,10 +1,9 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.ChauffeurDto;
-import com.hitecart.deliverysystem.dto.ClientDto;
-import com.hitecart.deliverysystem.dto.CreatedByUserDto;
-import com.hitecart.deliverysystem.dto.UtilisateurDto;
+import com.hitecart.deliverysystem.dto.basic.ClientDto;
+import com.hitecart.deliverysystem.dto.basic.CreatedByUserDto;
+import com.hitecart.deliverysystem.dto.basic.UtilisateurDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
@@ -12,10 +11,9 @@ import com.hitecart.deliverysystem.exception.InvalidOperationException;
 import com.hitecart.deliverysystem.model.Client;
 import com.hitecart.deliverysystem.model.CommandeClient;
 import com.hitecart.deliverysystem.model.Devis;
-import com.hitecart.deliverysystem.repository.ClientRepository;
-import com.hitecart.deliverysystem.repository.CommandeClientRepository;
-import com.hitecart.deliverysystem.repository.DevisRepository;
-import com.hitecart.deliverysystem.repository.UtilisateurRepository;
+import com.hitecart.deliverysystem.dao.ClientRepository;
+import com.hitecart.deliverysystem.dao.CommandeClientRepository;
+import com.hitecart.deliverysystem.dao.DevisRepository;
 import com.hitecart.deliverysystem.services.ClientService;
 import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.validator.ClientValidator;

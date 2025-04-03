@@ -1,10 +1,8 @@
 package com.hitecart.deliverysystem.controllers.api;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.ClientDto;
-import com.hitecart.deliverysystem.dto.CommandeClientResponse;
-import com.hitecart.deliverysystem.dto.MissionDto;
-import com.hitecart.deliverysystem.dto.MissionResponse;
+import com.hitecart.deliverysystem.dto.basic.MissionDto;
+import com.hitecart.deliverysystem.dto.basic.MissionResponse;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -171,6 +169,8 @@ public interface MissionApi {
 
     @GetMapping(value = GENER_MISSION_ENDPOINT)
     void generateMissions();
+   @GetMapping(value = GENER_ASSIGN_ENDPOINT)
+    void generateWeeklyAssignments();
 
     @GetMapping(value =FIND_ALL_MISSION_PAGEABLE_ENDPOINT ,
             produces =MediaType.APPLICATION_JSON_VALUE )

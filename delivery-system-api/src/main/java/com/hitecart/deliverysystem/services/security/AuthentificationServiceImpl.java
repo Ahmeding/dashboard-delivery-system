@@ -1,34 +1,20 @@
 package com.hitecart.deliverysystem.services.security;
 
-import com.flickr4java.flickr.auth.Auth;
-import com.hitecart.deliverysystem.dto.*;
+import com.hitecart.deliverysystem.dto.basic.*;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
-import com.hitecart.deliverysystem.exception.InvalidOperationException;
-import com.hitecart.deliverysystem.exception.RequiredFieldException;
-import com.hitecart.deliverysystem.model.Token;
 import com.hitecart.deliverysystem.model.Utilisateur;
-import com.hitecart.deliverysystem.repository.RoleRepository;
-import com.hitecart.deliverysystem.repository.TokenRepository;
-import com.hitecart.deliverysystem.repository.UtilisateurRepository;
-import com.hitecart.deliverysystem.validator.ChauffeurValidator;
-import com.hitecart.deliverysystem.validator.LoginValidator;
+import com.hitecart.deliverysystem.dao.RoleRepository;
+import com.hitecart.deliverysystem.dao.TokenRepository;
+import com.hitecart.deliverysystem.dao.UtilisateurRepository;
 import com.hitecart.deliverysystem.validator.SignupRequestValidator;
-import com.hitecart.deliverysystem.validator.UtilisateurValidator;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 

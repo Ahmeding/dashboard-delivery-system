@@ -1,7 +1,6 @@
 package com.hitecart.deliverysystem.validator;
 
-import com.hitecart.deliverysystem.dto.DayPlanDto;
-import com.hitecart.deliverysystem.dto.WeeklyPlanningDto;
+import com.hitecart.deliverysystem.dto.basic.WeeklyPlanningDto;
 
 import java.util.ArrayList;
 import java.util.List;

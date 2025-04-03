@@ -1,14 +1,11 @@
 package com.hitecart.deliverysystem.services.impl;
 
-import com.hitecart.deliverysystem.dto.EtapeDto;
-import com.hitecart.deliverysystem.dto.EntrepriseDto;
-import com.hitecart.deliverysystem.dto.EtapeDto;
+import com.hitecart.deliverysystem.dto.basic.EtapeDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.model.Etape;
-import com.hitecart.deliverysystem.repository.EtapeRepository;
-import com.hitecart.deliverysystem.services.EntrepriseService;
+import com.hitecart.deliverysystem.dao.EtapeRepository;
 import com.hitecart.deliverysystem.services.EtapeService;
 import com.hitecart.deliverysystem.validator.EtapeValidator;
 import lombok.extern.slf4j.Slf4j;

@@ -3,12 +3,10 @@ package com.hitecart.deliverysystem;
 import com.hitecart.deliverysystem.model.DeliveryPointCategory;
 import com.hitecart.deliverysystem.model.Role;
 import com.hitecart.deliverysystem.model.Utilisateur;
-import com.hitecart.deliverysystem.repository.IDeliveryPointCategoryRepository;
-import com.hitecart.deliverysystem.repository.RoleRepository;
-import com.hitecart.deliverysystem.repository.UtilisateurRepository;
-import com.hitecart.deliverysystem.services.impl.MissionServiceImpl;
-import com.hitecart.deliverysystem.services.impl.MissionVehicleServiceImpl;
-import com.hitecart.deliverysystem.utils.CodeGeneratorExecutor;
+import com.hitecart.deliverysystem.dao.IDeliveryPointCategoryRepository;
+import com.hitecart.deliverysystem.dao.RoleRepository;
+import com.hitecart.deliverysystem.dao.UtilisateurRepository;
+import com.hitecart.deliverysystem.services.impl.ChauffeurServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -36,8 +34,10 @@ public class DeliverysystemApplication {
 
 
 	@Bean
-	public CommandLineRunner runner(RoleRepository roleRepository, UtilisateurRepository userRepo,
-									IDeliveryPointCategoryRepository dpcRepository) {
+	public CommandLineRunner runner(RoleRepository roleRepository,
+									UtilisateurRepository userRepo,
+									IDeliveryPointCategoryRepository dpcRepository,
+									ChauffeurServiceImpl driverService) {
 		return args -> {//CodeGeneratorExecutor.executeCodeGenerator();
 
 			if(roleRepository.findByName("USER").isEmpty()){
@@ -84,6 +84,7 @@ public class DeliverysystemApplication {
 								.build()
 				);
 			}
+			driverService.initializeMissingStats();
 		};
 	}
 }

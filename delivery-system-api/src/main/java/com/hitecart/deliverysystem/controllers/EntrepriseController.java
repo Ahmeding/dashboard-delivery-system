@@ -2,9 +2,8 @@ package com.hitecart.deliverysystem.controllers;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.EntrepriseApi;
-import com.hitecart.deliverysystem.dto.EntrepriseDto;
+import com.hitecart.deliverysystem.dto.basic.EntrepriseDto;
 import com.hitecart.deliverysystem.services.EntrepriseService;
-import com.hitecart.deliverysystem.services.EtapeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 

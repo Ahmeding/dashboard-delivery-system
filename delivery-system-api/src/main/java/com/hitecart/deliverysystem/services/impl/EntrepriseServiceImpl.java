@@ -1,17 +1,12 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.DevisDto;
-import com.hitecart.deliverysystem.dto.EntrepriseDto;
-import com.hitecart.deliverysystem.dto.EntrepriseDto;
-import com.hitecart.deliverysystem.dto.MissionDto;
+import com.hitecart.deliverysystem.dto.basic.EntrepriseDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
-import com.hitecart.deliverysystem.model.Devis;
 import com.hitecart.deliverysystem.model.Entreprise;
-import com.hitecart.deliverysystem.model.Mission;
-import com.hitecart.deliverysystem.repository.EntrepriseRepository;
+import com.hitecart.deliverysystem.dao.EntrepriseRepository;
 import com.hitecart.deliverysystem.services.EntrepriseService;
 import com.hitecart.deliverysystem.validator.EntrepriseValidator;
 import lombok.extern.slf4j.Slf4j;

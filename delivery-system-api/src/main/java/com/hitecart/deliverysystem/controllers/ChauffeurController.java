@@ -2,7 +2,7 @@ package com.hitecart.deliverysystem.controllers;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.ChauffeurApi;
-import com.hitecart.deliverysystem.dto.ChauffeurDto;
+import com.hitecart.deliverysystem.dto.basic.ChauffeurDto;
 import com.hitecart.deliverysystem.services.ChauffeurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

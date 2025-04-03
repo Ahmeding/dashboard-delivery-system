@@ -1,6 +1,6 @@
 package com.hitecart.deliverysystem.validator;
 
-import com.hitecart.deliverysystem.dto.SigninRequest;
+import com.hitecart.deliverysystem.dto.basic.SigninRequest;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;

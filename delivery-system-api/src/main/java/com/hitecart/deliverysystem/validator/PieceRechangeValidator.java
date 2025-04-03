@@ -1,6 +1,6 @@
 package com.hitecart.deliverysystem.validator;
 
-import com.hitecart.deliverysystem.dto.PieceRechangeDto;
+import com.hitecart.deliverysystem.dto.basic.PieceRechangeDto;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.*;
+import com.hitecart.deliverysystem.dto.basic.*;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
@@ -10,9 +10,9 @@ import com.hitecart.deliverysystem.model.Client;
 import com.hitecart.deliverysystem.model.DeliveryDestination;
 import com.hitecart.deliverysystem.model.DeliveryPoint;
 import com.hitecart.deliverysystem.model.ServiceDelivery;
-import com.hitecart.deliverysystem.repository.DeliveryDestinationRepository;
-import com.hitecart.deliverysystem.repository.DeliveryPointRepository;
-import com.hitecart.deliverysystem.repository.IServiceDeliveryRepository;
+import com.hitecart.deliverysystem.dao.DeliveryDestinationRepository;
+import com.hitecart.deliverysystem.dao.DeliveryPointRepository;
+import com.hitecart.deliverysystem.dao.IServiceDeliveryRepository;
 import com.hitecart.deliverysystem.services.ClientService;
 import com.hitecart.deliverysystem.services.IServiceDeliveryService;
 import com.hitecart.deliverysystem.services.UtilisateurService;

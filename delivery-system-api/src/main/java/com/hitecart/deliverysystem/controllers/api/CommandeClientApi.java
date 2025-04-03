@@ -1,11 +1,8 @@
 package com.hitecart.deliverysystem.controllers.api;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.ClientDto;
-import com.hitecart.deliverysystem.dto.CommandeClientDto;
-import com.hitecart.deliverysystem.dto.CommandeClientDto;
-import com.hitecart.deliverysystem.dto.CommandeClientResponse;
-import com.hitecart.deliverysystem.utils.Constants;
+import com.hitecart.deliverysystem.dto.basic.CommandeClientDto;
+import com.hitecart.deliverysystem.dto.basic.CommandeClientResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -1,8 +1,8 @@
 package com.hitecart.deliverysystem.services;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.PieceRechangeDto;
-import com.hitecart.deliverysystem.dto.ReparationDto;
+import com.hitecart.deliverysystem.dto.basic.PieceRechangeDto;
+import com.hitecart.deliverysystem.dto.basic.ReparationDto;
 
 import java.time.Instant;
 import java.util.List;

@@ -49,9 +49,6 @@ public class Mission extends AbstractEntity {
 
     @Column(name = "kmfin")
     private double kmFin;
-    @ManyToOne
-    @JoinColumn(name = "id_day_paly")
-    private DayPlan dayPlan;
     @OneToOne
     @JoinColumn(name = "idfraismission", referencedColumnName = "id")
     private FraisMission fraisMission;
@@ -61,6 +58,7 @@ public class Mission extends AbstractEntity {
 
     @Enumerated(EnumType.STRING)
     private RouteDifficulty difficulty; // SIMPLE, MEDIUM, DIFFICULT
+
     @Column(name = "assignment_status")
     @Enumerated(EnumType.STRING)
     private AssignmentStatus assignmentStatus = AssignmentStatus.PENDING_VOLUME;

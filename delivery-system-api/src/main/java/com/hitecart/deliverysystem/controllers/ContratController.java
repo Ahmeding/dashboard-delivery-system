@@ -1,10 +1,8 @@
 package com.hitecart.deliverysystem.controllers;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.controllers.api.ChauffeurApi;
 import com.hitecart.deliverysystem.controllers.api.ContratApi;
-import com.hitecart.deliverysystem.dto.ContratDto;
-import com.hitecart.deliverysystem.services.ClientService;
+import com.hitecart.deliverysystem.dto.basic.ContratDto;
 import com.hitecart.deliverysystem.services.ContratService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

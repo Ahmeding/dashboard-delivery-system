@@ -2,11 +2,10 @@ package com.hitecart.deliverysystem.controllers;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.MissionApi;
-import com.hitecart.deliverysystem.dto.MissionDto;
-import com.hitecart.deliverysystem.dto.MissionResponse;
-import com.hitecart.deliverysystem.exception.InvalidOperationException;
+import com.hitecart.deliverysystem.dto.basic.MissionDto;
+import com.hitecart.deliverysystem.dto.basic.MissionResponse;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
-import com.hitecart.deliverysystem.services.MissionService;
+import com.hitecart.deliverysystem.services.impl.MissionServicesImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MissionController implements MissionApi {
 
-    private final MissionService missionService;
+    private final MissionServicesImpl missionService;
 
 
     @Override
@@ -65,6 +64,11 @@ public class MissionController implements MissionApi {
     @Override
     public void generateMissions() {
         missionService.generateMissions();
+    }
+
+    @Override
+    public void generateWeeklyAssignments() {
+        missionService.generateWeeklyAssignments();
     }
 
     @Override

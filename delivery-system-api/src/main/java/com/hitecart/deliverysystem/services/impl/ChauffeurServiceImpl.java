@@ -1,22 +1,19 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.*;
+import com.hitecart.deliverysystem.dto.basic.ChauffeurDto;
+import com.hitecart.deliverysystem.dto.basic.CreatedByUserDto;
+import com.hitecart.deliverysystem.dto.basic.UtilisateurDto;
 import com.hitecart.deliverysystem.exception.*;
-import com.hitecart.deliverysystem.model.Chauffeur;
-import com.hitecart.deliverysystem.model.Contrat;
-import com.hitecart.deliverysystem.model.Mission;
-import com.hitecart.deliverysystem.model.ServiceDelivery;
+import com.hitecart.deliverysystem.model.*;
 import com.hitecart.deliverysystem.model.enums.TypeContrat;
-import com.hitecart.deliverysystem.repository.ChauffeurRepository;
-import com.hitecart.deliverysystem.repository.ContratRepository;
-import com.hitecart.deliverysystem.repository.MissionRepository;
-import com.hitecart.deliverysystem.repository.RoleRepository;
+import com.hitecart.deliverysystem.dao.IChauffeurRepository;
+import com.hitecart.deliverysystem.dao.ContratRepository;
+import com.hitecart.deliverysystem.dao.RoleRepository;
 import com.hitecart.deliverysystem.services.ChauffeurService;
 import com.hitecart.deliverysystem.validator.ChauffeurValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,10 +21,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,12 +35,46 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class  ChauffeurServiceImpl implements ChauffeurService {
 
-    private final ChauffeurRepository chauffeurRepository;
+    private final IChauffeurRepository chauffeurRepository;
     private final ContratRepository contratRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final UtilisateurServiceImpl utilisateurServiceImpl;
 
+    @Transactional
+    public void initializeMissingStats() {
+        // Get all drivers (empty list instead of null)
+        List<Chauffeur> allDrivers = chauffeurRepository.findAll();
+
+        // Return early if no drivers exist
+        if (allDrivers.isEmpty()) {
+            log.info("No drivers found in the database.");
+            return;
+        }
+
+        // Filter drivers without stats
+        List<Chauffeur> driversWithoutStats = allDrivers.stream()
+                .filter(d -> d.getStats() == null)
+                .collect(Collectors.toList());
+
+        // Return early if no drivers need stats initialization
+        if (driversWithoutStats.isEmpty()) {
+            log.info("All drivers already have stats initialized.");
+            return;
+        }
+
+        // Initialize stats for drivers that need it
+        driversWithoutStats.forEach(driver -> {
+            DriverStats stats = new DriverStats();
+            stats.setChauffeur(driver);
+            driver.setStats(stats);
+        });
+
+        // Save only if there are drivers to update
+        chauffeurRepository.saveAll(driversWithoutStats);
+        log.info("Initialized stats for {} drivers.", driversWithoutStats.size());
+
+    }
 
     @Override
     public ChauffeurDto save(ChauffeurDto dto) {

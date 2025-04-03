@@ -1,6 +1,6 @@
 package com.hitecart.deliverysystem.validator;
 
-import com.hitecart.deliverysystem.dto.ContratDto;
+import com.hitecart.deliverysystem.dto.basic.ContratDto;
 import com.hitecart.deliverysystem.model.enums.TypeContrat;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package com.hitecart.deliverysystem.services.impl;
 
-import com.hitecart.deliverysystem.dto.MissionVehicleDto;
-import com.hitecart.deliverysystem.repository.MissionVehicleRepository;
+import com.hitecart.deliverysystem.dto.basic.MissionVehicleDto;
+import com.hitecart.deliverysystem.dao.MissionVehicleRepository;
 import com.hitecart.deliverysystem.services.IMissionVehicleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

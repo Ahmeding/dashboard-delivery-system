@@ -1,6 +1,6 @@
 package com.hitecart.deliverysystem.services;
 
-import com.hitecart.deliverysystem.dto.ChauffeurVehicleDto;
+import com.hitecart.deliverysystem.dto.basic.ChauffeurVehicleDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
