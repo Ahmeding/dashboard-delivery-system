@@ -1,18 +1,11 @@
 package com.hitecart.deliverysystem.dto;
 
+import com.hitecart.deliverysystem.dto.basic.ContratDto;
 import com.hitecart.deliverysystem.model.Contrat;
-import com.hitecart.deliverysystem.model.enums.TypeContrat;
 import org.junit.Before;
-import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

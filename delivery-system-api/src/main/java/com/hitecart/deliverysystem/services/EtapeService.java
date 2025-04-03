@@ -1,6 +1,6 @@
 package com.hitecart.deliverysystem.services;
 
-import com.hitecart.deliverysystem.dto.EtapeDto;
+import com.hitecart.deliverysystem.dto.basic.EtapeDto;
 
 import java.util.List;
 

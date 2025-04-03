@@ -1,7 +1,7 @@
 package com.hitecart.deliverysystem.services;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.EntrepriseDto;
+import com.hitecart.deliverysystem.dto.basic.EntrepriseDto;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.hitecart.deliverysystem.controllers.api;
 
-import com.hitecart.deliverysystem.dto.*;
+import com.hitecart.deliverysystem.dto.basic.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

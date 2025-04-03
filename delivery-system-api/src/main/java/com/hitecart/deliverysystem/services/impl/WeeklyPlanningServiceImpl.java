@@ -1,24 +1,21 @@
 package com.hitecart.deliverysystem.services.impl;
 
-import com.hitecart.deliverysystem.dto.CreatedByUserDto;
-import com.hitecart.deliverysystem.dto.DayPlanDto;
-import com.hitecart.deliverysystem.dto.UtilisateurDto;
-import com.hitecart.deliverysystem.dto.WeeklyPlanningDto;
+import com.hitecart.deliverysystem.dto.basic.CreatedByUserDto;
+import com.hitecart.deliverysystem.dto.basic.UtilisateurDto;
+import com.hitecart.deliverysystem.dto.basic.WeeklyPlanningDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.services.WeeklyPlanningService;
-import com.hitecart.deliverysystem.validator.DayPlanValidator;
 import com.hitecart.deliverysystem.validator.WeeklyPlanningValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import com.hitecart.deliverysystem.model.WeeklyPlanning;
-import com.hitecart.deliverysystem.repository.WeeklyPlanningRepository;
+import com.hitecart.deliverysystem.dao.WeeklyPlanningRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

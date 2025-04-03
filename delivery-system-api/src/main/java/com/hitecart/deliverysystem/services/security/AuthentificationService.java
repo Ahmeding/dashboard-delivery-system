@@ -1,6 +1,6 @@
 package com.hitecart.deliverysystem.services.security;
 
-import com.hitecart.deliverysystem.dto.*;
+import com.hitecart.deliverysystem.dto.basic.*;
 
 public interface AuthentificationService {
 

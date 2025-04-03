@@ -1,13 +1,14 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.*;
+import com.hitecart.deliverysystem.dto.basic.ContratDto;
+import com.hitecart.deliverysystem.dto.basic.CreatedByUserDto;
+import com.hitecart.deliverysystem.dto.basic.UtilisateurDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
-import com.hitecart.deliverysystem.model.Client;
 import com.hitecart.deliverysystem.model.Contrat;
-import com.hitecart.deliverysystem.repository.ContratRepository;
+import com.hitecart.deliverysystem.dao.ContratRepository;
 import com.hitecart.deliverysystem.services.ContratService;
 import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.validator.ContratValidator;

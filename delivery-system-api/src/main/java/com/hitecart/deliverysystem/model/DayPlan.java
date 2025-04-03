@@ -19,10 +19,5 @@ public class DayPlan extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private DayName name;
     private LocalDate date;
-    @ManyToOne
-    @JoinColumn(name = "id_weekly_planning")
-    private WeeklyPlanning weeklyPlanning;
-    @OneToMany(mappedBy = "dayPlan")
-    private List<Mission> missions=new ArrayList<>();
 
 }

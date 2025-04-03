@@ -1,27 +1,24 @@
 package com.hitecart.deliverysystem.services.impl;
 
-import com.hitecart.deliverysystem.dto.*;
+import com.hitecart.deliverysystem.dto.basic.CreatedByUserDto;
+import com.hitecart.deliverysystem.dto.basic.DayPlanDto;
+import com.hitecart.deliverysystem.dto.basic.UtilisateurDto;
+import com.hitecart.deliverysystem.dto.basic.WeeklyPlanningDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
-import com.hitecart.deliverysystem.exception.InvalidOperationException;
-import com.hitecart.deliverysystem.model.Contrat;
 import com.hitecart.deliverysystem.model.WeeklyPlanning;
-import com.hitecart.deliverysystem.repository.UtilisateurRepository;
 import com.hitecart.deliverysystem.services.DayPlanService;
 import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.services.WeeklyPlanningService;
-import com.hitecart.deliverysystem.validator.ContratValidator;
 import com.hitecart.deliverysystem.validator.DayPlanValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hitecart.deliverysystem.model.DayPlan;
-import com.hitecart.deliverysystem.repository.DayPlanRepository;
+import com.hitecart.deliverysystem.dao.DayPlanRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +32,7 @@ public class DayPlanServiceImpl implements DayPlanService {
 
     @Override
     public List<DayPlanDto> findAllByWeeklyPlanningId(Integer weeklyPlanningId) {
-        CheckParmasUtil.checkID(
+      /*  CheckParmasUtil.checkID(
                 weeklyPlanningId,
                 "ID WeeklyPlanning est null",
                 "Immpossible de trouver un WeeklyPlanning avec un id null",
@@ -43,7 +40,8 @@ public class DayPlanServiceImpl implements DayPlanService {
 
         return dayPlanRepository.findAllByWeeklyPlanningId(weeklyPlanningId).stream()
                 .map(this::updatedResponse)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
+        return null;
     }
 
     @Override
@@ -91,15 +89,10 @@ public class DayPlanServiceImpl implements DayPlanService {
             throw new EntityNotFoundException("Aucun WeeklyPalnning trouvées",
                     ErrorCodes.WEEKLYPLANNING_NOT_FOUND);
         }
-        var dayExist = weeklyPlanning.getDaysPlan().stream().map(DayPlan::getName).anyMatch(dto.getName()::equals);
 
-        if(dayExist){
-            throw new InvalidOperationException("le nom du jour est deja existe pour le weeklyPanning",
-                    ErrorCodes.DAYPLAN_NOT_VALID_OPERATION);
-        }
+
         DayPlan dayPlanToSave = DayPlanDto.toEntity(dto);
 
-        dayPlanToSave.setWeeklyPlanning(weeklyPlanning);
         return DayPlanDto.fromEntity(dayPlanRepository.save(dayPlanToSave));
 
 

@@ -1,15 +1,12 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.*;
-import com.hitecart.deliverysystem.dto.UtilisateurDto;
+import com.hitecart.deliverysystem.dto.basic.UtilisateurDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
-import com.hitecart.deliverysystem.model.Devis;
-import com.hitecart.deliverysystem.model.Mission;
 import com.hitecart.deliverysystem.model.Utilisateur;
-import com.hitecart.deliverysystem.repository.UtilisateurRepository;
+import com.hitecart.deliverysystem.dao.UtilisateurRepository;
 import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.validator.UtilisateurValidator;
 import lombok.RequiredArgsConstructor;

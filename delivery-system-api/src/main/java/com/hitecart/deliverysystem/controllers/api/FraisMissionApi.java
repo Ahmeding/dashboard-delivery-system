@@ -1,9 +1,8 @@
 package com.hitecart.deliverysystem.controllers.api;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.ClientDto;
-import com.hitecart.deliverysystem.dto.FraisMissionDto;
-import com.hitecart.deliverysystem.dto.LigneFraisMissionDto;
+import com.hitecart.deliverysystem.dto.basic.FraisMissionDto;
+import com.hitecart.deliverysystem.dto.basic.LigneFraisMissionDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

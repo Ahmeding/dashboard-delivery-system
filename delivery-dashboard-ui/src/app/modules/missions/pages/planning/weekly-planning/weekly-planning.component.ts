@@ -1,8 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {addDays, format, startOfWeek, isToday, isBefore, startOfDay} from 'date-fns';
-import {
-  NewDpCategoryModalComponent
-} from "../../../../settings/pages/delivery-point-category/new-dp-category-modal/new-dp-category-modal.component";
 import {AlertService} from "../../../../../services/alert/alert.service";
 import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -15,20 +12,8 @@ import {DayPlan, MissionCard} from "./models/mission.model";
 import {PlanningService} from "./services/planning-service";
 
 import {formatDate, formatDateDay, formatDateTimeDay, formatDayName} from './utils/planning.utils';
-import {MissionDto} from "../../../../../../ds-api/src/models/mission-dto";
-import {EtapeDto} from "../../../../../../ds-api/src/models/etape-dto";
-import {VehiculeDto} from "../../../../../../ds-api/src/models/vehicule-dto";
-import {ChauffeurDto} from "../../../../../../ds-api/src/models/chauffeur-dto";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
-import {ChauffeurVehicleDto} from "../../../../../../ds-api/src/models/chauffeur-vehicle-dto";
-import {MissionVehicleDto} from "../../../../../../ds-api/src/models/mission-vehicle-dto";
-import {ServiceDeliveryDto} from "../../../../../../ds-api/src/models/service-delivery-dto";
-import {DeliveryPointDto} from "../../../../../../ds-api/src/models/delivery-point-dto";
-import {ServiceDeliveryService} from "../../../../../../ds-api/src/services/service-delivery.service";
 import {MissionService} from "../../../../../../ds-api/src/services/mission.service";
-import {DeliveryPointsService} from "../../../../../../ds-api/src/services/delivery-points.service";
-import {VehiculeService} from "../../../../../../ds-api/src/services/vehicule.service";
-import {ChauffeurService} from "../../../../../../ds-api/src/services/chauffeur.service";
 import {Router} from "@angular/router";
 import {DateUtilsService} from "../../../../../services/date-utils/date-utils.service";
 import {MissionResponse} from "../../../../../../ds-api/src/models/mission-response";
@@ -42,25 +27,15 @@ import {MissionResponse} from "../../../../../../ds-api/src/models/mission-respo
 })
 export class WeeklyPlanningComponent implements  OnInit {
 
-  weeklyPlannigToSave:WeeklyPlanningDto={};
-  dayPlanToSave:DayPlanDto={};
-  testDayPlan:DayPlan={date:new Date,missions:[]}
-  testMissions: MissionCard[]=[];
-  testMission!:MissionCard;
   weekDays: DayPlan[] = [];
   isLoading = false;
-  currentWeekStart: Date = startOfWeek(new Date(), { weekStartsOn: 1 });
+  currentWeekStart: Date = startOfWeek(new Date(), { weekStartsOn: 0 });
   missionsPerWeek!:MissionResponse[];
 
   constructor(
     private dateService: DateUtilsService, private fb:FormBuilder,
               private missionService:MissionService,
-              private planningService: PlanningService,
-              private weeklyPlanningService: WeeklyPlanningService,
-              private dayPlanService:DayPlanService,
-              private alertService:AlertService,
               private router:Router,
-              private confirmBoxService:ConfirmBoxEvokeService,
               private modalService:NgbModal) {
 
   }

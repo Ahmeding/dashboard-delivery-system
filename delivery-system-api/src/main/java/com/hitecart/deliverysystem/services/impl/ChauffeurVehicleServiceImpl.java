@@ -1,8 +1,8 @@
 package com.hitecart.deliverysystem.services.impl;
 
-import com.hitecart.deliverysystem.dto.ChauffeurVehicleDto;
+import com.hitecart.deliverysystem.dto.basic.ChauffeurVehicleDto;
 import com.hitecart.deliverysystem.model.ChauffeurVehicle;
-import com.hitecart.deliverysystem.repository.ChauffeurVehicleRepository;
+import com.hitecart.deliverysystem.dao.IChauffeurVehicleRepository;
 import com.hitecart.deliverysystem.services.IChauffeurVehicleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ChauffeurVehicleServiceImpl implements IChauffeurVehicleService {
 
-    private final ChauffeurVehicleRepository chauffeurVehicleRepository;
+    private final IChauffeurVehicleRepository chauffeurVehicleRepository;
 
     @Override
     public ChauffeurVehicleDto findByChauffeurId(Integer chauffeurId) {

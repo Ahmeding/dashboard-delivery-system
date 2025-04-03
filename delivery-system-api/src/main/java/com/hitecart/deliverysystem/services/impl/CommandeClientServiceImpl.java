@@ -1,14 +1,14 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.*;
+import com.hitecart.deliverysystem.dto.basic.*;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.exception.InvalidOperationException;
 import com.hitecart.deliverysystem.model.*;
-import com.hitecart.deliverysystem.repository.CommandeClientRepository;
-import com.hitecart.deliverysystem.repository.LigneCommandeClientRepository;
+import com.hitecart.deliverysystem.dao.CommandeClientRepository;
+import com.hitecart.deliverysystem.dao.LigneCommandeClientRepository;
 import com.hitecart.deliverysystem.services.ClientService;
 import com.hitecart.deliverysystem.services.CommandeClientService;
 import com.hitecart.deliverysystem.services.IServiceDeliveryService;
@@ -21,7 +21,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

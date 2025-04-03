@@ -1,9 +1,7 @@
 package com.hitecart.deliverysystem.controllers.api;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.CommandeClientResponse;
-import com.hitecart.deliverysystem.dto.ServiceDeliveryDto;
-import com.hitecart.deliverysystem.dto.ServiceDeliveryDto;
+import com.hitecart.deliverysystem.dto.basic.ServiceDeliveryDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;

@@ -1,6 +1,6 @@
 package com.hitecart.deliverysystem.validator;
 
-import com.hitecart.deliverysystem.dto.FraisMissionDto;
+import com.hitecart.deliverysystem.dto.basic.FraisMissionDto;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;

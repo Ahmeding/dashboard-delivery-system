@@ -1,6 +1,6 @@
 package com.hitecart.deliverysystem.validator;
 
-import com.hitecart.deliverysystem.dto.LigneCommandeClientDto;
+import com.hitecart.deliverysystem.dto.basic.LigneCommandeClientDto;
 
 import java.util.ArrayList;
 import java.util.List;

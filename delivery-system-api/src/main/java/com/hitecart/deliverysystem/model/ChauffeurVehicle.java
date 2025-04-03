@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.model;
 
+import com.hitecart.deliverysystem.utils.TimeSlot;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -29,4 +30,10 @@ public class ChauffeurVehicle extends AbstractEntity{
 
     private LocalDateTime assignedAt ;
 
+    public TimeSlot getTimeSlot() {
+        return new TimeSlot(
+                this.getMissionVehicle().getMission().getDateDebut(),
+                this.getMissionVehicle().getMission().getDateFin()
+        );
+    }
 }

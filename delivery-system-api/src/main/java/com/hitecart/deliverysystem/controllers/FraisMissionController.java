@@ -2,8 +2,8 @@ package com.hitecart.deliverysystem.controllers;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.FraisMissionApi;
-import com.hitecart.deliverysystem.dto.FraisMissionDto;
-import com.hitecart.deliverysystem.dto.LigneFraisMissionDto;
+import com.hitecart.deliverysystem.dto.basic.FraisMissionDto;
+import com.hitecart.deliverysystem.dto.basic.LigneFraisMissionDto;
 import com.hitecart.deliverysystem.services.FraisMissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.hitecart.deliverysystem.validator;
 
-import com.hitecart.deliverysystem.dto.DeliveryPointContactDto;
+import com.hitecart.deliverysystem.dto.basic.DeliveryPointContactDto;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;

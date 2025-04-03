@@ -1,7 +1,7 @@
 package com.hitecart.deliverysystem.controllers;
 
 import com.hitecart.deliverysystem.controllers.api.WeeklyPlanningApi;
-import com.hitecart.deliverysystem.dto.WeeklyPlanningDto;
+import com.hitecart.deliverysystem.dto.basic.WeeklyPlanningDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

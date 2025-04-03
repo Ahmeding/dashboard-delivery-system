@@ -1,7 +1,6 @@
 package com.hitecart.deliverysystem.validator;
 
-import com.hitecart.deliverysystem.dto.DayPlanDto;
-import com.hitecart.deliverysystem.model.enums.TypeContrat;
+import com.hitecart.deliverysystem.dto.basic.DayPlanDto;
 
 import java.util.ArrayList;
 import java.util.List;

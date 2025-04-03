@@ -1,18 +1,16 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.*;
-import com.hitecart.deliverysystem.dto.DevisDto;
+import com.hitecart.deliverysystem.dto.basic.*;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.exception.InvalidOperationException;
 import com.hitecart.deliverysystem.model.Client;
-import com.hitecart.deliverysystem.model.CommandeClient;
 import com.hitecart.deliverysystem.model.Devis;
 import com.hitecart.deliverysystem.model.LigneDevis;
-import com.hitecart.deliverysystem.repository.DevisRepository;
-import com.hitecart.deliverysystem.repository.LigneDevisRepository;
+import com.hitecart.deliverysystem.dao.DevisRepository;
+import com.hitecart.deliverysystem.dao.LigneDevisRepository;
 import com.hitecart.deliverysystem.services.ClientService;
 import com.hitecart.deliverysystem.services.DevisService;
 import com.hitecart.deliverysystem.services.UtilisateurService;

@@ -1,6 +1,6 @@
 package com.hitecart.deliverysystem.services.impl;
 
-import com.hitecart.deliverysystem.dto.ChauffeurDto;
+import com.hitecart.deliverysystem.dto.basic.ChauffeurDto;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.exception.InvalidOperationException;

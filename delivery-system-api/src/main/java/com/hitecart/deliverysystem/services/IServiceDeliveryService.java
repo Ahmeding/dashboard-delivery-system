@@ -1,10 +1,7 @@
 package com.hitecart.deliverysystem.services;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.ChauffeurDto;
-import com.hitecart.deliverysystem.dto.ServiceDeliveryDto;
-import com.hitecart.deliverysystem.model.ServiceDelivery;
-import com.hitecart.deliverysystem.repository.IServiceDeliveryRepository;
+import com.hitecart.deliverysystem.dto.basic.ServiceDeliveryDto;
 
 import java.util.List;
 

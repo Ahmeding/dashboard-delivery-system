@@ -1,15 +1,16 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.*;
-import com.hitecart.deliverysystem.dto.VehiculeDto;
+import com.hitecart.deliverysystem.dto.basic.CreatedByUserDto;
+import com.hitecart.deliverysystem.dto.basic.UtilisateurDto;
+import com.hitecart.deliverysystem.dto.basic.VehiculeDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.exception.InvalidOperationException;
 import com.hitecart.deliverysystem.model.*;
-import com.hitecart.deliverysystem.repository.ReparationRepository;
-import com.hitecart.deliverysystem.repository.VehiculeRepository;
+import com.hitecart.deliverysystem.dao.ReparationRepository;
+import com.hitecart.deliverysystem.dao.VehiculeRepository;
 import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.services.VehiculeService;
 import com.hitecart.deliverysystem.validator.VehiculeValidator;

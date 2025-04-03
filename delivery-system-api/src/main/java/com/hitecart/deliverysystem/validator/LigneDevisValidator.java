@@ -1,7 +1,6 @@
 package com.hitecart.deliverysystem.validator;
 
-import com.hitecart.deliverysystem.dto.LigneDevisDto;
-import org.springframework.util.StringUtils;
+import com.hitecart.deliverysystem.dto.basic.LigneDevisDto;
 
 import java.util.ArrayList;
 import java.util.List;

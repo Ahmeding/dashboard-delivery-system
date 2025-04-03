@@ -126,6 +126,7 @@ String MISSION_ENDPOINT= "/missions";
     String FIND_ALL_MISSION_ENDPOINT= "/all";
     String DELETE_MISSION_ENDPOINT= "/delete/{id}";
     String GENER_MISSION_ENDPOINT= "/gener-mission";
+    String GENER_ASSIGN_ENDPOINT= "/gener-assign";
     String CHECK_OVERLAPPING_DRIVERS_ENDPOINT= "/drivers-check";
     String CHECK_OVERLAPPING_VEHICLES_ENDPOINT= "/vehicles-check";
 /////////////////////////////////////////////////////////////////////////

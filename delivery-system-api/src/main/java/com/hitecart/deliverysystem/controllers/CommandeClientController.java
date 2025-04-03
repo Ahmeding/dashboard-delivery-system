@@ -2,13 +2,11 @@ package com.hitecart.deliverysystem.controllers;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.CommandeClientApi;
-import com.hitecart.deliverysystem.dto.CommandeClientDto;
-import com.hitecart.deliverysystem.dto.CommandeClientResponse;
+import com.hitecart.deliverysystem.dto.basic.CommandeClientDto;
+import com.hitecart.deliverysystem.dto.basic.CommandeClientResponse;
 import com.hitecart.deliverysystem.services.CommandeClientService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;

@@ -1,9 +1,8 @@
 package com.hitecart.deliverysystem.services;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.CommandeClientDto;
-import com.hitecart.deliverysystem.dto.CommandeClientResponse;
-import org.springframework.security.core.Authentication;
+import com.hitecart.deliverysystem.dto.basic.CommandeClientDto;
+import com.hitecart.deliverysystem.dto.basic.CommandeClientResponse;
 
 import java.util.List;
 

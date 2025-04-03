@@ -1,8 +1,8 @@
 package com.hitecart.deliverysystem.services;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.DevisDto;
-import com.hitecart.deliverysystem.dto.DevisDtoResponse;
+import com.hitecart.deliverysystem.dto.basic.DevisDto;
+import com.hitecart.deliverysystem.dto.basic.DevisDtoResponse;
 
 import java.util.List;
 

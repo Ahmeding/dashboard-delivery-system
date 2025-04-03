@@ -2,7 +2,7 @@ package com.hitecart.deliverysystem.controllers;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.DeliveryPointApi;
-import com.hitecart.deliverysystem.dto.DeliveryPointDto;
+import com.hitecart.deliverysystem.dto.basic.DeliveryPointDto;
 import com.hitecart.deliverysystem.services.IDeliveryPointService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

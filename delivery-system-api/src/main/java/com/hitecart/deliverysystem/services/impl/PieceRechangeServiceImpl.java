@@ -1,19 +1,15 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.MissionDto;
-import com.hitecart.deliverysystem.dto.PieceRechangeDto;
-import com.hitecart.deliverysystem.dto.PieceRechangeDto;
-import com.hitecart.deliverysystem.dto.ReparationDto;
+import com.hitecart.deliverysystem.dto.basic.PieceRechangeDto;
+import com.hitecart.deliverysystem.dto.basic.ReparationDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
-import com.hitecart.deliverysystem.model.Mission;
 import com.hitecart.deliverysystem.model.PieceRechange;
-import com.hitecart.deliverysystem.repository.PieceRechangeRepository;
+import com.hitecart.deliverysystem.dao.PieceRechangeRepository;
 import com.hitecart.deliverysystem.services.PieceRechangeService;
 import com.hitecart.deliverysystem.services.ReparationService;
-import com.hitecart.deliverysystem.utils.Constants;
 import com.hitecart.deliverysystem.validator.PieceRechangeValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

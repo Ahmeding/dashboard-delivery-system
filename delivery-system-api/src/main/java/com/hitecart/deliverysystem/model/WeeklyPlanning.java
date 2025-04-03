@@ -18,8 +18,7 @@ public class WeeklyPlanning extends AbstractEntity {
     private String title;
     private LocalDate weekStartDate;
     private LocalDate weekEndDate;
-    @OneToMany(mappedBy = "weeklyPlanning", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DayPlan> daysPlan;
+
 
     // Getters and Setters
 }

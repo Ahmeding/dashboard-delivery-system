@@ -9,8 +9,13 @@ spring:
       ddl:-auto: update
     show-sql: false
     properties:
+
       dialect: org.hibernate.dialect.PostgreSQLDialect #org.hibernate.dialect.MySQL8Dialect
       hibernate:
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
         session_factory:
           statement_inspector: com.hitecart.deliverysystem.interceptor.Interceptor
     database   : postgresql #MYSQL

@@ -2,7 +2,7 @@ package com.hitecart.deliverysystem.controllers;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.DeliveryPointCategoryApi;
-import com.hitecart.deliverysystem.dto.DeliveryPointCategoryDto;
+import com.hitecart.deliverysystem.dto.basic.DeliveryPointCategoryDto;
 import com.hitecart.deliverysystem.services.IDeliverPointCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

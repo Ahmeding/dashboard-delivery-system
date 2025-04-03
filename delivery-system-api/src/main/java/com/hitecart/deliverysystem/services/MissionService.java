@@ -1,8 +1,8 @@
 package com.hitecart.deliverysystem.services;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.MissionDto;
-import com.hitecart.deliverysystem.dto.MissionResponse;
+import com.hitecart.deliverysystem.dto.basic.MissionDto;
+import com.hitecart.deliverysystem.dto.basic.MissionResponse;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
 import org.springframework.security.core.Authentication;
 
@@ -25,6 +25,7 @@ public interface MissionService {
     void delete(Integer id);
 
     void generateMissions();
+    void generateWeeklyAssignments();
     List<Integer> checkOverlappingVehicles(MissionDto dto);
     List<Integer> checkOverlappingDrivers(MissionDto dto);
     PageResponse<MissionDto> findAllMissions(int page, int size);
