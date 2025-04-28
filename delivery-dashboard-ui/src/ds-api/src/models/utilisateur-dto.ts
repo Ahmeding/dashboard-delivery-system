@@ -4,7 +4,8 @@
 
 import { AdresseDto } from '../models/adresse-dto';
 import { CreatedByUserDto } from '../models/created-by-user-dto';
-import { Role } from '../models/role';
+import { NotificationDto } from '../models/notification-dto';
+import { RoleDto } from '../models/role-dto';
 export interface UtilisateurDto {
   accountLocked?: boolean;
   address?: AdresseDto;
@@ -19,9 +20,9 @@ export interface UtilisateurDto {
   id?: number;
   lastModifiedBy?: number;
   lastname?: string;
+  notificationsDtos?: Array<NotificationDto>;
   password?: string;
   phoneNum?: string;
-  role?: 'ADMIN' | 'USER';
-  roles?: Array<Role>;
+  rolesDto?: Array<RoleDto>;
   updatedAt?: string;
 }

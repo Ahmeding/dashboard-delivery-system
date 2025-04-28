@@ -4,8 +4,8 @@
 
 import { UtilisateurDto } from '../models/utilisateur-dto';
 export interface JwtAuthenticationResponse {
+  access_token?: string;
   authenicated?: boolean;
-  refreshToken?: string;
-  token?: string;
+  refresh_token?: string;
   user?: UtilisateurDto;
 }

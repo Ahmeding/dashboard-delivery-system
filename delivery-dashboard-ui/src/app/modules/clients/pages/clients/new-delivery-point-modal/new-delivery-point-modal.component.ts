@@ -112,7 +112,7 @@ export class NewDeliveryPointModalComponent implements OnInit{
   }
 
   getDeliveryPointById(){
-    this.deliveryPointsService.findById11({id:this.dpointId}).subscribe({
+    this.deliveryPointsService.findById12({id:this.dpointId}).subscribe({
       next:(dpResp)=>{
         this.selectedDeliveryPoint=dpResp;
         console.log(this.selectedDeliveryPoint);
@@ -166,7 +166,7 @@ export class NewDeliveryPointModalComponent implements OnInit{
       this.destinationForm.get("serviceDeliveryId")?.setValue(this.selectedDeliveryService.id)
       const deliveryDest=this.destinationForm.getRawValue();
       console.log( );
-      this.dDestinationService.save12({body:deliveryDest}).subscribe({
+      this.dDestinationService.save13({body:deliveryDest}).subscribe({
         next:(dpResp)=>{
           console.log(dpResp);
 
@@ -193,7 +193,7 @@ export class NewDeliveryPointModalComponent implements OnInit{
   }
 
   private getAllCategories() {
-    this.dpCategoryService.findAll9().subscribe({
+    this.dpCategoryService.findAll10().subscribe({
       next:(dpCatRep)=>{
         this.dpCategories=dpCatRep;
       },error:(err)=>{

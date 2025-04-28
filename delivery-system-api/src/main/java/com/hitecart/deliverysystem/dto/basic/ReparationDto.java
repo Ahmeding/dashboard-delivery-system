@@ -29,7 +29,7 @@ public class ReparationDto{
     @JsonIgnore
     private List<PieceRechangeDto> pieceRechangesDtos;
 
-    private VehiculeDto vehiculeDto;
+    private VehicleDto vehiculeDto;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer createdBy;
@@ -58,7 +58,7 @@ public class ReparationDto{
                 .lastModifiedBy(reparation.getLastModifiedBy())
 
 
-                .vehiculeDto(VehiculeDto.fromEntity(reparation.getVehicule()))
+                .vehiculeDto(VehicleDto.fromEntity(reparation.getVehicule()))
                 .build();
     }
 
@@ -76,7 +76,7 @@ public class ReparationDto{
                     reparation.setDateFin(dto.getDateFin());
                     reparation.setDateProchainRep(dto.getDateProchainRep());
                     reparation.setCout(dto.getCout());
-                    reparation.setVehicule(VehiculeDto.toEntity(dto.getVehiculeDto()));
+                    reparation.setVehicule(VehicleDto.toEntity(dto.getVehiculeDto()));
 
         reparation.setCreatedAt(dto.getCreatedAt());
         reparation.setUpdatedAt(dto.getUpdatedAt());

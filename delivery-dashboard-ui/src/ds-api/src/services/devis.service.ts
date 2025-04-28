@@ -11,21 +11,21 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { delete9 } from '../fn/devis/delete-9';
-import { Delete9$Params } from '../fn/devis/delete-9';
+import { delete10 } from '../fn/devis/delete-10';
+import { Delete10$Params } from '../fn/devis/delete-10';
 import { DevisDto } from '../models/devis-dto';
 import { DevisDtoResponse } from '../models/devis-dto-response';
-import { findAll10 } from '../fn/devis/find-all-10';
-import { FindAll10$Params } from '../fn/devis/find-all-10';
+import { findAll11 } from '../fn/devis/find-all-11';
+import { FindAll11$Params } from '../fn/devis/find-all-11';
 import { findAllDevis } from '../fn/devis/find-all-devis';
 import { FindAllDevis$Params } from '../fn/devis/find-all-devis';
 import { findByCode } from '../fn/devis/find-by-code';
 import { FindByCode$Params } from '../fn/devis/find-by-code';
-import { findById10 } from '../fn/devis/find-by-id-10';
-import { FindById10$Params } from '../fn/devis/find-by-id-10';
+import { findById11 } from '../fn/devis/find-by-id-11';
+import { FindById11$Params } from '../fn/devis/find-by-id-11';
 import { PageResponseDevisDtoResponse } from '../models/page-response-devis-dto-response';
-import { save10 } from '../fn/devis/save-10';
-import { Save10$Params } from '../fn/devis/save-10';
+import { save11 } from '../fn/devis/save-11';
+import { Save11$Params } from '../fn/devis/save-11';
 
 @Injectable({ providedIn: 'root' })
 export class DevisService extends BaseService {
@@ -33,60 +33,60 @@ export class DevisService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `save10()` */
-  static readonly Save10Path = '/devis/create';
+  /** Path part for operation `save11()` */
+  static readonly Save11Path = '/devis/create';
 
   /**
    * Ajouter/Modifier un devis, cette methode permet d'enregistrer ou modifier un devis
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save10()` instead.
+   * To access only the response body, use `save11()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save10$Response(params: Save10$Params, context?: HttpContext): Observable<StrictHttpResponse<DevisDto>> {
-    return save10(this.http, this.rootUrl, params, context);
+  save11$Response(params: Save11$Params, context?: HttpContext): Observable<StrictHttpResponse<DevisDto>> {
+    return save11(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier un devis, cette methode permet d'enregistrer ou modifier un devis
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save10$Response()` instead.
+   * To access the full response (for headers, for example), `save11$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save10(params: Save10$Params, context?: HttpContext): Observable<DevisDto> {
-    return this.save10$Response(params, context).pipe(
+  save11(params: Save11$Params, context?: HttpContext): Observable<DevisDto> {
+    return this.save11$Response(params, context).pipe(
       map((r: StrictHttpResponse<DevisDto>): DevisDto => r.body)
     );
   }
 
-  /** Path part for operation `findById10()` */
-  static readonly FindById10Path = '/devis/devis/by-id/{id}';
+  /** Path part for operation `findById11()` */
+  static readonly FindById11Path = '/devis/devis/by-id/{id}';
 
   /**
    * Rechercher un Devis par ID! Cette methode permet de chercher un devis par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById10()` instead.
+   * To access only the response body, use `findById11()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById10$Response(params: FindById10$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DevisDtoResponse>>> {
-    return findById10(this.http, this.rootUrl, params, context);
+  findById11$Response(params: FindById11$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DevisDtoResponse>>> {
+    return findById11(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher un Devis par ID! Cette methode permet de chercher un devis par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById10$Response()` instead.
+   * To access the full response (for headers, for example), `findById11$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById10(params: FindById10$Params, context?: HttpContext): Observable<Array<DevisDtoResponse>> {
-    return this.findById10$Response(params, context).pipe(
+  findById11(params: FindById11$Params, context?: HttpContext): Observable<Array<DevisDtoResponse>> {
+    return this.findById11$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<DevisDtoResponse>>): Array<DevisDtoResponse> => r.body)
     );
   }
@@ -120,31 +120,31 @@ export class DevisService extends BaseService {
     );
   }
 
-  /** Path part for operation `findAll10()` */
-  static readonly FindAll10Path = '/devis/all';
+  /** Path part for operation `findAll11()` */
+  static readonly FindAll11Path = '/devis/all';
 
   /**
    * Rechercher tout les Devis! Cette methode permet de retouner tous les devis
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll10()` instead.
+   * To access only the response body, use `findAll11()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll10$Response(params?: FindAll10$Params, context?: HttpContext): Observable<StrictHttpResponse<DevisDtoResponse>> {
-    return findAll10(this.http, this.rootUrl, params, context);
+  findAll11$Response(params?: FindAll11$Params, context?: HttpContext): Observable<StrictHttpResponse<DevisDtoResponse>> {
+    return findAll11(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les Devis! Cette methode permet de retouner tous les devis
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll10$Response()` instead.
+   * To access the full response (for headers, for example), `findAll11$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll10(params?: FindAll10$Params, context?: HttpContext): Observable<DevisDtoResponse> {
-    return this.findAll10$Response(params, context).pipe(
+  findAll11(params?: FindAll11$Params, context?: HttpContext): Observable<DevisDtoResponse> {
+    return this.findAll11$Response(params, context).pipe(
       map((r: StrictHttpResponse<DevisDtoResponse>): DevisDtoResponse => r.body)
     );
   }
@@ -174,31 +174,31 @@ export class DevisService extends BaseService {
     );
   }
 
-  /** Path part for operation `delete9()` */
-  static readonly Delete9Path = '/devis/delete/{id}';
+  /** Path part for operation `delete10()` */
+  static readonly Delete10Path = '/devis/delete/{id}';
 
   /**
    * Supprimer un Devis par ID! Cette methode permet de suprimmer un devis par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete9()` instead.
+   * To access only the response body, use `delete10()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete9$Response(params: Delete9$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return delete9(this.http, this.rootUrl, params, context);
+  delete10$Response(params: Delete10$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return delete10(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Supprimer un Devis par ID! Cette methode permet de suprimmer un devis par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete9$Response()` instead.
+   * To access the full response (for headers, for example), `delete10$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete9(params: Delete9$Params, context?: HttpContext): Observable<any> {
-    return this.delete9$Response(params, context).pipe(
+  delete10(params: Delete10$Params, context?: HttpContext): Observable<any> {
+    return this.delete10$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

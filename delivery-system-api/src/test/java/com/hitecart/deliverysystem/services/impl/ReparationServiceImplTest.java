@@ -37,7 +37,7 @@ public class ReparationServiceImplTest {
                 .build();
         pieceRechanges.add(pieceRechangeDto2);
 
-        VehiculeDto vehiculeDto = VehiculeDto.builder()
+        VehicleDto vehiculeDto = VehicleDto.builder()
                 .id(1)
                 .missionsDto(null).marque("Renault").modele("Clio").immatriculation("AB-858-ER")
                 .dateExpCtrlTec(LocalDate.from(new Date("12/04/2024").toInstant()))
@@ -66,7 +66,7 @@ public class ReparationServiceImplTest {
         reparationToSave.setType(TypeReparation.MECANIQUE);
         reparationToSave.setDateDebut(new Date().toInstant());
         reparationToSave.setDateFin(new Date("12/04/2024").toInstant());
-        reparationToSave.setVehicule(VehiculeDto.toEntity(vehiculeDto));
+        reparationToSave.setVehicule(VehicleDto.toEntity(vehiculeDto));
         reparationToSave.setPieceRechanges(
                  pieceRechanges.stream()
                 .map(PieceRechangeDto::toEntity).collect(Collectors.toList()));

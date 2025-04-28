@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {VehiculeDto} from "../../../../../../ds-api/src/models/vehicule-dto";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../../../../services/alert/alert.service";
@@ -68,7 +67,7 @@ export class NewDriverComponent  implements OnInit {
 
   private loadDriverToEditing(vId: number) {
     this.isNewDriver = false;
-    this.driverService.findById17({
+    this.driverService.findById18({
       id: vId
     }).subscribe({
       next: (responseD) => {
@@ -98,7 +97,7 @@ export class NewDriverComponent  implements OnInit {
   }
 
   private saveDriver(driverValue: ChauffeurDto, successMsg: string, errorMesg: string) {
-    this.driverService.save17({body: driverValue}).subscribe({
+    this.driverService.save18({body: driverValue}).subscribe({
       next: (response) => {
         console.log(response);
         this.alertService.alertSuccess(successMsg + " completed successfully!")

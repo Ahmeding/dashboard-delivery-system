@@ -10,17 +10,23 @@ import {authGuard} from "../../services/guard/auth.guard";
 
 const routes: Routes = [
   { path: 'profile', component: MyProfileComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN','ROLE_USER']} },
   { path: 'users', component: UsersComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'new-user', component: NewUserComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'services', component: ServicesDeleiveryComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'categories', component: DeliveryPointCategoryComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'new-service-deliv', component: NewServiceDelivComponent,
-        canActivate:[authGuard]},
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']}},
 ];
 
 @NgModule({

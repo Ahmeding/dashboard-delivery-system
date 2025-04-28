@@ -2,12 +2,16 @@ package com.hitecart.deliverysystem.dto.basic;
 
 
 import com.hitecart.deliverysystem.model.ChauffeurVehicle;
+import com.hitecart.deliverysystem.model.MissionVehicle;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Builder
 public class ChauffeurVehicleDto {
     private Integer id;
@@ -39,6 +43,7 @@ public class ChauffeurVehicleDto {
 
          ChauffeurVehicle chauffeurVehicle = new ChauffeurVehicle();
                  chauffeurVehicle.setId(dto.getId());
+                 chauffeurVehicle.setMissionVehicle(MissionVehicle.builder().id(dto.missionVehicleId).build());
                  chauffeurVehicle.setChauffeur(ChauffeurDto.toEntity(dto.getChauffeurDto()));
                 chauffeurVehicle.setAssignedAt(chauffeurVehicle.getAssignedAt());
                 return chauffeurVehicle;

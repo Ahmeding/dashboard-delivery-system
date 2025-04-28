@@ -44,7 +44,7 @@ public class ReparationServiceImpl implements ReparationService {
         checkDto(reparationDto,"Reparation n'est pas valide",
                 "La Reparation n'est pas valide", ErrorCodes.REPARATION_NOT_VALID_OPERATION);
 
-        VehiculeDto vehiculeDto = vehiculeService.findById(reparationDto.getVehiculeDto().getId());
+        VehicleDto vehiculeDto = vehiculeService.findById(reparationDto.getVehiculeDto().getId());
         reparationDto.setVehiculeDto(vehiculeDto);
 
 

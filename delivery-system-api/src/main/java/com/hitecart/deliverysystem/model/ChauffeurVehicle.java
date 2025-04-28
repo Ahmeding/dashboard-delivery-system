@@ -1,20 +1,19 @@
 package com.hitecart.deliverysystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hitecart.deliverysystem.utils.TimeSlot;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
-@Data
+import java.util.Objects;
+
+@Getter @Setter
 @Entity
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper=true)
 @Table
 public class ChauffeurVehicle extends AbstractEntity{
 
@@ -25,6 +24,7 @@ public class ChauffeurVehicle extends AbstractEntity{
 
     @ManyToOne
     @JoinColumn(name = "mission_vehicle_id",nullable = false)
+    @JsonIgnore // Prevent JSON recursion
     private MissionVehicle missionVehicle;
 
 
@@ -35,5 +35,26 @@ public class ChauffeurVehicle extends AbstractEntity{
                 this.getMissionVehicle().getMission().getDateDebut(),
                 this.getMissionVehicle().getMission().getDateFin()
         );
+    }
+    @PrePersist
+    @PreUpdate
+    private void validateMissionVehicle() {
+        if (missionVehicle == null) {
+            throw new IllegalStateException("ChauffeurVehicle must be assigned to a MissionVehicle");
+        }
+    }
+
+    // Use only ID for hashCode/equals
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getId());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChauffeurVehicle that = (ChauffeurVehicle) o;
+        return Objects.equals(this.getId(), that.getId());
     }
 }

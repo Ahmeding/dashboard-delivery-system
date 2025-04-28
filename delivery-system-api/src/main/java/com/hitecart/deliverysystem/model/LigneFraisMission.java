@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter @Setter
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @Entity

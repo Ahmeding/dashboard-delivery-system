@@ -6,7 +6,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 
-@Data
+@Getter @Setter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor

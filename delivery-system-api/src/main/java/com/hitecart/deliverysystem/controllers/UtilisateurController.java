@@ -2,6 +2,7 @@ package com.hitecart.deliverysystem.controllers;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.UtilisateurApi;
+import com.hitecart.deliverysystem.dto.basic.RoleDto;
 import com.hitecart.deliverysystem.dto.basic.UtilisateurDto;
 import com.hitecart.deliverysystem.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.util.List;
 public class UtilisateurController implements UtilisateurApi {
 
     private final UtilisateurService utilisateurService;
+
     @Autowired
     public UtilisateurController(UtilisateurService utilisateurService) {
         this.utilisateurService = utilisateurService;
@@ -46,5 +48,18 @@ public class UtilisateurController implements UtilisateurApi {
     @Override
     public ResponseEntity<PageResponse<UtilisateurDto>> findAllUtilisateurs(int page, int size) {
         return ResponseEntity.ok(utilisateurService.findAllUsers(page,size));
+    }
+
+    @Override
+    public ResponseEntity<UtilisateurDto> updateUserRoles(Integer id, List<RoleDto> rolesDto) {
+
+        UtilisateurDto updated = utilisateurService.updateUserRoles(id, rolesDto);
+        return ResponseEntity.ok(updated);
+    }
+
+    @Override
+    public ResponseEntity<UtilisateurDto> updateUserPassword(Integer id, UtilisateurDto dto) {
+        UtilisateurDto updated = utilisateurService.updateUserPassword(id, dto);
+        return ResponseEntity.ok(updated);
     }
 }

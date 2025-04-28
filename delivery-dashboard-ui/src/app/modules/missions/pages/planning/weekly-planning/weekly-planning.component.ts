@@ -1,15 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {addDays, format, startOfWeek, isToday, isBefore, startOfDay} from 'date-fns';
-import {AlertService} from "../../../../../services/alert/alert.service";
-import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {NewWeeklyPlanningModalComponent} from "../new-weekly-planning-modal/new-weekly-planning-modal.component";
-import {WeeklyPlanningDto} from "../../../../../../ds-api/src/models/weekly-planning-dto";
-import {DayPlanDto} from "../../../../../../ds-api/src/models/day-plan-dto";
-import {WeeklyPlanningService} from "../../../../../../ds-api/src/services/weekly-planning.service";
-import {DayPlanService} from "../../../../../../ds-api/src/services/day-plan.service";
 import {DayPlan, MissionCard} from "./models/mission.model";
-import {PlanningService} from "./services/planning-service";
 
 import {formatDate, formatDateDay, formatDateTimeDay, formatDayName} from './utils/planning.utils';
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
@@ -106,7 +99,7 @@ export class WeeklyPlanningComponent implements  OnInit {
         }
       });*/
 
-        this.missionService.findAll6().subscribe({
+        this.missionService.findAll7().subscribe({
           next:(allMissions)=>{
 
             console.log(allMissions.length);
@@ -125,6 +118,20 @@ export class WeeklyPlanningComponent implements  OnInit {
   private distributeMissions(missions: MissionResponse[]) {
     // Reset missions for each day
     this.weekDays.forEach(day => day.missions = []);
+    // Filter missions based on search text
+    const filteredMissions = missions.filter(mission =>
+      mission.titre?.toLowerCase().includes(this.filterText)
+    );
+    // Distribute missions to appropriate days
+    /*filteredMissions.forEach(mission => {
+      const missionDate = new Date(this.dateService.convertArrayDateToString(mission.dateDebut));
+      const dayIndex = this.weekDays.findIndex(day =>
+        day.date.toDateString() === missionDate.toDateString()
+      );
+      if (dayIndex !== -1) {
+        this.weekDays[dayIndex].missions.push(mission);
+      }
+    });*/
     // Distribute missions to appropriate days
     missions.forEach(mission => {
       const missionDate = new Date(this.dateService.convertArrayDateToString(mission.dateDebut));
@@ -254,4 +261,10 @@ export class WeeklyPlanningComponent implements  OnInit {
     console.log("---- "+dateDayString+" ----");
     this.router.navigate(['missions',"add-mission",dateDayString]);
   }
+  filterText: string = '';
+  onFilterChange($event: Event) {
+    this.filterText = (event?.target as HTMLInputElement).value.toLowerCase();
+    this.distributeMissions(this.missionsPerWeek);
+  }
+
 }

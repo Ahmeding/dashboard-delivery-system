@@ -83,8 +83,8 @@ public class AuthentificationServiceImpl implements AuthentificationService{
         var jwt = jwtService.generateToken(claims,user);
         var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
         jwtAuthenticationResponse.setUser(UtilisateurDto.fromEntity(user));
-        jwtAuthenticationResponse.setToken(jwt);
-        jwtAuthenticationResponse.setRefreshToken(refreshToken);
+        jwtAuthenticationResponse.setAccess_token(jwt);
+        jwtAuthenticationResponse.setRefresh_token(refreshToken);
 
 
         return jwtAuthenticationResponse;
@@ -101,8 +101,8 @@ public class AuthentificationServiceImpl implements AuthentificationService{
             claims.put("fullName", utilisateur.fullName());
             var jwt= jwtService.generateToken(claims,utilisateur);
             JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
-            jwtAuthenticationResponse.setToken(jwt);
-            jwtAuthenticationResponse.setRefreshToken(refreshTokenRequest.getToken());
+            jwtAuthenticationResponse.setAccess_token(jwt);
+            jwtAuthenticationResponse.setRefresh_token(refreshTokenRequest.getToken());
             return jwtAuthenticationResponse;
         }
         return null;

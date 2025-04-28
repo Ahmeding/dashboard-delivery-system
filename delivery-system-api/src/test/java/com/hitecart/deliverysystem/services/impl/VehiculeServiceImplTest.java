@@ -29,7 +29,7 @@ class VehiculeServiceImplTest {
 
     @Test
     public void should_throw_invalid_entity_exception(){
-        VehiculeDto expectedVehiculeDto= VehiculeDto.builder().build();
+        VehicleDto expectedVehiculeDto= VehicleDto.builder().build();
         InvalidEntityException expectedException = assertThrows(InvalidEntityException.class,()->vehiculeService.save(expectedVehiculeDto));
 
         assertEquals(ErrorCodes.VEHICULE_NOT_VALID,expectedException.getErrorCodes());
@@ -41,7 +41,7 @@ class VehiculeServiceImplTest {
     }
     @Test
     public void should_update_vehicule_whith_success(){
-        VehiculeDto expectedvehiculeDto = VehiculeDto.builder()
+        VehicleDto expectedvehiculeDto = VehicleDto.builder()
 
                 .missionsDto(null)
                 .marque("Mercedes")
@@ -83,9 +83,9 @@ class VehiculeServiceImplTest {
 
 
         //
-        VehiculeDto saveVehiculeDto = vehiculeService.save(VehiculeDto.fromEntity(savedVehicule));
+        VehicleDto saveVehiculeDto = vehiculeService.save(VehicleDto.fromEntity(savedVehicule));
 
-        VehiculeDto vToupdate  = saveVehiculeDto;
+        VehicleDto vToupdate  = saveVehiculeDto;
         vToupdate.setModele("Boxer");
         saveVehiculeDto = vehiculeService.save(vToupdate);
 
@@ -100,7 +100,7 @@ class VehiculeServiceImplTest {
     @Test
     public void test_save_vehicule(){
         // Given
-        VehiculeDto vehiculeDto = VehiculeDto.builder()
+        VehicleDto vehiculeDto = VehicleDto.builder()
                 .id(1)
                 .missionsDto(null)
                 .marque("Mercedes")
@@ -140,8 +140,8 @@ class VehiculeServiceImplTest {
         when(vehiculeRepository.save(vehiculeToSave)).thenReturn(savedVehicule);
         // When
         //vehiculeRepository.save(vehiculeToSave); // for testing verify(vr,times(1)).save(v);
-        VehiculeDto vehiculeDto1 = vehiculeService.save(VehiculeDto.fromEntity(vehiculeToSave));
-        //verify(vehiculeService).save(VehiculeDto.fromEntity(vehiculeToSave));
+        VehicleDto vehiculeDto1 = vehiculeService.save(VehicleDto.fromEntity(vehiculeToSave));
+        //verify(vehiculeService).save(VehicleDto.fromEntity(vehiculeToSave));
         // Then
         assertEquals(vehiculeDto1.getMarque(), vehiculeDto.getMarque());
         verify(vehiculeRepository,times(1)).save(vehiculeToSave);
@@ -166,7 +166,7 @@ class VehiculeServiceImplTest {
         //Mock calls
         when(vehiculeRepository.findById(id)).thenReturn(Optional.of(savedVehicule));
         // When
-        VehiculeDto v = vehiculeService.findById(id);
+        VehicleDto v = vehiculeService.findById(id);
         // Then
         assertNotNull(v);
 
@@ -189,7 +189,7 @@ class VehiculeServiceImplTest {
         //Mock calls
         when(vehiculeRepository.findByImmatriculation(immat)).thenReturn(Optional.of(savedVehicule));
         // When
-        VehiculeDto v = vehiculeService.findByImmatriculation(immat);
+        VehicleDto v = vehiculeService.findByImmatriculation(immat);
         // Then
         assertNotNull(v);
     }
@@ -197,9 +197,9 @@ class VehiculeServiceImplTest {
     public void test_successfull_find_All(){
 
         // Given
-        List<VehiculeDto> allVehiculesDto = new ArrayList<>();
+        List<VehicleDto> allVehiculesDto = new ArrayList<>();
 
-        VehiculeDto vehicule1 = VehiculeDto.builder()
+        VehicleDto vehicule1 = VehicleDto.builder()
                 .id(1)
                 .missionsDto(null)
                 .marque("Mercedes")
@@ -213,7 +213,7 @@ class VehiculeServiceImplTest {
                 .typecarburant(TypeEnergie.GASOIL)
                 .build();
 
-        VehiculeDto vehicule2 = VehiculeDto.builder()
+        VehicleDto vehicule2 = VehicleDto.builder()
                 .id(1)
                 .missionsDto(null)
                 .marque("Mercedes")
@@ -231,13 +231,13 @@ class VehiculeServiceImplTest {
 
         List<Vehicule> allVehicules = new ArrayList<>();
 
-        for(VehiculeDto v : allVehiculesDto){
-            allVehicules.add(VehiculeDto.toEntity(v));
+        for(VehicleDto v : allVehiculesDto){
+            allVehicules.add(VehicleDto.toEntity(v));
         }
         //Mock calls
         when(vehiculeRepository.findAll()).thenReturn(allVehicules);
         //
-        List<VehiculeDto> expVehiculeList = vehiculeService.findAll();
+        List<VehicleDto> expVehiculeList = vehiculeService.findAll();
         //
         assertEquals(2,expVehiculeList.size());
 
@@ -247,7 +247,7 @@ class VehiculeServiceImplTest {
     public void test_delete_vehicule_by_id(){
             Integer id=2;
 
-        VehiculeDto vehicule2 = VehiculeDto.builder()
+        VehicleDto vehicule2 = VehicleDto.builder()
                 .id(id)
                 .missionsDto(null)
                 .marque("Mercedes")
@@ -261,7 +261,7 @@ class VehiculeServiceImplTest {
                 .typecarburant(TypeEnergie.GASOIL)
                 .build();
         // Mock
-            when(vehiculeRepository.findById(id)).thenReturn(Optional.ofNullable(VehiculeDto.toEntity(vehicule2)));
+            when(vehiculeRepository.findById(id)).thenReturn(Optional.ofNullable(VehicleDto.toEntity(vehicule2)));
         // When
         vehiculeService.delete(id);
         //

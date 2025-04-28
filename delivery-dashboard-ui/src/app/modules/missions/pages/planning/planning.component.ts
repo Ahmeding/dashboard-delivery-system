@@ -24,7 +24,7 @@ export class PlanningComponent  implements OnInit{
     this.getAllMyMissions();
   }
   private getAllMyMissions() {
-    this.missionsServices.findAllMissionsByDriverId({
+    this.missionsServices.findAllMissionsByDriverIdPageable({
       page:0
       ,size:10
     }).subscribe({

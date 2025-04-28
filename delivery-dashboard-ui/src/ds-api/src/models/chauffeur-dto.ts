@@ -24,6 +24,6 @@ export interface ChauffeurDto {
   password?: string;
   phoneNum?: string;
   rib?: string;
-  role?: 'ADMIN' | 'USER';
+  role?: 'ROLE_ADMIN' | 'ROLE_USER' | 'ROLE_DRIVER';
   updatedAt?: string;
 }

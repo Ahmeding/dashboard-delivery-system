@@ -1,0 +1,58 @@
+<div class="weekly-planning">
+  <!-- Page Heading -->
+  <!-- New Stats Card -->
+  <!-- Stats Dashboard -->
+  <app-status-card [weekDaysForWeekStatus]= "weekDays">
+
+  </app-status-card>
+
+  <div class="planning-header">
+    <h2>Weekly Planning</h2>
+    <div class="controls">
+      <button class="btn btn-icon" (click)="previousWeek()">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+      <span class="week-range">
+        {{ formatDate(weekDays[0].date) }} - {{ formatDate(weekDays[6].date) }}
+      </span>
+      <button class="btn btn-icon" (click)="nextWeek()">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="planning-table">
+    <div class="planning-days">
+      <div class="day-column" *ngFor="let day of weekDays" [class.today]="isToday(day.date)">
+        <div class="day-header">
+          <span class="day-name">{{ formatDayName(day.date) }}</span>
+          <span class="day-date">{{ formatDate(day.date) }}</span>
+        </div>
+        <div *ngIf="isLoading" class="spinner-border spinner-border-sm text-warning" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <app-mission-card
+          *ngFor="let mission of day.missions"
+          [mission]="mission"
+          (edit)="onEditMission($event)"
+          (delete)="onDeleteMission($event)"
+        >
+        </app-mission-card>
+        <div class="missions-container">
+
+
+          <div class="empty-state" *ngIf="day.missions.length === 0">
+            <i class="bi bi-calendar-x"></i>
+            <span>No missions</span>
+          </div>
+
+          <button *ngIf="isNotOldDay(day.date)" class="btn-new-mission" (click)="navigateToNewMissionByDate(day.date)">
+            <i class="bi bi-plus-lg"></i>
+            <span>New Mission</span>
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

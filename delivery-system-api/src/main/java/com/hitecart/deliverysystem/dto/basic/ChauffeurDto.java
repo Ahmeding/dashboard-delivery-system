@@ -3,7 +3,7 @@ package com.hitecart.deliverysystem.dto.basic;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hitecart.deliverysystem.model.*;
 import com.hitecart.deliverysystem.model.enums.DrivingLicenseType;
-import com.hitecart.deliverysystem.model.enums.RoleUtilisateur;
+import com.hitecart.deliverysystem.model.enums.RoleName;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -26,7 +26,7 @@ public class ChauffeurDto {
     private String password;
     private AdresseDto address;
     private LocalDate dateOfBirth;
-    private RoleUtilisateur role;
+    private RoleName role;
     private String drivinglicenseNbr;
     private DrivingLicenseType drivingLicenseType;
     private String numSecu;

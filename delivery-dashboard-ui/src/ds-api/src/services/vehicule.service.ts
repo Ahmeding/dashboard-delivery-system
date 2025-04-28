@@ -21,12 +21,12 @@ import { findById1 } from '../fn/vehicule/find-by-id-1';
 import { FindById1$Params } from '../fn/vehicule/find-by-id-1';
 import { findByImmatriculation } from '../fn/vehicule/find-by-immatriculation';
 import { FindByImmatriculation$Params } from '../fn/vehicule/find-by-immatriculation';
-import { PageResponseVehiculeDto } from '../models/page-response-vehicule-dto';
+import { PageResponseVehicleDto } from '../models/page-response-vehicle-dto';
 import { save1 } from '../fn/vehicule/save-1';
 import { Save1$Params } from '../fn/vehicule/save-1';
 import { updateIsActive } from '../fn/vehicule/update-is-active';
 import { UpdateIsActive$Params } from '../fn/vehicule/update-is-active';
-import { VehiculeDto } from '../models/vehicule-dto';
+import { VehicleDto } from '../models/vehicle-dto';
 
 @Injectable({ providedIn: 'root' })
 export class VehiculeService extends BaseService {
@@ -43,7 +43,7 @@ export class VehiculeService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  updateIsActive$Response(params: UpdateIsActive$Params, context?: HttpContext): Observable<StrictHttpResponse<VehiculeDto>> {
+  updateIsActive$Response(params: UpdateIsActive$Params, context?: HttpContext): Observable<StrictHttpResponse<VehicleDto>> {
     return updateIsActive(this.http, this.rootUrl, params, context);
   }
 
@@ -53,9 +53,9 @@ export class VehiculeService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  updateIsActive(params: UpdateIsActive$Params, context?: HttpContext): Observable<VehiculeDto> {
+  updateIsActive(params: UpdateIsActive$Params, context?: HttpContext): Observable<VehicleDto> {
     return this.updateIsActive$Response(params, context).pipe(
-      map((r: StrictHttpResponse<VehiculeDto>): VehiculeDto => r.body)
+      map((r: StrictHttpResponse<VehicleDto>): VehicleDto => r.body)
     );
   }
 
@@ -70,7 +70,7 @@ export class VehiculeService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save1$Response(params: Save1$Params, context?: HttpContext): Observable<StrictHttpResponse<VehiculeDto>> {
+  save1$Response(params: Save1$Params, context?: HttpContext): Observable<StrictHttpResponse<VehicleDto>> {
     return save1(this.http, this.rootUrl, params, context);
   }
 
@@ -82,9 +82,9 @@ export class VehiculeService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save1(params: Save1$Params, context?: HttpContext): Observable<VehiculeDto> {
+  save1(params: Save1$Params, context?: HttpContext): Observable<VehicleDto> {
     return this.save1$Response(params, context).pipe(
-      map((r: StrictHttpResponse<VehiculeDto>): VehiculeDto => r.body)
+      map((r: StrictHttpResponse<VehicleDto>): VehicleDto => r.body)
     );
   }
 
@@ -184,7 +184,7 @@ export class VehiculeService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findAllVehicules$Response(params?: FindAllVehicules$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseVehiculeDto>> {
+  findAllVehicules$Response(params?: FindAllVehicules$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseVehicleDto>> {
     return findAllVehicules(this.http, this.rootUrl, params, context);
   }
 
@@ -194,9 +194,9 @@ export class VehiculeService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findAllVehicules(params?: FindAllVehicules$Params, context?: HttpContext): Observable<PageResponseVehiculeDto> {
+  findAllVehicules(params?: FindAllVehicules$Params, context?: HttpContext): Observable<PageResponseVehicleDto> {
     return this.findAllVehicules$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PageResponseVehiculeDto>): PageResponseVehiculeDto => r.body)
+      map((r: StrictHttpResponse<PageResponseVehicleDto>): PageResponseVehicleDto => r.body)
     );
   }
 

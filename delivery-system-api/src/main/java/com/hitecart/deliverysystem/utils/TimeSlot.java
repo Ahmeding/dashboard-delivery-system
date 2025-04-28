@@ -29,24 +29,15 @@ public class TimeSlot {
 
     public List<TimeSlot> subtract(TimeSlot other) {
         List<TimeSlot> result = new ArrayList<>();
-/*        if (this.end.isBefore(other.start) || this.start.isAfter(other.end)) {
-            // No overlap: keep original slot
+        // No overlap: keep original
+        if (this.end.isBefore(other.start) || this.start.isAfter(other.end)) {
             result.add(this);
-        } else {
-            // Split into non-overlapping segments
-            if (this.start.isBefore(other.start)) {
-                result.add(new TimeSlot(this.start, other.start));
-            }
-            if (this.end.isAfter(other.end)) {
-                result.add(new TimeSlot(other.end, this.end));
-            }
-        }*/
-        // Before the subtracted period
+            return result;
+        }
+        // Split into non-overlapping segments
         if (this.start.isBefore(other.start)) {
             result.add(new TimeSlot(this.start, other.start));
         }
-
-        // After the subtracted period
         if (this.end.isAfter(other.end)) {
             result.add(new TimeSlot(other.end, this.end));
         }
@@ -62,7 +53,4 @@ public class TimeSlot {
     public String toString() {
         return start + " to " + end;
     }
-    // Getters
-    public LocalDateTime getStart() { return start; }
-    public LocalDateTime getEnd() { return end; }
 }

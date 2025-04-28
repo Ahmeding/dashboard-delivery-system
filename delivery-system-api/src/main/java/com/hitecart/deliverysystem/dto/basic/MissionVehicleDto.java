@@ -1,15 +1,20 @@
 package com.hitecart.deliverysystem.dto.basic;
 
+import com.hitecart.deliverysystem.model.Mission;
 import com.hitecart.deliverysystem.model.MissionVehicle;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
-@Data
+@Getter
+@Setter
 @Builder
 public class MissionVehicleDto {
 
@@ -17,8 +22,8 @@ public class MissionVehicleDto {
     //private MissionDto missionDto;
     private Integer id;
     private Integer missionId;
-    private VehiculeDto vehicleDto;
-    private List<ChauffeurVehicleDto> chauffeursVehicleDto;
+    private VehicleDto vehicleDto;
+    private List<ChauffeurVehicleDto> chauffeursVehicleDto= new ArrayList<>();
     private LocalDateTime assignedAt;
 
     public static MissionVehicleDto fromEntity(MissionVehicle missionVehicule) {
@@ -27,7 +32,7 @@ public class MissionVehicleDto {
         }
         return MissionVehicleDto.builder()
                 .id(missionVehicule.getId())
-                .vehicleDto(VehiculeDto.fromEntity(missionVehicule.getVehicule()))
+                .vehicleDto(VehicleDto.fromEntity(missionVehicule.getVehicule()!=null?missionVehicule.getVehicule():null))
                 .missionId(missionVehicule.getMission()!=null ? missionVehicule.getMission().getId():null)
                 .chauffeursVehicleDto(missionVehicule.getChauffeurVehiculeList()!= null?
                         missionVehicule.getChauffeurVehiculeList().stream()
@@ -44,8 +49,8 @@ public class MissionVehicleDto {
         }
         MissionVehicle missionVehicule = new MissionVehicle();
         missionVehicule.setId(dto.getId());
-               missionVehicule.setVehicule(VehiculeDto.toEntity(dto.getVehicleDto()));
-               //missionVehicule.setMission(dto.getMissionId());
+               missionVehicule.setVehicule(VehicleDto.toEntity(dto.getVehicleDto()));
+               missionVehicule.setMission(Mission.builder().id(dto.getMissionId()).build());
                 missionVehicule.setChauffeurVehiculeList(
                         dto.chauffeursVehicleDto!=null?
                         dto.chauffeursVehicleDto.stream()

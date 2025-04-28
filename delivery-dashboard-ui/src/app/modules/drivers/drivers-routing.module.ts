@@ -8,17 +8,23 @@ import {authGuard} from "../../services/guard/auth.guard";
 
 const routes: Routes = [
   { path: 'all', component: DriversComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'new-driver', component: NewDriverComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'edit-driver/:id', component: NewDriverComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'contracts', component: ContractsComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'new-contract', component: NewContractComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'edit-contract/:id', component: NewContractComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
 
 ];
 

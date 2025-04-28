@@ -11,20 +11,20 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { delete3 } from '../fn/reparation/delete-3';
-import { Delete3$Params } from '../fn/reparation/delete-3';
-import { findAll4 } from '../fn/reparation/find-all-4';
-import { FindAll4$Params } from '../fn/reparation/find-all-4';
+import { delete4 } from '../fn/reparation/delete-4';
+import { Delete4$Params } from '../fn/reparation/delete-4';
+import { findAll5 } from '../fn/reparation/find-all-5';
+import { FindAll5$Params } from '../fn/reparation/find-all-5';
 import { findAllReparations } from '../fn/reparation/find-all-reparations';
 import { FindAllReparations$Params } from '../fn/reparation/find-all-reparations';
 import { findByDate } from '../fn/reparation/find-by-date';
 import { FindByDate$Params } from '../fn/reparation/find-by-date';
-import { findById4 } from '../fn/reparation/find-by-id-4';
-import { FindById4$Params } from '../fn/reparation/find-by-id-4';
+import { findById5 } from '../fn/reparation/find-by-id-5';
+import { FindById5$Params } from '../fn/reparation/find-by-id-5';
 import { PageResponseReparationDto } from '../models/page-response-reparation-dto';
 import { ReparationDto } from '../models/reparation-dto';
-import { save4 } from '../fn/reparation/save-4';
-import { Save4$Params } from '../fn/reparation/save-4';
+import { save5 } from '../fn/reparation/save-5';
+import { Save5$Params } from '../fn/reparation/save-5';
 
 @Injectable({ providedIn: 'root' })
 export class ReparationService extends BaseService {
@@ -32,60 +32,60 @@ export class ReparationService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `save4()` */
-  static readonly Save4Path = '/reparations/create';
+  /** Path part for operation `save5()` */
+  static readonly Save5Path = '/reparations/create';
 
   /**
    * Ajouter/Modifier une reparation, cette methode permet d'enregistrer ou modifier une reparattion
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save4()` instead.
+   * To access only the response body, use `save5()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save4$Response(params: Save4$Params, context?: HttpContext): Observable<StrictHttpResponse<ReparationDto>> {
-    return save4(this.http, this.rootUrl, params, context);
+  save5$Response(params: Save5$Params, context?: HttpContext): Observable<StrictHttpResponse<ReparationDto>> {
+    return save5(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier une reparation, cette methode permet d'enregistrer ou modifier une reparattion
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save4$Response()` instead.
+   * To access the full response (for headers, for example), `save5$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save4(params: Save4$Params, context?: HttpContext): Observable<ReparationDto> {
-    return this.save4$Response(params, context).pipe(
+  save5(params: Save5$Params, context?: HttpContext): Observable<ReparationDto> {
+    return this.save5$Response(params, context).pipe(
       map((r: StrictHttpResponse<ReparationDto>): ReparationDto => r.body)
     );
   }
 
-  /** Path part for operation `findById4()` */
-  static readonly FindById4Path = '/reparations/reparation/{id}';
+  /** Path part for operation `findById5()` */
+  static readonly FindById5Path = '/reparations/reparation/{id}';
 
   /**
    * Rechercher une Reparation par ID! Cette methode permet de chercher une reparation par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById4()` instead.
+   * To access only the response body, use `findById5()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById4$Response(params: FindById4$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findById4(this.http, this.rootUrl, params, context);
+  findById5$Response(params: FindById5$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findById5(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher une Reparation par ID! Cette methode permet de chercher une reparation par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById4$Response()` instead.
+   * To access the full response (for headers, for example), `findById5$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById4(params: FindById4$Params, context?: HttpContext): Observable<any> {
-    return this.findById4$Response(params, context).pipe(
+  findById5(params: FindById5$Params, context?: HttpContext): Observable<any> {
+    return this.findById5$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
@@ -119,31 +119,31 @@ export class ReparationService extends BaseService {
     );
   }
 
-  /** Path part for operation `findAll4()` */
-  static readonly FindAll4Path = '/reparations/all';
+  /** Path part for operation `findAll5()` */
+  static readonly FindAll5Path = '/reparations/all';
 
   /**
    * Rechercher tout les Reparation! Cette methode permet de retouner toutes les reparations
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll4()` instead.
+   * To access only the response body, use `findAll5()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll4$Response(params?: FindAll4$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findAll4(this.http, this.rootUrl, params, context);
+  findAll5$Response(params?: FindAll5$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findAll5(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les Reparation! Cette methode permet de retouner toutes les reparations
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll4$Response()` instead.
+   * To access the full response (for headers, for example), `findAll5$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll4(params?: FindAll4$Params, context?: HttpContext): Observable<any> {
-    return this.findAll4$Response(params, context).pipe(
+  findAll5(params?: FindAll5$Params, context?: HttpContext): Observable<any> {
+    return this.findAll5$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
@@ -173,31 +173,31 @@ export class ReparationService extends BaseService {
     );
   }
 
-  /** Path part for operation `delete3()` */
-  static readonly Delete3Path = '/reparations/delete/{id}';
+  /** Path part for operation `delete4()` */
+  static readonly Delete4Path = '/reparations/delete/{id}';
 
   /**
    * Supprimer une Reparation par ID! Cette methode permet de suprimmer une reparation par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete3()` instead.
+   * To access only the response body, use `delete4()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete3$Response(params: Delete3$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return delete3(this.http, this.rootUrl, params, context);
+  delete4$Response(params: Delete4$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return delete4(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Supprimer une Reparation par ID! Cette methode permet de suprimmer une reparation par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete3$Response()` instead.
+   * To access the full response (for headers, for example), `delete4$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete3(params: Delete3$Params, context?: HttpContext): Observable<any> {
-    return this.delete3$Response(params, context).pipe(
+  delete4(params: Delete4$Params, context?: HttpContext): Observable<any> {
+    return this.delete4$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

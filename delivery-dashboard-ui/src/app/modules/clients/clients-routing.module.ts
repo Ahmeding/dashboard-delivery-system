@@ -10,21 +10,32 @@ import {ViewClientComponent} from "./pages/clients/view-client/view-client.compo
 import {authGuard} from "../../services/guard/auth.guard";
 
 const routes: Routes = [
-  { path: 'all', component: ClientsComponent,canActivate:[authGuard] },
+  {
+    path: 'all',
+    component: ClientsComponent,
+    canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'new-client', component: NewClientComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'view-client/:id', component: ViewClientComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'edit-client/:id', component: NewClientComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'orders', component: OrdersComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'new-order', component: NewOrderComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'quotes', component: QuotesComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'new-quote', component: NewQuoteComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
 
 ];
 

@@ -4,7 +4,7 @@ import {ReparationService} from "../../../../../ds-api/src/services/reparation.s
 import {ReparationDto} from "../../../../../ds-api/src/models/reparation-dto";
 import {Router} from "@angular/router";
 import {VehiculeService} from "../../../../../ds-api/src/services/vehicule.service";
-import {VehiculeDto} from "../../../../../ds-api/src/models/vehicule-dto";
+import {VehicleDto} from "../../../../../ds-api/src/models/vehicle-dto";
 import {FormControl, FormGroup} from "@angular/forms";
 import {DateUtilsService} from "../../../../services/date-utils/date-utils.service";
 import {ViewVehiculeModalComponent} from "../vehicles/view-vehicule-modal/view-vehicule-modal.component";
@@ -96,7 +96,7 @@ getAllRepairs(){
     this.confirmBoxService.customFour('Are you sure you want to delete this repair?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.repairService.delete3({id:repair_id}).subscribe(() => {
+          this.repairService.delete4({id:repair_id}).subscribe(() => {
             this.getAllRepairs();
             this.alertService.alertSuccess('Deletion successfully completed');
           });

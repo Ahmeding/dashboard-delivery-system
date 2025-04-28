@@ -80,7 +80,7 @@ public class  ChauffeurServiceImpl implements ChauffeurService {
     public ChauffeurDto save(ChauffeurDto dto) {
         checkDto(dto,"Chauffeur n'est valid","le Chauffeur n'est pas valid");
 
-        var userRole = roleRepository.findByName("USER")
+        var userRole = roleRepository.findByName("ROLE_USER")
                 .orElseThrow(()->new IllegalStateException("ROLE USER was not initialized"));
         Chauffeur chauffeurToSave = ChauffeurDto.toEntity(dto);
 

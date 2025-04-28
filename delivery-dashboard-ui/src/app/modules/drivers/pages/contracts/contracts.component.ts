@@ -98,7 +98,7 @@ export class ContractsComponent implements OnInit{
     this.confirmBoxService.customFour('Are you sure you want to delete this contract?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.contratService.delete12({id:contract_id}).subscribe(() => {
+          this.contratService.delete13({id:contract_id}).subscribe(() => {
             this.getAllContracts();
             this.alertService.alertSuccess('Deletion successfully completed');
           });

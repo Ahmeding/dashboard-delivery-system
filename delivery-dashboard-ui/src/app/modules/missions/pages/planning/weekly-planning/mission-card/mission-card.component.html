@@ -1,61 +1,14 @@
-<!--
-<div class="mission-card" [style.borderLeft]="'4px solid ' + getDestinationColor()">
-  <div class="mission-header">
-    <div class="mission-time-status">
-      <i [class]="'status-indicator bi ' + getStatusIcon()"></i>
-      <span class="mission-time">{{ mission.startTime }} - {{ mission.endTime }}</span>
-      <span class="mission-tag" [style.background]="getDestinationColor() + '20'" [style.color]="getDestinationColor()">
-        {{ mission.destination }}
-      </span>
-    </div>
-    <div class="mission-actions">
-      <button class="btn-action" title="Edit" (click)="onEdit()">
-        <i class="bi bi-pencil"></i>
-      </button>
-      <button class="btn-action" title="Delete" (click)="onDelete()">
-        <i class="bi bi-trash"></i>
-      </button>
-    </div>
-  </div>
+<!-- src/app/components/mission-card/mission-card.component.html -->
+<div class="mission-card"
+     [style.backgroundColor]="getDestinationColor() + '10'"
+     [style.borderLeft]="'3px solid ' + getDestinationColor()"
+     (click)="openEditMissionModal(mission)">
 
-  <h3 class="mission-title">{{ mission.title }}</h3>
-
-  <div class="mission-resources">
-    &lt;!&ndash; Vehicles &ndash;&gt;
-    <div class="resources-section">
-      <div class="resources-header">
-        <i class="bi bi-truck"></i>
-        <span>Vehicles</span>
-      </div>
-      <div class="resources-chips">
-        <div class="chip" *ngFor="let vehicle of mission.vehicles">
-          <span class="plate-number">{{ vehicle.plateNumber }}</span>
-        </div>
-      </div>
-    </div>
-
-    &lt;!&ndash; Drivers &ndash;&gt;
-    <div class="resources-section">
-      <div class="resources-header">
-        <i class="bi bi-people"></i>
-        <span>Drivers</span>
-      </div>
-      <div class="resources-chips">
-        <div class="chip" *ngFor="let driver of mission.drivers">
-          <i class="bi bi-person-circle"></i>
-          <span>{{ driver.name }}</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
--->
-<div class="mission-card" [style.borderLeft]="'4px solid ' + getDestinationColor()">
   <div class="mission-header">
     <div class="time-destination">
       <span class="time">{{ getStartTime() }}</span>
-      <span class="destination-tag" [style.color]="getDestinationColor()">
-        {{ mission.deliveryDestinationResponse?.serviceDelivery?.destinationCity }}
+      <span class="mission-title" [style.color]="getDestinationColor()">
+        {{ mission.titre }}
       </span>
     </div>
     <div class="status">
@@ -64,22 +17,91 @@
   </div>
 
   <div class="mission-content">
-    <p class="title">{{ mission.titre }}</p>
-    <p class="title">{{ mission.deliveryDestinationResponse?.deliveryPoints?.length}}</p>
-    <div class="resources">
-      <div class="vehicles" *ngIf="mission.missionVehiclesDtos?.length">
-        <i class="bi bi-truck-front"></i>
-        <span class="count">{{ mission.missionVehiclesDtos?.length }}</span>
+    <div class="info-row">
+      <div class="info-badge volume">
+        <i class="bi bi-box-seam"></i>
+        {{ mission.volume }}m³
       </div>
-      <div class="drivers" *ngIf="mission.missionVehiclesDtos?.length">
-        <i class="bi bi-person"></i>
-        <span class="count">{{ getNumbersOfDrivers() }}</span>
+      <div class="info-badge id">
+        <i class="bi bi-hash"></i>
+        {{ mission.id }}
       </div>
-      <div class="actions">
-        <button class="action-btn" (click)="onEdit()">
-          <i class="bi bi-three-dots"></i>
-        </button>
+    </div>
+
+    <div class="resources-container" *ngIf="mission.missionVehiclesDtos?.length">
+      <div class="resources-scroll">
+        <ng-container *ngFor="let mv of mission.missionVehiclesDtos">
+          <div class="resource-group">
+            <div class="resource-badge vehicle">
+              <i class="bi bi-truck"></i>
+              <span class="plate">{{ mv.vehicleDto?.immatriculation }}</span>
+            </div>
+            <div class="drivers-list">
+              <div class="resource-badge driver" *ngFor="let driver of mv.chauffeursVehicleDto">
+                <i class="bi bi-person-badge"></i>
+                <span class="name">{{ driver.chauffeurDto?.firstname }}</span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
       </div>
     </div>
   </div>
+
+<!--  <button class="action-btn" (click)="$event.stopPropagation(); onEdit()">
+    <i class="bi bi-three-dots-vertical"></i>
+  </button>-->
 </div>
+
+
+
+<!--
+
+
+&lt;!&ndash; mission-card.component.html &ndash;&gt;
+<div class="mission-card"
+     [style.backgroundColor]="getDestinationColor() + '15'"
+     [style.borderLeft]="'3px solid ' + getDestinationColor()"
+     (click)="openEditMissionModal(mission)">
+
+  <div class="mission-header">
+    <div class="time-destination">
+      <span class="time">{{ getStartTime() }}</span>
+      <span class="mission-title" [style.color]="getDestinationColor()">
+        {{ mission.titre }}
+      </span>
+    </div>
+    <div class="status">
+      <i [class]="'bi ' + getStatusIcon()" [title]="mission.etatMission"></i>
+    </div>
+  </div>
+
+  <div class="mission-content">
+    <div class="info-row">
+      <div class="info-badge">
+        <i class="bi bi-box-seam"></i>
+        {{ mission.volume }}m³
+      </div>
+      <span class="mission-id">#{{ mission.id }}</span>
+    </div>
+
+    &lt;!&ndash; Resources Summary &ndash;&gt;
+    <div class="resources-row" *ngIf="mission.missionVehiclesDtos?.length">
+      <ng-container *ngFor="let mv of mission.missionVehiclesDtos">
+        <div class="resource-badge vehicle">
+          <i class="bi bi-truck"></i>
+          <span>{{ mv.vehicleDto?.immatriculation }}</span>
+        </div>
+        <div class="resource-badge driver" *ngFor="let driver of mv.chauffeursVehicleDto">
+          <i class="bi bi-person"></i>
+          <span>{{ driver.chauffeurDto?.firstname }}</span>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <button class="action-btn" (click)="$event.stopPropagation(); onEdit()">
+    <i class="bi bi-three-dots-vertical"></i>
+  </button>
+</div>
+-->

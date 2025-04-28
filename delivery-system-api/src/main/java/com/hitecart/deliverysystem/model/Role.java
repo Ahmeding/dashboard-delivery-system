@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "role")
 @SuperBuilder
-@Data
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=true)

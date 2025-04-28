@@ -1,0 +1,145 @@
+<!-- edit-mission-modal.component.html -->
+<div class="modal-content" id="modal-edit">
+  <div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">Edit {{mission.titre}}</h5>
+    <button type="button" class="btn-close btn-close-white" (click)="activeModal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="editForm" (ngSubmit)="onSave()">
+      <!-- Volume Input -->
+      <div class="mb-4">
+        <label class="form-label">Volume (m³)</label>
+        <input type="number"
+               class="form-control"
+               formControlName="volume"
+               [class.is-invalid]="editForm.get('volume')?.invalid && editForm.get('volume')?.touched">
+        <div class="invalid-feedback">
+          Please enter a valid volume (minimum 1)
+        </div>
+      </div>
+
+      <!-- Vehicles & Drivers Section -->
+      <div class="mb-4">
+        <h6 class="mb-3">Assigned Vehicles & Drivers</h6>
+        <form [formGroup]="currentVehicleDriversForm">
+          <div class="row g-3">
+            <div class="col-md-5">
+              <div>
+                <ng-select
+                  [items]="vehicles"
+                  [bindLabel]="'marque'"
+                  [searchable]="true"
+                  [multiple]="false"
+                  [maxSelectedItems]="1"
+                  [closeOnSelect]="true"
+                  [clearable]="true"
+                  formControlName="vehicleDto"
+                  (change)="setSelectedVehicle()"
+                  [class.is-invalid]="isFieldInvalid(currentVehicleDriversForm,'vehicleDto') || isVehicleNotAvailable"
+                  placeholder="Select Vehicle"
+                >
+                  <ng-template ng-option-tmp let-item="item">
+                    <i class="bi bi-truck me-2"></i>
+                    {{item.immatriculation}} | {{item.marque}} - ({{item.volume}}m³)
+                  </ng-template>
+                  <ng-template ng-label-tmp let-item="item"  let-clear="clear">
+                  <span> <i class="bi bi-truck me-2"></i>
+                    {{item.immatriculation}}|{{item.marque}} - ({{item.volume}}m³)
+                  </span>
+                    <span class="ng-value-icon" (click)="clear(item)" aria-hidden="true">×</span>
+                  </ng-template>
+                </ng-select>
+                <span class="invalid-feedback" *ngIf="isFieldInvalid(currentVehicleDriversForm,'vehicleDto')"><i class="bi bi-exclamation-circle"></i> Select a vehicle</span>
+                <span *ngIf="checkVehicleAvailability" class="spinner-border spinner-border-sm text-danger"></span>
+                <small *ngIf="checkVehicleAvailability" class="invalid-feedback">Check for availability...</small>
+                <small *ngIf="assignedVehicleError" class="invalid-feedback"><i class="bi bi-exclamation-circle"></i><i class="bi bi-exclamation-circle"></i>  Vehicle already assigned for the selected start date</small>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div>
+                <ng-select
+                  [items]="drivers"
+                  [bindLabel]="'firstname'"
+                  [multiple]="true"
+                  [maxSelectedItems]="2"
+                  [closeOnSelect]="false"
+                  [clearable]="false"
+                  formControlName="chauffeursVehicleDto"
+                  (change)="setSelectedDrivers()"
+                  [class.is-invalid]="isFieldInvalid(currentVehicleDriversForm,
+                  'chauffeursVehicleDto') || isDriverNotAvailable"
+                  placeholder="Select drivers"
+                >
+                  <ng-template ng-option-tmp let-item="item">
+                    <i class="bi bi-person-circle me-2"></i>
+                    {{item.firstname}} {{item.lastname}}
+                  </ng-template>
+                  <ng-template ng-label-tmp let-item="item"  let-clear="clear">
+                  <span> <i class="bi bi-person-circle me-2"></i>
+                    {{item.firstname}} {{item.lastname}}
+                  </span>
+                    <span class="ng-value-icon" (click)="clear(item)" aria-hidden="true">×</span>
+                  </ng-template>
+                </ng-select>
+                <small *ngIf="isFieldInvalid(currentVehicleDriversForm,'chauffeursVehicleDto')" class="invalid-feedback">
+                  <i class="bi bi-exclamation-circle"></i>  Select at least one driver
+                </small>
+                <span *ngIf="checkDriverAvailability" class="spinner-border spinner-border-sm text-danger"></span>
+                <small *ngIf="checkDriverAvailability" class="invalid-feedback">Check for availability...</small>
+                <small *ngIf="assignedDriverError" class="invalid-feedback">
+                  <i class="bi bi-exclamation-circle"></i>  Driver already assigned for the selected start date</small>
+              </div>
+            </div>
+            <div class="col-md-2 d-flex align-items-center">
+              <button
+                type="button"
+                class="btn btn-primary w-100"
+                (click)="addMissionVehicle()">
+                <i class="bi bi-plus-lg me-2"></i>Add
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Selected Vehicles List -->
+      <div class="vehicles-list mt-4">
+        <div class="vehicle-item" *ngFor="let v of tmpArrayMissionVehicles; let i = index">
+          <div class="vehicle-plate">
+            <div class="plate-content">
+              <i class="bi bi-truck"></i>
+              <span class="plate-number">{{v.vehicleDto?.immatriculation}}</span>
+              <span class="vehicle-volume">{{v.vehicleDto?.volume}}m³</span>
+            </div>
+          </div>
+
+          <div class="vehicle-drivers">
+            <div class="driver" *ngFor="let driver of v.chauffeursVehicleDto">
+              <div class="driver-avatar">
+                <i class="bi bi-person-circle"></i>
+              </div>
+              <div class="driver-info">
+                <span class="driver-name">{{driver.chauffeurDto?.firstname}} {{driver.chauffeurDto?.lastname}}</span>
+                <span class="driver-status">Available</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-icon btn-remove" (click)="removeVehicle(i)">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary"
+                (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary"
+                [disabled]="editForm.invalid">
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

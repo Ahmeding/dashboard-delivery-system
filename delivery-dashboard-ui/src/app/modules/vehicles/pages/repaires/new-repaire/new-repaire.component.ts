@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ReparationDto} from "../../../../../../ds-api/src/models/reparation-dto";
 import {FormControl, FormGroup, NgForm, Validators} from "@angular/forms";
-import {VehiculeDto} from "../../../../../../ds-api/src/models/vehicule-dto";
+import {VehicleDto} from "../../../../../../ds-api/src/models/vehicle-dto";
 import {VehiculeService} from "../../../../../../ds-api/src/services/vehicule.service";
 import {ReparationService} from "../../../../../../ds-api/src/services/reparation.service";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -19,7 +19,7 @@ export class NewRepaireComponent implements OnInit{
   //;
 
   repair: ReparationDto = {};
-  allVehicles: VehiculeDto[]=[];
+  allVehicles: VehicleDto[]=[];
   /**---------------------**/
   repairForm: FormGroup= new FormGroup({});
   repairValue: ReparationDto={};
@@ -72,7 +72,7 @@ export class NewRepaireComponent implements OnInit{
   }
 
   loadRepairToEdit(rId:number){
-    this.repairService.findById4({id:rId}).subscribe({
+    this.repairService.findById5({id:rId}).subscribe({
       next:(repairToEditResponse)=>{
         this.repairValue= repairToEditResponse;
    /*     if(this.repairValue.dateDebut){
@@ -126,7 +126,7 @@ export class NewRepaireComponent implements OnInit{
   }
 
   saveRepair(repairData: ReparationDto, successMsg: string, errorMsg: string){
-  this.repairService.save4({body:repairData}).subscribe({
+  this.repairService.save5({body:repairData}).subscribe({
     next:(response)=>{
       this.alertService.alertSuccess(successMsg+" completed successfully!")
       this.router.navigate(['vehicles/repairs']);

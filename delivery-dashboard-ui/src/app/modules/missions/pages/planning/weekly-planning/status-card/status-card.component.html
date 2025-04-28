@@ -1,0 +1,137 @@
+
+<div class="stats-dashboard mb-4">
+  <div class="stats-grid">
+    <!-- Missions Stats -->
+    <div class="stat-card missions">
+      <div class="stat-header">
+        <div class="stat-icon">
+          <i class="bi bi-list-task"></i>
+        </div>
+        <div class="stat-title">
+          <h5>Missions Overview</h5>
+          <span class="stat-period">This Week</span>
+        </div>
+      </div>
+      <div class="stat-content">
+        <div class="stat-metrics">
+          <div class="metric">
+            <span class="metric-value">
+              {{totalWeeklyMissions}}
+            </span>
+            <span class="metric-label">Total</span>
+          </div>
+          <div class="metric primary">
+            <span class="metric-value">{{ currentDayOnTrack }}</span>
+            <span class="metric-label">On Track</span>
+          </div>
+          <div class="metric warning">
+            <span class="metric-value">0</span>
+            <span class="metric-label">Delayed</span>
+          </div>
+          <div class="metric success">
+            <span class="metric-value">{{ currentDayCompleted }}</span>
+            <span class="metric-label">Completed</span>
+          </div>
+        </div>
+        <div class="stat-progress">
+          <div class="progress-bar" [style.width.%]="completionPercentage"></div>
+          <span class="progress-text">{{ completionPercentage }}% Completed</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vehicles Stats -->
+    <div class="stat-card vehicles">
+      <div class="stat-header">
+        <div class="stat-icon">
+          <i class="bi bi-truck"></i>
+        </div>
+        <div class="stat-title">
+          <h5>Fleet Status</h5>
+          <span class="stat-period">Real-time</span>
+        </div>
+      </div>
+      <div class="stat-content">
+        <div class="stat-metrics">
+          <div class="metric">
+            <span class="metric-value">10</span>
+            <span class="metric-label">Total</span>
+          </div>
+          <div class="metric success">
+            <span class="metric-value">8</span>
+            <span class="metric-label">Active</span>
+          </div>
+          <div class="metric danger">
+            <span class="metric-value">2</span>
+            <span class="metric-label">Maintenance</span>
+          </div>
+        </div>
+        <div class="vehicle-status-list">
+          <div class="status-item">
+            <i class="bi bi-circle-fill text-success"></i>
+            <span>6 On Route</span>
+          </div>
+          <div class="status-item">
+            <i class="bi bi-circle-fill text-warning"></i>
+            <span>2 Loading</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Drivers Stats -->
+    <div class="stat-card drivers">
+      <div class="stat-header">
+        <div class="stat-icon">
+          <i class="bi bi-people"></i>
+        </div>
+        <div class="stat-title">
+          <h5>Driver Status</h5>
+          <span class="stat-period">Real-time</span>
+        </div>
+      </div>
+      <div class="stat-content">
+        <div class="stat-metrics">
+          <div class="metric">
+            <span class="metric-value">12</span>
+            <span class="metric-label">Total</span>
+          </div>
+          <div class="metric success">
+            <span class="metric-value">10</span>
+            <span class="metric-label">On Duty</span>
+          </div>
+          <div class="metric info">
+            <span class="metric-value">2</span>
+            <span class="metric-label">Off Duty</span>
+          </div>
+        </div>
+        <div class="driver-performance">
+          <div class="performance-item">
+            <span class="label">Avg. Rating</span>
+            <div class="rating">
+              <i class="bi bi-star-fill"></i>
+              <span>4.8</span>
+            </div>
+          </div>
+          <div class="performance-item">
+            <span class="label">On-Time</span>
+            <span class="value">95%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-section">
+    <div class="search-input">
+      <i class="bi bi-search"></i>
+      <input type="text" placeholder="Search missions, vehicles, or drivers..." (input)="onFilterChange($event)">
+    </div>
+    <div class="quick-filters">
+      <button class="filter-btn active">All</button>
+      <button class="filter-btn">Active</button>
+      <button class="filter-btn">Pending</button>
+      <button class="filter-btn">Completed</button>
+    </div>
+  </div>
+</div>

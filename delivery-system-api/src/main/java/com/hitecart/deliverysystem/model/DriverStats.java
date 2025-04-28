@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 /**
  * Tracks driver mission statistics
  */
-@Data
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper= false)

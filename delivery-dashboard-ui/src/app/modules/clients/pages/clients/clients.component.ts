@@ -94,7 +94,7 @@ export class ClientsComponent implements OnInit{
     this.confirmBoxService.customFour('Are you sure you want to delete this client?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.clientService.delete14({id:client_id}).subscribe(() => {
+          this.clientService.delete15({id:client_id}).subscribe(() => {
             this.getAllClients();
             this.alertService.alertSuccess('Deletion successfully completed');
           });

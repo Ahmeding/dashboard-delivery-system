@@ -32,3 +32,8 @@ flickr:
   apiSecret: 44cb0abb59042a17
   appKey: 72157720904761931-ed09cbdb9cd327d0
   appSecret: e4d84547efa4c530
+jwt:
+  secret: "EAqQ+S5bV4X3MCvg0i5jqvk2rfaHQX67NOeIy7xliXY="
+application:
+  cors:
+    origins: "http://localhost:4200"

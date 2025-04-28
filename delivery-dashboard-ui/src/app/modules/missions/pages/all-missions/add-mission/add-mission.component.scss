@@ -48,7 +48,6 @@
       padding: 1.5rem;
     }
   }
-
   .section-title {
     color: var(--text-color);
     font-size: 1.25rem;
@@ -61,7 +60,6 @@
       color: var(--primary-color);
     }
   }
-
   // Form Controls Styling
   .form-floating {
     > .form-control,
@@ -103,7 +101,6 @@
 
 
   }
-
   // Stages List Styling
   .stages-list {
     .stage-item {
@@ -202,56 +199,6 @@
       }
     }
   }
-  /*.stages-list {
-    .stage-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem;
-      background: var(--bg-color);
-      border-radius: 8px;
-      margin-bottom: 1rem;
-
-      .stage-content {
-        flex: 1;
-      }
-      .stage-route {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 0.5rem;
-
-        .location {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          color: var(--text-color); // Add this to ensure text color changes with theme
-
-          i {
-            font-size: 1.1rem;
-          }
-
-          span {
-            color: var(--text-color); // Explicitly set span color
-          }
-        }
-
-        .route-line {
-          flex: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--text-muted);
-        }
-      }
-
-      .stage-date {
-        font-size: 0.875rem;
-        color: var(--text-muted);
-      }
-    }
-  }*/
-
   // Vehicles List Styling
   .vehicles-list {
     .vehicle-item {

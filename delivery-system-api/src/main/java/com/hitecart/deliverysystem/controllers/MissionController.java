@@ -2,6 +2,7 @@ package com.hitecart.deliverysystem.controllers;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.MissionApi;
+import com.hitecart.deliverysystem.dao.MissionServiceImpl;
 import com.hitecart.deliverysystem.dto.basic.MissionDto;
 import com.hitecart.deliverysystem.dto.basic.MissionResponse;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
@@ -18,13 +19,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MissionController implements MissionApi {
 
-    private final MissionServicesImpl missionService;
+    private final MissionServiceImpl missionService;
 
 
     @Override
     public ResponseEntity<MissionDto> save(MissionDto dto) {
 
         return ResponseEntity.ok(missionService.save(dto));
+    }
+
+    @Override
+    public ResponseEntity<MissionDto> update(Integer idMission, MissionDto request) {
+        return ResponseEntity.ok(missionService.update(idMission, request));
     }
 
     @Override
@@ -76,9 +82,15 @@ public class MissionController implements MissionApi {
         return ResponseEntity.ok(missionService.findAllMissions(page,size));
     }
 
+
     @Override
-    public ResponseEntity<PageResponse<MissionDto>> findAllMissionsByDriverId(int page, int size, Authentication connectedUser) {
+    public ResponseEntity<PageResponse<MissionDto>> findAllMissionsByDriverIdPageable(int page, int size, Authentication connectedUser) {
         return ResponseEntity.ok(missionService.findAllMissionsByDriverId(page,size,connectedUser));
+    }
+
+    @Override
+    public ResponseEntity<List<MissionResponse>> findAllMissionsByDriver(Authentication connectedUser) {
+        return ResponseEntity.ok(missionService.findAllMissionsByDriver(connectedUser));
     }
 
     @Override

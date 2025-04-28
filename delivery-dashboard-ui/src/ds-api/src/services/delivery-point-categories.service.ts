@@ -11,20 +11,20 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { delete8 } from '../fn/delivery-point-categories/delete-8';
-import { Delete8$Params } from '../fn/delivery-point-categories/delete-8';
+import { delete9 } from '../fn/delivery-point-categories/delete-9';
+import { Delete9$Params } from '../fn/delivery-point-categories/delete-9';
 import { DeliveryPointCategoryDto } from '../models/delivery-point-category-dto';
-import { findAll9 } from '../fn/delivery-point-categories/find-all-9';
-import { FindAll9$Params } from '../fn/delivery-point-categories/find-all-9';
+import { findAll10 } from '../fn/delivery-point-categories/find-all-10';
+import { FindAll10$Params } from '../fn/delivery-point-categories/find-all-10';
 import { findAllDeliveryPointCategories } from '../fn/delivery-point-categories/find-all-delivery-point-categories';
 import { FindAllDeliveryPointCategories$Params } from '../fn/delivery-point-categories/find-all-delivery-point-categories';
-import { findById9 } from '../fn/delivery-point-categories/find-by-id-9';
-import { FindById9$Params } from '../fn/delivery-point-categories/find-by-id-9';
+import { findById10 } from '../fn/delivery-point-categories/find-by-id-10';
+import { FindById10$Params } from '../fn/delivery-point-categories/find-by-id-10';
 import { findByName } from '../fn/delivery-point-categories/find-by-name';
 import { FindByName$Params } from '../fn/delivery-point-categories/find-by-name';
 import { PageResponseDeliveryPointCategoryDto } from '../models/page-response-delivery-point-category-dto';
-import { save9 } from '../fn/delivery-point-categories/save-9';
-import { Save9$Params } from '../fn/delivery-point-categories/save-9';
+import { save10 } from '../fn/delivery-point-categories/save-10';
+import { Save10$Params } from '../fn/delivery-point-categories/save-10';
 
 @Injectable({ providedIn: 'root' })
 export class DeliveryPointCategoriesService extends BaseService {
@@ -32,31 +32,31 @@ export class DeliveryPointCategoriesService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `save9()` */
-  static readonly Save9Path = '/dp-categories/create';
+  /** Path part for operation `save10()` */
+  static readonly Save10Path = '/dp-categories/create';
 
   /**
    * Ajouter/Modifier une delivery Point categroy, cette methode permet d'enregistrer ou modifier un delivery Point categroy
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save9()` instead.
+   * To access only the response body, use `save10()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save9$Response(params: Save9$Params, context?: HttpContext): Observable<StrictHttpResponse<DeliveryPointCategoryDto>> {
-    return save9(this.http, this.rootUrl, params, context);
+  save10$Response(params: Save10$Params, context?: HttpContext): Observable<StrictHttpResponse<DeliveryPointCategoryDto>> {
+    return save10(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier une delivery Point categroy, cette methode permet d'enregistrer ou modifier un delivery Point categroy
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save9$Response()` instead.
+   * To access the full response (for headers, for example), `save10$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save9(params: Save9$Params, context?: HttpContext): Observable<DeliveryPointCategoryDto> {
-    return this.save9$Response(params, context).pipe(
+  save10(params: Save10$Params, context?: HttpContext): Observable<DeliveryPointCategoryDto> {
+    return this.save10$Response(params, context).pipe(
       map((r: StrictHttpResponse<DeliveryPointCategoryDto>): DeliveryPointCategoryDto => r.body)
     );
   }
@@ -90,60 +90,60 @@ export class DeliveryPointCategoriesService extends BaseService {
     );
   }
 
-  /** Path part for operation `findById9()` */
-  static readonly FindById9Path = '/dp-categories/dp-category/by-id/{id}';
+  /** Path part for operation `findById10()` */
+  static readonly FindById10Path = '/dp-categories/dp-category/by-id/{id}';
 
   /**
    * Rechercher un DeliveryPoint par ID! Cette methode permet de chercher un delivery Point categroy par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById9()` instead.
+   * To access only the response body, use `findById10()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById9$Response(params: FindById9$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findById9(this.http, this.rootUrl, params, context);
+  findById10$Response(params: FindById10$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findById10(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher un DeliveryPoint par ID! Cette methode permet de chercher un delivery Point categroy par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById9$Response()` instead.
+   * To access the full response (for headers, for example), `findById10$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById9(params: FindById9$Params, context?: HttpContext): Observable<any> {
-    return this.findById9$Response(params, context).pipe(
+  findById10(params: FindById10$Params, context?: HttpContext): Observable<any> {
+    return this.findById10$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
 
-  /** Path part for operation `findAll9()` */
-  static readonly FindAll9Path = '/dp-categories/all';
+  /** Path part for operation `findAll10()` */
+  static readonly FindAll10Path = '/dp-categories/all';
 
   /**
    * Rechercher tout les DeliveryPoint! Cette methode permet de retouner tous les delivery Point categroys
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll9()` instead.
+   * To access only the response body, use `findAll10()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll9$Response(params?: FindAll9$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findAll9(this.http, this.rootUrl, params, context);
+  findAll10$Response(params?: FindAll10$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findAll10(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les DeliveryPoint! Cette methode permet de retouner tous les delivery Point categroys
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll9$Response()` instead.
+   * To access the full response (for headers, for example), `findAll10$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll9(params?: FindAll9$Params, context?: HttpContext): Observable<any> {
-    return this.findAll9$Response(params, context).pipe(
+  findAll10(params?: FindAll10$Params, context?: HttpContext): Observable<any> {
+    return this.findAll10$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
@@ -173,31 +173,31 @@ export class DeliveryPointCategoriesService extends BaseService {
     );
   }
 
-  /** Path part for operation `delete8()` */
-  static readonly Delete8Path = '/dp-categories/delete/{id}';
+  /** Path part for operation `delete9()` */
+  static readonly Delete9Path = '/dp-categories/delete/{id}';
 
   /**
    * Supprimer un DeliveryPoint par ID! Cette methode permet de suprimmer un delivery Point categroy par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete8()` instead.
+   * To access only the response body, use `delete9()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete8$Response(params: Delete8$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return delete8(this.http, this.rootUrl, params, context);
+  delete9$Response(params: Delete9$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return delete9(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Supprimer un DeliveryPoint par ID! Cette methode permet de suprimmer un delivery Point categroy par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete8$Response()` instead.
+   * To access the full response (for headers, for example), `delete9$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete8(params: Delete8$Params, context?: HttpContext): Observable<any> {
-    return this.delete8$Response(params, context).pipe(
+  delete9(params: Delete9$Params, context?: HttpContext): Observable<any> {
+    return this.delete9$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

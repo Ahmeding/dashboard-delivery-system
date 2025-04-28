@@ -97,12 +97,14 @@ public class MissionDto {
                                 .map(EtapeDto::toEntity)
                                 .collect(Collectors.toList()):null
                                 );
+/*
         mission.setMissionVehicules(
                         dto.getMissionVehiclesDtos() != null?
                                 dto.getMissionVehiclesDtos().stream()
                                         .map(MissionVehicleDto::toEntity)
                                         .collect(Collectors.toList()):null
                                         );
+*/
 
         mission.setCreatedAt(dto.getCreatedAt());
         mission.setUpdatedAt(dto.getUpdatedAt());

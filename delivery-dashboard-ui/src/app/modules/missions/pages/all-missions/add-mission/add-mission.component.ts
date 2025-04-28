@@ -5,7 +5,7 @@ import {ChauffeurService} from "../../../../../../ds-api/src/services/chauffeur.
 import {DeliveryDestinationService} from "../../../../../../ds-api/src/services/delivery-destination.service";
 import {AlertService} from "../../../../../services/alert/alert.service";
 import {DeliveryDestinationResponse} from "../../../../../../ds-api/src/models/delivery-destination-response";
-import {VehiculeDto} from "../../../../../../ds-api/src/models/vehicule-dto";
+import {VehicleDto} from "../../../../../../ds-api/src/models/vehicle-dto";
 import {ChauffeurDto} from "../../../../../../ds-api/src/models/chauffeur-dto";
 import {MissionDto} from "../../../../../../ds-api/src/models/mission-dto";
 import {CreatedByUserDto} from "../../../../../../ds-api/src/models/created-by-user-dto";
@@ -33,7 +33,7 @@ export class AddMissionComponent implements OnInit {
   selectedDeliveryDestination: DeliveryDestinationResponse={};
   /** populate data */
   allDeliveryDestinations: DeliveryDestinationResponse[]=[];
-  allVehicles: VehiculeDto[]=[];
+  allVehicles: VehicleDto[]=[];
   allDrivers: ChauffeurDto[]=[];
   allDeliveryPointsByCity: DeliveryPointDto[]=[];
   /** **/
@@ -51,14 +51,14 @@ export class AddMissionComponent implements OnInit {
   etapes: EtapeDto[]=[];
   missionVcls: MissionVehicleDto[]=[]; // table after add
   vehicleDrivers:ChauffeurDto[] =[];
+
   /* to add to list*/
   etape:EtapeDto={};
   selectedDPoint!: DeliveryPointDto;
 
-  missonVehicle: MissionVehicleDto={};
-  selectedVehicle:VehiculeDto={};
+  selectedVehicle:VehicleDto={};
 
-  selectedVehicles:VehiculeDto[]=[];
+  selectedVehicles:VehicleDto[]=[];
   private missionToSave: MissionDto={};
 
   private unavailableVehicleIds: number[] =[]
@@ -104,48 +104,30 @@ export class AddMissionComponent implements OnInit {
     this.createMissionVehicle();
   }
 
-  saveMission() {
-    this.missionForm.markAllAsTouched();
-    const idDD = this.selectedDeliveryDestination.id;
-    this.missionForm.get("idDeliveryDestination")?.setValue(idDD);
-    const mission = this.missionForm.value as MissionDto;
-    console.log(mission);
-    this.missionToSave = mission;
-    this.missionToSave.etatMission="PLANNED";
-    this.missionService.save6({
-      body:this.missionToSave
-    }).subscribe({next:()=>{
-        this.alertService.alertSuccess("Saved OK!!");
-        this.router.navigate(['missions','w-planning']);
-      }, error:(err)=>{
-        console.log(JSON.stringify(mission) );
-        this.alertService.alertWaring(err.error.httpCode+ " ERROR :: "+ err.error.msg)
-      }});
+
+
+  createMissionVehicle(): FormGroup{
+    return this.currentMissionVForm = this.fb.group({
+      id:[''] ,
+      vehicleDto: ['',Validators.required],
+      chauffeursVehicleDto: [[],Validators.required],
+    })
   }
   get missionVehiclesDtoArray():FormArray{
     return this.missionForm.get('missionVehiclesDtos') as FormArray;
   }
-
-  createMissionVehicle(): FormGroup{
-  return this.currentMissionVForm = this.fb.group({
-     id:[''] ,
-     vehicleDto: ['',Validators.required],
-     chauffeursVehicleDto: [[],Validators.required],
-   })
-  }
-
   setSelectedVehicle() {
-   const v = this.currentMissionVForm.get('vehicleDto')?.value as VehiculeDto;
-   const startDate = this.missionForm.get('dateDebut')?.value;
-   const endDate = this.missionForm.get('dateFin')?.value ;
-   const currentVehicule = {
-                       body:{
-                         dateDebut: startDate,
-                         dateFin: endDate,
-                         missionVehiclesDtos:[
-                           {vehicleDto:{id: v.id}
-                           }]}
-                          }
+    const v = this.currentMissionVForm.get('vehicleDto')?.value as VehicleDto;
+    const startDate = this.missionForm.get('dateDebut')?.value;
+    const endDate = this.missionForm.get('dateFin')?.value ;
+    const currentVehicule = {
+      body:{
+        dateDebut: startDate,
+        dateFin: endDate,
+        missionVehiclesDtos:[
+          {vehicleDto:{id: v.id}
+          }]}
+    }
     console.log(currentVehicule);
     this.checkVehicleAvailability=true;
     this.missionService.checkOverlappingVehicles(currentVehicule).subscribe({
@@ -164,11 +146,10 @@ export class AddMissionComponent implements OnInit {
 
       },error:(err)=>{
         console.log(""+err);
-    }
+      }
     })
     this.selectedVehicle= v;
   }
-
   setSelectedDrivers() {
     const selectedDrivers: ChauffeurDto[] =
       this.currentMissionVForm.get('chauffeursVehicleDto')?.value;
@@ -179,10 +160,10 @@ export class AddMissionComponent implements OnInit {
         dateDebut: startDate,
         dateFin: endDate,
         missionVehiclesDtos:[
-        {
-          chauffeursVehicleDto:  selectedDrivers.map(d=>({chauffeurDto: { id : d.id } }))
+          {
+            chauffeursVehicleDto:  selectedDrivers.map(d=>({chauffeurDto: { id : d.id } }))
           }
-         ]
+        ]
       }
     }
     console.log(currentDiver);
@@ -209,32 +190,31 @@ export class AddMissionComponent implements OnInit {
 
     this.vehicleDrivers= selectedDrivers ;
   }
-
-  private isVehicleDuplicat(selectedV:VehiculeDto):boolean{
-   const isDuplicated = this.missionVcls.some(mv=>
-     mv.vehicleDto?.id === selectedV.id);
-   return isDuplicated;
+  private isVehicleDuplicat(selectedV:VehicleDto):boolean{
+    const isDuplicated = this.missionVcls.some(mv=>
+      mv.vehicleDto?.id === selectedV.id);
+    return isDuplicated;
+  }
+  private isDuplicateDrivers(newDrivers: any[]):boolean{
+    for (const newDriver of newDrivers) {
+      const driverAlreadyAssigned = this.missionVcls.some(vehicle => {
+        // mission.chauffeursVehicleDto is an array of objects: { chauffeurDto: driver }
+        return vehicle.chauffeursVehicleDto?.some(
+          assignedDriver => assignedDriver.chauffeurDto?.id=== newDriver.id
+        );
+      });
+      if (driverAlreadyAssigned) {
+        this.alertService.alertError(
+          `Driver ${newDriver.firstname || newDriver.id} is already assigned to another vehicle.`
+        );
+        return true;
+      }
+    }
+    return false;
   }
 
-  private isDuplicateDrivers(newDrivers: any[]):boolean{
-      for (const newDriver of newDrivers) {
-        const driverAlreadyAssigned = this.missionVcls.some(vehicle => {
-          // mission.chauffeursVehicleDto is an array of objects: { chauffeurDto: driver }
-          return vehicle.chauffeursVehicleDto?.some(
-            assignedDriver => assignedDriver.chauffeurDto?.id=== newDriver.id
-          );
-        });
-        if (driverAlreadyAssigned) {
-          this.alertService.alertError(
-            `Driver ${newDriver.firstname || newDriver.id} is already assigned to another vehicle.`
-          );
-          return true;
-        }
-      }
-      return false;
-    }
 
-    get missionVehiclesDtos(): FormArray {
+  get missionVehiclesDtos(): FormArray {
     return this.missionForm.get('missionVehiclesDtos') as FormArray;
   }
 
@@ -243,61 +223,72 @@ export class AddMissionComponent implements OnInit {
     if(this.currentMissionVForm && this.currentMissionVForm.valid){
 
       const vehicleData =  this.currentMissionVForm.value;
-      const selectedV : VehiculeDto= vehicleData.vehicleDto;
+      const selectedV : VehicleDto= vehicleData.vehicleDto;
       const selectedDs : ChauffeurDto[] = vehicleData.chauffeursVehicleDto;
 
       if (this.isVehicleDuplicat(selectedV)){
         this.alertService.alertError("This Vehicule already selected");
         return {};
       }
-     if(this.isDuplicateDrivers(this.vehicleDrivers)){
+      if(this.isDuplicateDrivers(this.vehicleDrivers)){
         return {};
-     }
+      }
 
-     const tmpVehiclesDrivers : MissionVehicleDto={
-       vehicleDto:selectedV,
-       chauffeursVehicleDto:this.vehicleDrivers.map(d=>({chauffeurDto:d}))
-     }
-     const newMissionVehicle: MissionVehicleDto ={
-       vehicleDto: {id:selectedV.id},
-       chauffeursVehicleDto: this.vehicleDrivers.map(driver => ({ chauffeurDto: {id:driver.id} }))
-     }
+      const tmpVehiclesDrivers : MissionVehicleDto = {
+                                vehicleDto:selectedV,
+                                chauffeursVehicleDto: this.vehicleDrivers
+                                  .map(d=>({chauffeurDto:d}))
+      }
+      const newMissionVehicle: MissionVehicleDto ={
+        vehicleDto: {id:selectedV.id},
+        chauffeursVehicleDto: this.vehicleDrivers.map(driver => (
+          { chauffeurDto: {id:driver.id} }))
+      }
       // Push a new FormGroup to the missionVehiclesDtos FormArray
 
       this.missionVehiclesDtoArray.push(
         this.fb.group({
           vehicleDto: [newMissionVehicle.vehicleDto, Validators.required],
-          chauffeursVehicleDto: [newMissionVehicle.chauffeursVehicleDto, Validators.required]
+          chauffeursVehicleDto: [newMissionVehicle.chauffeursVehicleDto,
+            Validators.required]
         })
       );
       console.log( this.missionVehiclesDtoArray.value);
-      /*     this.currentMissionVForm.patchValue({
-               vehicleDto: this.selectedVehicle,
-               chauffeursVehicleDto: this.vehicleDrivers.map(driver=>(
-                 { chauffeurDto: driver}
-               )),
-             });*/
 
-
-/*        const missionVehicleValue= this.currentMissionVForm.value;
-        this.missionVehiclesDtos.push(this.fb.group({...missionVehicleValue}));
-        console.log("+++++++++++++++"+
-          JSON.stringify(this.missionVehiclesDtos.value));*/
-       //this.missonVehicle=this.currentMissionVForm.value;
-       this.missionVcls.push(tmpVehiclesDrivers);
-       this.selectedVehicles.push(tmpVehiclesDrivers);
-       this.currentMissionVForm = this.createMissionVehicle();
-   }else{
+      this.missionVcls.push(tmpVehiclesDrivers);
+      this.selectedVehicles.push(tmpVehiclesDrivers);
+      this.currentMissionVForm = this.createMissionVehicle();
+    }
+    else{
       this.alertService.alertError("All filler are mandatory")
       return {};
     }
     return {};
   }
-
   removeVehicle(index: number) {
     this.missionVehiclesDtoArray.removeAt(index);
     this.missionVcls.splice(index,1);
   }
+
+  saveMission() {
+    this.missionForm.markAllAsTouched();
+    const idDD = this.selectedDeliveryDestination.id;
+    this.missionForm.get("idDeliveryDestination")?.setValue(idDD);
+    const mission = this.missionForm.value as MissionDto;
+    console.log(mission);
+    this.missionToSave = mission;
+    this.missionToSave.etatMission="PLANNED";
+    this.missionService.save7({
+      body:this.missionToSave
+    }).subscribe({next:()=>{
+        this.alertService.alertSuccess("Saved OK!!");
+        this.router.navigate(['missions','w-planning']);
+      }, error:(err)=>{
+        console.log(JSON.stringify(mission) );
+        this.alertService.alertWaring(err.error.httpCode+ " ERROR :: "+ err.error.msg)
+      }});
+  }
+
 
   get etapeDtosArray():FormArray{
     return this.missionForm.get('etapeDtos') as FormArray;
@@ -406,7 +397,7 @@ export class AddMissionComponent implements OnInit {
     this.initDate();
   }
   private loadDeliveryDestinations(){
-    this.deliveryDestinationService.findAll12().subscribe({next:(deliveryDestination)=>{
+    this.deliveryDestinationService.findAll13().subscribe({next:(deliveryDestination)=>{
         this.allDeliveryDestinations=deliveryDestination
       },
       error:(err)=>{
@@ -424,7 +415,7 @@ export class AddMissionComponent implements OnInit {
   }
 
   private loadDrivers(){
-   this.driversService.findAll17().subscribe({
+   this.driversService.findAll18().subscribe({
      next:(drivers)=>{
        this.allDrivers=drivers;
      },
@@ -453,7 +444,8 @@ export class AddMissionComponent implements OnInit {
     this.selectedDeliveryDestination = selectDD as DeliveryDestinationResponse ;
     if(this.selectedDeliveryDestination) {
       const city = this.selectedDeliveryDestination.serviceDelivery?.destinationCity as string;
-    this.missionForm.get("titre")?.setValue("Mission " + this.selectedDeliveryDestination.serviceDelivery?.destinationCity);
+    this.missionForm.get("titre")?.setValue("Mission "
+      + this.selectedDeliveryDestination.serviceDelivery?.destinationCity);
     this.currentEtapeForm.get('lieuDepart')?.setValue(this.selectedDeliveryDestination.serviceDelivery?.pickUpLocation);
     this.findAllDeliveryPointsByCity(city);
     this.currentEtapeForm.get('lieuArrivee')?.setValue(undefined);

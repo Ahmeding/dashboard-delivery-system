@@ -1,11 +1,8 @@
 package com.hitecart.deliverysystem.model;
 
-import com.hitecart.deliverysystem.model.enums.RoleUtilisateur;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,8 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,16 +42,19 @@ public class Utilisateur extends AbstractEntity implements UserDetails, Principa
     private Adresse address;
     @Column(name="date_of_birth")
     private LocalDate dateOfBirth;
-    @Column(name = "role")
-    private RoleUtilisateur role;
     private boolean accountLocked;
     private boolean enabled;
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Role> roles;
+    private List<Role> roles= new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Notification> notifications = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         //return List.of(new SimpleGrantedAuthority(role.name()));
+        if (roles == null) {
+            return Collections.emptyList(); // Return empty list if roles is null
+        }
         return this.roles
                 .stream()
                 .map(r-> new SimpleGrantedAuthority(r.getName()))
@@ -97,4 +98,6 @@ public class Utilisateur extends AbstractEntity implements UserDetails, Principa
     public String fullName(){
         return this.firstname + " " + this.lastname;
     }
+
 }
+
