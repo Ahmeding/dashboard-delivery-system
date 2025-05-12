@@ -8,15 +8,19 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { EtapeDto } from '../../models/etape-dto';
+import { MissionDto } from '../../models/mission-dto';
 
-export interface FindAllLignesFraisMissionByFraisMissionId$Params {
-  idFM: number;
+export interface UpdateEtapeMission$Params {
+  id: number;
+      body: Array<EtapeDto>
 }
 
-export function findAllLignesFraisMissionByFraisMissionId(http: HttpClient, rootUrl: string, params: FindAllLignesFraisMissionByFraisMissionId$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-  const rb = new RequestBuilder(rootUrl, findAllLignesFraisMissionByFraisMissionId.PATH, 'get');
+export function updateEtapeMission(http: HttpClient, rootUrl: string, params: UpdateEtapeMission$Params, context?: HttpContext): Observable<StrictHttpResponse<MissionDto>> {
+  const rb = new RequestBuilder(rootUrl, updateEtapeMission.PATH, 'patch');
   if (params) {
-    rb.path('idFM', params.idFM, {});
+    rb.path('id', params.id, {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -24,9 +28,9 @@ export function findAllLignesFraisMissionByFraisMissionId(http: HttpClient, root
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<any>;
+      return r as StrictHttpResponse<MissionDto>;
     })
   );
 }
 
-findAllLignesFraisMissionByFraisMissionId.PATH = '/fraismissions/fraismission/{idFM}';
+updateEtapeMission.PATH = '/missions/update/etapes/{id}';

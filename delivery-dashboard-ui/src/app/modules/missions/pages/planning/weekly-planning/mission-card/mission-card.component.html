@@ -2,7 +2,7 @@
 <div class="mission-card"
      [style.backgroundColor]="getDestinationColor() + '10'"
      [style.borderLeft]="'3px solid ' + getDestinationColor()"
-     (click)="openEditMissionModal(mission)">
+     (click)="!isUserAsDriver() && openEditMissionModal(mission)">
 
   <div class="mission-header">
     <div class="time-destination">
@@ -48,60 +48,17 @@
     </div>
   </div>
 
-<!--  <button class="action-btn" (click)="$event.stopPropagation(); onEdit()">
-    <i class="bi bi-three-dots-vertical"></i>
-  </button>-->
-</div>
-
-
-
-<!--
-
-
-&lt;!&ndash; mission-card.component.html &ndash;&gt;
-<div class="mission-card"
-     [style.backgroundColor]="getDestinationColor() + '15'"
-     [style.borderLeft]="'3px solid ' + getDestinationColor()"
-     (click)="openEditMissionModal(mission)">
-
-  <div class="mission-header">
-    <div class="time-destination">
-      <span class="time">{{ getStartTime() }}</span>
-      <span class="mission-title" [style.color]="getDestinationColor()">
-        {{ mission.titre }}
-      </span>
-    </div>
-    <div class="status">
-      <i [class]="'bi ' + getStatusIcon()" [title]="mission.etatMission"></i>
-    </div>
-  </div>
-
-  <div class="mission-content">
-    <div class="info-row">
-      <div class="info-badge">
-        <i class="bi bi-box-seam"></i>
-        {{ mission.volume }}m³
-      </div>
-      <span class="mission-id">#{{ mission.id }}</span>
-    </div>
-
-    &lt;!&ndash; Resources Summary &ndash;&gt;
-    <div class="resources-row" *ngIf="mission.missionVehiclesDtos?.length">
-      <ng-container *ngFor="let mv of mission.missionVehiclesDtos">
-        <div class="resource-badge vehicle">
-          <i class="bi bi-truck"></i>
-          <span>{{ mv.vehicleDto?.immatriculation }}</span>
-        </div>
-        <div class="resource-badge driver" *ngFor="let driver of mv.chauffeursVehicleDto">
-          <i class="bi bi-person"></i>
-          <span>{{ driver.chauffeurDto?.firstname }}</span>
-        </div>
-      </ng-container>
-    </div>
-  </div>
-
-  <button class="action-btn" (click)="$event.stopPropagation(); onEdit()">
+  <button *ngIf="isUserAsDriver()" class="action-btn"
+          (click)="toggelMenu($event,mission.id!)">
     <i class="bi bi-three-dots-vertical"></i>
   </button>
+  <div class="menu-container" [class.visible]="currentOpenMenuId === mission.id">
+    <div *ngIf="isInputDateSameDay()" class="menu-option km-option" (click)="handleStarEndKm(mission)">
+      <i class="bi bi-speedometer2 me-2"></i>
+      Start/End Km
+    </div>
+    <div class="menu-option expenses-option" (click)="handleExpenses(mission)">
+      <i class="bi bi-cash-coin me-2"></i>
+      Expenses</div>
+  </div>
 </div>
--->

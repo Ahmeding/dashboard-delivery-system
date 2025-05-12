@@ -37,6 +37,15 @@ export class NewDeliveryPointModalComponent implements OnInit{
   destinationForm!: FormGroup;
   deliveryPointForm!: FormGroup;
   currentPointForm: FormGroup | null = null;
+  weekDays = [
+    { label: 'Sun', value: 'SUNDAY' },
+    { label: 'Mon', value: 'MONDAY' },
+    { label: 'Tue', value: 'TUESDAY' },
+    { label: 'Wed', value: 'WEDNESDAY' },
+    { label: 'Thu', value: 'THURSDAY' },
+    { label: 'Fri', value: 'FRIDAY' },
+    { label: 'Sat', value: 'SATURDAY' }
+  ];
 
   constructor(
     private fillInputService: InputFillUtilsService,
@@ -169,11 +178,10 @@ export class NewDeliveryPointModalComponent implements OnInit{
       this.dDestinationService.save13({body:deliveryDest}).subscribe({
         next:(dpResp)=>{
           console.log(dpResp);
-
           this.alertService.alertSuccess("New Delivery Point added successfully!");
           this.activeModal.close(this.destinationForm.value);
         },error:(err)=>{
-          this.alertService.alertWaring("An error occurred while adding the new delivery point. ["+ err.error.msg+"]");
+          this.alertService.alertWarning("An error occurred while adding the new delivery point. ["+ err.error.msg+"]");
           console.log(err.error.msg);
         }
       })

@@ -50,7 +50,7 @@ export class ContractsComponent implements OnInit{
 
   formatDate(dateString: string | undefined):string{
 
-   return this.dateUtilSdervice.formatToDate(dateString as string);
+   return dateString as string;
   }
 
   goToPreviousPage() {
@@ -120,8 +120,7 @@ export class ContractsComponent implements OnInit{
   }
 
   formatDateTime(dateTimeString: string | undefined):string {
-    console.log("=================> "+JSON.stringify(dateTimeString) );
-    return this.dateUtilSdervice.formatDateTime(dateTimeString);
+    return dateTimeString as string;
   }
 
   capitalizeName(name: string | undefined) {

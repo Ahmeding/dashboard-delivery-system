@@ -2,11 +2,13 @@ package com.hitecart.deliverysystem.controllers;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.MissionApi;
-import com.hitecart.deliverysystem.dao.MissionServiceImpl;
+import com.hitecart.deliverysystem.dto.basic.EtapeDto;
+import com.hitecart.deliverysystem.dto.basic.FraisMissionDto;
+import com.hitecart.deliverysystem.model.enums.KmFlag;
+import com.hitecart.deliverysystem.services.impl.MissionServiceImpl;
 import com.hitecart.deliverysystem.dto.basic.MissionDto;
 import com.hitecart.deliverysystem.dto.basic.MissionResponse;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
-import com.hitecart.deliverysystem.services.impl.MissionServicesImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -34,14 +36,24 @@ public class MissionController implements MissionApi {
     }
 
     @Override
+    public ResponseEntity<MissionDto> updateExpensesMission(Integer idMission, List<FraisMissionDto> expensesDto) {
+        return ResponseEntity.ok(missionService.updateExpensesMission(idMission, expensesDto));
+    }
+
+    @Override
+    public ResponseEntity<MissionDto> updateEtapeMission(Integer idMission, List<EtapeDto> etapesDto) {
+        return ResponseEntity.ok(missionService.updateEtapeMission(idMission, etapesDto));
+    }
+
+    @Override
     public ResponseEntity<MissionDto> updateEtatMission(Integer idMission, EtatMission etatMission) {
 
         return ResponseEntity.ok(missionService.updateEtatMission(idMission,etatMission));
     }
 
     @Override
-    public ResponseEntity<MissionDto> updateKilometrage(String flag, Integer idMission, double kilometrage) {
-        return ResponseEntity.ok(missionService.updateKilometrage(flag,idMission,kilometrage));
+    public ResponseEntity<MissionDto> updateKilometrage(KmFlag flag, Integer idMission,Integer vehicleId,  double kilometrage) {
+        return ResponseEntity.ok(missionService.updateKilometrage(flag,idMission,vehicleId, kilometrage));
     }
 
     @Override

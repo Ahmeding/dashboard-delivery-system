@@ -15,6 +15,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {
   NewWeeklyPlanningModalComponent
 } from "../../../missions/pages/planning/new-weekly-planning-modal/new-weekly-planning-modal.component";
+import {TokenService} from "../../../../services/token/token.service";
 
 @Component({
   selector: 'app-weekly-planning',
@@ -29,13 +30,17 @@ export class WeeklyPlanningComponent implements  OnInit {
   missionsPerWeek!:MissionResponse[];
 
   constructor(
-    private dateService: DateUtilsService, private fb:FormBuilder,
+    private tokenService:TokenService,
+    private fb:FormBuilder,
     private missionService:MissionService,
     private router:Router,
     private modalService:NgbModal) {
 
   }
 
+  isConnectedUserAdmin(){
+    return this.tokenService.hasRoles(["ROLE_ADMIN"]);
+  }
   ngOnInit() {
     this.initializeWeek();
     this.loadMissions();
@@ -117,7 +122,7 @@ export class WeeklyPlanningComponent implements  OnInit {
 
     // Distribute missions to appropriate days
     missions.forEach(mission => {
-      const missionDate = new Date(this.dateService.convertArrayDateToString(mission.dateDebut));
+      const missionDate = new Date(mission.dateDebut!);
       const dayIndex = this.weekDays.findIndex(day =>
         day.date.toDateString() === missionDate.toDateString()
       );
@@ -129,8 +134,8 @@ export class WeeklyPlanningComponent implements  OnInit {
     // Sort missions by time for each day
     this.weekDays.forEach(day => {
       day.missions.sort((a, b) =>
-        new Date(this.dateService.convertArrayDateToString(a.dateDebut)).getTime() -
-        new Date(this.dateService.convertArrayDateToString(b.dateDebut)).getTime()
+        new Date(a.dateDebut!).getTime() -
+        new Date(b.dateDebut!).getTime()
       );
     });
   }

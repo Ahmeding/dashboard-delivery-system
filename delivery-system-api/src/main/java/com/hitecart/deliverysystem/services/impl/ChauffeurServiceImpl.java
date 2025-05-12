@@ -112,14 +112,14 @@ public class  ChauffeurServiceImpl implements ChauffeurService {
         checkID(id,"Le parametre ID chauffeur est null",
                 "Impossible de trouver un chauffeur avec un ID null");
 
-        Optional<Chauffeur> chauffeurOp= chauffeurRepository.findById(id);
-        ChauffeurDto chauffeurDto=  Optional.of(ChauffeurDto.fromEntity(chauffeurOp.get()))
-                .orElseThrow(
+        Chauffeur chauffeurOp= chauffeurRepository.findById(id).orElseThrow(
                 ()->new EntityNotFoundException(
                         "Opps! Aucun chauffeur avec l'id :"
                                 + id +"n'a ete trouvé dans la base donnée",
                         ErrorCodes.CHAUFFEUR_NOT_FOUND)
         );
+        ChauffeurDto chauffeurDto=  ChauffeurDto.fromEntity(chauffeurOp);
+
 
         setCreatedByUser(chauffeurDto);
         return chauffeurDto;

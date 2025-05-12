@@ -137,7 +137,7 @@ constructor(private alertService:AlertService,
     this.deliveryPointCategoryService.delete9({id:categoryId}).subscribe({
       next:()=>{this.alertService.alertInfo("Category deleted successfully.");
         this.getAllDeliveryPointCategories()},
-      error:(err)=>{this.alertService.alertWaring("An error occurred while deleting the category. Please try again.");
+      error:(err)=>{this.alertService.alertWarning("An error occurred while deleting the category. Please try again.");
         console.log(err);
       }
     })

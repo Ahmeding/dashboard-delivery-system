@@ -21,6 +21,7 @@ public class LigneCommandeClientDto {
     //private ServiceDeliveryDto serviceDeliveryDto;
     private Integer ServiceDeliveryDtoId;
     private Integer cmdClientId;
+
     public static LigneCommandeClientDto fromEntity(LigneCommandeClient ligneCommandeClient) {
         if(ligneCommandeClient == null){
             return null;

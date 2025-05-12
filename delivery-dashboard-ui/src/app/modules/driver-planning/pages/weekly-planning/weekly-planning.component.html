@@ -46,7 +46,7 @@
             <span>No missions</span>
           </div>
 
-          <button *ngIf="isNotOldDay(day.date)" class="btn-new-mission" (click)="navigateToNewMissionByDate(day.date)">
+          <button *ngIf="isNotOldDay(day.date) && isConnectedUserAdmin()" class="btn-new-mission" (click)="navigateToNewMissionByDate(day.date)">
             <i class="bi bi-plus-lg"></i>
             <span>New Mission</span>
           </button>

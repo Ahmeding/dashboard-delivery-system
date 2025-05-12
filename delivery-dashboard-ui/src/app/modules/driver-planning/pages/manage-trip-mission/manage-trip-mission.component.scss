@@ -1,0 +1,19 @@
+.manage-trip-form-container {
+  padding: 1.5rem;
+  background-color: var(--card-bg);
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .service-delivery-form-container {
+    .form-content {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}

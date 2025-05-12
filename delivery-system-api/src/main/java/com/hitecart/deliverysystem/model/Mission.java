@@ -48,9 +48,8 @@ public class Mission extends AbstractEntity {
 
     @Column(name = "kmfin")
     private double kmFin;
-    @OneToOne
-    @JoinColumn(name = "idfraismission", referencedColumnName = "id")
-    private FraisMission fraisMission;
+    @OneToMany(mappedBy = "mission",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<FraisMission> fraisMissionList = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "id_delivery_destination")
     private DeliveryDestination deliveryDestination;

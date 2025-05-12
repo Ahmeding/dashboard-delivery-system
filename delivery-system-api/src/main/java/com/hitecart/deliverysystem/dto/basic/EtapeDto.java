@@ -2,6 +2,7 @@ package com.hitecart.deliverysystem.dto.basic;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hitecart.deliverysystem.model.Etape;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -22,7 +23,11 @@ public class EtapeDto {
     private LocalTime scheduledDeliveryTime ;
     @JsonFormat(pattern = "HH:mm")
     private LocalTime actualDeliveryTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @Schema(type = "string", format = "date", example = "27-05-2025")
     private LocalDate dateDepart;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @Schema(type = "string", format = "date", example = "27-05-2025")
     private LocalDate dateArrivee;
     private String lieuDepart;
     private String lieuArrivee;

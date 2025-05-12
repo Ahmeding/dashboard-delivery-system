@@ -22,6 +22,8 @@ spring:
 
   jackson:
     serialization.write-date-keys-as-timestamps: false
+    time-zone: UTC
+    date-format: yyyy-MM-dd'T'HH:mm:ss
 
 server:
   port: 8080

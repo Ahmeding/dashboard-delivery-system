@@ -153,6 +153,11 @@ private getAdminMenu(): MenuItem[]{
         route: '/dplanning/my-weekly-p',
       },
       {
+        label: 'Expenses',
+        icon: 'bi-cash',
+        route: '/missions/expenses',
+      },
+      {
         label: 'Settings',
         icon: 'bi-gear',
         children: [

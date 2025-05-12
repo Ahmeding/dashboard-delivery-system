@@ -41,9 +41,7 @@ constructor(
     this.getAllRepairs();
   }
 
-  formatDate(dateString: string | undefined):string{
-  return this.dateUtilSdervice.formatToDate(dateString) as string;
-  }
+
 getAllRepairs(){
   this.repairService.findAllReparations({
     page:this.page,

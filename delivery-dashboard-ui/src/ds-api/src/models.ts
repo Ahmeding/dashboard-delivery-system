@@ -24,7 +24,6 @@ export { FraisMissionDto } from './models/frais-mission-dto';
 export { JwtAuthenticationResponse } from './models/jwt-authentication-response';
 export { LigneCommandeClientDto } from './models/ligne-commande-client-dto';
 export { LigneDevisDto } from './models/ligne-devis-dto';
-export { LigneFraisMissionDto } from './models/ligne-frais-mission-dto';
 export { LocalTime } from './models/local-time';
 export { MissionDto } from './models/mission-dto';
 export { MissionResponse } from './models/mission-response';

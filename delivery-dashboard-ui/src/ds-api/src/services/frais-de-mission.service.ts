@@ -13,14 +13,10 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { delete7 } from '../fn/frais-de-mission/delete-7';
 import { Delete7$Params } from '../fn/frais-de-mission/delete-7';
-import { deleteLigneFraisMission } from '../fn/frais-de-mission/delete-ligne-frais-mission';
-import { DeleteLigneFraisMission$Params } from '../fn/frais-de-mission/delete-ligne-frais-mission';
 import { findAll8 } from '../fn/frais-de-mission/find-all-8';
 import { FindAll8$Params } from '../fn/frais-de-mission/find-all-8';
 import { findAllFraisMissions } from '../fn/frais-de-mission/find-all-frais-missions';
 import { FindAllFraisMissions$Params } from '../fn/frais-de-mission/find-all-frais-missions';
-import { findAllLignesFraisMissionByFraisMissionId } from '../fn/frais-de-mission/find-all-lignes-frais-mission-by-frais-mission-id';
-import { FindAllLignesFraisMissionByFraisMissionId$Params } from '../fn/frais-de-mission/find-all-lignes-frais-mission-by-frais-mission-id';
 import { findById8 } from '../fn/frais-de-mission/find-by-id-8';
 import { FindById8$Params } from '../fn/frais-de-mission/find-by-id-8';
 import { findByIdMission } from '../fn/frais-de-mission/find-by-id-mission';
@@ -73,6 +69,8 @@ export class FraisDeMissionService extends BaseService {
   static readonly UpdateFraisMissionPath = '/fraismissions/update';
 
   /**
+   * updateFraisMission.
+   *
    * Modifier un fraisMission, cette methode permet de modifier un fraisMission
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -85,6 +83,8 @@ export class FraisDeMissionService extends BaseService {
   }
 
   /**
+   * updateFraisMission.
+   *
    * Modifier un fraisMission, cette methode permet de modifier un fraisMission
    *
    * This method provides access only to the response body.
@@ -102,6 +102,8 @@ export class FraisDeMissionService extends BaseService {
   static readonly UpdateQuantitePath = '/fraismissions/update/{idFM}/{idLigneFM}/{qte}';
 
   /**
+   * updateQuantite.
+   *
    * Modifier la qte dans une ligne fraisMission, cette methode permet de la qte modifier dans une ligne fraisMission
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -114,6 +116,8 @@ export class FraisDeMissionService extends BaseService {
   }
 
   /**
+   * updateQuantite.
+   *
    * Modifier la qte dans une ligne fraisMission, cette methode permet de la qte modifier dans une ligne fraisMission
    *
    * This method provides access only to the response body.
@@ -152,35 +156,6 @@ export class FraisDeMissionService extends BaseService {
    */
   findByIdMission(params: FindByIdMission$Params, context?: HttpContext): Observable<any> {
     return this.findByIdMission$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
-    );
-  }
-
-  /** Path part for operation `findAllLignesFraisMissionByFraisMissionId()` */
-  static readonly FindAllLignesFraisMissionByFraisMissionIdPath = '/fraismissions/fraismission/{idFM}';
-
-  /**
-   * Rechercher les lignes du frais de mission par l'ID de mission! Cette methode permet de chercher tous les lignes du fraisMission par l'ID de mission
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAllLignesFraisMissionByFraisMissionId()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  findAllLignesFraisMissionByFraisMissionId$Response(params: FindAllLignesFraisMissionByFraisMissionId$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findAllLignesFraisMissionByFraisMissionId(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Rechercher les lignes du frais de mission par l'ID de mission! Cette methode permet de chercher tous les lignes du fraisMission par l'ID de mission
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAllLignesFraisMissionByFraisMissionId$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  findAllLignesFraisMissionByFraisMissionId(params: FindAllLignesFraisMissionByFraisMissionId$Params, context?: HttpContext): Observable<any> {
-    return this.findAllLignesFraisMissionByFraisMissionId$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
@@ -294,35 +269,6 @@ export class FraisDeMissionService extends BaseService {
   delete7(params: Delete7$Params, context?: HttpContext): Observable<any> {
     return this.delete7$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
-    );
-  }
-
-  /** Path part for operation `deleteLigneFraisMission()` */
-  static readonly DeleteLigneFraisMissionPath = '/fraismissions/delete/{idFM}/{idLigneFM}';
-
-  /**
-   * Supprimer une ligne du fraisMission, cette methode permet de supprimer une ligne  du fraisMission
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteLigneFraisMission()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteLigneFraisMission$Response(params: DeleteLigneFraisMission$Params, context?: HttpContext): Observable<StrictHttpResponse<FraisMissionDto>> {
-    return deleteLigneFraisMission(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Supprimer une ligne du fraisMission, cette methode permet de supprimer une ligne  du fraisMission
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `deleteLigneFraisMission$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteLigneFraisMission(params: DeleteLigneFraisMission$Params, context?: HttpContext): Observable<FraisMissionDto> {
-    return this.deleteLigneFraisMission$Response(params, context).pipe(
-      map((r: StrictHttpResponse<FraisMissionDto>): FraisMissionDto => r.body)
     );
   }
 

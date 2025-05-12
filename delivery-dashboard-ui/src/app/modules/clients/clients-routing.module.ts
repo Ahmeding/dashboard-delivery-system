@@ -8,6 +8,7 @@ import {NewOrderComponent} from "./pages/orders/new-order/new-order.component";
 import {NewQuoteComponent} from "./pages/quotes/new-quote/new-quote.component";
 import {ViewClientComponent} from "./pages/clients/view-client/view-client.component";
 import {authGuard} from "../../services/guard/auth.guard";
+import {NewDeliveryPointComponent} from "./pages/clients/new-delivery-point/new-delivery-point.component";
 
 const routes: Routes = [
   {
@@ -19,6 +20,9 @@ const routes: Routes = [
         canActivate:[authGuard],
     data: {roles: ['ROLE_ADMIN']} },
   { path: 'view-client/:id', component: ViewClientComponent,
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
+  { path: 'new-delivery-points/:id', component: NewDeliveryPointComponent,
         canActivate:[authGuard],
     data: {roles: ['ROLE_ADMIN']} },
   { path: 'edit-client/:id', component: NewClientComponent,

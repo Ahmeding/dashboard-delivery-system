@@ -40,8 +40,8 @@
               <td>{{ repair.id}}</td>
               <td>{{ repair.vehiculeDto?.immatriculation }}/{{ repair.vehiculeDto?.marque }} {{ repair.vehiculeDto?.modele }}</td>
               <td>{{repair.type}}</td>
-              <td>{{ formatDate(repair.dateDebut) }}</td>
-              <td>{{ formatDate(repair.dateDebut) }}</td>
+              <td>{{repair.dateDebut }}</td>
+              <td>{{ repair.dateDebut }}</td>
               <td>{{ repair.createdByUser?.fullname}}</td>
               <td>
                 <i class="bi bi-pen text-warning mr-3" (click)="goToUpdateRepair(repair.id!)" title="Modify"></i>

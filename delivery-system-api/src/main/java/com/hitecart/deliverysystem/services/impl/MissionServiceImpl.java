@@ -1,6 +1,7 @@
-package com.hitecart.deliverysystem.dao;
+package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
+import com.hitecart.deliverysystem.dao.*;
 import com.hitecart.deliverysystem.dto.basic.*;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
@@ -8,10 +9,10 @@ import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.exception.InvalidOperationException;
 import com.hitecart.deliverysystem.model.*;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
+import com.hitecart.deliverysystem.model.enums.KmFlag;
 import com.hitecart.deliverysystem.model.enums.NotificationStatus;
 import com.hitecart.deliverysystem.services.*;
 import com.hitecart.deliverysystem.services.IChauffeurVehicleService;
-import com.hitecart.deliverysystem.services.impl.CheckParmasUtil;
 import com.hitecart.deliverysystem.specification.MissionSpecification;
 import com.hitecart.deliverysystem.utils.AssignmentResult;
 import com.hitecart.deliverysystem.utils.TimeSlot;
@@ -23,15 +24,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.servlet.View;
 
 import java.math.BigDecimal;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
@@ -46,6 +46,7 @@ public class MissionServiceImpl implements IMissionService {
     private final IChauffeurVehicleService chauffeurVehicleService;
     private final AvailabilityManager availabilityManager;
     private final IMissionVehicleService missionVehicleService;
+    private final FraisMissionRepository fraisMissionRepository;
     private final IChauffeurVehicleRepository chauffeurVehicleRepository;
     private final MissionVehicleRepository missionVehicleRepository;
     private final MissionRepository missionRepository;
@@ -53,7 +54,6 @@ public class MissionServiceImpl implements IMissionService {
     private final INotificationService notificationService;
     private final IChauffeurRepository chauffeurRepository;
     private final VehiculeRepository vehiculeRepository;
-    private final View error;
     private final UtilisateurService utilisateurServiceImpl;
     private final IDeliveryDestinationService deliveryDestinationService;
     private final DeliveryPointRepository deliveryPointRepository;
@@ -301,6 +301,7 @@ public class MissionServiceImpl implements IMissionService {
             }
         });
     }
+
     private boolean matchesRecurrencePattern(DeliveryPoint point, LocalDate date) {
         RecurrencePattern pattern = point.getRecurrencePattern();
 
@@ -344,6 +345,7 @@ public class MissionServiceImpl implements IMissionService {
         };
 
     }
+
     // Get the week of the month (1st, 2nd, 3rd, etc.)
     private int getWeekOfMonth(LocalDate date) {
         return ((date.getDayOfMonth() - 1) / 7) + 1;
@@ -368,11 +370,18 @@ public class MissionServiceImpl implements IMissionService {
                 missionStart,
                 missionEnd);
 
-
         if (!exists) {
+            Etape etape = Etape.builder()
+                    .titre(point.getName() +" "+ point.getAddress().getVille())
+                    .lieuDepart(point.getDeliveryDestination().getServiceDelivery().getPickUpLocation())
+                    .scheduledDeliveryTime(point.getSchedule())
+                    .lieuArrivee(point.getName() +"-"+ point.getAddress().getVille() )
+                    .build();
+            List<Etape> etapes = Arrays.asList(etape);
 
             Mission newMission = Mission.builder()
                     .titre("Mission " + point.getAddress().getVille())
+                    .etapes(etapes)
                     .deliveryDestination(point.getDeliveryDestination())
                     .dateDebut(missionStart)
                     .dateFin(missionEnd)
@@ -383,7 +392,6 @@ public class MissionServiceImpl implements IMissionService {
             log.info("Created mission for {} on {}", point.getName(), date);
         }
     }
-
 
     private List<Integer> extractVehicleIds(MissionDto dto){
        if (dto.getMissionVehiclesDtos() == null) {
@@ -406,12 +414,14 @@ public class MissionServiceImpl implements IMissionService {
                 .collect(Collectors.toList());
    }
 
-    private void updateVehicleAndDriverStatus(MissionDto dto,boolean isAssigned){
+    private void updateVehicleAndDriverStatus(MissionDto dto, boolean isAssigned, Mission missionToSave){
         List<Integer> vehicleIds = extractVehicleIds(dto);
         List<Integer> driverIds = extractDriverIds(dto);
 
         vehiculeRepository.bulkUpdateAssignmentStatus(vehicleIds, isAssigned);
         chauffeurRepository.bulkUpdateAssignmentStatus(driverIds, isAssigned);
+        // Notify updated drivers
+        sendNotificationsAsync(driverIds, missionToSave.getId());
     }
 
     private void createMissionRelationships(MissionDto dto, Mission savedMission){
@@ -534,7 +544,7 @@ public class MissionServiceImpl implements IMissionService {
         Mission missionToSave = createAndSaveMission(dto);
         missionToSave.setEtatMission(EtatMission.PLANNED);
         // batch update vehicule/ drivers
-        updateVehicleAndDriverStatus(dto,true);
+        updateVehicleAndDriverStatus(dto,true,missionToSave);
         // Batch create relationships
         createMissionRelationships(dto, missionToSave);
        // save mission-vehicle history and chauffeur_vehicle
@@ -581,8 +591,6 @@ public class MissionServiceImpl implements IMissionService {
             throw new InvalidOperationException("At least one Vehicle with a driver(s) must be specified when creating a mission!",
                     ErrorCodes.MISSION_NOT_VALID_OPERATION);
         }*/
-
-
         return MissionDto.fromEntity(missionToSave);
 
     }
@@ -783,7 +791,8 @@ public class MissionServiceImpl implements IMissionService {
     }
 
     @Override
-    public MissionDto updateKilometrage(String flag, Integer idMission, double kilometrage) {
+    @Transactional
+    public MissionDto updateKilometrage(KmFlag flag, Integer idMission,Integer vehicleId,  double kilometrage) {
 
         CheckParmasUtil.checkID(idMission,
                 "Le parametre ID Mission est null",
@@ -794,29 +803,57 @@ public class MissionServiceImpl implements IMissionService {
                 "Impossible de modifier une mission avec kilometrage null",
                 ErrorCodes.MISSION_NOT_VALID_OPERATION);
 
+        CheckParmasUtil.checkID(vehicleId,
+                "Le parametre ID Vehicle est null",
+                "Impossible de modifier une mission avec un ID null",
+                ErrorCodes.MISSION_NOT_VALID_OPERATION);
+
         CheckParmasUtil.checkDoubleGTZero(kilometrage,
                 "Le parametre kilometrage de Debut de Mission est egale zero",
                 "Impossible de modifier une mission avec kilometrage egale à zero",
                 ErrorCodes.MISSION_NOT_VALID_OPERATION);
 
 
-        Optional<Mission> missionOptional = missionRepository.findById(idMission);
-        if (missionOptional == null) {
-            new EntityNotFoundException("Aucune Mission avec l'id :"
-                    + idMission + "n'a ete trouvé dans la base deonnée", ErrorCodes.MISSION_NOT_FOUND);
+        Mission mission = missionRepository.findById(idMission)
+                .orElseThrow(
+                        ()-> new EntityNotFoundException("Mission not found with id: " + idMission,ErrorCodes.MISSION_NOT_FOUND)
+                );
+
+        switch (flag){
+            case START_KM:
+                mission.setKmDebut(kilometrage);
+                mission.setEtatMission(EtatMission.IN_PROGRESS);
+                break;
+            case END_KM:
+                this.updateKmCurrentVehicle(vehicleId,kilometrage);
+                mission.setKmFin(kilometrage);
+                mission.setEtatMission(EtatMission.COMPLETED);
+                break;
+            default:
+                throw  new InvalidOperationException("Invalid KmFlag: " + flag);
+
         }
 
-        Mission mission = missionOptional.get();
-        if (flag == "KM_DEBUT") {
-            mission.setKmDebut(kilometrage);
-        } else {
-            mission.setKmFin(kilometrage);
-        }
-        missionRepository.save(mission);
+        MissionDto savedMission = MissionDto.fromEntity(missionRepository.save(mission));
 
-        return MissionDto.fromEntity(mission);
+
+        return savedMission;
     }
 
+    private void updateKmCurrentVehicle(Integer vehcileId, double kilometrage){
+
+        Vehicule vehicule = this.vehiculeRepository.findById(vehcileId).orElseThrow(
+                ()-> new EntityNotFoundException("No saved vehicle with the ID : " + vehcileId,ErrorCodes.VEHICULE_NOT_FOUND)
+        );
+        if (vehicule.getKilometrage() == null) {
+             throw new IllegalArgumentException("Invalid mileage");
+        }
+        if(new BigDecimal(kilometrage).compareTo(vehicule.getKilometrage()) <=0){
+            throw new InvalidOperationException("Invalid mileage. New value must be higher than the existing record.",ErrorCodes.MISSION_NOT_VALID_OPERATION);
+        }
+        vehicule.setKilometrage(new BigDecimal(kilometrage));
+        this.vehiculeRepository.save(vehicule);
+    }
     @Override
     public MissionDto updateEtatMission(Integer idMission, EtatMission etatMission) {
         CheckParmasUtil.checkID(idMission,
@@ -831,12 +868,80 @@ public class MissionServiceImpl implements IMissionService {
         MissionDto missionDto = findById(idMission);
         if (missionDto.isMissionAccomplished()) {
             throw new InvalidOperationException(
-                    "Impossible de modifier la commande lorsqu'elle est accompli",
+                    "Impossible de modifier la mission lorsqu'elle est accompli",
                     ErrorCodes.MISSION_NOT_VALID_OPERATION);
         }
         missionDto.setEtatMission(etatMission);
 
-        return MissionDto.fromEntity(missionRepository.save(MissionDto.toEntity(missionDto)));
+        Mission missionUpdatedStatus = MissionDto.toEntity(missionDto);
+             //   missionRepository.save(missionUpdatedStatus);
+
+
+        return MissionDto.fromEntity(missionUpdatedStatus);
+    }
+
+    @Override
+    public MissionDto updateExpensesMission(Integer idMission, List<FraisMissionDto> expensesDto) {
+        CheckParmasUtil.checkID(idMission,
+                "Le parametre ID Mission est null",
+                "Impossible de modifier une mission avec un ID null",
+                ErrorCodes.MISSION_NOT_VALID_OPERATION);
+        MissionDto missionToUpdate = findById(idMission);
+          if(expensesDto.isEmpty()){
+            throw new InvalidOperationException("Empty expensesDto List",ErrorCodes.MISSION_NOT_VALID_OPERATION);
+        }
+          List<FraisMissionDto> invalidExpenses = checkExpensesDates(missionToUpdate,expensesDto);
+
+          if(!invalidExpenses.isEmpty()){
+              DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+              List<String> errorInvalids= invalidExpenses.stream().map(fm -> {
+                  return fm.getType() + " | " + fm.getExpenseDate().format(formatter);
+              }).toList();
+              throw new InvalidOperationException("Some expenses has invalid date ",
+                      ErrorCodes.MISSION_NOT_VALID_OPERATION,
+                      errorInvalids);
+          }
+
+        List<FraisMission> fraisMissionList= expensesDto.stream().map(FraisMissionDto::toEntity).toList();
+          if (fraisMissionList.isEmpty()){
+              throw new InvalidOperationException("Empty expenses List",ErrorCodes.MISSION_NOT_VALID_OPERATION);
+          }
+        this.fraisMissionRepository.saveAll(fraisMissionList);
+
+        missionToUpdate.setFraisMissionDtoList(expensesDto);
+        Mission mission = MissionDto.toEntity(missionToUpdate);
+
+        return MissionDto.fromEntity(this.missionRepository.save(mission));
+    }
+    private  List<FraisMissionDto> checkExpensesDates(MissionDto missionDto, List<FraisMissionDto> expensesDto){
+        log.error("ok");
+        List<FraisMissionDto> invalidExps = new ArrayList<>();
+        expensesDto.forEach(fm ->{
+            if(fm.getExpenseDate().isBefore(missionDto.getDateDebut())||
+            fm.getExpenseDate().isAfter(missionDto.getDateFin())){
+                invalidExps.add(fm);
+            }
+        }
+        );
+        return invalidExps;
+    }
+    @Override
+    public MissionDto updateEtapeMission(Integer idMission, List<EtapeDto> etapesDto) {
+
+        CheckParmasUtil.checkID(idMission,
+                "Le parametre ID Mission est null",
+                "Impossible de modifier une mission avec un ID null",
+                ErrorCodes.MISSION_NOT_VALID_OPERATION);
+        MissionDto missionToUpdate = findById(idMission);
+         if(etapesDto.isEmpty()){
+            throw new InvalidOperationException("Empty etapes List",ErrorCodes.MISSION_NOT_VALID_OPERATION);
+        }
+
+        missionToUpdate.setEtapeDtos(etapesDto);
+        Mission mission = MissionDto.toEntity(missionToUpdate);
+
+        return MissionDto.fromEntity(this.missionRepository.save(mission));
+
     }
 
     @Override
@@ -845,13 +950,12 @@ public class MissionServiceImpl implements IMissionService {
                 "Le parametre ID Mission est null",
                 "Impossible de trouver une mission avec un ID null",
                 ErrorCodes.MISSION_NOT_VALID_OPERATION);
-        Optional<Mission> missionOp = missionRepository.findById(id);
+        Mission missionOp = missionRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Aucune Mission avec l'id :"
+                        + id + "n'a ete trouvé dans la base deonnée", ErrorCodes.MISSION_NOT_FOUND)
+        );
 
-        MissionDto missionDto= Optional.of(MissionDto.fromEntity(missionOp.get()))
-                .orElseThrow(
-                        () -> new EntityNotFoundException("Aucune Mission avec l'id :"
-                                + id + "n'a ete trouvé dans la base deonnée", ErrorCodes.MISSION_NOT_FOUND)
-                );
+        MissionDto missionDto= MissionDto.fromEntity(missionOp);
 
         setCreatedByUser(missionDto);
         return missionDto;

@@ -40,8 +40,12 @@ import { save7 } from '../fn/mission/save-7';
 import { Save7$Params } from '../fn/mission/save-7';
 import { update } from '../fn/mission/update';
 import { Update$Params } from '../fn/mission/update';
+import { updateEtapeMission } from '../fn/mission/update-etape-mission';
+import { UpdateEtapeMission$Params } from '../fn/mission/update-etape-mission';
 import { updateEtatMission } from '../fn/mission/update-etat-mission';
 import { UpdateEtatMission$Params } from '../fn/mission/update-etat-mission';
+import { updateExpensesMission } from '../fn/mission/update-expenses-mission';
+import { UpdateExpensesMission$Params } from '../fn/mission/update-expenses-mission';
 import { updateKilometrage } from '../fn/mission/update-kilometrage';
 import { UpdateKilometrage$Params } from '../fn/mission/update-kilometrage';
 
@@ -197,7 +201,7 @@ export class MissionService extends BaseService {
   }
 
   /** Path part for operation `updateKilometrage()` */
-  static readonly UpdateKilometragePath = '/missions/update/{flag}/{id}/{kilometrage}';
+  static readonly UpdateKilometragePath = '/missions/update/{flag}/{id}/{kilometrage}/{vehicleId}';
 
   /**
    * Mettre à jour le kilomtratge debut/fin d'une mission, cette methode permet Mettre à jour le kilomtratge debut/fin d' une mission
@@ -221,6 +225,72 @@ export class MissionService extends BaseService {
    */
   updateKilometrage(params: UpdateKilometrage$Params, context?: HttpContext): Observable<MissionDto> {
     return this.updateKilometrage$Response(params, context).pipe(
+      map((r: StrictHttpResponse<MissionDto>): MissionDto => r.body)
+    );
+  }
+
+  /** Path part for operation `updateExpensesMission()` */
+  static readonly UpdateExpensesMissionPath = '/missions/update/expenses/{id}';
+
+  /**
+   * update Expenses Mission.
+   *
+   * Modifier l'etat d'une mission, cette methode permet modifier l'etat d' une mission
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateExpensesMission()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateExpensesMission$Response(params: UpdateExpensesMission$Params, context?: HttpContext): Observable<StrictHttpResponse<MissionDto>> {
+    return updateExpensesMission(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * update Expenses Mission.
+   *
+   * Modifier l'etat d'une mission, cette methode permet modifier l'etat d' une mission
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateExpensesMission$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateExpensesMission(params: UpdateExpensesMission$Params, context?: HttpContext): Observable<MissionDto> {
+    return this.updateExpensesMission$Response(params, context).pipe(
+      map((r: StrictHttpResponse<MissionDto>): MissionDto => r.body)
+    );
+  }
+
+  /** Path part for operation `updateEtapeMission()` */
+  static readonly UpdateEtapeMissionPath = '/missions/update/etapes/{id}';
+
+  /**
+   * update Etapes Mission.
+   *
+   * Modifier l'etat d'une mission, cette methode permet modifier l'etat d' une mission
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateEtapeMission()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateEtapeMission$Response(params: UpdateEtapeMission$Params, context?: HttpContext): Observable<StrictHttpResponse<MissionDto>> {
+    return updateEtapeMission(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * update Etapes Mission.
+   *
+   * Modifier l'etat d'une mission, cette methode permet modifier l'etat d' une mission
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateEtapeMission$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateEtapeMission(params: UpdateEtapeMission$Params, context?: HttpContext): Observable<MissionDto> {
+    return this.updateEtapeMission$Response(params, context).pipe(
       map((r: StrictHttpResponse<MissionDto>): MissionDto => r.body)
     );
   }

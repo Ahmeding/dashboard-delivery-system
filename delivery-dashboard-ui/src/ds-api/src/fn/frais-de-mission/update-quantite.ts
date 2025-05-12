@@ -12,7 +12,6 @@ import { FraisMissionDto } from '../../models/frais-mission-dto';
 
 export interface UpdateQuantite$Params {
   idFM: number;
-  idLigneFM: number;
   qte: number;
 }
 
@@ -20,7 +19,6 @@ export function updateQuantite(http: HttpClient, rootUrl: string, params: Update
   const rb = new RequestBuilder(rootUrl, updateQuantite.PATH, 'patch');
   if (params) {
     rb.path('idFM', params.idFM, {});
-    rb.path('idLigneFM', params.idLigneFM, {});
     rb.path('qte', params.qte, {});
   }
 

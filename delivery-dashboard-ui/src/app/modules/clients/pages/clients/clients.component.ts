@@ -12,6 +12,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {DeliveryPointDto} from "../../../../../ds-api/src/models/delivery-point-dto";
 import {NewDeliveryPointModalComponent} from "./new-delivery-point-modal/new-delivery-point-modal.component";
 import {Client} from "stompjs";
+import {TokenService} from "../../../../services/token/token.service";
 
 @Component({
   selector: 'app-clients',
@@ -32,13 +33,23 @@ export class ClientsComponent implements OnInit{
   allClientsResponse: PageResponseClientDto = {};
   searchTerm: any;
   pageSize: any;
-
+// Inside your component class
+  private activeModalRef: any;
   constructor(
+    private tokenService:TokenService,
     private modalService: NgbModal,
     private router:Router,
     private confirmBoxService:ConfirmBoxEvokeService,
     private alertService:AlertService,
     private clientService: ClientService) {
+    // Subscribe to token changes
+
+    this.tokenService.tokenChanges.subscribe((token) => {
+      if (!token && this.activeModalRef) {
+        this.activeModalRef.close(); // Close the modal
+        this.activeModalRef = null;
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -169,27 +180,31 @@ export class ClientsComponent implements OnInit{
     return client.deliveryDestinationsDto.reduce((sum,dest)=>sum+(dest.deliveryPointsDto?.length||0),0);
   }*/
   openAddNewDPModal(client: any) {
-    const modalRef = this.modalService.open(NewDeliveryPointModalComponent, {
+    this.activeModalRef = this.modalService.open(NewDeliveryPointModalComponent, {
       size: 'xl',
       centered: true,
       backdrop: 'static'
     });
 
-    modalRef.componentInstance.clientId = client.id;
+    this.activeModalRef.componentInstance.clientId = client.id;
 
-    modalRef.result.then((result) => {
+    this.activeModalRef.result.then((result :any) => {
       if (result) {
         // Handle the new delivery point data
         console.log('New delivery point:', result);
         this.getAllClients();
         // Add your API call here
       }
-    }).catch((error) => {
+    }).catch((error :any) => {
       console.log('Modal dismissed');
     });
   }
 
   goToClientDetails(id: number | undefined) {
     this.router.navigate(['clients','view-client',id]);
+  }
+
+  openNewDeliveyPoint(idClient: number) {
+    this.router.navigate(['clients','new-delivery-points',idClient]);
   }
 }

@@ -34,6 +34,7 @@ export class ExpensesComponent implements OnInit{
     }).subscribe({
       next:(expensesResp)=>{
         this.allExpensesResponse=expensesResp;
+        console.log("ddddd",this.allExpensesResponse.totalPages);
       },error:(err)=>{
         err.log(err);
       }

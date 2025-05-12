@@ -84,9 +84,7 @@ export class WeeklyPlanningComponent implements  OnInit {
   formatDayName = formatDayName;
 
   private loadMissions() {
-
     this.isLoading = true;
-
 /*    this.planningService.getMissionsByWeek(this.currentWeekStart).subscribe({
         next: (missions) => {
           console.log(missions.length);
@@ -134,20 +132,23 @@ export class WeeklyPlanningComponent implements  OnInit {
     });*/
     // Distribute missions to appropriate days
     missions.forEach(mission => {
-      const missionDate = new Date(this.dateService.convertArrayDateToString(mission.dateDebut));
-      const dayIndex = this.weekDays.findIndex(day =>
-        day.date.toDateString() === missionDate.toDateString()
-      );
-      if (dayIndex !== -1) {
-        this.weekDays[dayIndex].missions.push(mission);
-      }
+      //const missionDate = new Date(this.dateService.convertArrayDateToString(mission.dateDebut));
+   if(mission.dateDebut){
+     const missionDate = new Date(mission.dateDebut);
+     const dayIndex = this.weekDays.findIndex(day =>
+       day.date.toDateString() === missionDate.toDateString()
+     );
+     if (dayIndex !== -1) {
+       this.weekDays[dayIndex].missions.push(mission);
+     }
+   }
     });
 
     // Sort missions by time for each day
     this.weekDays.forEach(day => {
       day.missions.sort((a, b) =>
-        new Date(this.dateService.convertArrayDateToString(a.dateDebut)).getTime() -
-        new Date(this.dateService.convertArrayDateToString(b.dateDebut)).getTime()
+        new Date(a.dateDebut ?? '').getTime() -
+        new Date(b.dateDebut?? '').getTime()
       );
     });
   }

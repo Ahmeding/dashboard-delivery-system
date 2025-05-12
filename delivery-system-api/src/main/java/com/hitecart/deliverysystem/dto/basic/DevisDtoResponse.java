@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.dto.basic;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hitecart.deliverysystem.model.Devis;
 import com.hitecart.deliverysystem.model.enums.QuoteStatus;
@@ -20,12 +21,19 @@ import java.util.stream.Collectors;
 public class DevisDtoResponse{
 
     private String code;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime dateDevis;
     private ClientDto client;
     private List<LigneDevisDto> ligneDevisDtos;
     private QuoteStatus etatDevis;
     private Integer id;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;

@@ -34,9 +34,7 @@ export class ViewClientComponent implements OnInit{
   ) {
   }
 
-  formatDate(dateString :string):string{
-    return this.dateUtils.formatToDate(dateString);
-  }
+
   revenueChart: any;
 
   ngOnInit(): void {

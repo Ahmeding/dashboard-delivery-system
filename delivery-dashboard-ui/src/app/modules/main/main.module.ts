@@ -10,6 +10,7 @@ import {ProfileMenuComponent} from "../../components/shared/profile-menu/profile
 import {FooterComponent} from "../../components/shared/footer/footer.component";
 import {ThemeToggleComponent} from "../../components/shared/theme-toggle/theme-toggle.component";
 import {NgbDropdown, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-bootstrap";
+import {RouterModule} from "@angular/router";
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import {NgbDropdown, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-
     ThemeToggleComponent,
   ],
   imports: [
+    RouterModule, // Required for <router-outlet>
     CommonModule,
     MainRoutingModule,
     NgbDropdown,

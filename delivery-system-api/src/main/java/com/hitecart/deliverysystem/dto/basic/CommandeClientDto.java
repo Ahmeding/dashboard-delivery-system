@@ -1,8 +1,10 @@
 package com.hitecart.deliverysystem.dto.basic;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hitecart.deliverysystem.model.CommandeClient;
 import com.hitecart.deliverysystem.model.enums.OrderStatus;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,12 +19,18 @@ import java.util.stream.Collectors;
 public class CommandeClientDto  {
     private Integer id;
     private String code;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime dateCommnde;
     private Integer clientId;
     private List<LigneCommandeClientDto> ligneCommandeClientsDtos;
     private OrderStatus etatCommande;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;

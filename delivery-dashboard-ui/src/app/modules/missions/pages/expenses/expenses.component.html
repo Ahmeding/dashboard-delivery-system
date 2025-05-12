@@ -40,12 +40,8 @@
             <tbody>
             <tr *ngFor="let expense of allExpensesResponse.content">
               <td>{{ expense.id}}</td>
-              <td>{{ expense.nom }}</td>
-              <td>{{ expense.missionDto?.titre }}</td>
-              <td><ul>
-                <li *ngFor="let lfm of expense.lignesFraisMissionDto ">
-                  {{lfm.dateAchat}} | {{lfm.type}} : {{lfm.quantite }} :{{lfm.cout }}
-                </li></ul></td>
+              <td>{{ expense.name }}</td>
+              <td>{{ expense.missionId }}</td>
               <td>total</td>
               <td>{{ expense.createdByUser?.fullname }}</td>
               <td>date</td>

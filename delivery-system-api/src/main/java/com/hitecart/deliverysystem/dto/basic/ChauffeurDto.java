@@ -1,9 +1,11 @@
 package com.hitecart.deliverysystem.dto.basic;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hitecart.deliverysystem.model.*;
 import com.hitecart.deliverysystem.model.enums.DrivingLicenseType;
 import com.hitecart.deliverysystem.model.enums.RoleName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -25,6 +27,8 @@ public class ChauffeurDto {
     private String email;
     private String password;
     private AdresseDto address;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @Schema(type = "string", format = "date", example = "27-05-2025")
     private LocalDate dateOfBirth;
     private RoleName role;
     private String drivinglicenseNbr;
@@ -35,7 +39,11 @@ public class ChauffeurDto {
     private boolean enabled;
     private boolean isAssigned;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;

@@ -20,17 +20,22 @@ export class AuthService implements OnDestroy{
 
   private updateRoles() {
     const token = this.tokenService.token;
-    console.log('UpdateRoles - Current token:', token);
 
     this.isAdmin = this.tokenService.hasRoles(['ROLE_ADMIN']);
     this.isUser = this.tokenService.hasRoles(['ROLE_USER']);
 
-    console.log('Role update results:', {
+/*    console.log('Role update results:', {
       admin: this.isAdmin,
       user: this.isUser
-    });
+    });*/
   }
 
+  getRoles(): string[]{
+    const userRoles : string [] = this.tokenService.getRoles()
+    console.error("userRoles : string []",userRoles);
+    return userRoles;
+
+  }
   isAdminUser(){
     return this.isAdmin;
   }
@@ -38,13 +43,10 @@ export class AuthService implements OnDestroy{
     return this.isUser;
   }
   public refreshRoles() {
-    console.log('Refreshing roles...');
     const previousAdmin = this.isAdmin;
     const previousUser = this.isUser;
 
     this.updateRoles();
-
-    console.log(`Role change - Admin: ${previousAdmin}->${this.isAdmin}, User: ${previousUser}->${this.isUser}`);
   }
 
   ngOnDestroy(): void {

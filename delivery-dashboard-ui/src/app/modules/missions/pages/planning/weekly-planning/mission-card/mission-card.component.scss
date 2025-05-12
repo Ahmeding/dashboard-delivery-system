@@ -157,9 +157,9 @@
 
   .action-btn {
     position: absolute;
-    top: 0.25rem;
+    bottom: 0.25rem;
     right: 0.25rem;
-    width: 20px;
+    width: 15px;
     height: 20px;
     padding: 0;
     display: flex;
@@ -182,6 +182,68 @@
     i {
       font-size: 0.8rem;
     }
+  }
+
+  // New menu container styles
+  .menu-container {
+    position: absolute;
+    bottom: 28px;
+    right: 0;
+    background: var(--menu-bg, #fff);
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 100;
+    min-width: 100px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.2s ease;
+    border: 1px solid var(--menu-border,#eee);
+
+    &.visible{
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .menu-option{
+      display: flex;
+      align-items: center;
+      padding: 6px 12px;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      background: var(--menu-option-bg,#fff);
+      margin:2px;
+      border-radius: 3px;
+      color: var(--text-color,#333);
+      transition: all 0.2s ease;
+
+      i{
+        font-size: 0.9rem;
+        min-width: 18px;
+      }
+      &.km-option{
+        color: var(--km-color,#2c7be5);
+        i{
+          color: var(--km-icon-color,#2c7be5);
+        }
+      }
+      &.expenses-option{
+        color: var(--expenses-color,#27b187);
+        i{
+          color:var(--expenses-icon-color,#27b187)
+        }
+      }
+      &:hover{
+        background: var(--menu-hover-bg, rgba(0,0,0,0.05));
+        color: var(--km-color,#2c7be5);
+
+        &.expenses-option{
+          color:var(--expenses-color,#27b187)
+        }
+      }
+    }
+
   }
 }
 
@@ -213,6 +275,25 @@
     .action-btn:hover {
       background: rgba(255, 255, 255, 0.1);
     }
+    .menu-container {
+      background: var(--dark-bg);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+      .menu-option{
+      background: var(--menu-option-bg, #3d3d3d);
+      &:hover {
+        background: var(--menu-hover-bg,#4d4d4d);
+      }
+      &.km-option{
+        --km-color:#6ea8fe;
+        --km-icon-color:#6ea8fe;
+      }
+      &.expenses-option{
+        --expenses-color: #2ca67a;
+        --expenses-icon-color: #2ca67a;
+      }
+    }
+    }
   }
 }
 
@@ -239,198 +320,3 @@
     }
   }
 }
-
-
-
-/*
-
-
-// mission-card.component.scss
-.mission-card {
-  --card-height: 75px;
-  --border-radius: 6px;
-
-  position: relative;
-  height: var(--card-height);
-  border-radius: var(--border-radius);
-  padding: 0.5rem;
-  margin-bottom: 0.25rem;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  overflow: hidden;
-
-  &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  // Header Section
-  .mission-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 0.35rem;
-
-    .time-destination {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-
-    .time {
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: var(--text-color);
-    }
-
-    .mission-title {
-      font-size: 0.8rem;
-      font-weight: 500;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 150px;
-    }
-
-    .status i {
-      font-size: 0.9rem;
-    }
-  }
-
-  // Content Section
-  .mission-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
-  .info-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .info-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.15rem 0.35rem;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
-    font-size: 0.65rem;
-    color: var(--text-color);
-
-    i {
-      font-size: 0.7rem;
-      opacity: 0.7;
-    }
-  }
-
-  .mission-id {
-    font-size: 0.65rem;
-    color: var(--text-muted);
-    font-family: monospace;
-  }
-
-  // Resources Row
-  .resources-row {
-    display: flex;
-    gap: 0.25rem;
-    flex-wrap: nowrap;
-    overflow-x: hidden;
-    margin-top: 0.25rem;
-  }
-
-  .resource-badge {
-    display: inline-flex;
-    align-items: center;
-    border-radius: 4px;
-    white-space: nowrap;
-    flex-shrink: 0;
-    padding: 0.1rem 0.25rem; // Smaller padding
-    font-size: 0.6rem; // Smaller font size
-    gap: 0.15rem; // Reduced gap between icon and text
-    i {
-      font-size: 0.6rem;
-    }
-
-    &.vehicle {
-      background: rgba(var(--primary-rgb), 0.1);
-      color: var(--primary-color);
-    }
-
-    &.driver {
-      background: rgba(var(--success-rgb), 0.1);
-      color: var(--success-color);
-    }
-
-    span {
-      max-width: 50px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  }
-
-  // Action Button
-  .action-btn {
-    position: absolute;
-    top: 0.25rem;
-    right: 0.25rem;
-    padding: 0.15rem;
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    border-radius: 3px;
-    z-index: 1;
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.05);
-      color: var(--primary-color);
-    }
-
-    i {
-      font-size: 0.8rem;
-    }
-  }
-}
-
-// Dark theme adjustments
-:host-context(.dark-theme) {
-  .mission-card {
-    .info-badge {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .resource-badge {
-      &.vehicle {
-        background: rgba(var(--primary-rgb), 0.15);
-      }
-
-      &.driver {
-        background: rgba(var(--success-rgb), 0.15);
-      }
-    }
-
-    .action-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-  }
-}
-
-// Mobile optimizations
-@media (max-width: 768px) {
-  .mission-card {
-    --card-height: 70px;
-
-    .mission-header .mission-title {
-      max-width: 120px;
-    }
-
-    .resource-badge span {
-      max-width: 50px;
-    }
-  }
-}
-*/

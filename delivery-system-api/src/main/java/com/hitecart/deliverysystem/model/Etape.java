@@ -38,7 +38,7 @@ public class Etape extends AbstractEntity{
     @Column(name = "lieuarrivee")
     private String lieuArrivee;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idmission")
+    @JoinColumn(name = "missionId")
     private Mission mission;
 
 

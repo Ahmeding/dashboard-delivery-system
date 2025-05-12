@@ -2,7 +2,6 @@ package com.hitecart.deliverysystem.controllers.api;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.basic.FraisMissionDto;
-import com.hitecart.deliverysystem.dto.basic.LigneFraisMissionDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -44,6 +43,8 @@ public interface FraisMissionApi {
     @PatchMapping(value = UPDATE_FRAISMISSION_ENDPOINT,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
 
     @Operation(
+            summary = "updateFraisMission",
+            operationId = "updateFraisMission",
             description = "Modifier un fraisMission, cette methode permet " +
                     "de modifier un fraisMission",
             responses = {
@@ -63,6 +64,8 @@ public interface FraisMissionApi {
     @PatchMapping(value = UPDATE_QTE_LIGNE_FRAISMISSION_ENDPOINT,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
 
     @Operation(
+            summary = "updateQuantite",
+            operationId = "updateQuantite",
             description = "Modifier la qte dans une ligne fraisMission, cette methode permet " +
                     "de la qte modifier dans une ligne fraisMission",
             responses = {
@@ -78,26 +81,7 @@ public interface FraisMissionApi {
                             description = "La qte n'est pas valide",
                             content = @Content(mediaType = "application/json"))
             })
-    ResponseEntity<FraisMissionDto> updateQuantite(@PathVariable("idFM") Integer idMF, @PathVariable("idLigneFM")Integer idLigneFM, @PathVariable("qte")BigDecimal qte);
-    @DeleteMapping(value = DELETE_LIGNE_FRAISMISSION_ENDPOINT)
-
-    @Operation(
-            description = "Supprimer une ligne du fraisMission, cette methode permet " +
-                    "de supprimer une ligne  du fraisMission",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "La ligne a été supprimer",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = FraisMissionDto.class))
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "L'action de suppression a echoué",
-                            content = @Content(mediaType = "application/json"))
-            })
-    ResponseEntity<FraisMissionDto> deleteLigneFraisMission(@PathVariable("idFM")Integer idFraisMission, @PathVariable("idLigneFM")Integer idLigneFraisMission);
+    ResponseEntity<FraisMissionDto> updateQuantite(@PathVariable("idFM") Integer idMF,@PathVariable("qte")BigDecimal qte);
     @GetMapping(value = FIND_FRAISMISSION_BY_ID_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             description = "Rechercher un FraisMission par ID! Cette methode permet de chercher un fraisMission par son ID",
@@ -142,28 +126,6 @@ public interface FraisMissionApi {
             }
     )
     ResponseEntity<FraisMissionDto> findByIdMission(@PathVariable("idMission") Integer idMission);
-    @GetMapping(value = FIND_ALL_LIGNESFRAISMISSION_BY_IDFRAISMISSION_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(
-            description = "Rechercher les lignes du frais de mission par l'ID de mission! Cette methode permet de chercher tous les lignes du fraisMission par l'ID de mission",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Les lignes du fraisMission a été trouvé dans la BBD",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    ),
-
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Les lignes du  fraisMission avec l'ID  frais de mission frouni n'esxiste pas dans la BDD",
-                            content = @Content(
-                                    mediaType = "application/json"
-                            )
-                    )
-            }
-    )
-    ResponseEntity<List<LigneFraisMissionDto>> findAllLignesFraisMissionByFraisMissionId(@PathVariable("idFM")Integer idFraisMission);
     @GetMapping(value = FIND_ALL_FRAISMISSION_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             description = "Rechercher tout les FraisMission! Cette methode permet de retouner tous les fraisMissions",

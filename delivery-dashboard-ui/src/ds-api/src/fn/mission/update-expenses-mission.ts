@@ -9,17 +9,18 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { FraisMissionDto } from '../../models/frais-mission-dto';
+import { MissionDto } from '../../models/mission-dto';
 
-export interface DeleteLigneFraisMission$Params {
-  idFM: number;
-  idLigneFM: number;
+export interface UpdateExpensesMission$Params {
+  id: number;
+      body: Array<FraisMissionDto>
 }
 
-export function deleteLigneFraisMission(http: HttpClient, rootUrl: string, params: DeleteLigneFraisMission$Params, context?: HttpContext): Observable<StrictHttpResponse<FraisMissionDto>> {
-  const rb = new RequestBuilder(rootUrl, deleteLigneFraisMission.PATH, 'delete');
+export function updateExpensesMission(http: HttpClient, rootUrl: string, params: UpdateExpensesMission$Params, context?: HttpContext): Observable<StrictHttpResponse<MissionDto>> {
+  const rb = new RequestBuilder(rootUrl, updateExpensesMission.PATH, 'patch');
   if (params) {
-    rb.path('idFM', params.idFM, {});
-    rb.path('idLigneFM', params.idLigneFM, {});
+    rb.path('id', params.id, {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -27,9 +28,9 @@ export function deleteLigneFraisMission(http: HttpClient, rootUrl: string, param
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<FraisMissionDto>;
+      return r as StrictHttpResponse<MissionDto>;
     })
   );
 }
 
-deleteLigneFraisMission.PATH = '/fraismissions/delete/{idFM}/{idLigneFM}';
+updateExpensesMission.PATH = '/missions/update/expenses/{id}';

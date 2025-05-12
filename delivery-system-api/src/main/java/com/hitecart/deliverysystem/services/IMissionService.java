@@ -1,9 +1,13 @@
 package com.hitecart.deliverysystem.services;
 
 import com.hitecart.deliverysystem.common.PageResponse;
+import com.hitecart.deliverysystem.dto.basic.EtapeDto;
+import com.hitecart.deliverysystem.dto.basic.FraisMissionDto;
 import com.hitecart.deliverysystem.dto.basic.MissionDto;
 import com.hitecart.deliverysystem.dto.basic.MissionResponse;
+import com.hitecart.deliverysystem.model.Etape;
 import com.hitecart.deliverysystem.model.enums.EtatMission;
+import com.hitecart.deliverysystem.model.enums.KmFlag;
 import org.springframework.security.core.Authentication;
 
 import java.time.Instant;
@@ -12,14 +16,10 @@ import java.util.List;
 public interface IMissionService {
     MissionDto save(MissionDto dto);
     MissionDto update(Integer id,MissionDto dto);
-    MissionDto updateKilometrage(String flag,Integer idMission, double kmDebut);
+    MissionDto updateKilometrage(KmFlag flag, Integer idMission,Integer vehicleId, double kmDebut);
     MissionDto updateEtatMission(Integer idMission, EtatMission etatMission) ;
-//    MissionDto deleteEtape(Integer idMission, Integer idEtape);
-//    MissionDto deleteChauffeur(Integer idMission, Integer idChauffeur);
-//    MissionDto deleteVehicule(Integer idMission, Integer idVehicule);
-//    MissionDto deleteFraisMission(Integer idMission, Integer idFM);
-//    List<Etape> findAllEtapeByMissionId(Integer idMission);
-//    FraisMissionDto updateX(Integer idMF, Integer idLFM, BigDecimal qte);
+    MissionDto updateExpensesMission(Integer idMission,  List<FraisMissionDto> expensesDto) ;
+    MissionDto updateEtapeMission(Integer idMission,  List<EtapeDto> etapesDto) ;
     MissionDto findById(Integer id);
     List<MissionDto> findAllByDate(Instant dateMission);
     List<MissionResponse> findAll();

@@ -23,7 +23,7 @@ export class TokenService {
     localStorage.setItem('access_token', token);
     this.tokenSubject.next(token);
     this.monitorTokenExpiration();
-    console.log('Token SET:', token); // Add debug log
+/*    console.log('Token SET:', token); // Add debug log*/
   }
   get token():string | null{
     return this.getToken();
@@ -36,28 +36,28 @@ export class TokenService {
   getRoles(): string[] {
     const token = this.getToken();
     if (!token) {
-      console.warn('No token available for role decoding');
+   /*   console.warn('No token available for role decoding');*/
       return [];
     }
 
     try {
       const decoded = this.jwtHelper.decodeToken(token);
-      console.log('Decoded token:', decoded); // Debug decoded content
+      //console.log('Decoded token:', decoded); // Debug decoded content
       return Array.isArray(decoded?.roles) ? decoded.roles : [];
     } catch (error) {
-      console.error('Token decoding error:', error);
+      //console.error('Token decoding error:', error);
       return [];
     }
   }
-  getUserId(): string {
+  getUserId(): number {
     const token = this.getToken();
-    if (!token) return '';
+    if (!token) return 0;
     try{
     const decoded = this.jwtHelper.decodeToken(token);
-    return decoded?.userId || '';
+    return decoded?.userId || 0;
     }catch (error){
-      console.error('Failed to decode token:', error);
-      return '';
+     /* console.error('Failed to decode token:', error);*/
+      return 0;
     }
   }
 
@@ -95,7 +95,7 @@ export class TokenService {
     }
     //checkexpiredDate
     const isTokenExpired = this.jwtHelper.isTokenExpired(token);
-    console.log("TOKEN--> : "+isTokenExpired);
+   /* console.log("TOKEN--> : "+isTokenExpired);*/
     if(isTokenExpired){
       localStorage.clear();
       return false;
@@ -112,7 +112,7 @@ export class TokenService {
     localStorage.clear();
     this.tokenSubject.next(null);
     this.clearExpirationCheck();// Stop checking for expiration
-    console.log("User has been logged out");
+   /* console.log("User has been logged out");*/
     //window.location.reload();
   }
 
@@ -129,7 +129,7 @@ export class TokenService {
       const checkTime = Math.max(timeUtilExpiration - 1 * 60 * 1000, 0);
       //Create a timer to call logout when the token is about to expire
       this.expirationCheckSubscription = timer(checkTime).subscribe(() => {
-        console.log('Token has expired, logging out...');
+       /* console.log('Token has expired, logging out...');*/
         alert("Logout soon !");
         this.logout();
       });

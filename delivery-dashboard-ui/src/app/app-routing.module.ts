@@ -8,7 +8,7 @@ import {RoleRedirectGuard} from "./services/guard/role-redirect.guard";
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '', pathMatch: 'full' },
+ /* { path: '', redirectTo: '', pathMatch: 'full' },*/
   { path: 'login', component: LoginComponent },
   { path: 'unauthorized', component: UnauthorizedComponent },
 
@@ -19,12 +19,6 @@ const routes: Routes = [
       { path: 'main',
         loadChildren: () => import('./modules/main/main.module').then(m => m.MainModule),
         canActivate:[authGuard],
-        data:{roles:['ROLE_ADMIN','ROLE_USER']}
-      },
-      { path: '',
-        loadChildren: () =>
-          import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule),
-        canActivate:[authGuard,RoleRedirectGuard],
         data:{roles:['ROLE_ADMIN','ROLE_USER']}
       },
       {
@@ -68,8 +62,15 @@ const routes: Routes = [
         canActivate:[authGuard],
         data:{roles:['ROLE_USER']}
       },
+      { path: '',
+        loadChildren: () =>
+          import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule),
+        canActivate:[authGuard,RoleRedirectGuard],
+        data:{roles:['ROLE_ADMIN','ROLE_USER']}
+      },
     ]
   },
+  { path: '**', redirectTo: '' } // Handle 404
 ];
 
 @NgModule({

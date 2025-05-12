@@ -1,7 +1,9 @@
 package com.hitecart.deliverysystem.dto.basic;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hitecart.deliverysystem.model.Mission;
 import com.hitecart.deliverysystem.model.MissionVehicle;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -24,6 +26,8 @@ public class MissionVehicleDto {
     private Integer missionId;
     private VehicleDto vehicleDto;
     private List<ChauffeurVehicleDto> chauffeursVehicleDto= new ArrayList<>();
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime assignedAt;
 
     public static MissionVehicleDto fromEntity(MissionVehicle missionVehicule) {

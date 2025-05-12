@@ -278,6 +278,8 @@ export class AddMissionComponent implements OnInit {
     console.log(mission);
     this.missionToSave = mission;
     this.missionToSave.etatMission="PLANNED";
+
+
     this.missionService.save7({
       body:this.missionToSave
     }).subscribe({next:()=>{
@@ -285,7 +287,7 @@ export class AddMissionComponent implements OnInit {
         this.router.navigate(['missions','w-planning']);
       }, error:(err)=>{
         console.log(JSON.stringify(mission) );
-        this.alertService.alertWaring(err.error.httpCode+ " ERROR :: "+ err.error.msg)
+        this.alertService.alertWarning(err.error.httpCode+ " ERROR :: "+ err.error.msg)
       }});
   }
 
@@ -314,17 +316,17 @@ export class AddMissionComponent implements OnInit {
     const newTimeString = this.currentEtapeForm.value.scheduledDeliveryTime;
 
     if(this.isEtapeDuplicate(newDepature,newArrival,newTimeString)){
-      this.alertService.alertWaring('This departure, destination, and time combination already exists.');
+      this.alertService.alertWarning('This departure, destination, and time combination already exists.');
       return {};
     }
 
     if(!newTimeString){
-      this.alertService.alertWaring('Schedule time departure is required.');
+      this.alertService.alertWarning('Schedule time departure is required.');
       return{};
     }
 
     if(this.hasInvalidTimeDifference(newTimeString)){
-      this.alertService.alertWaring("The time difference between stages must be at least 30 minutes.")
+      this.alertService.alertWarning("The time difference between stages must be at least 30 minutes.")
       return {};
     }
 
@@ -470,9 +472,9 @@ export class AddMissionComponent implements OnInit {
   }
 
   isFieldInvalid(currentForm: FormGroup,fieldName: string):boolean {
-   const field=currentForm.get(fieldName);
+   const field = currentForm.get(fieldName);
     return field ?
-           (field.invalid && (field.dirty|| field.touched))
+           (field.invalid && (field.dirty || field.touched))
            : false;
   }
 
@@ -483,7 +485,7 @@ export class AddMissionComponent implements OnInit {
     const selectedDate = new Date(this.missionForm.get('dateDebut')?.value);
     const dateDay=new Date(this.dateDay)
     if(isBefore(selectedDate.getDate(),dateDay.getDate()) || isAfter(selectedDate.getDate(),dateDay.getDate())){
-      this.alertService.alertWaring(`the satrt Date must be equal to  date day ${dateDay}`);
+      this.alertService.alertWarning(`the satrt Date must be equal to  date day ${dateDay}`);
       this.invalidSartDate=true;
     }else{
       this.calculateDifference(this.missionForm.get('dateDebut')?.value,
@@ -521,7 +523,7 @@ export class AddMissionComponent implements OnInit {
       console.log('Invalid end date.');
       this.invalidEndDate= true;
       this.difference=null;
-      this.alertService.alertWaring('The end date must be at least 7 hours from now and less than the end of this week.');
+      this.alertService.alertWarning('The end date must be at least 7 hours from now and less than the end of this week.');
 
     }
 

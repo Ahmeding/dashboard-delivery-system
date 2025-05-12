@@ -184,12 +184,12 @@ export class QuotesComponent implements OnInit{
     this.isFormAddNewSubmitted=true;
 
     if (!this.selectedServiceDelivery || !this.selectedServiceDelivery.id) {
-      this.alertService.alertWaring("Please select a service before adding")
+      this.alertService.alertWarning("Please select a service before adding")
       return;
     }
     const exists= this.orderlines.some(orderL=>orderL.serviceDeliveryDto?.id===this.selectedServiceDelivery?.id)
     if(exists){
-      this.alertService.alertWaring("This service has already been added.")
+      this.alertService.alertWarning("This service has already been added.")
       return;
     }
     const newOrdeLine :LigneDevisDto = {

@@ -211,18 +211,21 @@ this.mission.etapeDtos= this.etapeDtos;
 
   // 5 - on save
   onSave() {
-    this.mission.missionVehiclesDtos = this.missionVehicleDtoArray.value;
-    console.log(this.mission);
-    const missionToSave = this.mission;
-    this.missionService.update({id: missionToSave.id as number,body: missionToSave}).subscribe({
-      next:(rep) =>{
-        console.log(rep);
-        this.activeModal.dismiss();
-        this.alertService.alertSuccess("mission updated!")
-      },error:(err)=>{
-        console.log(err);
-      }
-    })
+
+      this.mission.missionVehiclesDtos = this.missionVehicleDtoArray.value;
+      console.log(this.mission);
+      const missionToSave = this.mission;
+      this.missionService.update({id: missionToSave.id as number,body: missionToSave}).subscribe({
+        next:(rep) =>{
+          console.log(rep);
+          this.activeModal.close(rep);
+          this.alertService.alertSuccess("mission updated!")
+        },error:(err)=>{
+          console.log(err);
+        }
+      })
+
+
   }
 
   isVehicleDuplicate(selectedVehicle: VehicleDto):boolean{
@@ -244,7 +247,7 @@ this.mission.etapeDtos= this.etapeDtos;
       );
     });
     if(driverAlreadyAssigned){
-      this.alertService.alertWaring(
+      this.alertService.alertWarning(
         `Driver ${newDriver.firstname || newDriver.id} is already assigned to another vehicle.`
       );
       return true;

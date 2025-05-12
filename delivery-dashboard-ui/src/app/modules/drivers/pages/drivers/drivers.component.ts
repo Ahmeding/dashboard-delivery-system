@@ -72,7 +72,7 @@ export class DriversComponent implements OnInit{
         this.alertService.alertSuccess("Driver successfully deactivated");
       },
       error:(err)=>{
-        this.alertService.alertWaring("Driver deactivation failed");
+        this.alertService.alertWarning("Driver deactivation failed");
       }
     })
   }
@@ -261,7 +261,7 @@ export class DriversComponent implements OnInit{
         this.alertService.alertInfo("Driver deleted successfully.")
       },error:(err)=>{
         console.log(err);
-        this.alertService.alertWaring("An error occurred while deleting the driver. Please try again.")
+        this.alertService.alertWarning("An error occurred while deleting the driver. Please try again.")
       }
     })
   }

@@ -25,7 +25,7 @@ const routes: Routes = [
     data: {roles: ['ROLE_ADMIN']} },
   { path: 'w-planning', component: WeeklyPlanningComponent,
         canActivate:[authGuard],
-    data: {roles: ['ROLE_USER']} },
+    data: {roles: ['ROLE_ADMIN','ROLE_USER']} },
   { path: 'expenses', component: ExpensesComponent,
         canActivate:[authGuard],
     data: {roles: ['ROLE_ADMIN']} },
