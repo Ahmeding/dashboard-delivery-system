@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, NgForm, Validators} from "@angular/forms";
 import {ContratDto} from "../../../../../../ds-api/src/models/contrat-dto";
-import {VehiculeDto} from "../../../../../../ds-api/src/models/vehicule-dto";
+import {VehicleDto} from "../../../../../../ds-api/src/models/vehicle-dto";
 import {ActivatedRoute, Router} from "@angular/router";
 import {VehiculeService} from "../../../../../../ds-api/src/services/vehicule.service";
 import {AlertService} from "../../../../../services/alert/alert.service";
@@ -48,7 +48,7 @@ export class NewContractComponent  implements OnInit{
   }
 
   private getAllDrivers() {
-    this.driverService.findAll17().subscribe({
+    this.driverService.findAll18().subscribe({
       next:(allDriversResponse)=>{
         console.log("-------------> "+allDriversResponse.length);
         this.allDrivers=allDriversResponse  ;
@@ -73,7 +73,7 @@ export class NewContractComponent  implements OnInit{
   }
 
   loadRepairToEdit(rId:number){
-    this.contractService.findById14({id:rId}).subscribe({
+    this.contractService.findById15({id:rId}).subscribe({
       next:(contractToEditResponse)=>{
         this.contractValue= contractToEditResponse;
 
@@ -108,7 +108,7 @@ export class NewContractComponent  implements OnInit{
   }
 
   saveRepair(contractData: ContratDto, successMsg: string, errorMsg: string){
-    this.contractService.save14({body:contractData}).subscribe({
+    this.contractService.save15({body:contractData}).subscribe({
       next:(response)=>{
         this.alertService.alertSuccess(successMsg+" completed successfully!")
         this.router.navigate(['dirvers','contracts']);

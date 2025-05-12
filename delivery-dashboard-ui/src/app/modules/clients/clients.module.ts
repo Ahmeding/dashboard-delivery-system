@@ -12,6 +12,7 @@ import { NewQuoteComponent } from './pages/quotes/new-quote/new-quote.component'
 import { ViewClientModalComponent } from './pages/clients/view-client-modal/view-client-modal.component';
 import { NewDeliveryPointModalComponent } from './pages/clients/new-delivery-point-modal/new-delivery-point-modal.component';
 import { ViewClientComponent } from './pages/clients/view-client/view-client.component';
+import { NewDeliveryPointComponent } from './pages/clients/new-delivery-point/new-delivery-point.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { ViewClientComponent } from './pages/clients/view-client/view-client.com
     NewQuoteComponent,
     ViewClientModalComponent,
     NewDeliveryPointModalComponent,
-    ViewClientComponent
+    ViewClientComponent,
+    NewDeliveryPointComponent
   ],
   imports: [
     CommonModule,

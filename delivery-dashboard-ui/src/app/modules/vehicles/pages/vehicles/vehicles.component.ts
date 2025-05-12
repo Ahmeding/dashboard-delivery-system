@@ -1,6 +1,6 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {VehiculeDto} from "../../../../../ds-api/src/models/vehicule-dto";
-import {PageResponseVehiculeDto} from "../../../../../ds-api/src/models/page-response-vehicule-dto";
+import {VehicleDto} from "../../../../../ds-api/src/models/vehicle-dto";
+import {PageResponseVehicleDto} from "../../../../../ds-api/src/models/page-response-vehicle-dto";
 import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
 import {AlertService} from "../../../../services/alert/alert.service";
 import {VehiculeService} from "../../../../../ds-api/src/services/vehicule.service";
@@ -16,10 +16,10 @@ import {ViewVehiculeModalComponent} from "./view-vehicule-modal/view-vehicule-mo
 })
 export class VehiclesComponent implements OnInit{
   @ViewChild('infoVehicleModal') infoVehicleModal!: TemplateRef<any>;
-  allVehicles:VehiculeDto[]=[];
-  allVehiclesResponse: PageResponseVehiculeDto={};
-  selectedVehicle: VehiculeDto={};
-  newVehicle: VehiculeDto={};
+  allVehicles:VehicleDto[]=[];
+  allVehiclesResponse: PageResponseVehicleDto={};
+  selectedVehicle: VehicleDto={};
+  newVehicle: VehicleDto={};
 
   isFormAddNewSubmitted: boolean=false;
   page: number=0;
@@ -152,7 +152,7 @@ private resetForm(form: NgForm) {
     }
 
   }*/
-private saveVehicle(vehicleToSave: VehiculeDto, form: NgForm) {
+private saveVehicle(vehicleToSave: VehicleDto, form: NgForm) {
     this.vehicleService.save1({
       body:vehicleToSave
     }).subscribe({
@@ -205,7 +205,7 @@ private saveVehicle(vehicleToSave: VehiculeDto, form: NgForm) {
     this.router.navigate(['vehicles','edit-vehicle',id])
   }
 
-  openVehicleModal(vehicle: VehiculeDto) {
+  openVehicleModal(vehicle: VehicleDto) {
     const modalRef = this.modalService.open(ViewVehiculeModalComponent, { size: 'xl' });
     modalRef.componentInstance.selectedVehicle = vehicle;  // Pass data to modal
   }

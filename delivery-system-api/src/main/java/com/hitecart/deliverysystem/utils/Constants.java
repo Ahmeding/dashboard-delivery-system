@@ -119,8 +119,11 @@ String ENTREPRISE_ENDPOINT= "/entreprises";
 /////////////////////////////////////////////////////////////////////////
 String MISSION_ENDPOINT= "/missions";
     String CREATE_MISSION_ENDPOINT= "/create";
+    String UPDATE_MISSION_ENDPOINT= "/update/{id}";
+    String UPDATE_EXPENSES_MISSION_ENDPOINT= "/update/expenses/{id}";
+    String UPDATE_ETAPES_MISSION_ENDPOINT= "/update/etapes/{id}";
     String UPDATE_ETAT_MISSION_ENDPOINT= "/update/{id}/{etatMission}";
-    String UPDATE_KILOMETRATGE_MISSION_ENDPOINT= "/update/{flag}/{id}/{kilometrage}";
+    String UPDATE_KILOMETRATGE_MISSION_ENDPOINT= "/update/{flag}/{id}/{kilometrage}/{vehicleId}";
     String FIND_MISSION_BY_ID_ENDPOINT= "/mission/{id}";
     String FIND_MISSION_BY_DATE_ENDPOINT= "/date/{dateMission}";
     String FIND_ALL_MISSION_ENDPOINT= "/all";
@@ -146,6 +149,18 @@ String PIECE_RECHANGE_ENDPOINT= "/piecerenchanges";
     String DELETE_REPARATION_ENDPOINT= "/delete/{id}";
 /////////////////////////////////////////////////////////////////////////
 
+    String ROLE_ENDPOINT= "/roles";
+    String CREATE_ROLE_ENDPOINT= "/create";
+    String FIND_ROLE_BY_ID_ENDPOINT= "/role/{id}";
+    String FIND_ALL_ROLE_ENDPOINT= "/all";
+    String DELETE_ROLE_ENDPOINT= "/delete/{id}";
+/////////////////////////////////////////////////////////////////////////
+
+    String NOTIFICATION_ENDPOINT= "/notifications";
+    String UPDATE_NOTIFICATION_ENDPOINT= "/update";
+    String FIND_ALL_NOTIFICATION_BY_USERID_ENDPOINT= "/all/by-userid/{userId}";
+/////////////////////////////////////////////////////////////////////////
+
     String UTILISATEUR_ENDPOINT= "/utilisateurs";
     String CREATE_UTILISATEUR_ENDPOINT= "/create";
     String FIND_UTILISATEUR_BY_ID_ENDPOINT= "/user/by-id/{id}";
@@ -153,6 +168,8 @@ String PIECE_RECHANGE_ENDPOINT= "/piecerenchanges";
     String FIND_ALL_UTILISATEUR_ENDPOINT= "/all";
     String FIND_ALL_UTILISATEUR_PAGEABLE_ENDPOINT ="/" ;
     String DELETE_UTILISATEUR_ENDPOINT= "/delete/{id}";
+    String UPDATE_UTILISATEUR_ROLES_ENDPOINT= "/{id}/roles";
+    String UPDATE_UTILISATEUR_PASS_ENDPOINT= "/{id}/pass";
 /////////////////////////////////////////////////////////////////////////
 
 
@@ -173,6 +190,7 @@ String PIECE_RECHANGE_ENDPOINT= "/piecerenchanges";
     String FIND_ALL_PIECERECHANGE_PAGEABLE_ENDPOINT = "/";
     String FIND_ALL_MISSION_PAGEABLE_ENDPOINT = "/";
     String FIND_ALL_MISSION_PAGEABLE_BY_DRIVERID_ENDPOINT = "/driver";
+    String FIND_ALL_MISSION_BY_DRIVER_ENDPOINT = "/logged/driver";
     String FIND_ALL_FRAISMISSION_PAGEABLE_ENDPOINT = "/";
     String FIND_ALL_ENTREPRISE_PAGEABLE_ENDPOINT = "/";
     String FIND_ALL_DEVIS_PAGEABLE_ENDPOINT = "/";

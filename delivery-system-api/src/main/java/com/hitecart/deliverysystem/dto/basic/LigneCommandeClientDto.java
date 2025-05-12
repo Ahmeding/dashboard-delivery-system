@@ -3,10 +3,13 @@ package com.hitecart.deliverysystem.dto.basic;
 import com.hitecart.deliverysystem.model.LigneCommandeClient;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
 @Builder
 public class LigneCommandeClientDto {
 
@@ -18,6 +21,7 @@ public class LigneCommandeClientDto {
     //private ServiceDeliveryDto serviceDeliveryDto;
     private Integer ServiceDeliveryDtoId;
     private Integer cmdClientId;
+
     public static LigneCommandeClientDto fromEntity(LigneCommandeClient ligneCommandeClient) {
         if(ligneCommandeClient == null){
             return null;

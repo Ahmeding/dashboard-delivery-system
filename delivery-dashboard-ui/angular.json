@@ -25,7 +25,8 @@
             "sourceMap": false,
             "vendorChunk": false,
             "polyfills": [
-              "zone.js"
+              "zone.js",
+              "src/window-global-fix.ts"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",

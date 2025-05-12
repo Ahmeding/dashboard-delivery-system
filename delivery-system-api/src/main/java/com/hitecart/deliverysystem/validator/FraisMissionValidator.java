@@ -15,11 +15,8 @@ public class FraisMissionValidator {
            errors.add("Veuillez saisir au moin un frais de mission!");
            return errors;
         }
-       if(!StringUtils.hasLength(dto.getNom())){
+       if(!StringUtils.hasLength(dto.getName())){
            errors.add("Veuillez renseigner le nom du fraisMission !");
-       }
-       if(dto.getLignesFraisMissionDto().isEmpty()){
-           errors.add("Veuillez saisir au moin un frais de mission!");
        }
 //       if(dto.getType()==null){
 //           errors.add("Veuillez renseigner le type  du fraisMission !");

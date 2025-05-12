@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hitecart.deliverysystem.model.RecurrencePattern;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Set;
-@Data
+@Getter
+@Setter
 @Builder
 public class RecurrencePatternDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING)

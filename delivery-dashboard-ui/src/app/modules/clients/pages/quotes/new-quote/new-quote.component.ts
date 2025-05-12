@@ -147,7 +147,7 @@ export class NewQuoteComponent implements OnInit{
   }
 
   private getAllClients() {
-    this.clientService.findAll16().subscribe({
+    this.clientService.findAll17().subscribe({
       next:(clientsResponse)=>{
         this.allClients=clientsResponse;
       }
@@ -161,7 +161,7 @@ export class NewQuoteComponent implements OnInit{
     this.newQuote.ligneCommandeClientsDtos=this.orderlines;
     this.newQuote.etatCommande= "IN_PROGRESS"
     console.log(this.newQuote);
-    this.cmdClientService.save15({body:this.newQuote}).subscribe({
+    this.cmdClientService.save16({body:this.newQuote}).subscribe({
       next:(resp)=>{
         this.getAllQuotes();
         this.resetForm(form);
@@ -202,12 +202,12 @@ export class NewQuoteComponent implements OnInit{
     this.isFormAddNewSubmitted=true;
 
     if (!this.selectedServiceDelivery || !this.selectedServiceDelivery.id) {
-      this.alertService.alertWaring("Please select a service before adding")
+      this.alertService.alertWarning("Please select a service before adding")
       return;
     }
     const exists= this.orderlines.some(orderL=>orderL.serviceDeliveryDtoId===this.selectedServiceDelivery?.id)
     if(exists){
-      this.alertService.alertWaring("This service has already been added.")
+      this.alertService.alertWarning("This service has already been added.")
       return;
     }
     const newOrdeLine :LigneCommandeClientDto = {
@@ -243,7 +243,7 @@ export class NewQuoteComponent implements OnInit{
   }
 
   editQuote(id: number | undefined) {
-    this.cmdClientService.findById15({id:id as number}).subscribe({
+    this.cmdClientService.findById16({id:id as number}).subscribe({
       next:(order)=>{
         this.selectedToEditQuote = order;
         this.orderlines = this.selectedToEditQuote.ligneCommandeClientsDtos as Array<CommandeClientDto>;

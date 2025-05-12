@@ -154,7 +154,7 @@ export class ServicesDeleiveryComponent implements OnInit{
         this.alertService.alertSuccess("Delivery Service successfully deactivated");
       },
       error:(err)=>{
-        this.alertService.alertWaring("Delivery Service deactivation failed");
+        this.alertService.alertWarning("Delivery Service deactivation failed");
       }
     })
   }

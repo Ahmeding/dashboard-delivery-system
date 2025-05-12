@@ -18,22 +18,47 @@ import java.util.List;
 
 @Configuration
 @EnableWebMvc
-public class WebConfig {
+public class WebConfig implements WebMvcConfigurer {
 
 @Value("${application.cors.origins:*}")
 private List<String> allowedOrigins;
-    @Bean
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+       registry.addMapping("/**")
+               .allowedOrigins(allowedOrigins.toArray(new String[0]))
+               .allowedMethods(
+                       HttpMethod.GET.name(),
+                       HttpMethod.POST.name(),
+                       HttpMethod.PUT.name(),
+                       HttpMethod.PATCH.name(),
+                       HttpMethod.DELETE.name(),
+                       HttpMethod.OPTIONS.name())
+               .allowedHeaders(
+                       HttpHeaders.ORIGIN,
+                       HttpHeaders.CONTENT_TYPE,
+                       HttpHeaders.ACCEPT,
+                       HttpHeaders.AUTHORIZATION,
+                       "X-Requested-With")
+               .exposedHeaders(
+                       HttpHeaders.AUTHORIZATION,
+                       "X-Custom-Header"
+               )
+               .allowCredentials(true)
+               .maxAge(3600);
+    }
+/*  @Bean
     public CorsFilter corsFilter(){
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration config = new CorsConfiguration();
-        /**to pipline*/
+        *//**to pipline*//*
         //config.setAllowCredentials(true);
         //config.setAllowedOrigins(allowedOrigins);
         //config.setAllowedHeaders(Arrays.asList("*"));//ORIGIN,CONTENT_TYPE,ACCEPT,AUTHORIZATION));
         //config.setAllowedMethods(Arrays.asList("*"));//"GET","POST","PATCH","DELETE","PUT"));
         config.setAllowCredentials(false);
-        //config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
-        config.setAllowedOrigins(Collections.singletonList("*"));
+        config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+        //config.setAllowedOrigins(Collections.singletonList("*"));
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.ORIGIN,
                 HttpHeaders.CONTENT_TYPE,
@@ -49,12 +74,12 @@ private List<String> allowedOrigins;
         ));
         source.registerCorsConfiguration("/**",config);
         return new CorsFilter(source);
-    }
+    }*/
 
 
 
 
-    public WebMvcConfigurer corsConfig(){
+ /*   public WebMvcConfigurer corsConfig(){
         return  new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
@@ -73,5 +98,5 @@ private List<String> allowedOrigins;
             }
         };
     }
-
+*/
 }

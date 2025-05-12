@@ -8,14 +8,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { VehiculeDto } from '../../models/vehicule-dto';
+import { VehicleDto } from '../../models/vehicle-dto';
 
 export interface UpdateIsActive$Params {
   id: number;
   isactive: boolean;
 }
 
-export function updateIsActive(http: HttpClient, rootUrl: string, params: UpdateIsActive$Params, context?: HttpContext): Observable<StrictHttpResponse<VehiculeDto>> {
+export function updateIsActive(http: HttpClient, rootUrl: string, params: UpdateIsActive$Params, context?: HttpContext): Observable<StrictHttpResponse<VehicleDto>> {
   const rb = new RequestBuilder(rootUrl, updateIsActive.PATH, 'put');
   if (params) {
     rb.path('id', params.id, {});
@@ -27,7 +27,7 @@ export function updateIsActive(http: HttpClient, rootUrl: string, params: Update
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<VehiculeDto>;
+      return r as StrictHttpResponse<VehicleDto>;
     })
   );
 }

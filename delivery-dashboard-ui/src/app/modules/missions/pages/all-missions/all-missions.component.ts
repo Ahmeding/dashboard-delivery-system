@@ -111,7 +111,7 @@ export class AllMissionsComponent  implements OnInit{
     this.confirmBoxService.customFour('Are you sure you want to delete this mission?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.missionService.delete5({id:mission_id}).subscribe(() => {
+          this.missionService.delete6({id:mission_id}).subscribe(() => {
             this.getAllMission();
             this.alertService.alertSuccess('Deleted successfully');
             this.alertService.alertSuccess('Deletion successfully completed');

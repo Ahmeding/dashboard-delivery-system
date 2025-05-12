@@ -1,14 +1,16 @@
 package com.hitecart.deliverysystem.model;
 
+import com.hitecart.deliverysystem.model.enums.TypeFraisMission;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter @Setter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,17 +20,23 @@ import java.util.List;
 public class FraisMission extends AbstractEntity{
 
     private String reference;
-    @Column(name = "nom")
-    private String nom;
-    @Column(name = "commentaire")
-    private String commentaire;
-
-    @OneToOne(mappedBy = "fraisMission")
+    @Column(name = "name")
+    private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private TypeFraisMission type;
+    @Column(name = "expenseDate")
+    private LocalDateTime expenseDate;
+    @Column(name = "quantity")
+    private BigDecimal quantity;
+    @Column(name = "cost")
+    private BigDecimal cost;
+    @Column(name = "comment")
+    private String comment;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idmission")
     private Mission mission;
 
-    @OneToMany(mappedBy = "fraisMission")
-    private List<LigneFraisMission> lignesFM;
-    @PrePersist
     private void generateReference() {
         if(this.reference == null || this.reference.isEmpty()){
             this.reference = "MF-"+System.currentTimeMillis();

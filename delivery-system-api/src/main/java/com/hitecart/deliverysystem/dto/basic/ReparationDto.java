@@ -1,8 +1,10 @@
 package com.hitecart.deliverysystem.dto.basic;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hitecart.deliverysystem.model.*;
 import com.hitecart.deliverysystem.model.enums.TypeReparation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,8 +31,12 @@ public class ReparationDto{
     @JsonIgnore
     private List<PieceRechangeDto> pieceRechangesDtos;
 
-    private VehiculeDto vehiculeDto;
+    private VehicleDto vehiculeDto;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;
@@ -58,7 +64,7 @@ public class ReparationDto{
                 .lastModifiedBy(reparation.getLastModifiedBy())
 
 
-                .vehiculeDto(VehiculeDto.fromEntity(reparation.getVehicule()))
+                .vehiculeDto(VehicleDto.fromEntity(reparation.getVehicule()))
                 .build();
     }
 
@@ -76,7 +82,7 @@ public class ReparationDto{
                     reparation.setDateFin(dto.getDateFin());
                     reparation.setDateProchainRep(dto.getDateProchainRep());
                     reparation.setCout(dto.getCout());
-                    reparation.setVehicule(VehiculeDto.toEntity(dto.getVehiculeDto()));
+                    reparation.setVehicule(VehicleDto.toEntity(dto.getVehiculeDto()));
 
         reparation.setCreatedAt(dto.getCreatedAt());
         reparation.setUpdatedAt(dto.getUpdatedAt());

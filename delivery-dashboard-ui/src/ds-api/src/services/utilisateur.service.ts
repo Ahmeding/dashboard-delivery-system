@@ -25,6 +25,11 @@ import { FindById2$Params } from '../fn/utilisateur/find-by-id-2';
 import { PageResponseUtilisateurDto } from '../models/page-response-utilisateur-dto';
 import { save2 } from '../fn/utilisateur/save-2';
 import { Save2$Params } from '../fn/utilisateur/save-2';
+import { updateUserPassword } from '../fn/utilisateur/update-user-password';
+import { UpdateUserPassword$Params } from '../fn/utilisateur/update-user-password';
+import { updateUserRoles } from '../fn/utilisateur/update-user-roles';
+import { UpdateUserRoles$Params } from '../fn/utilisateur/update-user-roles';
+import { UtilisateurDto } from '../models/utilisateur-dto';
 
 @Injectable({ providedIn: 'root' })
 export class UtilisateurService extends BaseService {
@@ -58,6 +63,72 @@ export class UtilisateurService extends BaseService {
   save2(params: Save2$Params, context?: HttpContext): Observable<ChauffeurDto> {
     return this.save2$Response(params, context).pipe(
       map((r: StrictHttpResponse<ChauffeurDto>): ChauffeurDto => r.body)
+    );
+  }
+
+  /** Path part for operation `updateUserRoles()` */
+  static readonly UpdateUserRolesPath = '/utilisateurs/{id}/roles';
+
+  /**
+   * update User Roles.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateUserRoles()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateUserRoles$Response(params: UpdateUserRoles$Params, context?: HttpContext): Observable<StrictHttpResponse<UtilisateurDto>> {
+    return updateUserRoles(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * update User Roles.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateUserRoles$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateUserRoles(params: UpdateUserRoles$Params, context?: HttpContext): Observable<UtilisateurDto> {
+    return this.updateUserRoles$Response(params, context).pipe(
+      map((r: StrictHttpResponse<UtilisateurDto>): UtilisateurDto => r.body)
+    );
+  }
+
+  /** Path part for operation `updateUserPassword()` */
+  static readonly UpdateUserPasswordPath = '/utilisateurs/{id}/pass';
+
+  /**
+   * update User Password.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateUserPassword()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateUserPassword$Response(params: UpdateUserPassword$Params, context?: HttpContext): Observable<StrictHttpResponse<UtilisateurDto>> {
+    return updateUserPassword(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * update User Password.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateUserPassword$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateUserPassword(params: UpdateUserPassword$Params, context?: HttpContext): Observable<UtilisateurDto> {
+    return this.updateUserPassword$Response(params, context).pipe(
+      map((r: StrictHttpResponse<UtilisateurDto>): UtilisateurDto => r.body)
     );
   }
 

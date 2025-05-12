@@ -3,7 +3,6 @@ package com.hitecart.deliverysystem.controllers;
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.FraisMissionApi;
 import com.hitecart.deliverysystem.dto.basic.FraisMissionDto;
-import com.hitecart.deliverysystem.dto.basic.LigneFraisMissionDto;
 import com.hitecart.deliverysystem.services.FraisMissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,7 @@ import java.util.List;
 @RestController
 public class FraisMissionController implements FraisMissionApi {
 
-    private FraisMissionService fraisMissionService;
+    private final FraisMissionService fraisMissionService;
 
     @Autowired
     public FraisMissionController(FraisMissionService fraisMissionService) {
@@ -32,16 +31,11 @@ public class FraisMissionController implements FraisMissionApi {
     }
 
     @Override
-    public ResponseEntity<FraisMissionDto> updateQuantite(Integer idMF, Integer idLigneFM, BigDecimal qte) {
-        return ResponseEntity.ok(fraisMissionService.updateQuantite(idMF,idLigneFM,qte));
+    public ResponseEntity<FraisMissionDto> updateQuantite(Integer idMF, BigDecimal qte) {
+        return ResponseEntity.ok(fraisMissionService.updateQuantite(idMF,qte));
     }
 
-    @Override
-    public ResponseEntity<FraisMissionDto> deleteLigneFraisMission(Integer idFraisMission, Integer idLigneFraisMission) {
-        return ResponseEntity.ok(fraisMissionService.deleteLigneFraisMission(idFraisMission,idLigneFraisMission));
-    }
-
-    @Override
+   @Override
     public ResponseEntity<FraisMissionDto> findById(Integer id) {
         return ResponseEntity.ok(fraisMissionService.findById(id));
     }
@@ -51,10 +45,7 @@ public class FraisMissionController implements FraisMissionApi {
         return ResponseEntity.ok(fraisMissionService.findByIdMission(idMission));
     }
 
-    @Override
-    public ResponseEntity<List<LigneFraisMissionDto>> findAllLignesFraisMissionByFraisMissionId(Integer idFraisMission) {
-        return ResponseEntity.ok(fraisMissionService.findAllLignesFraisMissionByFraisMissionId(idFraisMission));
-    }
+
 
     @Override
     public ResponseEntity<List<FraisMissionDto>> findAll() {

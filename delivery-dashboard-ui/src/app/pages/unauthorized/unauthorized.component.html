@@ -1,0 +1,23 @@
+<div class="unauthorized-container">
+  <h1>🚫 Access Denied</h1>
+
+  <!-- For Regular Users -->
+  <div *ngIf="authService.isRegularUser()">
+    <p>You are a regular user</p>
+    <p>You don't have permission to view this page</p>
+    <button routerLink="/dplanning/my-weekly-p">Back to My Planning</button>
+  </div>
+
+  <!-- For Admins -->
+  <div *ngIf="authService.isAdminUser()">
+    <p>You are an administrator</p>
+    <p>This page requires specific privileges</p>
+    <button routerLink="/">Back to Dashboard</button>
+  </div>
+
+  <!-- Fallback for other cases -->
+  <div *ngIf="!authService.isRegularUser() && !authService.isAdminUser()">
+    <p>Invalid user role detected</p>
+    <button (click)="clearAll()">Return to Login</button>
+  </div>
+</div>

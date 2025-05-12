@@ -2,7 +2,7 @@ package com.hitecart.deliverysystem.controllers;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.VehiculeApi;
-import com.hitecart.deliverysystem.dto.basic.VehiculeDto;
+import com.hitecart.deliverysystem.dto.basic.VehicleDto;
 import com.hitecart.deliverysystem.services.VehiculeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,29 +21,29 @@ public class VehiculeController implements VehiculeApi {
     }
 
     @Override
-    public ResponseEntity<VehiculeDto> save(VehiculeDto dto) {
+    public ResponseEntity<VehicleDto> save(VehicleDto dto) {
 
         System.out.println("----------save---------->"+ dto);
         return ResponseEntity.ok(vehiculeService.save(dto));
     }
 
     @Override
-    public ResponseEntity<VehiculeDto> findById(Integer id) {
+    public ResponseEntity<VehicleDto> findById(Integer id) {
         return ResponseEntity.ok(vehiculeService.findById(id));
     }
 
     @Override
-    public ResponseEntity<VehiculeDto> findByImmatriculation(String immat) {
+    public ResponseEntity<VehicleDto> findByImmatriculation(String immat) {
         return ResponseEntity.ok(vehiculeService.findByImmatriculation(immat));
     }
 
     @Override
-    public ResponseEntity<List<VehiculeDto>> findAll() {
+    public ResponseEntity<List<VehicleDto>> findAll() {
         return ResponseEntity.ok(vehiculeService.findAll());
     }
 
     @Override
-    public ResponseEntity<VehiculeDto> updateIsActive(Integer id, Boolean isActive) {
+    public ResponseEntity<VehicleDto> updateIsActive(Integer id, Boolean isActive) {
         return ResponseEntity.ok(vehiculeService.updateIsActive(id,isActive));
     }
 
@@ -53,7 +53,7 @@ public class VehiculeController implements VehiculeApi {
     }
 
     @Override
-    public ResponseEntity<PageResponse<VehiculeDto>> findAllVehicules(int page, int size) {
+    public ResponseEntity<PageResponse<VehicleDto>> findAllVehicules(int page, int size) {
         return ResponseEntity.ok(vehiculeService.findAllVehicles(page,size));
     }
 }

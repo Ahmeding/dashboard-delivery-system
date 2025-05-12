@@ -1,7 +1,9 @@
 package com.hitecart.deliverysystem.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -19,6 +21,8 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 
 import org.springframework.security.messaging.context.AuthenticationPrincipalArgumentResolver;
+import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
+import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
 
 import java.util.List;
@@ -43,25 +47,34 @@ public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/app");
         registry.setUserDestinationPrefix("/user");
 
+    }   @Bean
+    public HttpSessionHandshakeInterceptor httpSessionHandshakeInterceptor() {
+        return new HttpSessionHandshakeInterceptor();
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
 
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("http://localhost:4200")
-                .withSockJS();
+                .setAllowedOriginPatterns("http://localhost:4200")
+                .setHandshakeHandler(new DefaultHandshakeHandler())
+                .withSockJS()
+                .setInterceptors(httpSessionHandshakeInterceptor());
     }
 
     @Override
     public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
         DefaultContentTypeResolver resolver = new DefaultContentTypeResolver();
         resolver.setDefaultMimeType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule()); // Add this line
+
         MappingJackson2MessageConverter  converter = new MappingJackson2MessageConverter();
-        converter.setObjectMapper(new ObjectMapper());
+
+        converter.setObjectMapper(objectMapper);
         converter.setContentTypeResolver(resolver);
         messageConverters.add(converter);
-
 
         return false;
     }

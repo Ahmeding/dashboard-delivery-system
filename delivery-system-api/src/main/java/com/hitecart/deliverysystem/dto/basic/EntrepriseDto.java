@@ -1,6 +1,8 @@
 package com.hitecart.deliverysystem.dto.basic;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hitecart.deliverysystem.model.Entreprise;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
@@ -12,13 +14,17 @@ import java.time.LocalDateTime;
 @SuperBuilder
 public class EntrepriseDto {
 
+    private Integer id;
     private String raisonSocial;
     private String numFiscla;
     private String numtel;
     private String adresseEmail;
     private AdresseDto adresseDto;
-    private Integer id;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;

@@ -3,16 +3,13 @@ package com.hitecart.deliverysystem.services.impl;
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.basic.CreatedByUserDto;
 import com.hitecart.deliverysystem.dto.basic.FraisMissionDto;
-import com.hitecart.deliverysystem.dto.basic.LigneFraisMissionDto;
 import com.hitecart.deliverysystem.dto.basic.UtilisateurDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.exception.InvalidOperationException;
 import com.hitecart.deliverysystem.model.FraisMission;
-import com.hitecart.deliverysystem.model.LigneFraisMission;
 import com.hitecart.deliverysystem.dao.FraisMissionRepository;
-import com.hitecart.deliverysystem.dao.LigneFraisMissionRepository;
 import com.hitecart.deliverysystem.services.FraisMissionService;
 import com.hitecart.deliverysystem.services.UtilisateurService;
 import com.hitecart.deliverysystem.validator.FraisMissionValidator;
@@ -35,7 +32,6 @@ import java.util.stream.Collectors;
 public class FraisMissionServiceImpl implements FraisMissionService {
 
     private final FraisMissionRepository fraisMissionRepository;
-    private final LigneFraisMissionRepository lignefraisMissionRepository;
     private final UtilisateurService utilisateurServiceImpl;
 
 
@@ -53,39 +49,9 @@ public class FraisMissionServiceImpl implements FraisMissionService {
         FraisMission savedFraisMission = fraisMissionRepository.save(FraisMissionDto.toEntity(dto));
 
 
-        if(dto.getLignesFraisMissionDto()!=null){
-            dto.getLignesFraisMissionDto().forEach(
-                    fm->{
-                        LigneFraisMission lignefraisMissionToSave = LigneFraisMissionDto.toEntity(fm);
-                        lignefraisMissionToSave.setFraisMission(savedFraisMission);
-                        lignefraisMissionRepository.save(lignefraisMissionToSave);
-                    }
-            );
-        }
-
-
-
-        return FraisMissionDto.fromEntity(savedFraisMission);
+       return FraisMissionDto.fromEntity(savedFraisMission);
     }
 
-
-    @Override
-    public FraisMissionDto deleteLigneFraisMission(Integer idFraisMission, Integer idLigneFraisMission) {
-        CheckParmasUtil.checkID(idFraisMission,
-                "Le parametre ID FraisMission est null",
-                "Impossible de trouver un un frais de mission avec un ID null",
-                ErrorCodes.FRAISMISSION_NOT_VALID_OPERATION);
-        CheckParmasUtil.checkID(idLigneFraisMission,
-                "Le parametre ID ligne du frais de mission est null",
-                "Impossible de trouver une ligne du frais de mission avec un ID null",
-                ErrorCodes.FRAISMISSION_NOT_VALID_OPERATION);
-        FraisMissionDto fraisMissionDto =  checkFraisMission(idFraisMission);
-        findLigneFraisMission(idLigneFraisMission);
-
-        lignefraisMissionRepository.deleteById(idLigneFraisMission);
-
-        return fraisMissionDto;
-    }
 
     @Override
     public FraisMissionDto findById(Integer id) {
@@ -123,27 +89,12 @@ public class FraisMissionServiceImpl implements FraisMissionService {
         return fraisMissionDto;
     }
 
-    @Override
-    public List<LigneFraisMissionDto> findAllLignesFraisMissionByFraisMissionId(Integer idFraisMission) {
-        CheckParmasUtil.checkID(idFraisMission,
-                "ERREUR: Le parametre Id  frais mision est null",
-                "Impossible de trouver la liste des lignes frais Mission par frais de misson avec id misson null",
-                ErrorCodes.FRAISMISSION_NOT_VALID_OPERATION);
 
-
-
-
-        return lignefraisMissionRepository.findAllByFraisMissionId(idFraisMission).stream()
-                .map(LigneFraisMissionDto::fromEntity)
-                .collect(Collectors.toList());
-    }
 
     @Override
-    public FraisMissionDto updateQuantite(Integer idFM, Integer idLFM, BigDecimal qte) {
+    public FraisMissionDto updateQuantite(Integer idFM, BigDecimal qte) {
         CheckParmasUtil.checkID(idFM,"l'ID FraisMission est null",
                 "Impossible de modifier un frais de Mission  avec un ID null",ErrorCodes.FRAISMISSION_NOT_VALID_OPERATION);
-        CheckParmasUtil.checkID(idLFM,"l'ID Ligne Frais de Mission est null",
-                "Impossible de modifier une ligne du frais de Mission  avec un ID null",ErrorCodes.FRAISMISSION_NOT_VALID_OPERATION);
 
         if(qte ==null || qte.compareTo(BigDecimal.ZERO)==0){
             log.error("La qte  dans la ligne est NULL ou inferier à zero ");
@@ -151,12 +102,10 @@ public class FraisMissionServiceImpl implements FraisMissionService {
                     ErrorCodes.FRAISMISSION_NOT_VALID_OPERATION);
         }
         FraisMissionDto fraisMissionDto = checkFraisMission(idFM);
-        Optional <LigneFraisMission> ligneFraisMissionOp = findLigneFraisMission(idLFM);
+        fraisMissionDto.setQuantity(qte);
 
 
-        LigneFraisMission ligneFraisMission = ligneFraisMissionOp.get();
-        ligneFraisMission.setQuantite(qte);
-        lignefraisMissionRepository.save(ligneFraisMission);
+        fraisMissionRepository.save(FraisMissionDto.toEntity(fraisMissionDto));
 
         return fraisMissionDto;
     }
@@ -167,18 +116,6 @@ public class FraisMissionServiceImpl implements FraisMissionService {
             throw new EntityNotFoundException("Aucun frais de mission avec l'ID "+idFM+ "n'a ete trouve dans la BDD",ErrorCodes.FRAISMISSION_NOT_FOUND);
         }
         return missionDto;
-    }
-
-    private Optional <LigneFraisMission> findLigneFraisMission(Integer idLFM) {
-        CheckParmasUtil.checkID(idLFM,
-                "l'ID Ligne Frais de Mission null",
-                "Impossible de trouver une ligne frais de Mission  avec un ID null",ErrorCodes.LIGNE_FRAISMISSION_NOT_VALID_OPERATION);
-        Optional <LigneFraisMission> ligneFraisMissionOptional= lignefraisMissionRepository.findById(idLFM);
-        if(ligneFraisMissionOptional.isEmpty()){
-            throw new EntityNotFoundException("Aucune ligne n'a ete trouve avec l'ID " + idLFM, ErrorCodes.LIGNE_COMMANDE_CLIENT_NOT_FOUND);
-        }
-
-        return ligneFraisMissionOptional;
     }
 
     @Override
@@ -193,12 +130,7 @@ public class FraisMissionServiceImpl implements FraisMissionService {
         CheckParmasUtil.checkID(id,"l'ID FraisMission  à supprimer est null",
                 "Impossible de supprimer un frais de Mission  avec un ID null",ErrorCodes.COMMANDECLIENT_NOT_VALID_OPERATION);
 
-        List<LigneFraisMission> lignesFM = lignefraisMissionRepository.findAllByFraisMissionId(id);
-        if(lignesFM.isEmpty()){
-            throw new InvalidOperationException("Impossible de supprimer un frais de mission qui a deja un ou plusieur ligne des frais",ErrorCodes.FRAISMISSION_NOT_VALID_OPERATION);
-        }
-
-        fraisMissionRepository.deleteById(id);
+           fraisMissionRepository.deleteById(id);
     }
 
     @Override

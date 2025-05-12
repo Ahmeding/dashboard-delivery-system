@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -115,5 +116,14 @@ public interface MissionRepository extends JpaRepository<Mission, Integer>, JpaS
     @Query("SELECT m FROM Mission m WHERE m.dateDebut BETWEEN :start AND :end")
     List<MissionView> findMissionsByDateRange(@Param("start") LocalDateTime start,
                                               @Param("end") LocalDateTime end);
+
+
+
+    @EntityGraph(attributePaths = "missionVehicules")
+    @Query("""
+        SELECT DISTINCT m FROM Mission m
+        WHERE m.id = :id
+""")
+    Optional<Mission> findByIdWithMissionVehiclesAndChauffeurs(@Param("id") Integer id);
 }
 

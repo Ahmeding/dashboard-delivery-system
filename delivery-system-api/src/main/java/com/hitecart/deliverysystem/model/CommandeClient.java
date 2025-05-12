@@ -2,10 +2,7 @@ package com.hitecart.deliverysystem.model;
 
 import com.hitecart.deliverysystem.model.enums.OrderStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
@@ -14,7 +11,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @SuperBuilder
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=true)
 @AllArgsConstructor

@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem;
 
+import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.model.DeliveryPointCategory;
 import com.hitecart.deliverysystem.model.Role;
 import com.hitecart.deliverysystem.model.Utilisateur;
@@ -15,6 +16,9 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @SpringBootApplication
@@ -40,23 +44,28 @@ public class DeliverysystemApplication {
 									ChauffeurServiceImpl driverService) {
 		return args -> {//CodeGeneratorExecutor.executeCodeGenerator();
 
-			if(roleRepository.findByName("USER").isEmpty()){
-				roleRepository.save(Role.builder().name("USER")
+			Utilisateur connectedUser =  userRepo.findByEmail("admin@gmail.com").orElseThrow(() ->new EntityNotFoundException("not found user"));
+			Role userRole = roleRepository.findByName("ROLE_USER").orElseGet(()->{
+				return roleRepository.save( Role.builder()
+								 .name("ROLE_USER")
 								.createdBy(1)
-						.build());
+								 .build());}
+			);
 
-			}
+			List<Role> roleList  =  new ArrayList<>();
+			roleList.add(userRole);
 
-			if(userRepo.findByEmail("admin@gmail.com").isEmpty()){
+			if(userRepo.findByEmail("admin3@gmail.com").isEmpty()){
 				userRepo.save(
 						Utilisateur.builder()
 								.password(passwordEncoder.encode("admin"))
-								.email("admin@gmail.com")
-								.createdBy(1)
+								.email("admin3@gmail.com")
+								.createdBy(connectedUser.getId())
 								.enabled(true)
-								.firstname("admin")
-								.lastname("admin")
-								.phoneNum("+3355478798")
+								.firstname("Admin3")
+								.lastname("Admin")
+								.phoneNum("+3322785698")
+								.roles(roleList)
 								.build()
 				);
 			}

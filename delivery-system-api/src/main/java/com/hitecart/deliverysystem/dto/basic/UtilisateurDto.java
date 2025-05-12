@@ -1,8 +1,9 @@
 package com.hitecart.deliverysystem.dto.basic;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hitecart.deliverysystem.model.Role;
 import com.hitecart.deliverysystem.model.Utilisateur;
-import com.hitecart.deliverysystem.model.enums.RoleUtilisateur;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -25,18 +27,22 @@ public class UtilisateurDto {
     private String email;
     private String password;
     private AdresseDto address;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @Schema(type = "string", format = "date", example = "27-05-2025")
     private LocalDate dateOfBirth;
-    private RoleUtilisateur role;
     private boolean accountLocked;
     private boolean enabled;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;
     private CreatedByUserDto createdByUser;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Role> roles;
+    private List<RoleDto> rolesDto;
+    private List<NotificationDto> notificationsDtos;
 
 
 
@@ -53,8 +59,13 @@ public class UtilisateurDto {
                 .email(utilisateur.getEmail())
                 .password(utilisateur.getPassword())
                 .dateOfBirth(utilisateur.getDateOfBirth())
-                .role(utilisateur.getRole())
                 .address(AdresseDto.fromEntity(utilisateur.getAddress()))
+                .rolesDto(utilisateur.getRoles()!=null?utilisateur.getRoles().stream()
+                        .map(RoleDto::fromEntiy).collect(Collectors.toList()):null)
+                .notificationsDtos(utilisateur.getNotifications()!=null?
+                        utilisateur.getNotifications().stream()
+                                .map(NotificationDto::fromEntity)
+                                .collect(Collectors.toList()):null)
                 .createdAt(utilisateur.getCreatedAt())
                 .updatedAt(utilisateur.getUpdatedAt())
                 .build();
@@ -71,10 +82,13 @@ public class UtilisateurDto {
         utilisateur.setPhoneNum(dto.getPhoneNum());
         utilisateur.setEmail(dto.getEmail());
         utilisateur.setPassword(dto.getPassword());
-        utilisateur.setRole(dto.getRole());
         utilisateur.setAddress(AdresseDto.toEntity(dto.getAddress()));
+       utilisateur.setNotifications(dto.notificationsDtos!=null?dto.notificationsDtos.stream()
+               .map(NotificationDto::toEntity).collect(Collectors.toList()):null);
         utilisateur.setCreatedAt(dto.getCreatedAt());
         utilisateur.setUpdatedAt(dto.getUpdatedAt());
+        utilisateur.setRoles(dto.rolesDto!=null?dto.rolesDto.stream().map(
+                RoleDto::toEntiy).collect(Collectors.toList()):null);
 
         return utilisateur;
     }

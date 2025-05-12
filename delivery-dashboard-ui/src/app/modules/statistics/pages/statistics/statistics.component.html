@@ -1,0 +1,27 @@
+<!-- Statistics Cards -->
+<div class="row g-4 mb-4">
+  <div class="col-md-3" *ngFor="let stat of statistics">
+    <app-statistics-card [data]="stat"></app-statistics-card>
+  </div>
+</div>
+
+<!-- Charts -->
+<div class="row mb-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <app-chart chartId="revenueChart" [chartConfig]="revenueChartConfig"></app-chart>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <app-chart
+          chartId="deliveriesChart"
+          [chartConfig]="deliveriesChartConfig">
+        </app-chart>
+      </div>
+    </div>
+  </div>
+</div>

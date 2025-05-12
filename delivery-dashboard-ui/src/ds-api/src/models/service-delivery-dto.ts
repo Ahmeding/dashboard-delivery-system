@@ -6,6 +6,7 @@ import { CreatedByUserDto } from '../models/created-by-user-dto';
 export interface ServiceDeliveryDto {
   basicTripCost?: number;
   color?: string;
+  createdAt?: string;
   createdBy?: number;
   createdByUser?: CreatedByUserDto;
   description?: string;
@@ -14,7 +15,9 @@ export interface ServiceDeliveryDto {
   distance?: number;
   enabled?: boolean;
   id?: number;
+  lastModifiedBy?: number;
   pickUpLocation?: string;
   reference?: string;
   title?: string;
+  updatedAt?: string;
 }

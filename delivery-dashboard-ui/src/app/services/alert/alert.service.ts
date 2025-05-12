@@ -12,7 +12,7 @@ export class AlertService {
   alertInfo(message: string){
     this.toastrService.info(message , "Infos!")
   }
-  alertWaring(message: string){
+  alertWarning(message: string){
     this.toastrService.warning(message , "Warning!")
   }
   alertError(message: string){

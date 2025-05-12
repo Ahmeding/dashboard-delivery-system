@@ -4,7 +4,7 @@ import {ActivatedRoute} from "@angular/router";
 import {Chart} from "chart.js";
 import {MissionDto} from "../../../../../../ds-api/src/models/mission-dto";
 import {ChauffeurDto} from "../../../../../../ds-api/src/models/chauffeur-dto";
-import {VehiculeDto} from "../../../../../../ds-api/src/models/vehicule-dto";
+import {VehicleDto} from "../../../../../../ds-api/src/models/vehicle-dto";
 import {AlertService} from "../../../../../services/alert/alert.service";
 import {DateUtilsService} from "../../../../../services/date-utils/date-utils.service";
 
@@ -19,8 +19,8 @@ export class MissionDetailsComponent implements OnInit{
   datetime!:string
   mission:MissionDto={};
   drivers:ChauffeurDto[]=[];
-  v!:VehiculeDto;
-  vehicles:VehiculeDto[]=[];
+  v!:VehicleDto;
+  vehicles:VehicleDto[]=[];
   driversNdCars:any[]= [];
 
 constructor(
@@ -69,7 +69,7 @@ constructor(
   }*/
 
   loadMission(){
-    this.missionService.findById6({id:this.id}).subscribe(
+    this.missionService.findById7({id:this.id}).subscribe(
       {
         next:(loadedMission)=>{
           this.mission=loadedMission;

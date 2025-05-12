@@ -23,11 +23,13 @@ import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ApiModule} from "../ds-api/src/api.module";
+import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    UnauthorizedComponent,
   ],
   imports: [
 

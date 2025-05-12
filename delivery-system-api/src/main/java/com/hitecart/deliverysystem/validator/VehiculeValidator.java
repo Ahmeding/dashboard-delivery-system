@@ -1,13 +1,13 @@
 package com.hitecart.deliverysystem.validator;
 
-import com.hitecart.deliverysystem.dto.basic.VehiculeDto;
+import com.hitecart.deliverysystem.dto.basic.VehicleDto;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class VehiculeValidator {
-    public static List<String> validate(VehiculeDto dto){
+    public static List<String> validate(VehicleDto dto){
         List<String> errors= new ArrayList<>();
 
         if(dto==null){

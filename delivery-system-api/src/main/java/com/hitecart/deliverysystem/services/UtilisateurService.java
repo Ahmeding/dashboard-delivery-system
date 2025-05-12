@@ -1,6 +1,7 @@
 package com.hitecart.deliverysystem.services;
 
 import com.hitecart.deliverysystem.common.PageResponse;
+import com.hitecart.deliverysystem.dto.basic.RoleDto;
 import com.hitecart.deliverysystem.dto.basic.UtilisateurDto;
 
 import java.util.List;
@@ -13,4 +14,7 @@ public interface UtilisateurService {
     void delete(Integer id);
 
     PageResponse<UtilisateurDto> findAllUsers(int page, int size);
+
+    UtilisateurDto updateUserRoles(Integer id, List<RoleDto> rolesDto);
+    UtilisateurDto updateUserPassword(Integer userId, UtilisateurDto dto);
 }

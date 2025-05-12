@@ -1,10 +1,16 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.common.PageResponse;
+import com.hitecart.deliverysystem.dao.RoleRepository;
+import com.hitecart.deliverysystem.dto.basic.ChauffeurDto;
+import com.hitecart.deliverysystem.dto.basic.RoleDto;
 import com.hitecart.deliverysystem.dto.basic.UtilisateurDto;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
+import com.hitecart.deliverysystem.exception.InvalidOperationException;
+import com.hitecart.deliverysystem.model.Chauffeur;
+import com.hitecart.deliverysystem.model.Role;
 import com.hitecart.deliverysystem.model.Utilisateur;
 import com.hitecart.deliverysystem.dao.UtilisateurRepository;
 import com.hitecart.deliverysystem.services.UtilisateurService;
@@ -16,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,11 +36,16 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
 
     private final UtilisateurRepository utilisateurRepository;
-
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
     @Override
     public UtilisateurDto save(UtilisateurDto dto) {
         checkDto(dto,"Utilisateur n'est pas valide",
                 "l'Utilisateur n'est pas valide", ErrorCodes.UTILISATEUR_NOT_VALID_OPERATION);
+
+        Utilisateur uerToSave = UtilisateurDto.toEntity(dto);
+
+        uerToSave.setPassword(passwordEncoder.encode(dto.getPassword()));
         return UtilisateurDto.fromEntity(utilisateurRepository.
                 save(UtilisateurDto.toEntity(dto)));
     }
@@ -108,6 +120,35 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                 utilisateurs.isFirst(),
                 utilisateurs.isLast()
         );
+    }
+
+    @Override
+    public UtilisateurDto updateUserRoles(Integer userId, List<RoleDto> rolesDto) {
+        Utilisateur utilisateur = utilisateurRepository.findById(userId)
+                .orElseThrow(()-> new EntityNotFoundException( "Utilisateur not found: " + userId,ErrorCodes.UTILISATEUR_NOT_FOUND));
+
+
+                List<Role> roles = rolesDto.stream()
+            .map(roleDto ->roleRepository.findByName(roleDto.getName())
+                    .orElseThrow(()->new EntityNotFoundException("Role not found: "+ roleDto.getName(),ErrorCodes.ROLE_NOT_FOUND)))
+            .collect(Collectors.toList());
+
+            utilisateur.setRoles(roles);
+
+            Utilisateur updateUser = utilisateurRepository.save(utilisateur);
+            return UtilisateurDto.fromEntity(updateUser);
+    }
+    @Override
+    public UtilisateurDto updateUserPassword(Integer userId, UtilisateurDto dto) {
+        Utilisateur utilisateur = utilisateurRepository.findById(userId)
+                .orElseThrow(()-> new EntityNotFoundException( "Utilisateur not found: " + userId,ErrorCodes.UTILISATEUR_NOT_FOUND));
+        if(dto.getPassword() ==null){
+            throw new InvalidOperationException("Not valid password",
+                    ErrorCodes.UTILISATEUR_NOT_VALID_OPERATION);
+        }
+        utilisateur.setPassword(passwordEncoder.encode(dto.getPassword()));
+        Utilisateur updateUser = utilisateurRepository.save(utilisateur);
+        return UtilisateurDto.fromEntity(updateUser);
     }
 
     private void checkDto(UtilisateurDto dto, String msgLog, String msgException, ErrorCodes errorCodes) {

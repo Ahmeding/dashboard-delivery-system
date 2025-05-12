@@ -1,0 +1,181 @@
+<div class="trip-modal">
+  <div class="modal-header">
+    <div class="title-wrapper">
+      <div class="icon-bubble" [class.pulse]="isStartEndKm">
+        <i class="bi" [class.bi-speedometer2]="isStartEndKm" [class.bi-receipt]="!isStartEndKm"></i>
+      </div>
+      <h5 class="modal-title">
+        {{ isStartEndKm ? "Mission Mileage Update" : "Mission Expenses" }}
+      </h5>
+    </div>
+    <button type="button" class="close-btn" (click)="activeModal.dismiss()">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <!-- Mileage Form -->
+    <div *ngIf="isStartEndKm" class="mileage-form">
+      <form [formGroup]="editForm">
+        <div class="form-group">
+          <ng-container *ngIf="!isMissionStarts(mission); else showKm">
+            <div class="input-wrapper">
+              <div class="icon-prefix">
+                <i class="bi bi-flag text-primary"></i>
+              </div>
+              <input
+                type="number"
+                id="kmDebut"
+                class="form-control"
+                [class.is-invalid]=""
+                formControlName="kmDebut"
+                placeholder="Enter starting mileage"
+              >
+            </div>
+            <div class="error-message" >
+              <i class="bi bi-exclamation-triangle"></i>
+              Starting mileage is required
+            </div>
+          </ng-container>
+          <ng-template #showKm>
+            <div class="mileage-display">
+              <i class="bi bi-flag text-success"></i>
+              <span>Starting Mileage: {{mission.kmDebut}} km</span>
+            </div>
+          </ng-template>
+        </div>
+
+        <div *ngIf="isMissionStarts(mission)" class="form-group">
+          <div class="input-wrapper">
+            <div class="icon-prefix">
+              <i class="bi bi-flag-fill text-primary"></i>
+            </div>
+            <input
+              type="number"
+              id="kmFin"
+              class="form-control"
+              [class.is-invalid]=""
+              formControlName="kmFin"
+              placeholder="Enter ending mileage"
+            >
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Expenses Form -->
+    <div *ngIf="!isStartEndKm" class="expenses-form">
+      <form [formGroup]="expenseForm">
+        <div class="expense-card">
+          <div class="input-grid">
+            <div class="form-group">
+              <div class="input-wrapper">
+                <div class="icon-prefix">
+                  <i class="bi bi-tag text-primary"></i>
+                </div>
+                <select formControlName="type" class="form-select" [class.is-invalid]="isFieldInvalid(expenseForm,'type')">
+                  <option value="" disabled>Select type</option>
+                  <option *ngFor="let type of expenseTypes" [value]="type">{{type}}</option>
+                </select>
+              </div>
+              <div class="error-message" *ngIf="isFieldInvalid(expenseForm,'type')">
+                <i class="bi bi-exclamation-triangle"></i>
+                Type is required
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="input-wrapper">
+                <div class="icon-prefix">
+                  <i class="bi bi-123 text-primary"></i>
+                </div>
+                <input
+                  type="number"
+                  formControlName="quantity"
+                  class="form-control"
+                  min="1"
+                  placeholder="Quantity"
+                  [class.is-invalid]="isFieldInvalid(expenseForm,'quantity')"
+                >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="input-wrapper">
+                <div class="icon-prefix">
+                  <i class="bi bi-currency-dollar text-primary"></i>
+                </div>
+                <input
+                  type="number"
+                  formControlName="cost"
+                  class="form-control"
+                  min="0"
+                  step="0.01"
+                  placeholder="Cost"
+                  [class.is-invalid]="isFieldInvalid(expenseForm,'cost')"
+                >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="input-wrapper">
+                <div class="icon-prefix">
+                  <i class="bi bi-calendar text-primary"></i>
+                </div>
+                <input
+                  type="datetime-local"
+                  formControlName="expenseDate"
+                  class="form-control"
+                  [class.is-invalid]="isFieldInvalid(expenseForm,'expenseDate')"
+                >
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary add-btn" (click)="addExpense()">
+              <i class="bi bi-plus-lg"></i>
+            </button>
+          </div>
+
+          <div class="expenses-list">
+            <div class="expense-item" *ngFor="let exp of expensesArrayTmp; let i = index">
+              <div class="expense-info">
+                <div class="expense-type">
+                  <i class="bi bi-tag-fill text-primary"></i>
+                  <span>{{ exp.type }}</span>
+                </div>
+                <div class="expense-details">
+                  <span class="quantity">
+                    <i class="bi bi-123"></i>
+                    {{ exp.quantity }}
+                  </span>
+                  <span class="cost">
+                    <i class="bi bi-currency-dollar"></i>
+                    {{ exp.cost }}
+                  </span>
+                  <span class="date">
+                    <i class="bi bi-calendar"></i>
+                    {{ exp.expenseDate | date:'short' }}
+                  </span>
+                </div>
+              </div>
+              <button class="delete-btn" (click)="removeExpense(i)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="activeModal.dismiss()">
+      <i class="bi bi-x"></i>
+      Cancel
+    </button>
+    <button type="button" class="btn btn-primary" (click)="save()">
+      <i class="bi bi-check2"></i>
+      Save Changes
+    </button>
+  </div>
+</div>

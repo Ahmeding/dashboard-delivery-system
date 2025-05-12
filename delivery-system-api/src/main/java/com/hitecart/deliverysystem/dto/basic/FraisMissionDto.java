@@ -1,27 +1,45 @@
 package com.hitecart.deliverysystem.dto.basic;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hitecart.deliverysystem.model.FraisMission;
+import com.hitecart.deliverysystem.model.Mission;
+import com.hitecart.deliverysystem.model.enums.TypeFraisMission;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
 @Setter
-@SuperBuilder
+@Builder
+@ToString
 public class FraisMissionDto{
 
 
     private Integer id;
     private String reference;
-    private String nom;
-    private String commentaire;
-    private MissionDto missionDto;
-    private List<LigneFraisMissionDto> lignesFraisMissionDto;
+    private String name;
+    private TypeFraisMission type;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
+    private LocalDateTime expenseDate;
+    private BigDecimal quantity;
+    private BigDecimal cost;
+    private String comment;
+    private Integer missionId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime updatedAt;
     private Integer createdBy;
     private Integer lastModifiedBy;
@@ -35,15 +53,14 @@ public class FraisMissionDto{
         return FraisMissionDto.builder()
                 .id(fraisMission.getId())
                 .reference(fraisMission.getReference())
-                .nom(fraisMission.getNom())
-                .commentaire(fraisMission.getCommentaire())
-                .missionDto(MissionDto.fromEntity(fraisMission.getMission()))
-                .lignesFraisMissionDto(
-                        fraisMission.getLignesFM()!=null?
-                                fraisMission.getLignesFM().stream().
-                                        map(LigneFraisMissionDto::fromEntity)
-                                        .collect(Collectors.toList()) : null
-                )
+                .name(fraisMission.getName())
+
+                .type(fraisMission.getType())
+                .expenseDate(fraisMission.getExpenseDate())
+                .quantity(fraisMission.getQuantity())
+                .cost(fraisMission.getCost())
+                .comment(fraisMission.getComment())
+                .missionId(fraisMission.getMission()!=null?fraisMission.getMission().getId():null)
 
                 .createdAt(fraisMission.getCreatedAt())
                 .updatedAt(fraisMission.getUpdatedAt())
@@ -59,13 +76,13 @@ public class FraisMissionDto{
         FraisMission fraisMission = new FraisMission();
                 fraisMission.setId(dto.getId());
                 fraisMission.setReference(dto.getReference());
-                fraisMission.setNom(dto.getNom());
-                fraisMission.setCommentaire(dto.getCommentaire());
-                fraisMission.setMission(MissionDto.toEntity(dto.getMissionDto()));
-                fraisMission.setLignesFM(dto.getLignesFraisMissionDto()!=null?
-                        dto.getLignesFraisMissionDto().stream()
-                                .map(LigneFraisMissionDto::toEntity)
-                                .collect(Collectors.toList()) : null);
+                fraisMission.setName(dto.getName());
+                fraisMission.setComment(dto.getComment());
+                fraisMission.setType(dto.getType());
+                fraisMission.setExpenseDate(dto.getExpenseDate());
+                fraisMission.setQuantity(dto.getQuantity());
+                fraisMission.setCost(dto.getCost());
+                fraisMission.setMission(Mission.builder().id(dto.missionId).build());
 
         fraisMission.setCreatedAt(dto.getCreatedAt());
         fraisMission.setUpdatedAt(dto.getUpdatedAt());

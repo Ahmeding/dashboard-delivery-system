@@ -4,6 +4,7 @@
 
 import { CreatedByUserDto } from '../models/created-by-user-dto';
 import { EtapeDto } from '../models/etape-dto';
+import { FraisMissionDto } from '../models/frais-mission-dto';
 import { MissionVehicleDto } from '../models/mission-vehicle-dto';
 export interface MissionDto {
   commentaire?: string;
@@ -14,6 +15,7 @@ export interface MissionDto {
   dateFin?: string;
   etapeDtos?: Array<EtapeDto>;
   etatMission?: 'PLANNED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED';
+  fraisMissionDtoList?: Array<FraisMissionDto>;
   id?: number;
   idDayPlan?: number;
   idDeliveryDestination?: number;

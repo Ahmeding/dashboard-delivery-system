@@ -1,0 +1,90 @@
+{
+  "id": 7165,
+  "reference": "MIS-1743689957207",
+  "titre": "Mission Roquebrune",
+  "volume": 10,
+  "dateDebut": [
+    2025,
+    4,
+    8,
+    18,
+    0
+  ],
+  "dateFin": [
+    2025,
+    4,
+    9,
+    19,
+    0
+  ],
+  "etatMission": "PLANNED",
+  "etapeDtos": [],
+  "missionVehiclesDtos": [
+    {
+      "id": 164,
+      "missionId": 7165,
+      "vehicleDto": {
+        "id": 5,
+        "vehicleType": "VAN",
+        "immatriculation": "IK-312-JW",
+        "marque": "Mercedes-Benz",
+        "modele": "Vito"
+      },
+      "chauffeursVehicleDto": [
+        {
+          "id": 185,
+          "chauffeurId": 15,
+          "chauffeurDto": {
+            "id": 15,
+            "firstname": "Tarek",
+            "lastname": "Midouni"
+          }},
+        {
+          "id": 186,
+          "chauffeurId": 14,
+          "chauffeurDto": {
+            "id": 14,
+            "firstname": "Salim",
+            "lastname": "Brahim"
+          },
+          "missionVehicleId": 164
+        }
+      ]
+    },
+    {
+      "id": 163,
+      "missionId": 7165,
+      "vehicleDto": {
+        "id": 5,
+        "vehicleType": "VAN",
+        "immatriculation": "IK-312-JW",
+        "marque": "Mercedes-Benz",
+        "modele": "Vito"
+      },
+      "chauffeursVehicleDto": [
+        {
+          "id": 183,
+          "chauffeurId": 15,
+          "chauffeurDto": {
+            "id": 15,
+            "firstname": "Tarek",
+            "lastname": "Midouni"
+          },
+          "missionVehicleId": 163
+        },
+        {
+          "id": 184,
+          "chauffeurId": 14,
+          "chauffeurDto": {
+            "id": 14,
+            "firstname": "Salim",
+            "lastname": "Brahim"
+          },
+          "missionVehicleId": 163}
+      ]
+    }
+  ],
+  "kmDebut": 0,
+  "kmFin": 0,
+  "missionAccomplished": false
+}

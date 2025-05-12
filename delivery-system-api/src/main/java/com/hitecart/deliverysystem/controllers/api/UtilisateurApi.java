@@ -2,6 +2,7 @@ package com.hitecart.deliverysystem.controllers.api;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.basic.ChauffeurDto;
+import com.hitecart.deliverysystem.dto.basic.RoleDto;
 import com.hitecart.deliverysystem.dto.basic.UtilisateurDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -129,4 +130,21 @@ public interface UtilisateurApi {
             @RequestParam(name = "page",defaultValue = "1", required = false) int page,
             @RequestParam(name = "size",defaultValue = "10", required = false) int size
     );
+    @Operation(
+            summary = "update User Roles",
+            operationId = "updateUserRoles"   // ← stable, custom ID
+    )
+    @PatchMapping(UPDATE_UTILISATEUR_ROLES_ENDPOINT)
+    ResponseEntity<UtilisateurDto> updateUserRoles(
+            @PathVariable Integer id,
+            @RequestBody List<RoleDto> rolesDto);
+
+    @Operation(
+            summary = "update User Password",
+            operationId = "updateUserPassword"   // ← stable, custom ID
+    )
+    @PatchMapping(UPDATE_UTILISATEUR_PASS_ENDPOINT)
+    ResponseEntity<UtilisateurDto> updateUserPassword(
+            @PathVariable Integer id,
+            @RequestBody UtilisateurDto dto);
 }

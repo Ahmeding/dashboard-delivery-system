@@ -3,10 +3,13 @@ package com.hitecart.deliverysystem.dto.basic;
 import com.hitecart.deliverysystem.model.LigneDevis;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
 @Builder
 public class  LigneDevisDto {
 

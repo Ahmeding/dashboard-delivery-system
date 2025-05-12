@@ -4,15 +4,17 @@
 
 export { VehiculeService } from './services/vehicule.service';
 export { ServiceDeliveryService } from './services/service-delivery.service';
+export { NotificationService } from './services/notification.service';
+export { MissionService } from './services/mission.service';
 export { DeliveryPointService } from './services/delivery-point.service';
 export { DeliveryPointsService } from './services/delivery-points.service';
 export { ClientService } from './services/client.service';
 export { ChauffeurService } from './services/chauffeur.service';
 export { WeeklyPlanningService } from './services/weekly-planning.service';
 export { UtilisateurService } from './services/utilisateur.service';
+export { RoleService } from './services/role.service';
 export { ReparationService } from './services/reparation.service';
 export { PiecesDeRechangeService } from './services/pieces-de-rechange.service';
-export { MissionService } from './services/mission.service';
 export { FraisDeMissionService } from './services/frais-de-mission.service';
 export { EntrepriseControllerService } from './services/entreprise-controller.service';
 export { DeliveryPointCategoriesService } from './services/delivery-point-categories.service';

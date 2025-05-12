@@ -10,7 +10,7 @@
           id="nom"
           class="form-control"
           name="nom"
-          [(ngModel)]="expense.nom"
+          [(ngModel)]="expense.name"
           placeholder=" "
           required />
         <label for="nom">Name</label>
@@ -22,7 +22,7 @@
           id="commentaire"
           class="form-control"
           name="commentaire"
-          [(ngModel)]="expense.commentaire"
+          [(ngModel)]="expense.comment"
           placeholder=" "
           rows="3"
           required></textarea>
@@ -75,32 +75,12 @@
           id="mission"
           class="form-control"
           name="missionDto"
-          [(ngModel)]="expense.missionDto"
+          [(ngModel)]="expense.missionId"
           placeholder=" " >
           <option>fdgdfhfdh</option>
         </select>
         <label for="mission">Mission Title</label>
       </div>
-
-      <!-- Ligne Frais (Expense Lines) -->
-     <!-- <div class="form-group">
-        <label >Expense Lines</label>
-        <div *ngFor="let line of expense.lignesFraisMissionDto; let i = index">
-          <input
-            type="text"
-            class="form-control my-2"
-            [(ngModel)]="line.type"
-            name="lignesFrais-{{i}}"
-            placeholder="Line Detail" />
-          <input
-            type="number"
-            class="form-control my-2"
-            [(ngModel)]="line.cout"
-            name="amount-{{i}}"
-            placeholder="Amount" />
-        </div>
-      </div>-->
-
       <button
         type="submit"
         class="btn btn-primary btn-block"

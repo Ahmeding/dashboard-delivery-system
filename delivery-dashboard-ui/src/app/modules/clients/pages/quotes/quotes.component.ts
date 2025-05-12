@@ -129,7 +129,7 @@ export class QuotesComponent implements OnInit{
   }
 
   private getAllClients() {
-    this.clientService.findAll16().subscribe({
+    this.clientService.findAll17().subscribe({
       next:(clientsResponse)=>{
         this.allClients=clientsResponse;
       }
@@ -143,7 +143,7 @@ export class QuotesComponent implements OnInit{
     this.newQuote.ligneDevisDtos=this.orderlines;
     this.newQuote.etatDevis= "PENDING_APPROVAL"
     console.log(this.newQuote);
-    this.devisService.save10({body:this.newQuote}).subscribe({
+    this.devisService.save11({body:this.newQuote}).subscribe({
       next:(resp)=>{
         this.getAllQuotes();
         this.resetForm(form);
@@ -184,12 +184,12 @@ export class QuotesComponent implements OnInit{
     this.isFormAddNewSubmitted=true;
 
     if (!this.selectedServiceDelivery || !this.selectedServiceDelivery.id) {
-      this.alertService.alertWaring("Please select a service before adding")
+      this.alertService.alertWarning("Please select a service before adding")
       return;
     }
     const exists= this.orderlines.some(orderL=>orderL.serviceDeliveryDto?.id===this.selectedServiceDelivery?.id)
     if(exists){
-      this.alertService.alertWaring("This service has already been added.")
+      this.alertService.alertWarning("This service has already been added.")
       return;
     }
     const newOrdeLine :LigneDevisDto = {
@@ -223,7 +223,7 @@ export class QuotesComponent implements OnInit{
   }
 
   editQuote(id: number | undefined) {
-    this.devisService.findById10({id:id as number}).subscribe({
+    this.devisService.findById11({id:id as number}).subscribe({
       next:(quote)=>{
         this.selectedToEditQuote = quote as DevisDto;
         this.orderlines = this.selectedToEditQuote.ligneDevisDtos as Array<DevisDto>;

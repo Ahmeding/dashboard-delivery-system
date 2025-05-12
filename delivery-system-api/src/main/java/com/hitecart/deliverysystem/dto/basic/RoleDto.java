@@ -1,6 +1,7 @@
 package com.hitecart.deliverysystem.dto.basic;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hitecart.deliverysystem.model.Role;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import java.util.List;
 public class RoleDto {
 
     private String name;
+    @JsonIgnore
     private List<UtilisateurDto> users;
 
     public static RoleDto fromEntiy(Role role) {

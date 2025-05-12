@@ -23,7 +23,7 @@ export class DateUtilsService {
     return `${year}-${month}-${day}`;
   }
 
-  formatToDate(dateString: string | undefined):string{
+  formatToDateoooooooooooo(dateString: string | undefined):string{
     let convertedDate: string = '';
     if (dateString) {
       const dateArray = JSON.stringify(dateString)
@@ -66,7 +66,7 @@ export class DateUtilsService {
     }).replace(',', ''); // Remove comma between date and time
   }
 
-  formatDateTime(dateTimeString: string | undefined):string {
+  formatDateTimeooooooooooooooo(dateTimeString: string | undefined):string {
     const dateTimeStringToArray=JSON.stringify(dateTimeString)
     const dateArray =JSON.parse(dateTimeStringToArray);
     // Convert to Date
@@ -100,7 +100,7 @@ export class DateUtilsService {
     formattedDate = formattedDate.replace(',', '');
 return formattedDate;
   }
-  formatDateTimeForWeekPlanning(dateTimeString: string | undefined):string {
+  formatDateTimeForWeekPlanningooooooooooo(dateTimeString: string | undefined):string {
     const dateTimeStringToArray=JSON.stringify(dateTimeString)
     const dateArray =JSON.parse(dateTimeStringToArray);
     // Convert to Date
@@ -139,7 +139,7 @@ return formattedDate;
 
 
 
-  formatTime(dateTimeString: string | undefined):string {
+  formatTimeooooo(dateTimeString: string | undefined):string {
     const dateTimeStringToArray=JSON.stringify(dateTimeString)
     console.log("========dateTimeStringToArray================"+dateTimeStringToArray);
     const dateArray =JSON.parse(dateTimeStringToArray);
@@ -170,7 +170,7 @@ return formattedDate;
     return formattedDate;
   }
 
-  formatToTime(schedule: LocalTime | undefined) :string{
+  formatToTimeoooo(schedule: LocalTime | undefined) :string{
     console.log(schedule);
     if(!schedule) return "No schedule available";
 
@@ -184,7 +184,7 @@ return formattedDate;
   }
 
 
-  convertArrayDateToString(dateString :string|undefined):string{
+  convertArrayDateToStringoooooooo(dateString :string|undefined):string{
     const dateAsString= JSON.stringify(dateString);
     // Create a Date object
     const dateArray= JSON.parse(dateAsString);

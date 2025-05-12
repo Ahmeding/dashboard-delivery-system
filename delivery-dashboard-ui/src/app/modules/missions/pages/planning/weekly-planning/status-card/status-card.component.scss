@@ -1,0 +1,283 @@
+
+.stats-dashboard {
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    padding: 1.25rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .stat-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+
+      .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+
+        .bi {
+          opacity: 0.9;
+        }
+      }
+
+      .stat-title {
+        h5 {
+          margin: 0;
+          font-size: 1rem;
+          font-weight: 600;
+          color: var(--text-color);
+        }
+
+        .stat-period {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+        }
+      }
+    }
+
+    .stat-content {
+      .stat-metrics {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+
+        .metric {
+          text-align: center;
+
+          .metric-value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+            line-height: 1;
+            margin-bottom: 0.25rem;
+          }
+
+          .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+          }
+
+          &.success .metric-value { color: var(--success-color); }
+          &.warning .metric-value { color: var(--warning-color); }
+          &.danger .metric-value { color: var(--danger-color); }
+          &.primary .metric-value { color: var(--primary-color); }
+          &.info .metric-value { color: var(--info-color); }
+        }
+      }
+    }
+
+    // Mission-specific styles
+    &.missions {
+      .stat-icon {
+        background: rgba(var(--primary-rgb), 0.1);
+        color: var(--primary-color);
+      }
+
+      .stat-progress {
+        background: var(--bg-color);
+        height: 8px;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-top: 1rem;
+
+        .progress-bar {
+          height: 100%;
+          background: var(--primary-color);
+          border-radius: 4px;
+          transition: width 0.3s ease;
+        }
+
+        .progress-text {
+          display: block;
+          text-align: center;
+          font-size: 0.75rem;
+          color: var(--text-muted);
+          margin-top: 0.5rem;
+        }
+      }
+    }
+
+    // Vehicle-specific styles
+    &.vehicles {
+      .stat-icon {
+        background: rgba(var(--warning-rgb), 0.1);
+        color: var(--warning-color);
+      }
+
+      .vehicle-status-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+
+        .status-item {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.8rem;
+          color: var(--text-color);
+
+          i {
+            font-size: 0.6rem;
+          }
+        }
+      }
+    }
+
+    // Driver-specific styles
+    &.drivers {
+      .stat-icon {
+        background: rgba(var(--success-rgb), 0.1);
+        color: var(--success-color);
+      }
+
+      .driver-performance {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-color);
+
+        .performance-item {
+          text-align: center;
+
+          .label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+          }
+
+          .rating, .value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+
+            i {
+              color: #ffc107;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .search-section {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    padding: 1.25rem;
+
+    .search-input {
+      position: relative;
+      margin-bottom: 1rem;
+
+      i {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+      }
+
+      input {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 2.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background: var(--bg-color);
+        color: var(--text-color);
+        transition: all 0.3s ease;
+
+        &:focus {
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+        }
+
+        &::placeholder {
+          color: var(--text-muted);
+        }
+      }
+    }
+
+    .quick-filters {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+
+      .filter-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        background: var(--bg-color);
+        color: var(--text-color);
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          border-color: var(--primary-color);
+          color: var(--primary-color);
+        }
+
+        &.active {
+          background: var(--primary-color);
+          border-color: var(--primary-color);
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+// Dark theme adjustments
+:host-context(.dark-theme) {
+  .stats-dashboard {
+    .stat-card {
+      .stat-icon {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .stat-progress {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    .search-section {
+      .search-input input {
+        background: var(--bg-color);
+      }
+
+      .filter-btn {
+        background: var(--bg-color);
+
+        &.active {
+          background: var(--primary-color);
+        }
+      }
+    }
+  }
+}

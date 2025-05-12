@@ -1,10 +1,12 @@
 package com.hitecart.deliverysystem.dto.basic;
 
-import com.hitecart.deliverysystem.model.enums.RoleUtilisateur;
+import com.hitecart.deliverysystem.model.enums.RoleName;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Builder
 public class SignupRequest {
 
@@ -12,6 +14,6 @@ public class SignupRequest {
     private String lastName;
     private String email;
     private String password;
-    private RoleUtilisateur role;
+    private RoleName role;
 
 }

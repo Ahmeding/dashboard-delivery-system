@@ -34,9 +34,7 @@ export class ViewClientComponent implements OnInit{
   ) {
   }
 
-  formatDate(dateString :string):string{
-    return this.dateUtils.formatToDate(dateString);
-  }
+
   revenueChart: any;
 
   ngOnInit(): void {
@@ -50,7 +48,7 @@ export class ViewClientComponent implements OnInit{
     return this.client.firstname+" "+this.client.lastname;
   }
   private getClient() {
-    this.serviceClient.findById16({id:this.id_client}).subscribe({
+    this.serviceClient.findById17({id:this.id_client}).subscribe({
       next:(clientResp)=>{
         this.client=clientResp;
       },error:(err)=>{
@@ -113,7 +111,7 @@ export class ViewClientComponent implements OnInit{
     )
   }
   confirmDeleteDeliveryPoint(id_dpoint: number){
-    this.deliveryPointService.delete10({id:id_dpoint}).subscribe(() => {
+    this.deliveryPointService.delete11({id:id_dpoint}).subscribe(() => {
       this.getClient();
       this.alertService.alertSuccess('Deletion successfully completed');
     });

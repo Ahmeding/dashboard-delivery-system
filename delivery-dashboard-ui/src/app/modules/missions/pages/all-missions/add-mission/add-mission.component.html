@@ -114,6 +114,7 @@
           </div>
         </div>
       </div>
+
       <!-- Stages Section -->
       <div class="card stages-section">
         <div class="card-body">
@@ -307,8 +308,7 @@
                     formControlName="chauffeursVehicleDto"
                     (change)="setSelectedDrivers()"
                     [class.is-invalid]="isFieldInvalid(currentMissionVForm,'chauffeursVehicleDto') || isDriverNotAvailable"
-                    placeholder="Select drivers"
-                  >
+                    placeholder="Select drivers">
                     <ng-template ng-option-tmp let-item="item">
                       <i class="bi bi-person-circle me-2"></i>
                       {{item.firstname}} {{item.lastname}}
@@ -392,8 +392,6 @@
       </div>
     </div>
   </form>
-
-
   <footer class="form-footer">
     <button class="btn btn-primary" (click)="saveMission()">
       <i class="bi bi-save me-2"></i>Save Mission

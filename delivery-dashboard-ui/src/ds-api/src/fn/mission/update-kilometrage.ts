@@ -11,8 +11,9 @@ import { RequestBuilder } from '../../request-builder';
 import { MissionDto } from '../../models/mission-dto';
 
 export interface UpdateKilometrage$Params {
-  flag: string;
+  flag: 'START_KM' | 'END_KM';
   id: number;
+  vehicleId: number;
   kilometrage: number;
 }
 
@@ -21,6 +22,7 @@ export function updateKilometrage(http: HttpClient, rootUrl: string, params: Upd
   if (params) {
     rb.path('flag', params.flag, {});
     rb.path('id', params.id, {});
+    rb.path('vehicleId', params.vehicleId, {});
     rb.path('kilometrage', params.kilometrage, {});
   }
 
@@ -34,4 +36,4 @@ export function updateKilometrage(http: HttpClient, rootUrl: string, params: Upd
   );
 }
 
-updateKilometrage.PATH = '/missions/update/{flag}/{id}/{kilometrage}';
+updateKilometrage.PATH = '/missions/update/{flag}/{id}/{kilometrage}/{vehicleId}';

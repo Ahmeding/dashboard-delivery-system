@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {VehiculeDto} from "../../../../../../ds-api/src/models/vehicule-dto";
+import {VehicleDto} from "../../../../../../ds-api/src/models/vehicle-dto";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {ChauffeurDto} from "../../../../../../ds-api/src/models/chauffeur-dto";
 

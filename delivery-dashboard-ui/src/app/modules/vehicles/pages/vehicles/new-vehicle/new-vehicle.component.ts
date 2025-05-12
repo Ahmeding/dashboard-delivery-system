@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {VehiculeDto} from "../../../../../../ds-api/src/models/vehicule-dto";
+import {VehicleDto} from "../../../../../../ds-api/src/models/vehicle-dto";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {VehiculeService} from "../../../../../../ds-api/src/services/vehicule.service";
@@ -18,7 +18,7 @@ interface Vehicle {
   styleUrls: ['./new-vehicle.component.scss']
 })
 export class NewVehicleComponent implements OnInit{
-  vehicleValue: VehiculeDto ={};  // Input for selected vehicle when editing
+  vehicleValue: VehicleDto ={};  // Input for selected vehicle when editing
   vId:number | null=null;
   /**/
   types: string[] = [];
@@ -81,7 +81,7 @@ export class NewVehicleComponent implements OnInit{
           this.vehicleValue.datePMC = this.formatDateToSetInInputDateType(this.vehicleValue.datePMC);
           this.vehicleValue.dateExpCtrlTec = this.formatDateToSetInInputDateType(this.vehicleValue.dateExpCtrlTec);
         }
-        this.vehicleForm.patchValue(this.vehicleValue as VehiculeDto);
+        this.vehicleForm.patchValue(this.vehicleValue as VehicleDto);
         this.onTypeChange();
         this.onMarqueChange();
       },error:(err)=>{
@@ -110,7 +110,7 @@ export class NewVehicleComponent implements OnInit{
 
   onSubmit() {
     if(this.vehicleForm.valid){
-      const vData: VehiculeDto = this.vehicleForm.value;
+      const vData: VehicleDto = this.vehicleForm.value;
       if(this.vehicleValue?.id){
         this.saveVehicle(vData,"Updating","updating");
       }else{
@@ -120,7 +120,7 @@ export class NewVehicleComponent implements OnInit{
 
   }
 
-  private saveVehicle(vehicleValue: VehiculeDto, successMsg: string, errorMesg:string) {
+  private saveVehicle(vehicleValue: VehicleDto, successMsg: string, errorMesg:string) {
     this.vehicleService.save1({body:vehicleValue}).subscribe({
       next:(response)=>{
         console.log(response);

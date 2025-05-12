@@ -50,7 +50,7 @@ export class ContractsComponent implements OnInit{
 
   formatDate(dateString: string | undefined):string{
 
-   return this.dateUtilSdervice.formatToDate(dateString as string);
+   return dateString as string;
   }
 
   goToPreviousPage() {
@@ -98,7 +98,7 @@ export class ContractsComponent implements OnInit{
     this.confirmBoxService.customFour('Are you sure you want to delete this contract?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.contratService.delete12({id:contract_id}).subscribe(() => {
+          this.contratService.delete13({id:contract_id}).subscribe(() => {
             this.getAllContracts();
             this.alertService.alertSuccess('Deletion successfully completed');
           });
@@ -120,8 +120,7 @@ export class ContractsComponent implements OnInit{
   }
 
   formatDateTime(dateTimeString: string | undefined):string {
-    console.log("=================> "+JSON.stringify(dateTimeString) );
-    return this.dateUtilSdervice.formatDateTime(dateTimeString);
+    return dateTimeString as string;
   }
 
   capitalizeName(name: string | undefined) {

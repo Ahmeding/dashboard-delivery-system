@@ -72,7 +72,7 @@ export class DriversComponent implements OnInit{
         this.alertService.alertSuccess("Driver successfully deactivated");
       },
       error:(err)=>{
-        this.alertService.alertWaring("Driver deactivation failed");
+        this.alertService.alertWarning("Driver deactivation failed");
       }
     })
   }
@@ -105,7 +105,7 @@ export class DriversComponent implements OnInit{
         this.driver.address=this.address;
         this.driver.enabled=false;
         console.log(this.driver.dateOfBirth);
-        this.chauffeurService.save17({
+        this.chauffeurService.save18({
           body:this.driver
         }) .subscribe({
           next:()=>{
@@ -119,7 +119,7 @@ export class DriversComponent implements OnInit{
           }
         })
       }else{
-        this.chauffeurService.save17({
+        this.chauffeurService.save18({
           body:this.driver
         }) .subscribe({
           next:()=>{
@@ -142,7 +142,7 @@ export class DriversComponent implements OnInit{
     editForm.form.markAllAsTouched();
 
     if(editForm.valid){
-      this.chauffeurService.save17({
+      this.chauffeurService.save18({
         body:driver
       }).subscribe({
         next:(res)=>{
@@ -165,7 +165,7 @@ export class DriversComponent implements OnInit{
   }
 
   driverEdit(id: number | undefined) {
-    this.chauffeurService.findById17({
+    this.chauffeurService.findById18({
       id:id as number
     }).subscribe({
       next:(res)=>{
@@ -252,7 +252,7 @@ export class DriversComponent implements OnInit{
   }
 
   private deleteDriver(driver_id: number) {
-    this.chauffeurService.delete15({
+    this.chauffeurService.delete16({
       id:driver_id
     }).subscribe({
       next:(res)=>{
@@ -261,7 +261,7 @@ export class DriversComponent implements OnInit{
         this.alertService.alertInfo("Driver deleted successfully.")
       },error:(err)=>{
         console.log(err);
-        this.alertService.alertWaring("An error occurred while deleting the driver. Please try again.")
+        this.alertService.alertWarning("An error occurred while deleting the driver. Please try again.")
       }
     })
   }
