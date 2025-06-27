@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {MissionDto} from "../../../../../../../ds-api/src/models/mission-dto";
+import {MissionResponse} from "../../../../../../../ds-api/src/models/mission-response";
 
 @Component({
   selector: 'app-review-mission',
@@ -7,5 +7,5 @@ import {MissionDto} from "../../../../../../../ds-api/src/models/mission-dto";
   styleUrls: ['./review-mission.component.scss']
 })
 export class ReviewMissionComponent {
-  @Input() missionData!: MissionDto;
+  @Input() missionData!: MissionResponse;
 }

@@ -15,8 +15,8 @@ public class DeliveryPointContact {
     private String firstname;
     @Column(name = "lastname")
     private String lastname;
-    @Column(name = "phone_num")
-    private String phoneNum;
+    @Column(name = "phone_nbr")
+    private String phoneNbr;
     @Column(name = "email")
     private String email;
 }

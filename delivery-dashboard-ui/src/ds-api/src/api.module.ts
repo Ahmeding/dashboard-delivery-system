@@ -6,30 +6,30 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
-import { VehiculeService } from './services/vehicule.service';
-import { ServiceDeliveryService } from './services/service-delivery.service';
+import { VehicleService } from './services/vehicle.service';
 import { NotificationService } from './services/notification.service';
-import { MissionService } from './services/mission.service';
+import { DriverService } from './services/driver.service';
+import { DeliveryServiceService } from './services/delivery-service.service';
 import { DeliveryPointService } from './services/delivery-point.service';
 import { DeliveryPointsService } from './services/delivery-points.service';
 import { ClientService } from './services/client.service';
-import { ChauffeurService } from './services/chauffeur.service';
-import { WeeklyPlanningService } from './services/weekly-planning.service';
-import { UtilisateurService } from './services/utilisateur.service';
+import { UserService } from './services/user.service';
+import { StopPointService } from './services/stop-point.service';
+import { SparePartService } from './services/spare-part.service';
 import { RoleService } from './services/role.service';
-import { ReparationService } from './services/reparation.service';
-import { PiecesDeRechangeService } from './services/pieces-de-rechange.service';
-import { FraisDeMissionService } from './services/frais-de-mission.service';
-import { EntrepriseControllerService } from './services/entreprise-controller.service';
+import { RepairService } from './services/repair.service';
+import { QuoteService } from './services/quote.service';
+import { OrderService } from './services/order.service';
+import { MissionsAssignmentService } from './services/missions-assignment.service';
+import { MissionService } from './services/mission.service';
+import { MissionExpenseService } from './services/mission-expense.service';
+import { FeedbackService } from './services/feedback.service';
 import { DeliveryPointCategoriesService } from './services/delivery-point-categories.service';
-import { DevisService } from './services/devis.service';
 import { DeliveryDestinationService } from './services/delivery-destination.service';
-import { DayPlanService } from './services/day-plan.service';
-import { ContratService } from './services/contrat.service';
-import { CommandeClientService } from './services/commande-client.service';
+import { EmploymentContractService } from './services/employment-contract.service';
+import { CompanyControllerService } from './services/company-controller.service';
 import { AuthenticationEnregistrementService } from './services/authentication-enregistrement.service';
-import { UserControllerService } from './services/user-controller.service';
-import { AdminControllerService } from './services/admin-controller.service';
+import { MissionStartEndService } from './services/mission-start-end.service';
 
 /**
  * Module that provides all services and configuration.
@@ -39,30 +39,30 @@ import { AdminControllerService } from './services/admin-controller.service';
   exports: [],
   declarations: [],
   providers: [
-    VehiculeService,
-    ServiceDeliveryService,
+    VehicleService,
     NotificationService,
-    MissionService,
+    DriverService,
+    DeliveryServiceService,
     DeliveryPointService,
     DeliveryPointsService,
     ClientService,
-    ChauffeurService,
-    WeeklyPlanningService,
-    UtilisateurService,
+    UserService,
+    StopPointService,
+    SparePartService,
     RoleService,
-    ReparationService,
-    PiecesDeRechangeService,
-    FraisDeMissionService,
-    EntrepriseControllerService,
+    RepairService,
+    QuoteService,
+    OrderService,
+    MissionsAssignmentService,
+    MissionService,
+    MissionExpenseService,
+    FeedbackService,
     DeliveryPointCategoriesService,
-    DevisService,
     DeliveryDestinationService,
-    DayPlanService,
-    ContratService,
-    CommandeClientService,
+    EmploymentContractService,
+    CompanyControllerService,
     AuthenticationEnregistrementService,
-    UserControllerService,
-    AdminControllerService,
+    MissionStartEndService,
     ApiConfiguration
   ],
 })

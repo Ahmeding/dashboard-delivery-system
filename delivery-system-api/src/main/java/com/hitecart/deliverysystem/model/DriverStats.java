@@ -1,5 +1,7 @@
 package com.hitecart.deliverysystem.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -13,7 +15,9 @@ import java.time.LocalDateTime;
 /**
  * Tracks driver mission statistics
  */
-@Getter @Setter
+@Getter
+@SuperBuilder
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper= false)
@@ -26,18 +30,23 @@ public class DriverStats implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @CreatedDate
-    @Column(name = "createdat", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
+
     @LastModifiedDate
-    @Column(name = "updatedat")
+    @Column(name = "updated_at")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedAt;
     private int longTrips;
     private int standardTrips;
 
     @OneToOne
-    @JoinColumn(name = "chauffeur_id", unique = true)
-    private Chauffeur chauffeur; // Link to driver
+    @JoinColumn(name = "driver_id", unique = true)
+    @JsonIgnore // Add this annotation
+    private Driver driver; // Link to driver
 
     public void incrementLongTrips() { longTrips++; }
     public void incrementStandardTrips() { standardTrips++; }

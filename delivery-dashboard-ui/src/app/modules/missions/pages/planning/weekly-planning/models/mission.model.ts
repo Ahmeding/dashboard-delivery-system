@@ -1,4 +1,3 @@
-import {MissionDto} from "../../../../../../../ds-api/src/models/mission-dto";
 import {MissionResponse} from "../../../../../../../ds-api/src/models/mission-response";
 
 export interface Vehicle {

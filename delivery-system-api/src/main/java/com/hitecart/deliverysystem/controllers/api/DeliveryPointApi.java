@@ -1,7 +1,8 @@
 package com.hitecart.deliverysystem.controllers.api;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.basic.DeliveryPointDto;
+import com.hitecart.deliverysystem.dto.deliverypoint.DeliveryPointRequest;
+import com.hitecart.deliverysystem.dto.deliverypoint.DeliveryPointResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,7 +17,7 @@ import java.util.List;
 import static com.hitecart.deliverysystem.utils.Constants.*;
 
 @RequestMapping(DELIVERY_POINT_ENDPOINT)
-@Tag(name = "delivery-points")
+@Tag(name = "Delivery Points")
 public interface DeliveryPointApi {
 
     @PostMapping(
@@ -24,7 +25,8 @@ public interface DeliveryPointApi {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @Operation(
+    @Operation(operationId = "saveDeliveryPoint",
+
             description = "Ajouter/Modifier un deliveryPoint, cette methode permet " +
                     "d'enregistrer ou modifier un deliveryPoint",
             responses = {
@@ -33,21 +35,47 @@ public interface DeliveryPointApi {
                             description = "L'objet DeliveryPoint a été créé / modifié",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = DeliveryPointDto.class))
+                                    schema = @Schema(implementation = DeliveryPointResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "400",
                             description = "L'objet DeliveryPoint n'est pas valide",
                             content = @Content(mediaType = "application/json"))
             })
-    ResponseEntity<DeliveryPointDto> save(@RequestBody DeliveryPointDto dto);
+    ResponseEntity<DeliveryPointResponse> saveDeliveryPoint(@RequestBody DeliveryPointRequest dto);
+
+    @PatchMapping(
+            value = UPDATE_DELIVERY_POINT_ENDPOINT,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(operationId = "updateDeliveryPointInfo",
+
+            description = "Ajouter/Modifier un deliveryPoint, cette methode permet " +
+                    "d'enregistrer ou modifier un deliveryPoint",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "L'objet DeliveryPoint a été créé / modifié",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = DeliveryPointResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "L'objet DeliveryPoint n'est pas valide",
+                            content = @Content(mediaType = "application/json"))
+            })
+    ResponseEntity<DeliveryPointResponse> updateDeliveryPointInfo(
+            @PathVariable("deliveryPointId")Integer deliveryPointId,@RequestBody DeliveryPointRequest deliveryPointRequest);
 
     @GetMapping(
             value = FIND_DELIVERY_POINT_BY_ID_ENDPOINT,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
 
-    @Operation(
+    @Operation(operationId = "findDeliveryPointById",
+
             description = "Rechercher un DeliveryPoint par ID! Cette methode permet de chercher un deliveryPoint par son ID",
             responses = {
                     @ApiResponse(
@@ -67,12 +95,14 @@ public interface DeliveryPointApi {
                     )
             }
     )
-    ResponseEntity<DeliveryPointDto> findById(@PathVariable("id") Integer id);
+    ResponseEntity<DeliveryPointResponse> findDeliveryPointById(@PathVariable("id") Integer id);
+
     @GetMapping(
             value = FIND_DELIVERY_POINT_BY_CITY_ENDPOINT,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @Operation(
+    @Operation(operationId = "findAllDeliveryPointByCity",
+
             description = "Rechercher un DeliveryPoint par son email ID! Cette methode permet de chercher un deliveryPoint par son email",
             responses = {
                     @ApiResponse(
@@ -92,12 +122,13 @@ public interface DeliveryPointApi {
                     )
             }
     )
-    ResponseEntity<List<DeliveryPointDto>> findAllByCity(@PathVariable("city") String city);
+    ResponseEntity<List<DeliveryPointResponse>> findAllDeliveryPointByCity(@PathVariable("city") String city);
     @GetMapping(
             value = FIND_ALL_DELIVERY_POINT_ENDPOINT,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @Operation(
+    @Operation(operationId = "findAllDeliveryPoint",
+
             description = "Rechercher tout les DeliveryPoint! Cette methode permet de retouner tous les deliveryPoints",
             responses = {
                     @ApiResponse(
@@ -109,13 +140,16 @@ public interface DeliveryPointApi {
                     )
             }
     )
-    ResponseEntity<List<DeliveryPointDto>> findAll();
+    ResponseEntity<List<DeliveryPointResponse>> findAllDeliveryPoint();
 
     @PutMapping(value = UPDATE_ISACTIVE_DELIVERY_POINT_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<DeliveryPointDto> updateIsActive(@PathVariable("id") Integer id, @PathVariable("isactive") Boolean isActive);
+    @Operation(operationId = "updateDeliveryPointIsActive"
+    )
+    ResponseEntity<DeliveryPointResponse> updateDeliveryPointIsActive(@PathVariable("id") Integer id, @PathVariable("isactive") Boolean isActive);
 
     @DeleteMapping(value = DELETE_DELIVERY_POINT_ENDPOINT)
-    @Operation(
+    @Operation(operationId = "deleteDeliveryPoint",
+
             description = "Supprimer un DeliveryPoint par ID! Cette methode permet de suprimmer un deliveryPoint par son ID",
             responses = {
                     @ApiResponse(
@@ -134,11 +168,13 @@ public interface DeliveryPointApi {
                     )
             }
     )
-    void delete(@PathVariable("id") Integer id);
+    ResponseEntity<?> deleteDeliveryPoint(@PathVariable("id") Integer id);
 
     @GetMapping(value =FIND_ALL_DELIVERY_POINT_PAGEABLE_ENDPOINT,
             produces =MediaType.APPLICATION_JSON_VALUE  )
-    ResponseEntity<PageResponse<DeliveryPointDto>> findAllDeliveryPoints(
+    @Operation(operationId = "findAllDeliveryPointsPageable"
+)
+    ResponseEntity<PageResponse<DeliveryPointResponse>> findAllDeliveryPointsPageable(
       @RequestParam(name = "page",defaultValue = "1", required = false) int page,
       @RequestParam(name = "size",defaultValue = "10", required = false) int size
     );

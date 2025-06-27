@@ -64,24 +64,24 @@
             <tbody>
             <tr  *ngFor="let mission of allMyMissionsResponse.content">
               <td>{{ mission.id }}</td>
-              <td>{{ mission.titre }}</td>
+              <td>{{ mission.title }}</td>
               <td>
-                <div *ngIf="mission.missionVehiclesDtos?.length">
-                  <div *ngFor="let mvehicle of mission.missionVehiclesDtos">
-                    <div *ngFor="let driver of mvehicle.chauffeursVehicleDto" style="margin-bottom: 5px;">
-                      <span class="badge bg-success">{{ driver.chauffeurDto?.lastname }} {{ driver.chauffeurDto?.firstname }}</span>
+                <div *ngIf="mission.missionVehicles?.length">
+                  <div *ngFor="let mvehicle of mission.missionVehicles">
+                    <div *ngFor="let driver of mvehicle.driverVehicles" style="margin-bottom: 5px;">
+                      <span class="badge bg-success">{{ "driver.driverId?.lastname" }} {{ "driver.driverId?.firstname "}}</span>
                     </div>
                   </div>
                 </div>
               </td>
               <td>
-                <div *ngIf="mission.missionVehiclesDtos?.length">
-                  <div *ngFor="let vehicle of mission.missionVehiclesDtos">
+                <div *ngIf="mission.missionVehicles?.length">
+                  <div *ngFor="let vehicle of mission.missionVehicles">
                     <div class="license-plate-container">
                       <!-- License Plate Background Image -->
                       <img src="assets/images/immat.png" alt="License Plate" class="license-plate-bg" width="90">
                       <div class="registration-number">
-                        {{ vehicle.vehicleDto?.immatriculation }}
+                        {{ "vehicle.vehicleId?.immatriculation" }}
                       </div>
                     </div>
                   </div>
@@ -90,8 +90,8 @@
 
               </td>
               <td><span class="badge bg-primary">{{ mission.volume }} m<sup>3</sup></span> </td>
-              <td><span class="badge bg-warning">{{ mission.etatMission }}</span></td>
-              <td>{{ mission.dateDebut }}</td>
+              <td><span class="badge bg-warning">{{ mission.missionStatus }}</span></td>
+              <td>{{ mission.startDate }}</td>
               <td class="text-center" style="cursor: pointer">
                 <i class="fas fa-pencil-alt ml-0" (click)="misionEdit(mission.id)" data-bs-toggle="modal"
                    data-bs-target="#missionUpdateModal" title="Modify"></i>

@@ -11,8 +11,6 @@ import {Router} from "@angular/router";
 import {DateUtilsService} from "../../../../../services/date-utils/date-utils.service";
 import {MissionResponse} from "../../../../../../ds-api/src/models/mission-response";
 
-
-
 @Component({
   selector: 'app-weekly-planning',
   templateUrl: './weekly-planning.component.html',
@@ -97,7 +95,7 @@ export class WeeklyPlanningComponent implements  OnInit {
         }
       });*/
 
-        this.missionService.findAll7().subscribe({
+        this.missionService.findAllMission().subscribe({
           next:(allMissions)=>{
 
             console.log(allMissions.length);
@@ -118,7 +116,7 @@ export class WeeklyPlanningComponent implements  OnInit {
     this.weekDays.forEach(day => day.missions = []);
     // Filter missions based on search text
     const filteredMissions = missions.filter(mission =>
-      mission.titre?.toLowerCase().includes(this.filterText)
+      mission.title?.toLowerCase().includes(this.filterText)
     );
     // Distribute missions to appropriate days
     /*filteredMissions.forEach(mission => {
@@ -133,8 +131,8 @@ export class WeeklyPlanningComponent implements  OnInit {
     // Distribute missions to appropriate days
     missions.forEach(mission => {
       //const missionDate = new Date(this.dateService.convertArrayDateToString(mission.dateDebut));
-   if(mission.dateDebut){
-     const missionDate = new Date(mission.dateDebut);
+   if(mission.startDate){
+     const missionDate = new Date(mission.startDate);
      const dayIndex = this.weekDays.findIndex(day =>
        day.date.toDateString() === missionDate.toDateString()
      );
@@ -147,8 +145,8 @@ export class WeeklyPlanningComponent implements  OnInit {
     // Sort missions by time for each day
     this.weekDays.forEach(day => {
       day.missions.sort((a, b) =>
-        new Date(a.dateDebut ?? '').getTime() -
-        new Date(b.dateDebut?? '').getTime()
+        new Date(a.startDate ?? '').getTime() -
+        new Date(b.startDate?? '').getTime()
       );
     });
   }

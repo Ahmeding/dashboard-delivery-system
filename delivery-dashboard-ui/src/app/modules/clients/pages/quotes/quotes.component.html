@@ -41,9 +41,9 @@
             <tr *ngFor="let quoteItem of allQuotesResponse.content">
               <td>{{ quoteItem.code }}</td>
               <td>{{quoteItem.client?.firstname}}&nbsp;{{quoteItem.client?.lastname}}</td>
-              <td>{{converteDateTime(quoteItem.dateDevis) | date: "dd-MM-yyyy hh:mm"}}</td>
-              <td>{{ quoteItem.etatDevis }}</td>
-              <td>{{ quoteItem.createdByUser?.fullname }}</td>
+              <td>{{converteDateTime(quoteItem.quoteDate) | date: "dd-MM-yyyy hh:mm"}}</td>
+              <td>{{ quoteItem.quoteStatus }}</td>
+              <td>{{ "quoteItem.createdByUser?.fullname "}}</td>
               <td>{{converteDateTime(quoteItem.createdAt) | date: "dd-MM-yyyy hh:mm"}}</td>
               <td><i class="bi bi-pen text-warning mr-2" data-toggle="modal"
                      data-target="#editQuoteModal" (click)="editQuote(quoteItem.id)" title="Modify"></i>
@@ -149,7 +149,8 @@
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
                     <select id="inputClient" [(ngModel)]="newQuote.clientId"
-                            [ngClass]="{'is-invalid':isFormAddNewSubmitted && form.controls['selectClient'].invalid}"
+                            [ngClass]="{'is-invalid':isFormAddNewSubmitted &&
+                            form.controls['selectClient'].invalid}"
                             class="form-select" name="selectClient" required>
                       <option [ngValue]="undefined" class="text-primary"
                               selected disabled>Select client</option>
@@ -161,7 +162,7 @@
                 </div>
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="newQuote.dateDevis"
+                    <input  [(ngModel)]="newQuote.quoteDate"
                             [ngClass]="{'is-invalid': isFormAddNewSubmitted && form.controls['orderdate'].invalid}"
                             name="orderdate" class="form-control" id="inputQuoteDate" type="datetime-local" placeholder="Date"  required/>
                     <label for="inputQuoteDate">Date</label>
@@ -177,13 +178,13 @@
                     <select id="inputServiceDelivery"
                             [(ngModel)]="selectedServiceDelivery"
                             (ngModelChange)="onServiceDeliveryChange()"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && (form.controls['serviceDelivery'].invalid)}"
-                            class="form-select" name="serviceDelivery">
+                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && (form.controls['deliveryService'].invalid)}"
+                            class="form-select" name="deliveryService">
                       <option [ngValue]="undefined" class="text-primary" selected disabled>Select Service</option>
-                      <option *ngFor="let serviceDelivery of allServiceDeliveries" [ngValue]="serviceDelivery">{{serviceDelivery.title}} &nbsp; ({{serviceDelivery.description}})</option>
+                      <option *ngFor="let deliveryService of allServiceDeliveries" [ngValue]="deliveryService">{{deliveryService.title}} &nbsp; ({{deliveryService.description}})</option>
                     </select>
                     <label for="inputServiceDelivery">Select Serive</label>
-                    <small *ngIf="isFormAddNewSubmitted && (form.controls['serviceDelivery']?.invalid)" class="text-danger">Service is required</small>
+                    <small *ngIf="isFormAddNewSubmitted && (form.controls['deliveryService']?.invalid)" class="text-danger">Service is required</small>
                   </div>
                 </div>
                 <div class="col-md-1">
@@ -206,9 +207,9 @@
                   <th>Tva</th>
                   <th>Action</th>
 
-                  <tr *ngFor="let orderL of orderlines; let i = index">
-                    <td>{{ orderL.serviceDeliveryDto?.reference }}</td>
-                    <td>{{ orderL.serviceDeliveryDto?.title }} &nbsp; {{ orderL.serviceDeliveryDto?.description }}</td>
+                  <tr *ngFor="let orderL of quotelines; let i = index">
+                    <td>{{ orderL.deliveryServiceId }}</td>
+                    <td>{{ "orderL.serviceDeliveryDto?.title" }} &nbsp; {{ "orderL.serviceDeliveryDto?.description" }}</td>
                     <td><select (change)="onQteChange($event,i)"
                                 id="selectQte" class="form-select qte-select" name="qte">
                       <option [ngValue]="1">1</option>
@@ -241,6 +242,7 @@
 </div>
 <!--edit client modal-->
 
+<!--
 <div class="modal fade" id="editQuoteModal" tabindex="-1" aria-labelledby="orderEditModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
@@ -254,7 +256,7 @@
         <div class="card mb-4">
           <div class="card-body">
             <form #editForm="ngForm">
-              <!-- ligne 1-->
+              &lt;!&ndash; ligne 1&ndash;&gt;
               <div class="row mb-3">
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
@@ -267,7 +269,7 @@
                 </div>
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
-                    <select id="inputEditClient" [(ngModel)]="selectedToEditQuote.clientId"
+                    <select id="inputEditClient" [(ngModel)]="selectedToEditQuote.client?.id"
                             [ngClass]="{'is-invalid':isFormAddNewSubmitted && editForm.controls['selectClient'].invalid}"
                             class="form-select" name="selectClient" required>
                       <option [ngValue]="undefined" class="text-primary"
@@ -280,7 +282,7 @@
                 </div>
                 <div class="col-md-4">
                   <div class="form-floating mb-3 mb-md-0">
-                    <input  [(ngModel)]="selectedToEditQuote.dateDevis"
+                    <input  [(ngModel)]="selectedToEditQuote.quoteDate"
                             [ngClass]="{'is-invalid': isFormAddNewSubmitted && editForm.controls['orderdate'].invalid}"
                             name="orderdate" class="form-control" id="inputEditQuoteDate" type="datetime-local" placeholder="Date"  required/>
                     <label for="inputQuoteDate">Date</label>
@@ -289,20 +291,20 @@
                 </div>
               </div>
 
-              <!-- ligne 2-->
+              &lt;!&ndash; ligne 2&ndash;&gt;
               <div class="row mb-3">
                 <div class="col-md-11">
                   <div class="form-floating mb-3 mb-md-0">
                     <select id="inputEditServiceDelivery"
                             [(ngModel)]="selectedServiceDelivery"
                             (ngModelChange)="onServiceDeliveryChange()"
-                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && (editForm.controls['serviceDelivery'].invalid)}"
-                            class="form-select" name="serviceDelivery">
+                            [ngClass]="{'is-invalid': isFormAddNewSubmitted && (editForm.controls['deliveryService'].invalid)}"
+                            class="form-select" name="deliveryService">
                       <option [ngValue]="undefined" class="text-primary" selected disabled>Select Service</option>
-                      <option *ngFor="let serviceDelivery of allServiceDeliveries" [ngValue]="serviceDelivery">{{serviceDelivery.title}} &nbsp; ({{serviceDelivery.description}})</option>
+                      <option *ngFor="let deliveryService of allServiceDeliveries" [ngValue]="deliveryService">{{deliveryService.title}} &nbsp; ({{deliveryService.description}})</option>
                     </select>
                     <label for="inputServiceDelivery">Select Serive</label>
-                    <small *ngIf="isFormAddNewSubmitted && (editForm.controls['serviceDelivery']?.invalid)" class="text-danger">Service is required</small>
+                    <small *ngIf="isFormAddNewSubmitted && (editForm.controls['deliveryService']?.invalid)" class="text-danger">Service is required</small>
                   </div>
                 </div>
                 <div class="col-md-1">
@@ -313,7 +315,7 @@
               </div>
 
 
-              <!-- ligne 3-->
+              &lt;!&ndash; ligne 3&ndash;&gt;
               <div class="row mb-3">
 
                 <table class="table table-hover">
@@ -325,9 +327,9 @@
                   <th>Tva</th>
                   <th>Action</th>
 
-                  <tr *ngFor="let orderL of orderlines; let i = index">
-                    <td>{{ orderL.serviceDeliveryDto?.reference }}</td>
-                    <td>{{ orderL.serviceDeliveryDto?.title }} &nbsp; {{ orderL.serviceDeliveryDto?.description }}</td>
+                  <tr *ngFor="let orderL of quotelines; let i = index">
+                    <td>{{ "orderL.deliveryServiceId?.reference" }}</td>
+                    <td>{{" orderL.serviceDeliveryDto?.title" }} &nbsp; {{ "orderL.serviceDeliveryDto?.description" }}</td>
                     <td><select (change)="onQteChange($event,i)"
                                 id="selectEditQte" class="form-select qte-select" name="qte">
                       <option [ngValue]="1">1</option>
@@ -358,7 +360,9 @@
     </div>
   </div>
 </div>
+-->
 <!--info modal-->
+<!--
 <div class="modal fade" id="infoQuoteModal" tabindex="-1" aria-labelledby="infoQuoteModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
@@ -373,7 +377,7 @@
           <h1>Quote</h1>
           <div class="invoice-meta">
             <div><strong>Quote No:</strong>{{ selectedQuote.code }}</div>
-            <div><strong>Date:</strong> <!--{{converteDateTime(selectedQuote.dateCommnde) | date: "dd-MM-yyyy hh:mm"}}--></div>
+            <div><strong>Date:</strong> &lt;!&ndash;{{converteDateTime(selectedQuote.dateCommnde) | date: "dd-MM-yyyy hh:mm"}}&ndash;&gt;</div>
           </div>
         </header>
 
@@ -389,19 +393,19 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let orderl of selectedQuote?.ligneDevisDtos">
-            <td>{{ orderl.serviceDeliveryDto?.title }}</td>
-            <td>{{ orderl.quantite }}</td>
-            <td>{{ orderl.prixUnitaire }}€</td>
-            <td>{{ orderl.prixTTC}}€</td>
-            <td>{{ calculTotalLigne(orderl.quantite , orderl.prixTTC)}}€</td>
+          <tr *ngFor="let orderl of selectedQuote?.quoteLines">
+            <td>{{ "orderl.serviceDeliveryDto?.title" }}</td>
+            <td>{{ "orderl.quantite "}}</td>
+            <td>{{ "orderl.prixUnitaire" }}€</td>
+            <td>{{ "orderl.prixTTC"}}€</td>
+            <td>{{ calculTotalLigne(orderl?.quantity , orderl?.ttcPrice)}}€</td>
           </tr>
 
           </tbody>
         </table>
 
         <footer class="invoice-footer">
-          <div><strong>Total:</strong> {{selectedQuote.montantTotalTTC}}€</div>
+          <div><strong>Total:</strong> {{selectedQuote.totalAmountTTC}}€</div>
         </footer>
       </div>
       <div class="modal-footer">
@@ -411,3 +415,4 @@
   </div>
 </div>
 
+-->

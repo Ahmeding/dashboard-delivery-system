@@ -13,7 +13,7 @@
       <div class="form-group">
         <select
           (change)="setAddressLocation(destinationForm.get('serviceDeliveryId')?.value)"
-          id="serviceDelivery"
+          id="deliveryService"
           class="form-select"
           formControlName="serviceDeliveryId"
           [class.is-invalid]="destinationForm.get('serviceDeliveryId')?.invalid
@@ -24,7 +24,7 @@
             {{service.title}}
           </option>
         </select>
-        <label for="serviceDelivery">
+        <label for="deliveryService">
           <i class="bi bi-truck"></i>
           Service Delivery
         </label>
@@ -55,11 +55,12 @@
             <tr *ngFor="let point of deliveryPoints; let i = index">
               <td>{{point.name}}</td>
               <td>
-                  <span class="badge" [class.bg-primary]="point.deliveryPointType === 'SHOP'" [class.bg-success]="point.deliveryPointType === 'DEPOT'">
-                    {{point.deliveryPointType}}
+                  <span class="badge" [class.bg-primary]="point.type === 'SHOP'"
+                        [class.bg-success]="point.type === 'DEPOT'">
+                    {{point.type}}
                   </span>
               </td>
-              <td>{{point.addressDto?.ville}}</td>
+              <td>{{point.address?.city}}</td>
               <td>
                 <div class="contact-info">
                   <span>{{point.contact?.firstname}} {{point.contact?.lastname}}</span>

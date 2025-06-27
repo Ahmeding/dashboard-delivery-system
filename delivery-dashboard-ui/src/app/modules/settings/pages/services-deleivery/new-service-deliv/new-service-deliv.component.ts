@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, NgForm, Validators} from "@angular/forms";
-import {ServiceDeliveryDto} from "../../../../../../ds-api/src/models/service-delivery-dto";
 import {Router} from "@angular/router";
-import {ServiceDeliveryService} from "../../../../../../ds-api/src/services/service-delivery.service";
 import {AlertService} from "../../../../../services/alert/alert.service";
-import {DeliveryPointDto} from "../../../../../../ds-api/src/models/delivery-point-dto";
+import {DeliveryServiceRequest} from "../../../../../../ds-api/src/models/delivery-service-request";
+import {DeliveryPointRequest} from "../../../../../../ds-api/src/models/delivery-point-request";
+import {DeliveryPointResponse} from "../../../../../../ds-api/src/models/delivery-point-response";
+import {DeliveryServiceService} from "../../../../../../ds-api/src/services/delivery-service.service";
 
 @Component({
   selector: 'app-new-service-deliv',
@@ -13,16 +14,16 @@ import {DeliveryPointDto} from "../../../../../../ds-api/src/models/delivery-poi
 })
 export class NewServiceDelivComponent implements OnInit{
 
-  service: ServiceDeliveryDto={};
+  service!: DeliveryServiceRequest;
   serviceDeliveryForm!: FormGroup;
-  deliveryPoints: DeliveryPointDto[] = [];
+  deliveryPoints: DeliveryPointResponse[] = [];
   isEditing = false;
 
   constructor(
     private alertService:AlertService,
     private router:Router,
     private fb: FormBuilder,
-    private serviceDlvService:ServiceDeliveryService) {
+    private serviceDlvService:DeliveryServiceService) {
   }
   ngOnInit(): void {
     this.initForm();
@@ -33,8 +34,8 @@ export class NewServiceDelivComponent implements OnInit{
   loadDeliveryPoints(): void {
     // Implement API call to load delivery points
     this.deliveryPoints = [
-      { id: 1, name: 'SHOP',  deliveryPointType: 'SHOP' },
-      { id: 2, name: 'DEPOT',  deliveryPointType: 'DEPOT' }
+     /* { id: 1, name: 'SHOP',  deliveryPointType: 'SHOP' },
+      { id: 2, name: 'DEPOT',  deliveryPointType: 'DEPOT' }*/
     ];
   }
 
@@ -64,8 +65,8 @@ export class NewServiceDelivComponent implements OnInit{
   }
 
 
-  saveNewDeliveryService(formValue: ServiceDeliveryDto){
-    this.serviceDlvService.save3({body:formValue}).subscribe({
+  saveNewDeliveryService(formValue: DeliveryServiceRequest){
+    this.serviceDlvService.saveDeliveryService({body:formValue}).subscribe({
       next:(response)=>{
         console.log(response);
         this.router.navigate(['settings','services']);

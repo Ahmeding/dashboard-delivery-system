@@ -1,12 +1,10 @@
 package com.hitecart.deliverysystem.controllers.api;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.basic.EtapeDto;
-import com.hitecart.deliverysystem.dto.basic.FraisMissionDto;
-import com.hitecart.deliverysystem.dto.basic.MissionDto;
-import com.hitecart.deliverysystem.dto.basic.MissionResponse;
-import com.hitecart.deliverysystem.model.enums.EtatMission;
-import com.hitecart.deliverysystem.model.enums.KmFlag;
+import com.hitecart.deliverysystem.dto.mission.MissionRequest;
+import com.hitecart.deliverysystem.dto.mission.MissionResponse;
+import com.hitecart.deliverysystem.dto.missionexpense.MissionExpenseRequest;
+import com.hitecart.deliverysystem.dto.stoppoint.StopPointRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,7 +26,7 @@ import static com.hitecart.deliverysystem.utils.Constants.*;
 public interface MissionApi {
 
     @PostMapping(value = CREATE_MISSION_ENDPOINT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(
+    @Operation(operationId = "saveMission",
             description = "Ajouter/Modifier une mission, cette methode permet " +
                     "d'enregistrer ou modifier une mission",
             responses = {
@@ -37,7 +35,7 @@ public interface MissionApi {
                             description = "L'objet Mission a été créé / modifié",
                             content = @Content(
                                     mediaType = "application/json"
-                                    //schema = @Schema(implementation = MissionDto.class)
+                                    //schema = @Schema(implementation = MissionFullDto.class)
                             )
                     ),
                     @ApiResponse(
@@ -45,10 +43,10 @@ public interface MissionApi {
                             description = "L'objet Mission n'est pas valide",
                             content = @Content(mediaType = "application/json"))
             })
-    ResponseEntity<MissionDto> save(@RequestBody MissionDto request);
+    ResponseEntity<MissionResponse> saveMission(@RequestBody MissionRequest missionRequest);
 
-    @PutMapping(value = UPDATE_MISSION_ENDPOINT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(
+    @PatchMapping(value = UPDATE_MISSION_ENDPOINT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(operationId = "updateMissionInfo",
             description = "Modifier une mission, cette methode permet " +
                     "modifier une mission",
             responses = {
@@ -57,7 +55,7 @@ public interface MissionApi {
                             description = "L'objet Mission a été créé / modifié",
                             content = @Content(
                                     mediaType = "application/json"
-                                    //schema = @Schema(implementation = MissionDto.class)
+                                    //schema = @Schema(implementation = MissionFullDto.class)
                             )
                     ),
                     @ApiResponse(
@@ -65,12 +63,11 @@ public interface MissionApi {
                             description = "L'objet Mission n'est pas valide",
                             content = @Content(mediaType = "application/json"))
             })
-    ResponseEntity<MissionDto> update(@PathVariable("id") Integer idMission,@RequestBody MissionDto request);
+    ResponseEntity<MissionResponse> updateMissionInfo(@PathVariable("missionId") Integer missionId,@RequestBody MissionRequest missionRequest);
 
     @PatchMapping(value = UPDATE_EXPENSES_MISSION_ENDPOINT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(
+    @Operation(operationId = "updateExpensesMission",
             summary = "update Expenses Mission",
-            operationId = "updateExpensesMission",
             description = "Modifier l'etat d'une mission, cette methode permet " +
                     "modifier l'etat d' une mission",
             responses = {
@@ -79,20 +76,19 @@ public interface MissionApi {
                             description = "Le frais de l' objet Mission a été modifié",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = MissionDto.class))
+                                    schema = @Schema(implementation = MissionResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "400",
                             description = "L'etat de l'objet Mission n'est pas valide",
                             content = @Content(mediaType = "application/json"))
             })
-    ResponseEntity<MissionDto> updateExpensesMission(@PathVariable("id") Integer idMission, @RequestBody  List<FraisMissionDto> expensesDto) ;
+    ResponseEntity<MissionResponse> updateExpensesMission(@PathVariable("id") Integer idMission, @RequestBody  List<MissionExpenseRequest> missionExpenseRequests) ;
 
-    @PatchMapping(value = UPDATE_ETAPES_MISSION_ENDPOINT, consumes = MediaType.APPLICATION_JSON_VALUE,
+    @PatchMapping(value = UPDATE_STOP_POINT_MISSION_ENDPOINT, consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(
+    @Operation(operationId = "updateStopPointMission",
             summary = "update Etapes Mission",
-            operationId = "updateEtapeMission",
             description = "Modifier l'etat d'une mission, cette methode permet " +
                     "modifier l'etat d' une mission",
             responses = {
@@ -101,62 +97,17 @@ public interface MissionApi {
                             description = "L'etat de l' objet Mission a été modifié",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = MissionDto.class))
+                                    schema = @Schema(implementation = MissionResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "400",
                             description = "L'etat de l'objet Mission n'est pas valide",
                             content = @Content(mediaType = "application/json"))
             })
-    ResponseEntity<MissionDto> updateEtapeMission(@PathVariable("id") Integer idMission,  @RequestBody  List<EtapeDto> etapesDto) ;
-    @PatchMapping(value = UPDATE_ETAT_MISSION_ENDPOINT)
-    @Operation(
-            description = "Modifier l'etat d'une mission, cette methode permet " +
-                    "modifier l'etat d' une mission",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "L'etat de l' objet Mission a été modifié",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = MissionDto.class))
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "L'etat de l'objet Mission n'est pas valide",
-                            content = @Content(mediaType = "application/json"))
-            })
-    ResponseEntity<MissionDto> updateEtatMission(@PathVariable("id") Integer idMission,@PathVariable("etatMission") EtatMission etatMission);
-
-    @PatchMapping(value = UPDATE_KILOMETRATGE_MISSION_ENDPOINT,
-            //consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-
-    @Operation(
-            operationId = "updateKilometrage",
-            description = "Mettre à jour le kilomtratge debut/fin d'une mission, cette methode permet " +
-                    "Mettre à jour le kilomtratge debut/fin d' une mission",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Le kilomtratge de l' objet Mission a été mis à jour",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = MissionDto.class))
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Le kilomtratge de l'objet Mission n'est pas valide",
-                            content = @Content(mediaType = "application/json"))
-            })
-    ResponseEntity<MissionDto> updateKilometrage(
-            @PathVariable("flag") KmFlag flag,
-            @PathVariable("id") Integer idMission,
-            @PathVariable("vehicleId") Integer vehicleId,
-            @PathVariable("kilometrage") double kilometrage);
+    ResponseEntity<MissionResponse> updateStopPointMission(@PathVariable("id") Integer idMission, @RequestBody  List<StopPointRequest> stopPointRequests) ;
 
     @GetMapping(value = FIND_MISSION_BY_ID_ENDPOINT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(
+    @Operation(operationId = "findMissionById",
             description = "Supprimer une Mission par ID! Cette methode permet de suprimmer une mission par son ID",
             responses = {
                     @ApiResponse(
@@ -175,10 +126,10 @@ public interface MissionApi {
                     )
             }
     )
-    ResponseEntity<MissionDto> findById(@PathVariable("id") Integer id);
+    ResponseEntity<MissionResponse> findMissionById(@PathVariable("id") Integer id);
 
     @GetMapping(value = FIND_MISSION_BY_DATE_ENDPOINT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(
+    @Operation(operationId = "findAllMissionByDate",
             description = "Rechercher une Mission par date! Cette methode permet de chercher une mission par une date",
             responses = {
                     @ApiResponse(
@@ -198,12 +149,12 @@ public interface MissionApi {
                     )
             }
     )
-    ResponseEntity<List<MissionDto>> findAllByDate(@PathVariable("dateMission") Instant dateMission);
+    ResponseEntity<List<MissionResponse>> findAllMissionByDate(@PathVariable("dateMission") Instant dateMission);
+
     @GetMapping(value = FIND_ALL_MISSION_ENDPOINT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(
+    @Operation(operationId = "findAllMission",
 
             summary = "find All Missions",
-            operationId = "findAll" ,  // ← stable, custom ID
             description = "Rechercher tout les Missions! Cette methode permet de retouner toutes les missions",
             responses = {
                     @ApiResponse(
@@ -216,10 +167,10 @@ public interface MissionApi {
                     )
             }
     )
-    ResponseEntity<List<MissionResponse>> findAll();
+    ResponseEntity<List<MissionResponse>> findAllMission();
 
     @DeleteMapping(value = DELETE_MISSION_ENDPOINT)
-    @Operation(
+    @Operation(operationId = "deleteMission",
             description = "Supprimer une Mission par ID! Cette methode permet de suprimmer une mission par son ID",
             responses = {
                     @ApiResponse(
@@ -238,47 +189,34 @@ public interface MissionApi {
                     )
             }
     )
-    void delete(@PathVariable("id") Integer id);
+    ResponseEntity<?> deleteMission(@PathVariable("id") Integer id);
 
-    @GetMapping(value = GENER_MISSION_ENDPOINT)
-    void generateMissions();
-
-    @GetMapping(value = GENER_ASSIGN_ENDPOINT)
-    void generateWeeklyAssignments();
-
-    @Operation(
-            summary = "find All Missions pageable",
-            operationId = "findAllMissions"   // ← stable, custom ID
-    )
     @GetMapping(value =FIND_ALL_MISSION_PAGEABLE_ENDPOINT ,
             produces =MediaType.APPLICATION_JSON_VALUE )
-    ResponseEntity<PageResponse<MissionDto>> findAllMissions(
+    @Operation(operationId = "findAllMissionsPageable",
+            summary = "find All Missions pageable")
+    ResponseEntity<PageResponse<MissionResponse>> findAllMissionsPageable(
             @RequestParam(name = "page",defaultValue = "1", required = false) int page,
             @RequestParam(name = "size",defaultValue = "10", required = false) int size
     );
 
-    @Operation(
-            summary = "find All Missions By Driver Id Pageable",
-            operationId = "findAllMissionsByDriverIdPageable"   // ← stable, custom ID
-    )
     @GetMapping(value =FIND_ALL_MISSION_PAGEABLE_BY_DRIVERID_ENDPOINT ,
             produces =MediaType.APPLICATION_JSON_VALUE )
-    ResponseEntity<PageResponse<MissionDto>> findAllMissionsByDriverIdPageable(
+    @Operation(operationId = "findAllMissionsByDriverIdPageable",
+            summary = "find All Missions By Driver Id Pageable")
+    ResponseEntity<PageResponse<MissionResponse>> findAllMissionsByDriverIdPageable(
        @RequestParam(name = "page",defaultValue = "1",required = false)int page,
        @RequestParam(name = "size",defaultValue = "10",required = false)int size,
-       Authentication connectedUser
-    );
-    @Operation(
-            summary = "find All Missions By Driver",
-            operationId = "findAllMissionsByDriver"   // ← stable, custom ID
+       Authentication connectedUser);
+
+
+    @GetMapping(value =FIND_ALL_MISSION_BY_DRIVER_ENDPOINT ,produces =MediaType.APPLICATION_JSON_VALUE )
+    @Operation(operationId = "findAllMissionsByConnectedDriver",
+            summary = "find All Missions By Driver"
     )
-    @GetMapping(value =FIND_ALL_MISSION_BY_DRIVER_ENDPOINT ,
-            produces =MediaType.APPLICATION_JSON_VALUE )
-    ResponseEntity<List<MissionResponse>> findAllMissionsByDriver(Authentication connectedUser);
+    ResponseEntity<List<MissionResponse>> findAllMissionsByConnectedDriver(Authentication connectedUser);
 
-
-    @PostMapping(value =CHECK_OVERLAPPING_VEHICLES_ENDPOINT )
-    ResponseEntity<?> checkOverlappingVehicles(@RequestBody MissionDto dto);
-    @PostMapping(value =CHECK_OVERLAPPING_DRIVERS_ENDPOINT )
-    ResponseEntity<?> checkOverlappingDrivers(@RequestBody MissionDto dto);
 }
+
+
+

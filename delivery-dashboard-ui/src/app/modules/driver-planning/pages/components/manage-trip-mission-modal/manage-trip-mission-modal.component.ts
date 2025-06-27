@@ -1,17 +1,20 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MissionDto} from "../../../../../../ds-api/src/models/mission-dto";
-import {VehicleDto} from "../../../../../../ds-api/src/models/vehicle-dto";
-import {ChauffeurDto} from "../../../../../../ds-api/src/models/chauffeur-dto";
 import {AlertService} from "../../../../../services/alert/alert.service";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MissionService} from "../../../../../../ds-api/src/services/mission.service";
 import {TokenService} from "../../../../../services/token/token.service";
-import {FraisMissionDto} from "../../../../../../ds-api/src/models/frais-mission-dto";
 import {format, isAfter, isBefore, isValid, parseISO} from "date-fns";
 import {isWithinInterval} from "date-fns";
-import {FormUtils} from "../../../../../components/shared/services/form-utils/form-utils";
 import {FormUtilsService} from "../../../../../components/shared/services/form-utils/form-utils.service";
+import {MissionResponse} from "../../../../../../ds-api/src/models/mission-response";
+import {VehicleResponse} from "../../../../../../ds-api/src/models/vehicle-response";
+import {DriverResponse} from "../../../../../../ds-api/src/models/driver-response";
+import {MissionExpenseService} from "../../../../../../ds-api/src/services/mission-expense.service";
+import {MissionExpenseRequest} from "../../../../../../ds-api/src/models/mission-expense-request";
+import {MissionStartEndService} from "../../../../../../ds-api/src/services/mission-start-end.service";
+import {MissionStartEndRequest} from "../../../../../../ds-api/src/models/mission-start-end-request";
+import {MissionExpenseResponse} from "../../../../../../ds-api/src/models/mission-expense-response";
 
 @Component({
   selector: 'app-manage-trip-mission-modal',
@@ -20,27 +23,29 @@ import {FormUtilsService} from "../../../../../components/shared/services/form-u
 })
 export class ManageTripMissionModalComponent implements OnInit {
 
-  @Input() mission!: MissionDto;
-  @Input() vehicles!: VehicleDto[];
-  @Input() drivers!: ChauffeurDto[];
+  @Input() mission!: MissionResponse;
+  @Input() vehicles!: VehicleResponse[];
+  @Input() drivers!: DriverResponse[];
   @Input() isStartEndKm!: boolean;
-  private myAssignedVehicle!: VehicleDto;
+  private myAssignedVehicle!: VehicleResponse;
 
 
   expenseTypes = ['CARBURANT', 'ADDBLUE', 'EAU_LAVGLASSE', 'ELECTRICITE', 'AUTRE_SERVICE'];
-  expensesArrayTmp: FraisMissionDto[] = [];
+  expensesArrayTmp: MissionExpenseRequest[] = [];
   editForm!: FormGroup;
   expenseForm!: FormGroup;
   expDate!: string;
-  expense!: FraisMissionDto;
+  expense!: MissionExpenseRequest;
 
   constructor(
-    private formUtils:FormUtilsService,
+    private formUtils: FormUtilsService,
     private tokenServer: TokenService,
     private alertService: AlertService,
     public activeModal: NgbActiveModal,
     private fb: FormBuilder,
-    private missionService: MissionService) {
+    private missionService: MissionService,
+    private startEndService: MissionStartEndService,
+  ) {
     this.connectedDriverID = this.tokenServer.getUserId() as number;
   }
 
@@ -48,14 +53,15 @@ export class ManageTripMissionModalComponent implements OnInit {
   connectedDriverID !: number;
 
   private getVehicleKm() {
-    if (this.mission.missionVehiclesDtos) {
-      const driverVehicle = this.mission.missionVehiclesDtos
-        .find(mv => mv.chauffeursVehicleDto?.some(cv => cv?.chauffeurDto?.id === this.connectedDriverID));
+    if (this.mission.missionVehicles) {
+      const driverVehicle = this.mission.missionVehicles
+        .find(mv => mv.driverVehicles?.some(cv => cv?.driver?.id === this.connectedDriverID));
 
-      if (driverVehicle?.vehicleDto?.kilometrage) {
-        this.myAssignedVehicle = driverVehicle.vehicleDto;
-        this.oldVehicleKM = driverVehicle?.vehicleDto?.kilometrage;
-      }
+      // TODO
+      /*   if (driverVehicle?.vehicleDto?.kilometrage) {
+           this.myAssignedVehicle = driverVehicle.vehicleDto;
+           this.oldVehicleKM = driverVehicle?.vehicleDto?.kilometrage;
+         }*/
     }
 
   }
@@ -75,22 +81,22 @@ export class ManageTripMissionModalComponent implements OnInit {
   }
 
 
-  private createExpensesFrom(expense?: FraisMissionDto) {
+  private createExpensesFrom(expense?: MissionExpenseRequest) {
     this.expenseForm = this.fb.group({
-      id: [ null],
-      type: [expense?.type || "CARBURANT" , Validators.required],
-      quantity: [expense?.quantity || 12 , [Validators.required, Validators.min(1)]],
+      id: [null],
+      type: [expense?.type || "CARBURANT", Validators.required],
+      quantity: [expense?.quantity || 12, [Validators.required, Validators.min(1)]],
       cost: [expense?.cost || 80, [Validators.required, Validators.min(0)]],
       expenseDate: [expense?.expenseDate || "2025-05-04T08:00:00", Validators.required],
       missionId: this.mission.id
     })
   }
 
-  isFieldInvalid(form: FormGroup, fieldName: string):boolean{
-    return this.formUtils.isFieldInvalid(form,fieldName);
+  isFieldInvalid(form: FormGroup, fieldName: string): boolean {
+    return this.formUtils.isFieldInvalid(form, fieldName);
   }
 
-  addExpense(): FraisMissionDto {
+  addExpense(): MissionExpenseRequest | null {
     this.expenseForm.markAllAsTouched();
 
     if (this.expenseForm && this.expenseForm.valid) {
@@ -98,53 +104,61 @@ export class ManageTripMissionModalComponent implements OnInit {
       const quantity = this.expenseForm.value.quantity;
       const cost = this.expenseForm.value.cost;
       const expenseDateValue = this.expenseForm.value.expenseDate;
-      this.expDate =expenseDateValue;
-     if(!this.checkValidDateInRange()){
-       this.showDateError();
-       return {};
-     }
+      this.expDate = expenseDateValue;
+      if (!this.checkValidDateInRange()) {
+        this.showDateError();
+        return null;
+      }
 
       if (this.isDuplicate(type, quantity, cost, expenseDateValue)) {
         this.alertService.alertWarning(
           'This expenses type, quantity,cost, and Expense ' +
           'Date combination already exists.');
-        return {};
+        return null;
       }
-      this.expense= this.expenseForm.value;
-      this.expensesArrayTmp.push(this.expense)
+      this.expense = this.expenseForm.value;
+      //this.expensesArrayTmp.push(this.expense)
       return this.expense
-    }else {
+    } else {
       this.alertService.alertError("All filler are mandatory")
-      return {};
+      return null;
     }
-    return {};
+    return null;
 
   }
+
 // Full example with date formatting
   private showDateError() {
-    const start = format(parseISO(this.mission.dateDebut!), 'MMM d, yyyy');
-    const end = format(parseISO(this.mission.dateFin!), 'MMM d, yyyy');
+    const start = format(parseISO(this.mission.startDate!), 'MMM d, yyyy');
+    const end = format(parseISO(this.mission.endDate!), 'MMM d, yyyy');
     this.alertService.alertWarning(
       `Please select a date between ${start} and ${end}`
     );
   }
+
   save() {
-    if(this.isStartEndKm){
-    this.updateMileageAndMissionStatus();
-    }else{
-    this.updateMissionExpenses();
+    if (this.isStartEndKm) {
+      this.updateMileageAndMissionStatus();
+    } else {
+      this.updateMissionExpenses();
     }
 
 
   }
 
+  private missionStartEndRequest !: MissionStartEndRequest;
+
   private updateStartKM(startKm: number) {
-    this.missionService.updateKilometrage(
+    this.missionStartEndRequest.startMileage = startKm;
+    this.missionStartEndRequest.missionStatus = "PLANNED";
+    this.missionStartEndRequest.flag = "START_KM";
+    this.missionStartEndRequest.vehicleId = this.myAssignedVehicle.id as number; // Todo
+    this.missionStartEndRequest.endMileage = 1; // Todo
+
+    this.startEndService.updateMissionMileage(
       {
-        flag: "START_KM",
-        id: this?.mission.id as number,
-        vehicleId: this.myAssignedVehicle.id as number,
-        kilometrage: startKm
+        missionId: this?.mission.id as number,
+        body: this.missionStartEndRequest
       }).subscribe({
       next: (res) => {
         console.log("SUCCESS :", res);
@@ -157,12 +171,13 @@ export class ManageTripMissionModalComponent implements OnInit {
   }
 
   private updateEndKM(endKm: number) {
-    this.missionService.updateKilometrage(
+    this.missionStartEndRequest.endMileage = endKm;
+    this.missionStartEndRequest.flag = "END_KM";
+    this.missionStartEndRequest.vehicleId = this.myAssignedVehicle.id as number
+    this.startEndService.updateMissionMileage(
       {
-        flag: "END_KM",
-        id: this?.mission.id as number,
-        vehicleId: this.myAssignedVehicle.id as number,
-        kilometrage: endKm
+        missionId: this?.mission.id as number,
+        body:this.missionStartEndRequest
       }).subscribe({
       next: (res) => {
         console.log("SUCCESS :", res);
@@ -175,8 +190,8 @@ export class ManageTripMissionModalComponent implements OnInit {
     });
   }
 
-  isMissionStarts(mission: MissionDto): boolean {
-    const status = mission.etatMission;
+  isMissionStarts(mission: MissionResponse): boolean {
+    const status = mission.missionStatus;
     return !(status === ("PLANNED"));
   }
 
@@ -192,46 +207,46 @@ export class ManageTripMissionModalComponent implements OnInit {
   }
 
 
-   checkValidDateInRange() : boolean {// out => false, in => true
+  checkValidDateInRange(): boolean {// out => false, in => true
     const expenseDateValue = this.expenseForm.value.expenseDate;
-    const missionStartDate = parseISO(this.mission.dateDebut!);
-    const missioEndDate = parseISO(this.mission.dateFin!);
+    const missionStartDate = parseISO(this.mission.startDate!);
+    const missioEndDate = parseISO(this.mission.endDate!);
 
 
-    const safeParse= (date:string |Date): Date | null=>{
-      try{
-        const parsed= typeof date == 'string' ? parseISO(date):new Date(date);
-        return isValid(parsed)?parsed : null;
-      }catch {
-      return null;
+    const safeParse = (date: string | Date): Date | null => {
+      try {
+        const parsed = typeof date == 'string' ? parseISO(date) : new Date(date);
+        return isValid(parsed) ? parsed : null;
+      } catch {
+        return null;
       }
-     }
+    }
 
-     const entredDate = safeParse(expenseDateValue);
-     const startDate = safeParse(missionStartDate);
-     const endDate = safeParse(missioEndDate);
+    const entredDate = safeParse(expenseDateValue);
+    const startDate = safeParse(missionStartDate);
+    const endDate = safeParse(missioEndDate);
 
-     if(!entredDate || !startDate || !endDate){
-       console.log('Invalid date format detected');
-       return false;
-     }
+    if (!entredDate || !startDate || !endDate) {
+      console.log('Invalid date format detected');
+      return false;
+    }
 
-      const isInRange= isWithinInterval(entredDate,{
-        start:startDate,
-        end: endDate
-      })
-     console.log('isInRange',isInRange);
-     return isInRange;
+    const isInRange = isWithinInterval(entredDate, {
+      start: startDate,
+      end: endDate
+    })
+    console.log('isInRange', isInRange);
+    return isInRange;
   }
 
   removeExpense(index: number) {
-    this.expensesArrayTmp.splice(index,1);
+    this.expensesArrayTmp.splice(index, 1);
   }
 
   private updateMileageAndMissionStatus() {
     const startKm = this.editForm.get("kmDebut")?.value;
     const endKm = this.editForm.get("kmFin")?.value;
-    switch (this.mission.etatMission) {
+    switch (this.mission.missionStatus) {
       case "PLANNED":
         // set init km & change status to in_progress
         this.updateStartKM(startKm);
@@ -249,18 +264,19 @@ export class ManageTripMissionModalComponent implements OnInit {
 
   private updateMissionExpenses() {
     const allCurrentExpenses = this.expensesArrayTmp;
-    if(allCurrentExpenses.length>0){
-    this.mission.fraisMissionDtoList = allCurrentExpenses;
-    this.missionService.updateExpensesMission({id: this.mission.id as number, body: allCurrentExpenses}).subscribe({
-      next:(rep)=>{
-        this.alertService.alertInfo("success update expenses");
-        this.activeModal.close(rep)
-        console.log(rep);
-      },
-      error:(err)=>{
-        this.alertService.alertWarning("failed update expenses")
-        console.log(err);}
-    })
+    if (allCurrentExpenses.length > 0) {
+      this.mission.missionExpenses = allCurrentExpenses;
+      this.missionService.updateExpensesMission({id: this.mission.id as number, body: allCurrentExpenses}).subscribe({
+        next: (rep) => {
+          this.alertService.alertInfo("success update expenses");
+          this.activeModal.close(rep)
+          console.log(rep);
+        },
+        error: (err) => {
+          this.alertService.alertWarning("failed update expenses")
+          console.log(err);
+        }
+      })
     }
   }
 }

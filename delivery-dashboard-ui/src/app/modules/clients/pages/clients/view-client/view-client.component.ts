@@ -1,17 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Client} from "stompjs";
-import {ClientDto} from "../../../../../../ds-api/src/models/client-dto";
 import {ClientService} from "../../../../../../ds-api/src/services/client.service";
 import {Chart} from "chart.js";
 import {DateUtilsService} from "../../../../../services/date-utils/date-utils.service";
 import {NewDeliveryPointModalComponent} from "../new-delivery-point-modal/new-delivery-point-modal.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {DeliveryPointDto} from "../../../../../../ds-api/src/models/delivery-point-dto";
 import {LocalTime} from "../../../../../../ds-api/src/models/local-time";
 import {DeliveryPointsService} from "../../../../../../ds-api/src/services/delivery-points.service";
 import {AlertService} from "../../../../../services/alert/alert.service";
 import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
+import {ClientResponse} from "../../../../../../ds-api/src/models/client-response";
+import {DeliveryPointResponse} from "../../../../../../ds-api/src/models/delivery-point-response";
 
 @Component({
   selector: 'app-view-client',
@@ -21,8 +21,8 @@ import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
 export class ViewClientComponent implements OnInit{
 
   id_client!:number;
-  client: ClientDto={};
-  dpoint:DeliveryPointDto={};
+  client: ClientResponse={};
+  dpoint:DeliveryPointResponse={};
   constructor(
     private modalService: NgbModal,
     private dateUtils:DateUtilsService,
@@ -48,7 +48,7 @@ export class ViewClientComponent implements OnInit{
     return this.client.firstname+" "+this.client.lastname;
   }
   private getClient() {
-    this.serviceClient.findById17({id:this.id_client}).subscribe({
+    this.serviceClient.findClientById({id:this.id_client}).subscribe({
       next:(clientResp)=>{
         this.client=clientResp;
       },error:(err)=>{
@@ -73,7 +73,7 @@ export class ViewClientComponent implements OnInit{
       }
     });
   }
-  openAddNewDPModal(client: ClientDto) {
+  openAddNewDPModal(client: ClientResponse) {
     const modalRef = this.modalService.open(NewDeliveryPointModalComponent, {
       size: 'lg',
       centered: true,
@@ -111,13 +111,13 @@ export class ViewClientComponent implements OnInit{
     )
   }
   confirmDeleteDeliveryPoint(id_dpoint: number){
-    this.deliveryPointService.delete11({id:id_dpoint}).subscribe(() => {
+    this.deliveryPointService.deleteDeliveryPoint({id:id_dpoint}).subscribe(() => {
       this.getClient();
       this.alertService.alertSuccess('Deletion successfully completed');
     });
 }
 
-  goToEditDelivery(dpoint_id: number | undefined, client: ClientDto) {
+  goToEditDelivery(dpoint_id: number | undefined, client: ClientResponse) {
     const modalRef = this.modalService.open(NewDeliveryPointModalComponent, {
       size: 'lg',
       centered: true,

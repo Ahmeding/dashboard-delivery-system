@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {NgForm} from "@angular/forms";
-import {FraisMissionDto} from "../../../../../../ds-api/src/models/frais-mission-dto";
+import {MissionExpenseRequest} from "../../../../../../ds-api/src/models/mission-expense-request";
 
 @Component({
   selector: 'app-new-expense',
@@ -8,7 +8,7 @@ import {FraisMissionDto} from "../../../../../../ds-api/src/models/frais-mission
   styleUrls: ['./new-expense.component.scss']
 })
 export class NewExpenseComponent {
-  expense: FraisMissionDto = {};
+  expense!: MissionExpenseRequest;
 
   onSubmit(expenseForm: NgForm) {
 

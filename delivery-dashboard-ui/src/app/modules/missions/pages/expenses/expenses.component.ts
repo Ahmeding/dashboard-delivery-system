@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {FraisMissionDto} from "../../../../../ds-api/src/models/frais-mission-dto";
-import {PageResponseClientDto} from "../../../../../ds-api/src/models/page-response-client-dto";
-import {PageResponseFraisMissionDto} from "../../../../../ds-api/src/models/page-response-frais-mission-dto";
-import {FraisDeMissionService} from "../../../../../ds-api/src/services/frais-de-mission.service";
 import {Router} from "@angular/router";
-import {ex} from "@fullcalendar/core/internal-common";
+import {
+  PageResponseMissionExpenseResponse
+} from "../../../../../ds-api/src/models/page-response-mission-expense-response";
+import {MissionExpenseRequest} from "../../../../../ds-api/src/models/mission-expense-request";
+import {MissionExpenseResponse} from "../../../../../ds-api/src/models/mission-expense-response";
+import {MissionExpenseService} from "../../../../../ds-api/src/services/mission-expense.service";
 
 @Component({
   selector: 'app-expenses',
@@ -13,13 +14,13 @@ import {ex} from "@fullcalendar/core/internal-common";
 })
 export class ExpensesComponent implements OnInit{
 
-  allExpensesResponse: PageResponseFraisMissionDto= {};
-  selectedExpenses: FraisMissionDto={};
+  allExpensesResponse: PageResponseMissionExpenseResponse= {};
+  selectedExpenses: MissionExpenseResponse={};
   page: number=0;
   size: number=4;
 
   constructor(
-    private expensesService:FraisDeMissionService,
+    private expensesService:MissionExpenseService,
     private router:Router
   ){}
   ngOnInit(): void {
@@ -28,13 +29,12 @@ export class ExpensesComponent implements OnInit{
 
 
   getAllExpenses(){
-    this.expensesService.findAllFraisMissions({
+    this.expensesService.findAllExpenseMissionsPageable({
       page:this.page,
       size:this.size
     }).subscribe({
       next:(expensesResp)=>{
         this.allExpensesResponse=expensesResp;
-        console.log("ddddd",this.allExpensesResponse.totalPages);
       },error:(err)=>{
         err.log(err);
       }

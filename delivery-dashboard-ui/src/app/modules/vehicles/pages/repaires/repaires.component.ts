@@ -1,17 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {PageResponseReparationDto} from "../../../../../ds-api/src/models/page-response-reparation-dto";
-import {ReparationService} from "../../../../../ds-api/src/services/reparation.service";
-import {ReparationDto} from "../../../../../ds-api/src/models/reparation-dto";
 import {Router} from "@angular/router";
-import {VehiculeService} from "../../../../../ds-api/src/services/vehicule.service";
-import {VehicleDto} from "../../../../../ds-api/src/models/vehicle-dto";
-import {FormControl, FormGroup} from "@angular/forms";
 import {DateUtilsService} from "../../../../services/date-utils/date-utils.service";
-import {ViewVehiculeModalComponent} from "../vehicles/view-vehicule-modal/view-vehicule-modal.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ViewRepairModalComponent} from "./view-repair-modal/view-repair-modal.component";
 import {AlertService} from "../../../../services/alert/alert.service";
 import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
+import {PageResponseRepairResponse} from "../../../../../ds-api/src/models/page-response-repair-response";
+import {RepairResponse} from "../../../../../ds-api/src/models/repair-response";
+import {RepairService} from "../../../../../ds-api/src/services/repair.service";
+import {VehicleService} from "../../../../../ds-api/src/services/vehicle.service";
 
 @Component({
   selector: 'app-repaires',
@@ -21,18 +18,18 @@ import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
 export class RepairesComponent implements OnInit{
 
 
-  allRepairsResponse: PageResponseReparationDto={};
+  allRepairsResponse: PageResponseRepairResponse={};
   page: number=0;
   size: number=4;
-  selectedRepair: ReparationDto={};
+  selectedRepair: RepairResponse={};
 
 constructor(
   private confirmBoxService:ConfirmBoxEvokeService,
   private alertService:AlertService,
   private modalService:NgbModal,
     private dateUtilSdervice:DateUtilsService,
-  private repairService:ReparationService,
-  private vehiculeService:VehiculeService,
+  private repairService:RepairService,
+  private vehiculeService:VehicleService,
             private router:Router) {
 }
 
@@ -43,7 +40,7 @@ constructor(
 
 
 getAllRepairs(){
-  this.repairService.findAllReparations({
+  this.repairService.findAllRepair({
     page:this.page,
     size:this.size
   }).subscribe({
@@ -94,7 +91,7 @@ getAllRepairs(){
     this.confirmBoxService.customFour('Are you sure you want to delete this repair?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.repairService.delete4({id:repair_id}).subscribe(() => {
+          this.repairService.deleteRepair({id:repair_id}).subscribe(() => {
             this.getAllRepairs();
             this.alertService.alertSuccess('Deletion successfully completed');
           });
@@ -110,7 +107,7 @@ getAllRepairs(){
     this.router.navigate(['vehicles','edit-repair',id])
   }
 
-  openRepairModal(repair: ReparationDto) {
+  openRepairModal(repair: RepairResponse) {
     const modalRef = this.modalService.open(ViewRepairModalComponent, { size: 'xl' });
     modalRef.componentInstance.selectedRepair = repair;  // Pass data to modal
   }

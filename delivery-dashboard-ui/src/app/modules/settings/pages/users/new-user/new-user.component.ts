@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {UtilisateurDto} from "../../../../../../ds-api/src/models/utilisateur-dto";
+import {UserRequest} from "../../../../../../ds-api/src/models/user-request";
 
 @Component({
   selector: 'app-new-user',
@@ -8,7 +8,7 @@ import {UtilisateurDto} from "../../../../../../ds-api/src/models/utilisateur-dt
 })
 export class NewUserComponent {
 
-  user:UtilisateurDto={}
+  user!:UserRequest;
   showPassword: any;
   isSubmitting!: boolean;
 

@@ -1,18 +1,17 @@
 import {Component, OnInit} from '@angular/core';
-import {CommandeClientDto} from "../../../../../../ds-api/src/models/commande-client-dto";
-import {
-  PageResponseCommandeClientResponse
-} from "../../../../../../ds-api/src/models/page-response-commande-client-response";
-import {ClientDto} from "../../../../../../ds-api/src/models/client-dto";
-import {ServiceDeliveryDto} from "../../../../../../ds-api/src/models/service-delivery-dto";
-import {LigneCommandeClientDto} from "../../../../../../ds-api/src/models/ligne-commande-client-dto";
-import {CommandeClientResponse} from "../../../../../../ds-api/src/models/commande-client-response";
-import {CommandeClientService} from "../../../../../../ds-api/src/services/commande-client.service";
+
 import {ClientService} from "../../../../../../ds-api/src/services/client.service";
-import {ServiceDeliveryService} from "../../../../../../ds-api/src/services/service-delivery.service";
 import {AlertService} from "../../../../../services/alert/alert.service";
-import {UtilisateurService} from "../../../../../../ds-api/src/services/utilisateur.service";
 import {NgForm} from "@angular/forms";
+import {QuoteRequest} from "../../../../../../ds-api/src/models/quote-request";
+import {PageResponseQuoteResponse} from "../../../../../../ds-api/src/models/page-response-quote-response";
+import {QuoteResponse} from "../../../../../../ds-api/src/models/quote-response";
+import {ClientResponse} from "../../../../../../ds-api/src/models/client-response";
+import {DeliveryServiceResponse} from "../../../../../../ds-api/src/models/delivery-service-response";
+import {QuoteLineRequest} from "../../../../../../ds-api/src/models/quote-line-request";
+import {QuoteService} from "../../../../../../ds-api/src/services/quote.service";
+import {DeliveryServiceService} from "../../../../../../ds-api/src/services/delivery-service.service";
+import {UserService} from "../../../../../../ds-api/src/services/user.service";
 
 @Component({
   selector: 'app-new-quote',
@@ -21,53 +20,30 @@ import {NgForm} from "@angular/forms";
 })
 export class NewQuoteComponent implements OnInit{
 
-  testQuote: CommandeClientDto={
-    code: "CMD0003",
-    dateCommnde: "2024-10-23T07:15:13.717Z",
-    clientId: 3,
-    ligneCommandeClientsDtos: [
-
-      {
-        quantite: 2,
-        prixUnitaire: 200,
-        tva: 20,
-        serviceDeliveryDtoId:  2
-
-      },
-      {
-        quantite: 4,
-        prixUnitaire: 700,
-        tva: 20,
-        serviceDeliveryDtoId : 3
-
-      }
-    ],
-    etatCommande: "IN_PROGRESS"
-  }
   page: number = 0;
   size: number =5;
-  allQuotesResponse: PageResponseCommandeClientResponse={};
-  newQuote: CommandeClientDto= {};
-  selectedToEditQuote: CommandeClientDto= {};
+  allQuotesResponse: PageResponseQuoteResponse={};
+  newQuote!: QuoteRequest;
+  selectedToEditQuote: QuoteResponse= {};
   isFormAddNewSubmitted: boolean= false;
-  allClients: ClientDto[]=[]
+  allClients: ClientResponse[]=[]
 
-  allServiceDeliveries: ServiceDeliveryDto[]=[];
-  selectedServiceDelivery: ServiceDeliveryDto|undefined={};
-  allSelectedServiceDeliveries: ServiceDeliveryDto[]=[];
+  allServiceDeliveries: DeliveryServiceResponse[]=[];
+  selectedServiceDelivery: DeliveryServiceResponse|undefined={};
 
-  orderLine:  LigneCommandeClientDto ={};
-  orderlines: LigneCommandeClientDto[]=[];
-  selectedQuote: CommandeClientResponse = {};
+  quoteLine!:  QuoteLineRequest;
+  quoteLines: QuoteLineRequest[]=[];
+  selectedQuote!: QuoteResponse;
   isEditMode: boolean=false;
 
 
   constructor(
-    private cmdClientService:CommandeClientService,
+    private quoteService:QuoteService,
     private clientService:ClientService,
-    private servDeliveryService: ServiceDeliveryService,
+    private deliveryServiceService: DeliveryServiceService,
     private alertService: AlertService,
-    private userService:UtilisateurService
+    private userService:UserService
+
   ) {}
 
   ngOnInit(): void {
@@ -78,7 +54,7 @@ export class NewQuoteComponent implements OnInit{
 
 
   private getAllQuotes() {
-    this.cmdClientService.findAllCommandeClients({
+    this.quoteService.findAllQuotesPageable({
       page:this.page,
       size:this.size
     }).subscribe({
@@ -147,7 +123,7 @@ export class NewQuoteComponent implements OnInit{
   }
 
   private getAllClients() {
-    this.clientService.findAll17().subscribe({
+    this.clientService.findAllClient().subscribe({
       next:(clientsResponse)=>{
         this.allClients=clientsResponse;
       }
@@ -158,10 +134,10 @@ export class NewQuoteComponent implements OnInit{
 
     this.isFormAddNewSubmitted=true;
     form.form.markAllAsTouched();
-    this.newQuote.ligneCommandeClientsDtos=this.orderlines;
-    this.newQuote.etatCommande= "IN_PROGRESS"
+    this.newQuote.quoteLines=this.quoteLines;
+    this.newQuote.quoteStatus= "PENDING_APPROVAL"
     console.log(this.newQuote);
-    this.cmdClientService.save16({body:this.newQuote}).subscribe({
+    this.quoteService.saveQuote({body:this.newQuote}).subscribe({
       next:(resp)=>{
         this.getAllQuotes();
         this.resetForm(form);
@@ -176,12 +152,12 @@ export class NewQuoteComponent implements OnInit{
   }
   private resetForm(form: NgForm) {
     form.resetForm();  // Reset the form state and clear input values
-    this.newQuote = {};   // Reset the driver object to its initial state
+    this.newQuote!;   // Reset the driver object to its initial state
     this.isFormAddNewSubmitted = false; // Reset the submitted state
   }
 
   private getAllServDelivery() {
-    this.servDeliveryService.findAll3().subscribe({
+    this.deliveryServiceService.findAllDeliveryService().subscribe({
       next:(allSDResponse)=>{
         this.allServiceDeliveries=allSDResponse;
       },
@@ -205,30 +181,32 @@ export class NewQuoteComponent implements OnInit{
       this.alertService.alertWarning("Please select a service before adding")
       return;
     }
-    const exists= this.orderlines.some(orderL=>orderL.serviceDeliveryDtoId===this.selectedServiceDelivery?.id)
+    const exists= this.quoteLines.some(orderL=>orderL.deliveryServiceId===this.selectedServiceDelivery?.id)
     if(exists){
       this.alertService.alertWarning("This service has already been added.")
       return;
     }
-    const newOrdeLine :LigneCommandeClientDto = {
-      serviceDeliveryDtoId : this.selectedServiceDelivery.id,
-      quantite: 2 as number,
-      prixUnitaire: this.selectedServiceDelivery.basicTripCost,
+    const newOrdeLine :QuoteLineRequest = {
+      deliveryServiceId : this.selectedServiceDelivery.id,
+      quantity: 2 as number,
+      unitPrice: this.selectedServiceDelivery.basicTripCost as number,
+      quoteId:this.newQuote.id as number,
+      ttcPrice:1,
       tva: 20,
     }
 
-    this.orderLine.serviceDeliveryDtoId=this.selectedServiceDelivery.id;
-    this.orderlines.push(newOrdeLine);
+    this.quoteLine.deliveryServiceId=this.selectedServiceDelivery.id;
+    this.quoteLines.push(newOrdeLine);
     this.selectedServiceDelivery = undefined;
   }
 
   deleteServDelivery(i: number) {
-    this.orderlines.splice(i,1);
+    this.quoteLines.splice(i,1);
   }
 
   onQteChange(event: any, index: number) {
     const selectedQte = event.target.value as number;
-    this.orderlines[index].quantite=selectedQte;
+    this.quoteLines[index].quantity=selectedQte;
 
   }
 
@@ -243,12 +221,12 @@ export class NewQuoteComponent implements OnInit{
   }
 
   editQuote(id: number | undefined) {
-    this.cmdClientService.findById16({id:id as number}).subscribe({
-      next:(order)=>{
-        this.selectedToEditQuote = order;
-        this.orderlines = this.selectedToEditQuote.ligneCommandeClientsDtos as Array<CommandeClientDto>;
+    this.quoteService.findQuoteById({id:id as number}).subscribe({
+      next:(quote)=>{
+        //this.selectedToEditQuote = quote;
+        this.quoteLines = this.selectedToEditQuote.quoteLines as Array<QuoteLineRequest>;
         console.log(this.selectedToEditQuote);
-        const dateString = JSON.stringify(this.selectedQuote.dateCommnde);
+        const dateString = JSON.stringify(this.selectedQuote.quoteDate);
         console.log("---------------"+this.convertDate(JSON.parse((dateString))));
         /* this.selectedToEditQuote.dateCommnde = this.convertDate(JSON.parse((dateString))) as Date;*/
       }

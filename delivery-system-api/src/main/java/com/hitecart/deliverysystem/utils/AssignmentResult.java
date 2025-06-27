@@ -1,10 +1,9 @@
 package com.hitecart.deliverysystem.utils;
 
-import com.hitecart.deliverysystem.model.Chauffeur;
+import com.hitecart.deliverysystem.model.Driver;
 import com.hitecart.deliverysystem.model.Mission;
-import com.hitecart.deliverysystem.model.Vehicule;
+import com.hitecart.deliverysystem.model.Vehicle;
 import lombok.*;
-import org.springframework.scheduling.annotation.Async;
 
 import java.util.List;
 
@@ -15,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class AssignmentResult {
     private Mission mission;
-    private Vehicule vehicle;
-    private List<Chauffeur> drivers;
+    private Vehicle vehicle;
+    private List<Driver> drivers;
 
 }

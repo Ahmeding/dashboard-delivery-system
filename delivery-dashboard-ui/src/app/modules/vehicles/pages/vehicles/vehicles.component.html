@@ -45,13 +45,13 @@
                   <!-- License Plate Background Image -->
                   <img src="assets/images/immat.png" alt="License Plate" class="license-plate-bg" width="90">
                   <div class="registration-number">
-                    {{ vehicle.immatriculation }}
+                    {{ vehicle.registrationNbr }}
                   </div>
                 </div></td>
-              <td>{{ vehicle.marque }}&nbsp;{{ vehicle.modele }}</td>
-              <td>{{ vehicle.volume }}(m<sup>3</sup>)</td>
-              <td>{{ vehicle.kilometrage }}</td>
-              <td>{{ formatDateDDMMYYYY(vehicle.datePMC) }}</td>
+              <td>{{ vehicle.brand }}&nbsp;{{ vehicle.model }}</td>
+              <td>{{ vehicle.volumeCapacity }}(m<sup>3</sup>)</td>
+              <td>{{ vehicle.mileage }}</td>
+              <td>{{ vehicle.dfcDate }}</td>
               <td><i
                 [ngClass]="vehicle.isActive?
                         'bi bi-toggle2-on text-success ml-3 mr-3':
@@ -154,37 +154,37 @@
             <!-- Row 1: Brand/Model and Date PMC -->
             <div class="row mb-3">
               <div class="col-md-6">
-                <span class="text-primary">Brand/Model:</span> {{selectedVehicle.marque}} {{selectedVehicle.modele}}
+                <span class="text-primary">Brand/Model:</span> {{selectedVehicle.brand}} {{selectedVehicle.model}}
               </div>
               <div class="col-md-6">
-                <span class="text-primary">Date PMC:</span> {{selectedVehicle.datePMC}}
+                <span class="text-primary">Date PMC:</span> {{selectedVehicle.dfcDate}}
               </div>
             </div>
 
             <!-- Row 2: Immatriculation and Capacity -->
             <div class="row mb-3">
               <div class="col-md-6">
-                <span class="text-primary">Immat. N°:</span> {{selectedVehicle.immatriculation}}
+                <span class="text-primary">Immat. N°:</span> {{selectedVehicle.registrationNbr}}
               </div>
               <div class="col-md-6">
-                <span class="text-primary">Capacity:</span> {{selectedVehicle.volume}} m<sup>3</sup>
+                <span class="text-primary">Capacity:</span> {{selectedVehicle.volumeCapacity}} m<sup>3</sup>
               </div>
             </div>
 
             <!-- Row 3: Mileage and VIN -->
             <div class="row mb-3">
               <div class="col-md-6">
-                <span class="text-primary">Mileage:</span> {{selectedVehicle.kilometrage}}
+                <span class="text-primary">Mileage:</span> {{selectedVehicle.mileage}}
               </div>
               <div class="col-md-6">
-                <span class="text-primary">VIN:</span> {{selectedVehicle.numVin}}
+                <span class="text-primary">VIN:</span> {{selectedVehicle.vinNbr}}
               </div>
             </div>
 
             <!-- Row 4: Fuel Type and Number of Missions -->
             <div class="row mb-3">
               <div class="col-md-6">
-                <span class="text-primary">Fuel:</span> {{selectedVehicle.typecarburant}}
+                <span class="text-primary">Fuel:</span> {{selectedVehicle.energyType}}
               </div>
               <div class="col-md-6">
                 <span class="text-primary">Number of Missions:</span> 3

@@ -18,7 +18,7 @@ import java.util.*;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table
+@Table(name = "mission_vehicle")
 public class MissionVehicle  extends AbstractEntity{
 
     private static final long serialVersionUID = 1L;
@@ -31,7 +31,7 @@ public class MissionVehicle  extends AbstractEntity{
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "vehicle_id" , nullable = false)
-    private Vehicule vehicule;
+    private Vehicle vehicle;
 
 
     @NotEmpty
@@ -39,18 +39,21 @@ public class MissionVehicle  extends AbstractEntity{
     @BatchSize(size = 100)
     @OneToMany(mappedBy = "missionVehicle", cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<ChauffeurVehicle> chauffeurVehiculeList = new ArrayList<>();
+    private List<DriverVehicle> driverVehicles = new ArrayList<>();
 
     private LocalDateTime assignedAt;
 
-    public void addChauffeurVehicle(ChauffeurVehicle chauffeurVehicle) {
-        chauffeurVehiculeList.add(chauffeurVehicle);
-        chauffeurVehicle.setMissionVehicle(this);
+    public void addDriverVehicle(DriverVehicle driverVehicle) {
+        if(this.driverVehicles == null){
+            this.driverVehicles = new ArrayList<>();
+        }
+        this.driverVehicles.add(driverVehicle);
+        driverVehicle.setMissionVehicle(this);
     }
 
-    public void removeChauffeurVehicle(ChauffeurVehicle chauffeurVehicle) {
-        chauffeurVehiculeList.remove(chauffeurVehicle);
-        chauffeurVehicle.setMissionVehicle(null);
+    public void removeDriverVehicle(DriverVehicle driverVehicle) {
+        driverVehicles.remove(driverVehicle);
+        driverVehicle.setMissionVehicle(null);
     }
 
     // Use only ID for hashCode/equals

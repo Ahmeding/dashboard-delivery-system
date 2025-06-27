@@ -1,7 +1,7 @@
 <!-- edit-mission-modal.component.html -->
 <div class="modal-content" id="modal-edit">
   <div class="modal-header bg-primary text-white">
-    <h5 class="modal-title">Edit {{mission.titre}}</h5>
+    <h5 class="modal-title">Edit {{mission.title}}</h5>
     <button type="button" class="btn-close btn-close-white" (click)="activeModal.dismiss()"></button>
   </div>
 
@@ -109,18 +109,18 @@
           <div class="vehicle-plate">
             <div class="plate-content">
               <i class="bi bi-truck"></i>
-              <span class="plate-number">{{v.vehicleDto?.immatriculation}}</span>
-              <span class="vehicle-volume">{{v.vehicleDto?.volume}}m³</span>
+              <span class="plate-number">{{"v.vehicleDto?.immatriculation"}}</span>
+              <span class="vehicle-volume">{{"v.vehicleDto?.volume"}}m³</span>
             </div>
           </div>
 
           <div class="vehicle-drivers">
-            <div class="driver" *ngFor="let driver of v.chauffeursVehicleDto">
+            <div class="driver" *ngFor="let driver of v.driverVehicles">
               <div class="driver-avatar">
                 <i class="bi bi-person-circle"></i>
               </div>
               <div class="driver-info">
-                <span class="driver-name">{{driver.chauffeurDto?.firstname}} {{driver.chauffeurDto?.lastname}}</span>
+                <span class="driver-name">{{"driver.chauffeurDto?.firstname"}} {{"driver.chauffeurDto?.lastname"}}</span>
                 <span class="driver-status">Available</span>
               </div>
             </div>

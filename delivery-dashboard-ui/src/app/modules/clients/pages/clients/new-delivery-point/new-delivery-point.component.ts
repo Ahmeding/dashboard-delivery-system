@@ -1,19 +1,26 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DeliveryDestinationDto} from "../../../../../../ds-api/src/models/delivery-destination-dto";
-import {DeliveryPointDto} from "../../../../../../ds-api/src/models/delivery-point-dto";
-import {ServiceDeliveryDto} from "../../../../../../ds-api/src/models/service-delivery-dto";
-import {DeliveryPointCategoryDto} from "../../../../../../ds-api/src/models/delivery-point-category-dto";
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from "@angular/forms";
 import {InputFillUtilsService} from "../../../../../services/input-fill-utils/input-fill-utils.service";
 import {DeliveryPointCategoriesService} from "../../../../../../ds-api/src/services/delivery-point-categories.service";
-import {ServiceDeliveryService} from "../../../../../../ds-api/src/services/service-delivery.service";
 import {DeliveryPointsService} from "../../../../../../ds-api/src/services/delivery-points.service";
 import {DeliveryDestinationService} from "../../../../../../ds-api/src/services/delivery-destination.service";
-import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {AlertService} from "../../../../../services/alert/alert.service";
-import {ClientDto} from "../../../../../../ds-api/src/models/client-dto";
 import {ActivatedRoute, Router} from "@angular/router";
-import {RecurrencePatternDto} from "../../../../../../ds-api/src/models/recurrence-pattern-dto";
+import {FormUtilsService} from "../../../../../components/shared/services/form-utils/form-utils.service";
+import {DeliveryDestinationResponse} from "../../../../../../ds-api/src/models/delivery-destination-response";
+import {DeliveryPointRequest} from "../../../../../../ds-api/src/models/delivery-point-request";
+import {DeliveryPointResponse} from "../../../../../../ds-api/src/models/delivery-point-response";
+import {DeliveryServiceResponse} from "../../../../../../ds-api/src/models/delivery-service-response";
+import {DeliveryPointCatResponse} from "../../../../../../ds-api/src/models/delivery-point-cat-response";
+import {DeliveryServiceService} from "../../../../../../ds-api/src/services/delivery-service.service";
 
 @Component({
   selector: 'app-new-delivery-point',
@@ -26,14 +33,13 @@ export class NewDeliveryPointComponent  implements OnInit{
   clientId!: number;
   @Input() dpointId!: number;
 
-  deliveryDestination:DeliveryDestinationDto={};
-  deliveryPoint:DeliveryPointDto={};
-
-  selectedDeliveryPoint:DeliveryPointDto={};
-  serviceDeliveries: ServiceDeliveryDto[]=[];
-  deliveryPoints: DeliveryPointDto[]=[];
-  dpCategories:DeliveryPointCategoryDto[]=[];
-  selectedDeliveryService!:ServiceDeliveryDto;
+  //track form submission
+  formSubmitted = false;
+  selectedDeliveryPoint:DeliveryPointResponse={};
+  serviceDeliveries: DeliveryServiceResponse[]=[];
+  deliveryPoints: DeliveryPointResponse[]=[];
+  dpCategories:DeliveryPointCatResponse[]=[];
+  selectedDeliveryService!:DeliveryServiceResponse;
 
   destinationForm!: FormGroup;
   deliveryPointForm!: FormGroup;
@@ -48,12 +54,14 @@ export class NewDeliveryPointComponent  implements OnInit{
     { label: 'Sat', value: 'SATURDAY' }
   ];
 
+
   constructor(
+    private formUtils:FormUtilsService,
     private routeActive: ActivatedRoute,
     private router:Router,
     private fillInputService: InputFillUtilsService,
     private dpCategoryService:DeliveryPointCategoriesService,
-    private serviceDeliveryService:ServiceDeliveryService,
+    private deliveryServiceService:DeliveryServiceService,
     private deliveryPointsService:DeliveryPointsService,
     private dDestinationService:DeliveryDestinationService,
     private fb: FormBuilder,
@@ -61,7 +69,10 @@ export class NewDeliveryPointComponent  implements OnInit{
   ){this.initDestForm();
     this.clientId= this.routeActive.snapshot.params['id'];}
 
-
+isValidField(currentForm:FormGroup,fieldName:string): boolean{
+    return  this.formUtils.isFieldInvalid(currentForm
+    ,fieldName);
+}
   initDestForm(){
     this.destinationForm = this.fb.group({
       id:[''],
@@ -97,7 +108,7 @@ export class NewDeliveryPointComponent  implements OnInit{
         startDate:['', Validators.required],
         endDate:['', Validators.required],
         recurrenceInterval:['', Validators.required],
-        daysOfWeek:this.fb.array([], Validators.required),
+        daysOfWeek:this.fb.array([],this.atLeastOneDayValidator()),
       }),
 
       addressDto:this.fb.group({
@@ -115,7 +126,9 @@ export class NewDeliveryPointComponent  implements OnInit{
       })
     })
   }
-
+  get daysArray(): FormArray {
+    return this.currentPointForm?.get('recurrencePatternDto.daysOfWeek') as FormArray;
+  }
   getDayeOfWeekArray():string [] {
     if(this.currentPointForm){
     return this.currentPointForm.get('recurrencePatternDto.daysOfWeek')?.value || [];
@@ -123,21 +136,28 @@ export class NewDeliveryPointComponent  implements OnInit{
     return [];
   }
 
-  updateDayOfWeek(day:string, isChecked:Event){
-    if(this.currentPointForm){
-
+  updateDayOfWeek(dayValue:string, isChecked:Event){
       const checked= (isChecked.target as HTMLInputElement).checked;
-      const daysFormArray =  this.currentPointForm
-        .get("recurrencePatternDto.daysOfWeek") as FormArray;
-      if(checked){
-        daysFormArray.push(this.fb.control(day));
-      }else{
-        const index =  daysFormArray.controls.findIndex(x=>x.value === day);
-        daysFormArray.removeAt(index);
-      }
-    }
+      const daysFormArrayControl =  this.daysArray;
+        if(checked){
+            daysFormArrayControl.push(this.fb.control(dayValue))
+        }else{
+          const index = daysFormArrayControl.value.indexOf(dayValue);
+        daysFormArrayControl.removeAt(index);
+        }
+    daysFormArrayControl.updateValueAndValidity();
   }
+
+
+
   addDeliveryPoint(){
+    this.formSubmitted = true;
+
+    if (this.currentPointForm!.invalid) {
+      // Mark all controls as touched to show errors
+      this.currentPointForm!.markAllAsTouched();
+      return;
+    }
     if(this.currentPointForm && this.currentPointForm.valid){
       this.currentPointForm.get("clientId")?.setValue(this.clientId);
       this.deliveryPointsArray.push(this.currentPointForm);
@@ -145,15 +165,26 @@ export class NewDeliveryPointComponent  implements OnInit{
       console.log(this.currentPointForm.value);
       this.currentPointForm=null;
     }
+
+    // Reset submission state
+    this.formSubmitted = false;
   }
 
+  private atLeastOneDayValidator():ValidatorFn{
+   return (control: AbstractControl) : ValidationErrors | null =>{
+     if(!control.value || control.value.length === 0){
+       return { required: true};
+     }
+    return null;
+   };
+  }
   removeDeliveryPoint(index:number){
     this.deliveryPointsArray.removeAt(index);
     this.deliveryPoints.splice(index,1)
   }
 
   getDeliveryPointById(){
-    this.deliveryPointsService.findById12({id:this.dpointId}).subscribe({
+    this.deliveryPointsService.findDeliveryPointById({id:this.dpointId}).subscribe({
       next:(dpResp)=>{
         this.selectedDeliveryPoint=dpResp;
         console.log(this.selectedDeliveryPoint);
@@ -173,7 +204,7 @@ export class NewDeliveryPointComponent  implements OnInit{
           this.destinationForm.get("serviceDeliveryId")?.setValue(this.selectedDeliveryService.id)
           const deliveryDest=this.destinationForm.getRawValue();
           console.log( );
-          this.dDestinationService.save13({body:deliveryDest}).subscribe({
+          this.dDestinationService.saveDeliveryDestination({body:deliveryDest}).subscribe({
             next:(dpResp)=>{
               console.log(dpResp);
               this.alertService.alertSuccess("New Delivery Point added successfully!");
@@ -190,7 +221,7 @@ export class NewDeliveryPointComponent  implements OnInit{
 
 
   private getAllServiceDelivery() {
-    this.serviceDeliveryService.findAll3().subscribe({
+    this.deliveryServiceService.findAllDeliveryService().subscribe({
       next:(response)=>{
         this.serviceDeliveries=response;
       }
@@ -199,7 +230,7 @@ export class NewDeliveryPointComponent  implements OnInit{
   }
 
   private getAllCategories() {
-    this.dpCategoryService.findAll10().subscribe({
+    this.dpCategoryService.findAllDeliveryPointCategory().subscribe({
       next:(dpCatRep)=>{
         this.dpCategories=dpCatRep;
       },error:(err)=>{
@@ -232,7 +263,7 @@ export class NewDeliveryPointComponent  implements OnInit{
     }
   }
 
-  setAddressLocation(selectedDeliveryService: ServiceDeliveryDto) {
+  setAddressLocation(selectedDeliveryService: DeliveryServiceResponse) {
     this.selectedDeliveryService = this.destinationForm.get("serviceDeliveryId")?.value;
     console.log(selectedDeliveryService.destinationCity+"----------------");
   }
@@ -241,5 +272,11 @@ export class NewDeliveryPointComponent  implements OnInit{
 
       this.router.navigate(['clients','all'])
 
+  }
+
+  isEmptyDaysOfWeek(): boolean {
+    //const daysOfWeek = this.currentPointForm.get('recurrence')
+    const daysArray = this.getDayeOfWeekArray();
+    return daysArray.length === 0;
   }
 }

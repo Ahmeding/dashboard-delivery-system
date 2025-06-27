@@ -1,18 +1,9 @@
 import {Component, Input, Output, EventEmitter, ViewChild, OnInit, HostListener} from '@angular/core';
-import { MissionCard } from '../models/mission.model';
-import {MissionDto} from "../../../../../../../ds-api/src/models/mission-dto";
-import {MissingFileReplacementException} from "@angular-devkit/build-angular/src/utils";
 import {MissionResponse} from "../../../../../../../ds-api/src/models/mission-response";
 import {formatTime} from "../utils/planning.utils";
 import {format, parseISO} from "date-fns";
-import {DateUtilsService} from "../../../../../../services/date-utils/date-utils.service";
-import {ChauffeurDto} from "../../../../../../../ds-api/src/models/chauffeur-dto";
-import {VehiculeService} from "../../../../../../../ds-api/src/services/vehicule.service";
-import {ChauffeurService} from "../../../../../../../ds-api/src/services/chauffeur.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {MissionService} from "../../../../../../../ds-api/src/services/mission.service";
-import {convertResponseToDto} from "../../../../../../services/dto-converters/mission-converter";
-import {VehicleDto} from "../../../../../../../ds-api/src/models/vehicle-dto";
 import {EditMissionModalComponent} from "../../edit-mission-modal/edit-mission-modal.component";
 import {
   ManageTripMissionModalComponent
@@ -21,6 +12,11 @@ import {TokenService} from "../../../../../../services/token/token.service";
 import {Router} from "@angular/router";
 import {DateHelperService} from "../../../../../../components/shared/services/date-helper/date-helper.service";
 import {MenuMissionCardService} from "../../../../../../components/shared/menu/menu-mission-card.service";
+import {VehicleResponse} from "../../../../../../../ds-api/src/models/vehicle-response";
+import {DriverResponse} from "../../../../../../../ds-api/src/models/driver-response";
+import {DriverService} from "../../../../../../../ds-api/src/services/driver.service";
+import {VehicleService} from "../../../../../../../ds-api/src/services/vehicle.service";
+import {MissionRequest} from "../../../../../../../ds-api/src/models/mission-request";
 
 @Component({
   selector: 'app-mission-card',
@@ -38,8 +34,8 @@ export class MissionCardComponent implements OnInit{
   @ViewChild(EditMissionModalComponent) editModal!: EditMissionModalComponent;
 
   // Load these from your service
-  availableVehicles: VehicleDto[] = [];
-  availableDrivers: ChauffeurDto[] = [];
+  availableVehicles: VehicleResponse[] = [];
+  availableDrivers: DriverResponse[] = [];
 
 
   constructor(
@@ -48,8 +44,8 @@ export class MissionCardComponent implements OnInit{
     private tokenService: TokenService,
     private missionService: MissionService,
     private modalService: NgbModal,
-              private vehicleService:VehiculeService,
-              private driverService:ChauffeurService){
+              private vehicleService:VehicleService,
+              private driverService:DriverService){
     this.menuService.openMenuId$.subscribe(openId=>{
       this.currentOpenMenuId = openId;
     })
@@ -57,7 +53,7 @@ export class MissionCardComponent implements OnInit{
 
 
   private loadAvailableVehicles(){
-    this.vehicleService.findAll1().subscribe(
+    this.vehicleService.findAllVehicle().subscribe(
       {next: (allV) =>{
         this.availableVehicles =allV;
         },
@@ -68,7 +64,7 @@ export class MissionCardComponent implements OnInit{
     );
   }
   private loadAvailableDrivers(){
-this.driverService.findAll18().subscribe({
+this.driverService.findAllDriver().subscribe({
   next:(allD)=>{
     this.availableDrivers=allD;
   },
@@ -86,7 +82,7 @@ this.driverService.findAll18().subscribe({
   formatTime =formatTime;
 
   getStartTime():string{
-    const date = new Date(this.mission.dateDebut!);
+    const date = new Date(this.mission.startDate!);
     // Extract the time using date-fns 'format'
     this.formattedTime = format(date, 'HH:mm');
     return this.formattedTime;
@@ -101,11 +97,11 @@ this.driverService.findAll18().subscribe({
       'CANCELED': 'bi-x-circle-fill text-danger',
       'IN_PROGRESS': 'bi-flag-fill text-info'
     };
-    return icons[this.mission?.etatMission as keyof typeof icons] || 'bi-question-circle-fill';
+    return icons[this.mission?.missionStatus as keyof typeof icons] || 'bi-question-circle-fill';
   }
 
   getDestinationColor(): string {
-    return this.mission.deliveryDestinationResponse?.serviceDelivery?.color || '#3498db';
+    return this.mission.deliveryDestination?.deliveryService?.color || '#3498db';
   }
 
 
@@ -116,7 +112,7 @@ this.driverService.findAll18().subscribe({
 
   private reloadMission() {
     console.log("reload mission");
-    this.missionService.findById7({id:this.mission.id as number}).subscribe(
+    this.missionService.findMissionById({id:this.mission.id as number}).subscribe(
       {
         next:(m)=>{
           this.mission=m;
@@ -129,13 +125,13 @@ this.driverService.findAll18().subscribe({
   }
 
   openEditMissionModal(mission: MissionResponse) {
-    const missionToEdit: MissionDto = convertResponseToDto(mission);
+    const missionToEdit: MissionResponse = mission;
     if(this.tokenService.hasRoles(["ROLE_ADMIN"])){
     this.editByAdmin(missionToEdit);
     }
   }
 
-  private editByAdmin(missionToEdit:MissionDto){
+  private editByAdmin(missionToEdit:MissionResponse){
     const modalRef = this.modalService.open(EditMissionModalComponent, {
       size: 'xl',
       centered: true,
@@ -160,7 +156,7 @@ this.driverService.findAll18().subscribe({
       });
   }
 
-  private editByDriver(missionToEdit:MissionDto, isStartEndKm:boolean){
+  private editByDriver(missionToEdit:MissionResponse, isStartEndKm:boolean){
     console.log(isStartEndKm);
     const modalEditingByDriver = this.modalService.open(ManageTripMissionModalComponent
     ,{
@@ -188,7 +184,7 @@ this.driverService.findAll18().subscribe({
 
   isInputDateSameDay():boolean{
     //console.log("isOutOfDate",this.mission.dateDebut);
-    const date = parseISO(this.mission.dateDebut as string);
+    const date = parseISO(this.mission.startDate as string);
     //console.log("isNotOldDay",this.dateDayService.isNotOldDay(date));
     return this.dateDayService.isInputDateSameDay(date);
   }
@@ -216,14 +212,14 @@ this.driverService.findAll18().subscribe({
   }
 
   handleStarEndKm(mission: MissionResponse) {
-    const missionToEdit: MissionDto = convertResponseToDto(mission);
+    const missionToEdit: MissionResponse = mission;
 
     this.editByDriver(missionToEdit,true);
   }
 
   handleExpenses(mission: MissionResponse) {
 
-    const missionToEdit: MissionDto = convertResponseToDto(mission);
+    const missionToEdit: MissionResponse = mission;
 
     this.editByDriver(missionToEdit,false);
   }

@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/delivery_db?createDatabaseIfNotExist=true #jdbc:mysql://localhost:3306/delivery_db?createDatabaseIfNotExist=true&userSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:postgresql://localhost:5432/ds_db?createDatabaseIfNotExist=true #jdbc:mysql://localhost:3306/delivery_db?createDatabaseIfNotExist=true&userSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: postgres #root
     password: admin #
     driver-class-name: org.postgresql.Driver #com.mysql.cj.jdbc.Driver
@@ -27,6 +27,10 @@ spring:
 
 server:
   port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+
 #  servlet:
 #    context-path: /api/v1/
 flickr:
@@ -39,3 +43,12 @@ jwt:
 application:
   cors:
     origins: "http://localhost:4200"
+
+
+logging:
+  level:
+    com.hitecart.deliverysystem: debug
+    org:
+      springframework:
+        web: debug
+        validation: trace

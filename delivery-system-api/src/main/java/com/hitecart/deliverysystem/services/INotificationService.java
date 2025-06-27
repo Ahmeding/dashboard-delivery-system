@@ -1,14 +1,14 @@
 package com.hitecart.deliverysystem.services;
 
-import com.hitecart.deliverysystem.dto.basic.NotificationDto;
-import com.hitecart.deliverysystem.model.Notification;
+import com.hitecart.deliverysystem.dto.notification.NotificationRequest;
+import com.hitecart.deliverysystem.dto.notification.NotificationResponse;
 
 import java.util.List;
 
 public interface INotificationService {
-    public void sendNotification(Integer userId, NotificationDto dto);
+    void sendNotification(Integer userId, NotificationRequest request);
 
-    NotificationDto markAsRead(NotificationDto dto);
+    NotificationResponse markAsRead(NotificationRequest dto);
 
-    List<NotificationDto> findAllByUserId(Integer userId);
+    List<NotificationResponse> findAllByUserId(Integer userId);
 }

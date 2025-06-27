@@ -11,15 +11,17 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { delete3 } from '../fn/role/delete-3';
-import { Delete3$Params } from '../fn/role/delete-3';
-import { findAll4 } from '../fn/role/find-all-4';
-import { FindAll4$Params } from '../fn/role/find-all-4';
-import { findById4 } from '../fn/role/find-by-id-4';
-import { FindById4$Params } from '../fn/role/find-by-id-4';
-import { RoleDto } from '../models/role-dto';
-import { save4 } from '../fn/role/save-4';
-import { Save4$Params } from '../fn/role/save-4';
+import { deleteRole } from '../fn/role/delete-role';
+import { DeleteRole$Params } from '../fn/role/delete-role';
+import { findAllRole } from '../fn/role/find-all-role';
+import { FindAllRole$Params } from '../fn/role/find-all-role';
+import { findRoleById } from '../fn/role/find-role-by-id';
+import { FindRoleById$Params } from '../fn/role/find-role-by-id';
+import { RoleResponse } from '../models/role-response';
+import { saveRole } from '../fn/role/save-role';
+import { SaveRole$Params } from '../fn/role/save-role';
+import { updateRoleInfo } from '../fn/role/update-role-info';
+import { UpdateRoleInfo$Params } from '../fn/role/update-role-info';
 
 @Injectable({ providedIn: 'root' })
 export class RoleService extends BaseService {
@@ -27,118 +29,147 @@ export class RoleService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `save4()` */
-  static readonly Save4Path = '/roles/create';
+  /** Path part for operation `saveRole()` */
+  static readonly SaveRolePath = '/roles/create';
 
   /**
    * Ajouter/Modifier une role, cette methode permet d'enregistrer ou modifier une reparattion
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save4()` instead.
+   * To access only the response body, use `saveRole()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save4$Response(params: Save4$Params, context?: HttpContext): Observable<StrictHttpResponse<RoleDto>> {
-    return save4(this.http, this.rootUrl, params, context);
+  saveRole$Response(params: SaveRole$Params, context?: HttpContext): Observable<StrictHttpResponse<RoleResponse>> {
+    return saveRole(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier une role, cette methode permet d'enregistrer ou modifier une reparattion
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save4$Response()` instead.
+   * To access the full response (for headers, for example), `saveRole$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save4(params: Save4$Params, context?: HttpContext): Observable<RoleDto> {
-    return this.save4$Response(params, context).pipe(
-      map((r: StrictHttpResponse<RoleDto>): RoleDto => r.body)
+  saveRole(params: SaveRole$Params, context?: HttpContext): Observable<RoleResponse> {
+    return this.saveRole$Response(params, context).pipe(
+      map((r: StrictHttpResponse<RoleResponse>): RoleResponse => r.body)
     );
   }
 
-  /** Path part for operation `findById4()` */
-  static readonly FindById4Path = '/roles/role/{id}';
+  /** Path part for operation `updateRoleInfo()` */
+  static readonly UpdateRoleInfoPath = '/roles/update/{roleId}';
+
+  /**
+   * Ajouter/Modifier une role, cette methode permet d'enregistrer ou modifier une reparattion
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateRoleInfo()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateRoleInfo$Response(params: UpdateRoleInfo$Params, context?: HttpContext): Observable<StrictHttpResponse<RoleResponse>> {
+    return updateRoleInfo(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Ajouter/Modifier une role, cette methode permet d'enregistrer ou modifier une reparattion
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateRoleInfo$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateRoleInfo(params: UpdateRoleInfo$Params, context?: HttpContext): Observable<RoleResponse> {
+    return this.updateRoleInfo$Response(params, context).pipe(
+      map((r: StrictHttpResponse<RoleResponse>): RoleResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `findRoleById()` */
+  static readonly FindRoleByIdPath = '/roles/by-id/{id}';
 
   /**
    * Rechercher une role par ID! Cette methode permet de chercher une role par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById4()` instead.
+   * To access only the response body, use `findRoleById()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById4$Response(params: FindById4$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findById4(this.http, this.rootUrl, params, context);
+  findRoleById$Response(params: FindRoleById$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findRoleById(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher une role par ID! Cette methode permet de chercher une role par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById4$Response()` instead.
+   * To access the full response (for headers, for example), `findRoleById$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById4(params: FindById4$Params, context?: HttpContext): Observable<any> {
-    return this.findById4$Response(params, context).pipe(
+  findRoleById(params: FindRoleById$Params, context?: HttpContext): Observable<any> {
+    return this.findRoleById$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
 
-  /** Path part for operation `findAll4()` */
-  static readonly FindAll4Path = '/roles/all';
+  /** Path part for operation `findAllRole()` */
+  static readonly FindAllRolePath = '/roles/all';
 
   /**
    * Rechercher tout les role! Cette methode permet de retouner toutes les roles
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll4()` instead.
+   * To access only the response body, use `findAllRole()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll4$Response(params?: FindAll4$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findAll4(this.http, this.rootUrl, params, context);
+  findAllRole$Response(params?: FindAllRole$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findAllRole(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les role! Cette methode permet de retouner toutes les roles
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll4$Response()` instead.
+   * To access the full response (for headers, for example), `findAllRole$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll4(params?: FindAll4$Params, context?: HttpContext): Observable<any> {
-    return this.findAll4$Response(params, context).pipe(
+  findAllRole(params?: FindAllRole$Params, context?: HttpContext): Observable<any> {
+    return this.findAllRole$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
 
-  /** Path part for operation `delete3()` */
-  static readonly Delete3Path = '/roles/delete/{id}';
+  /** Path part for operation `deleteRole()` */
+  static readonly DeleteRolePath = '/roles/delete/{id}';
 
   /**
    * Supprimer une role par ID! Cette methode permet de suprimmer une role par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete3()` instead.
+   * To access only the response body, use `deleteRole()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete3$Response(params: Delete3$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return delete3(this.http, this.rootUrl, params, context);
+  deleteRole$Response(params: DeleteRole$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return deleteRole(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Supprimer une role par ID! Cette methode permet de suprimmer une role par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete3$Response()` instead.
+   * To access the full response (for headers, for example), `deleteRole$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete3(params: Delete3$Params, context?: HttpContext): Observable<any> {
-    return this.delete3$Response(params, context).pipe(
+  deleteRole(params: DeleteRole$Params, context?: HttpContext): Observable<any> {
+    return this.deleteRole$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

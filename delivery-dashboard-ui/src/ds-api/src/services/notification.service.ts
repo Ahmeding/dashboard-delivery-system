@@ -15,7 +15,7 @@ import { findAllByUserId } from '../fn/notification/find-all-by-user-id';
 import { FindAllByUserId$Params } from '../fn/notification/find-all-by-user-id';
 import { markAsRead } from '../fn/notification/mark-as-read';
 import { MarkAsRead$Params } from '../fn/notification/mark-as-read';
-import { NotificationDto } from '../models/notification-dto';
+import { NotificationResponse } from '../models/notification-response';
 
 @Injectable({ providedIn: 'root' })
 export class NotificationService extends BaseService {
@@ -36,7 +36,7 @@ export class NotificationService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  markAsRead$Response(params: MarkAsRead$Params, context?: HttpContext): Observable<StrictHttpResponse<NotificationDto>> {
+  markAsRead$Response(params: MarkAsRead$Params, context?: HttpContext): Observable<StrictHttpResponse<NotificationResponse>> {
     return markAsRead(this.http, this.rootUrl, params, context);
   }
 
@@ -50,9 +50,9 @@ export class NotificationService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  markAsRead(params: MarkAsRead$Params, context?: HttpContext): Observable<NotificationDto> {
+  markAsRead(params: MarkAsRead$Params, context?: HttpContext): Observable<NotificationResponse> {
     return this.markAsRead$Response(params, context).pipe(
-      map((r: StrictHttpResponse<NotificationDto>): NotificationDto => r.body)
+      map((r: StrictHttpResponse<NotificationResponse>): NotificationResponse => r.body)
     );
   }
 

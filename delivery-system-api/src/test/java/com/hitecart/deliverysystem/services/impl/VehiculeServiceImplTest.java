@@ -4,11 +4,11 @@ package com.hitecart.deliverysystem.services.impl;
 class VehiculeServiceImplTest {
 /*
     @InjectMocks
-    private VehiculeServiceImpl vehiculeService;
+    private VehicleServiceImpl vehiculeService;
     @Mock
-    private VehiculeRepository vehiculeRepository;
+    private VehicleRepository vehiculeRepository;
     @Mock
-    private ReparationRepository reparationRepository;
+    private RepairRepository reparationRepository;
 
     @BeforeEach
     void setUp(){
@@ -29,7 +29,7 @@ class VehiculeServiceImplTest {
 
     @Test
     public void should_throw_invalid_entity_exception(){
-        VehicleDto expectedVehiculeDto= VehicleDto.builder().build();
+        VehicleFullDto expectedVehiculeDto= VehicleFullDto.builder().build();
         InvalidEntityException expectedException = assertThrows(InvalidEntityException.class,()->vehiculeService.save(expectedVehiculeDto));
 
         assertEquals(ErrorCodes.VEHICULE_NOT_VALID,expectedException.getErrorCodes());
@@ -41,7 +41,7 @@ class VehiculeServiceImplTest {
     }
     @Test
     public void should_update_vehicule_whith_success(){
-        VehicleDto expectedvehiculeDto = VehicleDto.builder()
+        VehicleFullDto expectedvehiculeDto = VehicleFullDto.builder()
 
                 .missionsDto(null)
                 .marque("Mercedes")
@@ -52,30 +52,30 @@ class VehiculeServiceImplTest {
                 .kilometrage(BigDecimal.valueOf(122000))
                 .volume(BigDecimal.valueOf(14))
                 .numVin("RRTRE4557B545B545455")
-                .typecarburant(TypeEnergie.GASOIL)
+                .typecarburant(EnergyType.GASOIL)
                 .build();
 
-        Vehicule vehiculeToSave = new Vehicule();
-        vehiculeToSave.setMarque("Mercedes");
-        vehiculeToSave.setModele("Sprinter");
-        vehiculeToSave.setImmatriculation("AB-858-ER");
-        vehiculeToSave.setDateExpCtrlTec(LocalDate.from(new Date("12/04/2024").toInstant()));
-        vehiculeToSave.setDatePMC(LocalDate.from(new Date("12/12/2022").toInstant()));
-        vehiculeToSave.setKilometrage(BigDecimal.valueOf(122000));
+        Vehicle vehiculeToSave = new Vehicle();
+        vehiculeToSave.setBrand("Mercedes");
+        vehiculeToSave.setModel("Sprinter");
+        vehiculeToSave.setRegistrationNbr("AB-858-ER");
+        vehiculeToSave.setCtExpDate(LocalDate.from(new Date("12/04/2024").toInstant()));
+        vehiculeToSave.setDfcDate(LocalDate.from(new Date("12/12/2022").toInstant()));
+        vehiculeToSave.setMileage(BigDecimal.valueOf(122000));
         vehiculeToSave.setVolume(BigDecimal.valueOf(14));
-        vehiculeToSave.setNumVin("RRTRE4557B545B545455");
-        vehiculeToSave.setTypecarburant(TypeEnergie.GASOIL);
+        vehiculeToSave.setVinNbr("RRTRE4557B545B545455");
+        vehiculeToSave.setEnergyType(EnergyType.GASOIL);
 
-        Vehicule savedVehicule = new Vehicule();
-        savedVehicule.setMarque("Mercedes");
-        savedVehicule.setModele("Sprinter");
-        savedVehicule.setImmatriculation("AB-858-ER");
-        savedVehicule.setDateExpCtrlTec(LocalDate.from(new Date("12/04/2024").toInstant()));
-        savedVehicule.setDatePMC(LocalDate.from(new Date("12/12/2022").toInstant()));
-        savedVehicule.setKilometrage(BigDecimal.valueOf(122000));
+        Vehicle savedVehicule = new Vehicle();
+        savedVehicule.setBrand("Mercedes");
+        savedVehicule.setModel("Sprinter");
+        savedVehicule.setRegistrationNbr("AB-858-ER");
+        savedVehicule.setCtExpDate(LocalDate.from(new Date("12/04/2024").toInstant()));
+        savedVehicule.setDfcDate(LocalDate.from(new Date("12/12/2022").toInstant()));
+        savedVehicule.setMileage(BigDecimal.valueOf(122000));
         savedVehicule.setVolume(BigDecimal.valueOf(14));
-        savedVehicule.setNumVin("RRTRE4557B545B545455");
-        savedVehicule.setTypecarburant(TypeEnergie.GASOIL);
+        savedVehicule.setVinNbr("RRTRE4557B545B545455");
+        savedVehicule.setEnergyType(EnergyType.GASOIL);
         savedVehicule.setId(2);
 
         //Mock
@@ -83,24 +83,24 @@ class VehiculeServiceImplTest {
 
 
         //
-        VehicleDto saveVehiculeDto = vehiculeService.save(VehicleDto.fromEntity(savedVehicule));
+        VehicleFullDto saveVehiculeDto = vehiculeService.save(VehicleFullDto.fromEntity(savedVehicule));
 
-        VehicleDto vToupdate  = saveVehiculeDto;
-        vToupdate.setModele("Boxer");
+        VehicleFullDto vToupdate  = saveVehiculeDto;
+        vToupdate.setModel("Boxer");
         saveVehiculeDto = vehiculeService.save(vToupdate);
 
         //assertNotNull(saveVehiculeDto);
         assertNotNull(saveVehiculeDto.getId());
-        assertEquals(vToupdate.getMarque(),saveVehiculeDto.getMarque());
-        assertEquals(vToupdate.getModele(),saveVehiculeDto.getModele());
-        assertEquals(vToupdate.getKilometrage(),saveVehiculeDto.getKilometrage());
+        assertEquals(vToupdate.getBrand(),saveVehiculeDto.getBrand());
+        assertEquals(vToupdate.getModel(),saveVehiculeDto.getModel());
+        assertEquals(vToupdate.getMileage(),saveVehiculeDto.getMileage());
 
     }
 
     @Test
     public void test_save_vehicule(){
         // Given
-        VehicleDto vehiculeDto = VehicleDto.builder()
+        VehicleFullDto vehiculeDto = VehicleFullDto.builder()
                 .id(1)
                 .missionsDto(null)
                 .marque("Mercedes")
@@ -111,39 +111,39 @@ class VehiculeServiceImplTest {
                 .kilometrage(BigDecimal.valueOf(122000))
                 .volume(BigDecimal.valueOf(14))
                 .numVin("RRTRE4557B545B545455")
-                .typecarburant(TypeEnergie.GASOIL)
+                .typecarburant(EnergyType.GASOIL)
                 .build();
         //
-        Vehicule vehiculeToSave = new Vehicule();
-        vehiculeToSave.setMarque("Mercedes");
-        vehiculeToSave.setModele("Sprinter");
-        vehiculeToSave.setImmatriculation("AB-858-ER");
-        vehiculeToSave.setDateExpCtrlTec(LocalDate.from(new Date("12/04/2024").toInstant()));
-        vehiculeToSave.setDatePMC(LocalDate.from(new Date("12/12/2022").toInstant()));
-        vehiculeToSave.setKilometrage(BigDecimal.valueOf(122000));
+        Vehicle vehiculeToSave = new Vehicle();
+        vehiculeToSave.setBrand("Mercedes");
+        vehiculeToSave.setModel("Sprinter");
+        vehiculeToSave.setRegistrationNbr("AB-858-ER");
+        vehiculeToSave.setCtExpDate(LocalDate.from(new Date("12/04/2024").toInstant()));
+        vehiculeToSave.setDfcDate(LocalDate.from(new Date("12/12/2022").toInstant()));
+        vehiculeToSave.setMileage(BigDecimal.valueOf(122000));
         vehiculeToSave.setVolume(BigDecimal.valueOf(14));
-        vehiculeToSave.setNumVin("RRTRE4557B545B545455");
-        vehiculeToSave.setTypecarburant(TypeEnergie.GASOIL);
+        vehiculeToSave.setVinNbr("RRTRE4557B545B545455");
+        vehiculeToSave.setEnergyType(EnergyType.GASOIL);
         //
-        Vehicule savedVehicule = new Vehicule();
-        savedVehicule.setMarque("Mercedes");
-        savedVehicule.setModele("Sprinter");
-        savedVehicule.setImmatriculation("AB-858-ER");
-        savedVehicule.setDateExpCtrlTec(LocalDate.from(new Date("12/04/2024").toInstant()));
-        savedVehicule.setDatePMC(LocalDate.from(new Date("12/12/2022").toInstant()));
-        savedVehicule.setKilometrage(BigDecimal.valueOf(122000));
+        Vehicle savedVehicule = new Vehicle();
+        savedVehicule.setBrand("Mercedes");
+        savedVehicule.setModel("Sprinter");
+        savedVehicule.setRegistrationNbr("AB-858-ER");
+        savedVehicule.setCtExpDate(LocalDate.from(new Date("12/04/2024").toInstant()));
+        savedVehicule.setDfcDate(LocalDate.from(new Date("12/12/2022").toInstant()));
+        savedVehicule.setMileage(BigDecimal.valueOf(122000));
         savedVehicule.setVolume(BigDecimal.valueOf(14));
-        savedVehicule.setNumVin("RRTRE4557B545B545455");
-        savedVehicule.setTypecarburant(TypeEnergie.GASOIL);
+        savedVehicule.setVinNbr("RRTRE4557B545B545455");
+        savedVehicule.setEnergyType(EnergyType.GASOIL);
         savedVehicule.setId(2);
         // Mock
         when(vehiculeRepository.save(vehiculeToSave)).thenReturn(savedVehicule);
         // When
         //vehiculeRepository.save(vehiculeToSave); // for testing verify(vr,times(1)).save(v);
-        VehicleDto vehiculeDto1 = vehiculeService.save(VehicleDto.fromEntity(vehiculeToSave));
-        //verify(vehiculeService).save(VehicleDto.fromEntity(vehiculeToSave));
+        VehicleFullDto vehiculeDto1 = vehiculeService.save(VehicleFullDto.fromEntity(vehiculeToSave));
+        //verify(vehiculeService).save(VehicleFullDto.fromEntity(vehiculeToSave));
         // Then
-        assertEquals(vehiculeDto1.getMarque(), vehiculeDto.getMarque());
+        assertEquals(vehiculeDto1.getBrand(), vehiculeDto.getBrand());
         verify(vehiculeRepository,times(1)).save(vehiculeToSave);
     }
 
@@ -151,45 +151,45 @@ class VehiculeServiceImplTest {
     public void test_find_vehicule_by_id(){
         Integer id = 3;
 
-        Vehicule savedVehicule = new Vehicule();
-        savedVehicule.setMarque("Mercedes");
-        savedVehicule.setModele("Sprinter");
-        savedVehicule.setImmatriculation("AB-858-ER");
-        savedVehicule.setDateExpCtrlTec(LocalDate.from(new Date("12/04/2024").toInstant()));
-        savedVehicule.setDatePMC(LocalDate.from(new Date("12/12/2022").toInstant()));
-        savedVehicule.setKilometrage(BigDecimal.valueOf(122000));
+        Vehicle savedVehicule = new Vehicle();
+        savedVehicule.setBrand("Mercedes");
+        savedVehicule.setModel("Sprinter");
+        savedVehicule.setRegistrationNbr("AB-858-ER");
+        savedVehicule.setCtExpDate(LocalDate.from(new Date("12/04/2024").toInstant()));
+        savedVehicule.setDfcDate(LocalDate.from(new Date("12/12/2022").toInstant()));
+        savedVehicule.setMileage(BigDecimal.valueOf(122000));
         savedVehicule.setVolume(BigDecimal.valueOf(14));
-        savedVehicule.setNumVin("RRTRE4557B545B545455");
-        savedVehicule.setTypecarburant(TypeEnergie.GASOIL);
+        savedVehicule.setVinNbr("RRTRE4557B545B545455");
+        savedVehicule.setEnergyType(EnergyType.GASOIL);
         savedVehicule.setId(id);
 
         //Mock calls
         when(vehiculeRepository.findById(id)).thenReturn(Optional.of(savedVehicule));
         // When
-        VehicleDto v = vehiculeService.findById(id);
+        VehicleFullDto v = vehiculeService.findById(id);
         // Then
         assertNotNull(v);
 
     }
     @Test
-    public void findByImmatriculation(){
+    public void findByRegistrationNbr(){
         String immat= "AA-852-AA";
-        Vehicule savedVehicule = new Vehicule();
-        savedVehicule.setMarque("Mercedes");
-        savedVehicule.setModele("Sprinter");
-        savedVehicule.setImmatriculation(immat);
-        savedVehicule.setDateExpCtrlTec(LocalDate.from(new Date("12/04/2024").toInstant()));
-        savedVehicule.setDatePMC(LocalDate.from(new Date("12/12/2022").toInstant()));
-        savedVehicule.setKilometrage(BigDecimal.valueOf(122000));
+        Vehicle savedVehicule = new Vehicle();
+        savedVehicule.setBrand("Mercedes");
+        savedVehicule.setModel("Sprinter");
+        savedVehicule.setRegistrationNbr(immat);
+        savedVehicule.setCtExpDate(LocalDate.from(new Date("12/04/2024").toInstant()));
+        savedVehicule.setDfcDate(LocalDate.from(new Date("12/12/2022").toInstant()));
+        savedVehicule.setMileage(BigDecimal.valueOf(122000));
         savedVehicule.setVolume(BigDecimal.valueOf(14));
-        savedVehicule.setNumVin("RRTRE4557B545B545455");
-        savedVehicule.setTypecarburant(TypeEnergie.GASOIL);
+        savedVehicule.setVinNbr("RRTRE4557B545B545455");
+        savedVehicule.setEnergyType(EnergyType.GASOIL);
         savedVehicule.setId(1);
 
         //Mock calls
-        when(vehiculeRepository.findByImmatriculation(immat)).thenReturn(Optional.of(savedVehicule));
+        when(vehiculeRepository.findByRegistrationNbr(immat)).thenReturn(Optional.of(savedVehicule));
         // When
-        VehicleDto v = vehiculeService.findByImmatriculation(immat);
+        VehicleFullDto v = vehiculeService.findByRegistrationNbr(immat);
         // Then
         assertNotNull(v);
     }
@@ -197,9 +197,9 @@ class VehiculeServiceImplTest {
     public void test_successfull_find_All(){
 
         // Given
-        List<VehicleDto> allVehiculesDto = new ArrayList<>();
+        List<VehicleFullDto> allVehiculesDto = new ArrayList<>();
 
-        VehicleDto vehicule1 = VehicleDto.builder()
+        VehicleFullDto vehicule1 = VehicleFullDto.builder()
                 .id(1)
                 .missionsDto(null)
                 .marque("Mercedes")
@@ -210,10 +210,10 @@ class VehiculeServiceImplTest {
                 .kilometrage(BigDecimal.valueOf(122000))
                 .volume(BigDecimal.valueOf(14))
                 .numVin("RRTRE4557B545B545455")
-                .typecarburant(TypeEnergie.GASOIL)
+                .typecarburant(EnergyType.GASOIL)
                 .build();
 
-        VehicleDto vehicule2 = VehicleDto.builder()
+        VehicleFullDto vehicule2 = VehicleFullDto.builder()
                 .id(1)
                 .missionsDto(null)
                 .marque("Mercedes")
@@ -224,20 +224,20 @@ class VehiculeServiceImplTest {
                 .kilometrage(BigDecimal.valueOf(122000))
                 .volume(BigDecimal.valueOf(14))
                 .numVin("RRTRE4557B545B545455")
-                .typecarburant(TypeEnergie.GASOIL)
+                .typecarburant(EnergyType.GASOIL)
                 .build();
         allVehiculesDto.add(vehicule1);
         allVehiculesDto.add(vehicule2);
 
-        List<Vehicule> allVehicules = new ArrayList<>();
+        List<Vehicle> allVehicules = new ArrayList<>();
 
-        for(VehicleDto v : allVehiculesDto){
-            allVehicules.add(VehicleDto.toEntity(v));
+        for(VehicleFullDto v : allVehiculesDto){
+            allVehicules.add(VehicleFullDto.toEntity(v));
         }
         //Mock calls
         when(vehiculeRepository.findAll()).thenReturn(allVehicules);
         //
-        List<VehicleDto> expVehiculeList = vehiculeService.findAll();
+        List<VehicleFullDto> expVehiculeList = vehiculeService.findAll();
         //
         assertEquals(2,expVehiculeList.size());
 
@@ -247,7 +247,7 @@ class VehiculeServiceImplTest {
     public void test_delete_vehicule_by_id(){
             Integer id=2;
 
-        VehicleDto vehicule2 = VehicleDto.builder()
+        VehicleFullDto vehicule2 = VehicleFullDto.builder()
                 .id(id)
                 .missionsDto(null)
                 .marque("Mercedes")
@@ -258,10 +258,10 @@ class VehiculeServiceImplTest {
                 .kilometrage(BigDecimal.valueOf(122000))
                 .volume(BigDecimal.valueOf(14))
                 .numVin("RRTRE4557B545B545455")
-                .typecarburant(TypeEnergie.GASOIL)
+                .typecarburant(EnergyType.GASOIL)
                 .build();
         // Mock
-            when(vehiculeRepository.findById(id)).thenReturn(Optional.ofNullable(VehicleDto.toEntity(vehicule2)));
+            when(vehiculeRepository.findById(id)).thenReturn(Optional.ofNullable(VehicleFullDto.toEntity(vehicule2)));
         // When
         vehiculeService.delete(id);
         //
@@ -274,7 +274,7 @@ class VehiculeServiceImplTest {
     public void test_delete_throw_Invalide_operation_exception_when_vehicule_has_repation(){
         Integer id = 2;
 
-        List<Reparation> reparationList = Arrays.asList(new Reparation());
+        List<Repair> reparationList = Arrays.asList(new Repair());
         // Mock calls
         when(reparationRepository.findAllByVehiculeId(id)).thenReturn(reparationList);
         // When
@@ -282,8 +282,8 @@ class VehiculeServiceImplTest {
             vehiculeService.delete(id);
             fail("L'exception InvalidOperatioException n'apas été levée");
         } catch (InvalidOperationException e) {
-            assertEquals("Impossible de supprimer un vehicule qui " +
-                    "a deja une liste des reparations",e.getMessage());
+            assertEquals("Impossible de supprimer un vehicle qui " +
+                    "a deja une liste des repairs",e.getMessage());
         }
         verify(reparationRepository).findAllByVehiculeId(id);
         verifyNoMoreInteractions(reparationRepository, vehiculeRepository);
@@ -292,18 +292,18 @@ class VehiculeServiceImplTest {
     @Test
     public void testDelete_shouldDeleteVehicule_whenVehiculeHasNoReparations(){
         Integer id = 2;
-        Vehicule  v = new Vehicule();
+        Vehicle  v = new Vehicle();
                 v.setId(id);
                 v.setMission(null);
-                v.setMarque("Mercedes");
-                v.setModele("Sprinter");
-                v.setImmatriculation("AB-858-ER");
-                v.setDateExpCtrlTec(LocalDate.from(new Date("12/04/2024").toInstant()));
-                v.setDatePMC(LocalDate.from(new Date("12/12/2022").toInstant()));
-                v.setKilometrage(BigDecimal.valueOf(122000));
+                v.setBrand("Mercedes");
+                v.setModel("Sprinter");
+                v.setRegistrationNbr("AB-858-ER");
+                v.setCtExpDate(LocalDate.from(new Date("12/04/2024").toInstant()));
+                v.setDfcDate(LocalDate.from(new Date("12/12/2022").toInstant()));
+                v.setMileage(BigDecimal.valueOf(122000));
                 v.setVolume(BigDecimal.valueOf(14));
-                v.setNumVin("RRTRE4557B545B545455");
-                v.setTypecarburant(TypeEnergie.GASOIL);
+                v.setVinNbr("RRTRE4557B545B545455");
+                v.setEnergyType(EnergyType.GASOIL);
 
         //Mock calls
         when(reparationRepository.findAllByVehiculeId(id)).thenReturn(Collections.emptyList());

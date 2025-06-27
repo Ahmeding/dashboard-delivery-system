@@ -2,10 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../../../../services/alert/alert.service";
-import {ChauffeurDto} from "../../../../../../ds-api/src/models/chauffeur-dto";
-import {AdresseDto} from "../../../../../../ds-api/src/models/adresse-dto";
-import {ChauffeurService} from "../../../../../../ds-api/src/services/chauffeur.service";
 import {DateUtilsService} from "../../../../../services/date-utils/date-utils.service";
+import {DriverRequest} from "../../../../../../ds-api/src/models/driver-request";
+import {DriverService} from "../../../../../../ds-api/src/services/driver.service";
 interface RandomCity {
   city: string;
   postalCode: string;
@@ -18,7 +17,7 @@ interface RandomCity {
 export class NewDriverComponent  implements OnInit {
 
 
-  driverValue: ChauffeurDto = {};
+  driverValue!: DriverRequest;
   dId: number | null = null;
   driverForm!: FormGroup;
   isLoading: boolean = false;
@@ -28,7 +27,7 @@ export class NewDriverComponent  implements OnInit {
     private dateUtils: DateUtilsService,
     private route: ActivatedRoute,
     private router: Router,
-    private driverService: ChauffeurService,
+    private driverService: DriverService,
     private alertService: AlertService) {
   }
 
@@ -49,33 +48,33 @@ export class NewDriverComponent  implements OnInit {
       lastname: new FormControl(this.driverValue?.lastname || '', [Validators.required]),
       email: new FormControl(this.driverValue?.email || '', [Validators.required, Validators.email]),
       password: new FormControl(this.driverValue?.password || 'password'),
-      phoneNum: new FormControl(this.driverValue?.phoneNum || '', [Validators.required, Validators.pattern('^[0-9]*$')]),
-      dateOfBirth: new FormControl(this.driverValue?.dateOfBirth || '', [Validators.required]),
+      phoneNum: new FormControl(this.driverValue?.phoneNbr || '', [Validators.required, Validators.pattern('^[0-9]*$')]),
+      dateOfBirth: new FormControl(this.driverValue?.birthDate || '', [Validators.required]),
       drivinglicenseNbr: new FormControl(this.driverValue?.drivinglicenseNbr || '', [Validators.required, Validators.pattern(/^\d{12}$/)]),
-      drivingLicenseType: new FormControl(this.driverValue?.drivingLicenseType || '', [Validators.required]),
+      drivingLicenseType: new FormControl(this.driverValue?.drivinglicenseType || '', [Validators.required]),
       rib: new FormControl(this.driverValue?.rib || '', [Validators.required, Validators.pattern(/^[A-Z]{2}\d{2}\d{5}\d{5}\d{11}\d{2}$/)]),
-      numSecu: new FormControl(this.driverValue?.numSecu || '', [Validators.required, Validators.pattern(/^\d{13}$/)]),
+      numSecu: new FormControl(this.driverValue?.secuNbr || '', [Validators.required, Validators.pattern(/^\d{13}$/)]),
       address: new FormGroup({
-        adresse1: new FormControl(this.driverValue.address?.adresse1 || '', [Validators.required]),
-        adresse2: new FormControl(this.driverValue.address?.adresse2 || ''),
-        codepostal: new FormControl(this.driverValue.address?.codepostal || '', [Validators.required, Validators.pattern('^[0-9]{5}$')]),
-        pays: new FormControl(this.driverValue.address?.pays || '', [Validators.required]),
-        ville: new FormControl(this.driverValue.address?.ville || '', [Validators.required])
+        adresse1: new FormControl(this.driverValue.address?.street || '', [Validators.required]),
+        adresse2: new FormControl(this.driverValue.address?.additionalInfo || ''),
+        codepostal: new FormControl(this.driverValue.address?.postalCode || '', [Validators.required, Validators.pattern('^[0-9]{5}$')]),
+        pays: new FormControl(this.driverValue.address?.country || '', [Validators.required]),
+        ville: new FormControl(this.driverValue.address?.city || '', [Validators.required])
       })
     })
   }
 
   private loadDriverToEditing(vId: number) {
     this.isNewDriver = false;
-    this.driverService.findById18({
+    this.driverService.findDriverById({
       id: vId
     }).subscribe({
       next: (responseD) => {
         this.driverValue = responseD;
-        if (this.driverValue.dateOfBirth) {
-          this.driverValue.dateOfBirth = this.dateUtils.setToInputDate(this.driverValue.dateOfBirth);
+        if (this.driverValue.birthDate) {
+          this.driverValue.birthDate = this.dateUtils.setToInputDate(this.driverValue.birthDate);
         }
-        this.driverForm.patchValue(this.driverValue as ChauffeurDto);
+        this.driverForm.patchValue(this.driverValue as DriverRequest);
 
       }, error: (err) => {
         console.log(err);
@@ -86,7 +85,7 @@ export class NewDriverComponent  implements OnInit {
 
   onSubmit() {
     if (this.driverForm.valid) {
-      const driverData: ChauffeurDto = this.driverForm.value;
+      const driverData: DriverRequest = this.driverForm.value;
       if (this.driverValue?.id) {
         this.saveDriver(driverData, "Updating", "updating");
       } else {
@@ -96,8 +95,8 @@ export class NewDriverComponent  implements OnInit {
 
   }
 
-  private saveDriver(driverValue: ChauffeurDto, successMsg: string, errorMesg: string) {
-    this.driverService.save18({body: driverValue}).subscribe({
+  private saveDriver(driverValue: DriverRequest, successMsg: string, errorMesg: string) {
+    this.driverService.saveDriver({body: driverValue}).subscribe({
       next: (response) => {
         console.log(response);
         this.alertService.alertSuccess(successMsg + " completed successfully!")

@@ -1,9 +1,7 @@
 package com.hitecart.deliverysystem.model;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import com.hitecart.deliverysystem.model.enums.RecurrenceInterval;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.DayOfWeek;
@@ -17,11 +15,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "recurrence_pattern")
 public class RecurrencePattern {
-
-    public enum RecurrenceInterval {
-        DAILY, WEEKLY, BIWEEKLY, MONTHLY
-    }
 
     @Enumerated(EnumType.STRING)
     private RecurrenceInterval recurrenceInterval;

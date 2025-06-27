@@ -18,10 +18,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 @Repository
 public interface MissionRepository extends JpaRepository<Mission, Integer>, JpaSpecificationExecutor<Mission> {
 
-    List<Mission> findAllByDateDebut(Instant dateMission);
+    List<Mission> findAllByStartDate(Instant dateMission);
 
     @Query("""
             SELECT mission
@@ -30,21 +31,20 @@ public interface MissionRepository extends JpaRepository<Mission, Integer>, JpaS
     Page<Mission> findAllMissions(Pageable pageable);
 
     @Query("""
-        SELECT DISTINCT m FROM Mission m
-        WHERE (m.dateDebut < :end AND m.dateFin > :start)
-        AND (
-            m.id IN (
-                SELECT mv.mission.id FROM MissionVehicle mv 
-                WHERE mv.vehicule.id IN :vehicleIds
-            )
-            OR 
-            m.id IN (
-                SELECT cv.missionVehicle.mission.id FROM ChauffeurVehicle cv 
-                WHERE cv.chauffeur.id IN :driverIds
-            )
-        )
-        
-    """)
+                SELECT DISTINCT m FROM Mission m
+                WHERE (m.startDate < :end AND m.endDate > :start)
+                AND (
+                    m.id IN (
+                        SELECT mv.mission.id FROM MissionVehicle mv
+                        WHERE mv.vehicle.id IN :vehicleIds
+                    )
+                    OR
+                    m.id IN (
+                        SELECT cv.missionVehicle.mission.id FROM DriverVehicle cv
+                        WHERE cv.driver.id IN :driverIds
+                    )
+                )
+            """)
     List<Mission> findConflictingMissions(
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end,
@@ -52,78 +52,99 @@ public interface MissionRepository extends JpaRepository<Mission, Integer>, JpaS
             @Param("driverIds") List<Integer> driverIds
     );
 
-    boolean existsByDeliveryDestinationAndDateDebut(DeliveryDestination deliveryDestination, LocalDateTime date);
+    boolean existsByDeliveryDestinationAndStartDate(DeliveryDestination deliveryDestination, LocalDateTime date);
 
     @Query("""
-            SELECT count(m) >0
+            SELECT m
             FROM Mission m
             WHERE m.deliveryDestination = :destination
             AND(
-            (m.dateDebut <= :end AND m.dateFin >= :start)OR
-            (m.dateDebut BETWEEN :start AND :end)
+            (m.startDate <= :end AND m.endDate >= :start)OR
+            (m.startDate BETWEEN :start AND :end)
             )
             """)
-    boolean existsByDeliveryDestinationAndTimeRange(
-            @Param("destination")DeliveryDestination destination,
-            @Param("start")LocalDateTime start,
+    Optional<Mission> findByDeliveryDestinationAndTimeRange(
+            @Param("destination") DeliveryDestination destination,
+            @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end);
 
     @Query("""
-    SELECT m FROM Mission m
-    WHERE m.dateDebut < :weekEnd
-     AND m.dateFin > :weekStart
-     AND NOT EXISTS (
-            SELECT mv FROM MissionVehicle mv
-            WHERE mv.mission = m
-            AND mv.assignedAt >= :weekStart
-            AND mv.assignedAt <= :weekEnd
-        )
-    """)
-
+            SELECT m FROM Mission m
+            WHERE m.startDate < :weekEnd
+             AND m.endDate > :weekStart
+             AND NOT EXISTS (
+                    SELECT mv FROM MissionVehicle mv
+                    WHERE mv.mission = m
+                    AND mv.assignedAt >= :weekStart
+                    AND mv.assignedAt <= :weekEnd
+                )
+            """)
     List<Mission> findMissionsWithVehiclesAndDrivers(
             @Param("weekStart") LocalDateTime weekStart,
             @Param("weekEnd") LocalDateTime weekEnd);
 
     @Query("""
-    SELECT m FROM Mission m
-    WHERE m.dateDebut < :weekEnd
-     AND m.dateFin > :weekStart
-     AND NOT EXISTS (
-            SELECT mv FROM MissionVehicle mv
-            WHERE mv.mission = m
-            AND mv.assignedAt >= :weekStart
-            AND mv.assignedAt <= :weekEnd
-        )
-    """)
-    @EntityGraph(attributePaths = {"deliveryDestination.serviceDelivery", "missionVehicules"})
+            SELECT m FROM Mission m
+            WHERE m.startDate < :weekEnd
+             AND m.endDate > :weekStart
+             AND NOT EXISTS (
+                    SELECT mv FROM MissionVehicle mv
+                    WHERE mv.mission = m
+                    AND mv.assignedAt >= :weekStart
+                    AND mv.assignedAt <= :weekEnd
+                )
+            """)
+    @EntityGraph(attributePaths = {"deliveryDestination.deliveryService", "missionVehicles"})
     List<Mission> findByDateRange(
-            @Param("weekStart")LocalDateTime weekStart,
-            @Param("weekEnd")LocalDateTime weekEnd);
+            @Param("weekStart") LocalDateTime weekStart,
+            @Param("weekEnd") LocalDateTime weekEnd);
 
     // Custom repository method
     @Query("""
-    SELECT m.id as missionId, m.reference as missionReference, 
-           m.dateDebut as startTime, m.dateFin as endTime,
-           v.id as vehicleId
-    FROM Mission m
-    JOIN m.missionVehicules mv
-    JOIN mv.vehicule v
-    WHERE m.dateDebut BETWEEN :start AND :end
-""")
+                SELECT m.id as missionId, m.reference as missionReference,
+                       m.startDate as startTime, m.endDate as endTime,
+                       v.id as vehicleId
+                FROM Mission m
+                JOIN m.missionVehicles mv
+                JOIN mv.vehicle v
+                WHERE m.startDate BETWEEN :start AND :end
+            """)
     List<MissionAssignmentDto> findMissionAssignments(@Param("start") LocalDateTime start,
                                                       @Param("end") LocalDateTime end);
 
-    @Query("SELECT m FROM Mission m WHERE m.dateDebut BETWEEN :start AND :end")
+    @Query("SELECT m FROM Mission m WHERE m.startDate BETWEEN :start AND :end")
     List<MissionView> findMissionsByDateRange(@Param("start") LocalDateTime start,
                                               @Param("end") LocalDateTime end);
 
 
-
-    @EntityGraph(attributePaths = "missionVehicules")
+    @EntityGraph(attributePaths = "missionVehicles")
     @Query("""
-        SELECT DISTINCT m FROM Mission m
-        WHERE m.id = :id
-""")
-    Optional<Mission> findByIdWithMissionVehiclesAndChauffeurs(@Param("id") Integer id);
+                    SELECT DISTINCT m FROM Mission m
+                    WHERE m.id = :id
+            """)
+    Optional<Mission> findByIdWithMissionVehiclesAndDrivers(@Param("id") Integer id);
+
+    @Query("""
+            SELECT m
+            FROM Mission m
+            WHERE m.deliveryDestination.id = :deliveryDestId
+            """)
+    List<Mission> findAllByDeliveryDestinationId(@Param("deliveryDestId") Integer deliveryDestId);
+
+    @Query("""
+            SELECT m
+            FROM Mission m
+            WHERE m.deliveryDestination.id = :deliveryDestId
+            AND m.startDate = :startDate
+            AND m.endDate = :endDate
+            AND m.id <> :excludeId
+            """)
+    Optional<Mission> findAllByDeliveryDestinationIdAndStartDateAndEndDate(
+            @Param("deliveryDestId") Integer deliveryDestId,
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate,
+            @Param("excludeId")Integer excludeId);
+
+    List<Mission> findByStartDateBetween(LocalDateTime rangeStart, LocalDateTime rangeEnd);
 }
 

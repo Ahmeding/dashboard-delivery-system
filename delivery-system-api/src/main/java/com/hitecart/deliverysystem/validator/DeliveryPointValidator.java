@@ -1,33 +1,36 @@
 package com.hitecart.deliverysystem.validator;
 
-import com.hitecart.deliverysystem.dto.basic.DeliveryPointDto;
+import com.hitecart.deliverysystem.dto.deliverypoint.DeliveryPointRequest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DeliveryPointValidator {
-    public static List<String> validate(DeliveryPointDto dto){
+    public static List<String> validate(DeliveryPointRequest request){
         List<String> errors= new ArrayList<>();
-
-        if(dto==null){
-            errors.add("Veuillez renseigner le nom de la ville !");
-            errors.add("Veuillez renseigner le client !");
-            errors.add("Veuillez renseigner le livraison !");
-            errors.add("Veuillez renseigner le type deu point de livraison!");
+        if (request == null) {
+            errors.add("Please provide the city name!");
+            errors.add("Please provide the client!");
+            errors.add("Please provide the delivery information!");
+            errors.add("Please provide the delivery point type!");
             errors.addAll(AdresseValidator.validate(null));
+            return errors;
         }
 
-        if(dto.getDelivDestinationId()==null){
-            errors.add("Veuillez renseigner la destination !");
+        if (request.deliveryDestinationId() == null) {
+            errors.add("Please provide the destination!");
         }
-        if(dto.getSchedule()==null){
-            errors.add("Veuillez renseigner l'heure de livraison!");
+        if (request.schedule() == null) {
+            errors.add("Please provide the delivery time!");
         }
-        if(dto.getDeliveryPointType()==null){
-            errors.add("Veuillez renseigner le type deu point de livraison!");
+        if (request.type() == null) {
+            errors.add("Please provide the delivery point type!");
         }
-        errors.addAll(AdresseValidator.validate(dto.getAddressDto()));
-        errors.addAll(DeliveryPointContactValidator.validate(dto.getContact()));
+
+        errors.addAll(AdresseValidator.validate(request.address()));
+        errors.addAll(DeliveryPointContactValidator.validate(request.contact()));
+
         return errors;
+
     }
 }

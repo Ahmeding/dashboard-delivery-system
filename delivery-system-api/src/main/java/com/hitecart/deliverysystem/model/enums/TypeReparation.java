@@ -1,5 +1,5 @@
 package com.hitecart.deliverysystem.model.enums;
 
 public enum TypeReparation {
-    MECANIQUE,ELECTRIQUE,CARROSSERIE,VIDANGE_COMPLET
+    MECHANICS, ELECTRICAL, CAROSSERIE, OIL_CHANGE, COMPLETE_OIL_CHANGE
 }

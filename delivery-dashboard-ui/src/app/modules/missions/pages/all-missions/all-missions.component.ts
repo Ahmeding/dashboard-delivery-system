@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
-import {MissionDto} from "../../../../../ds-api/src/models/mission-dto";
-import {ChauffeurDto} from "../../../../../ds-api/src/models/chauffeur-dto";
-import {PageResponseMissionDto} from "../../../../../ds-api/src/models/page-response-mission-dto";
 import {Router} from "@angular/router";
 import {AlertService} from "../../../../services/alert/alert.service";
 import {MissionService} from "../../../../../ds-api/src/services/mission.service";
 import {ToastrService} from "ngx-toastr";
 import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
 import {debounceTime, distinctUntilChanged} from "rxjs";
+import {MissionResponse} from "../../../../../ds-api/src/models/mission-response";
+import {DriverResponse} from "../../../../../ds-api/src/models/driver-response";
+import {PageResponseMissionResponse} from "../../../../../ds-api/src/models/page-response-mission-response";
 
 @Component({
   selector: 'app-all-missions',
@@ -20,9 +20,9 @@ export class AllMissionsComponent  implements OnInit{
   //for filter
   filterForm!: FormGroup;
   isLoading!: boolean;
-  missions:Array<MissionDto>=[]
-  drivers:Array<ChauffeurDto>=[]
-  allMissionsResponse: PageResponseMissionDto={};
+  missions:Array<MissionResponse>=[]
+  drivers:Array<DriverResponse>=[]
+  allMissionsResponse: PageResponseMissionResponse={};
   page: number = 0;
   size: number = 5;
 
@@ -82,7 +82,7 @@ export class AllMissionsComponent  implements OnInit{
 
   getAllMission(){
     this.isLoading=true;
-    this.missionService.findAllMissions({
+    this.missionService.findAllMissionsPageable({
       page:this.page,
       size:this.size
     }).subscribe({
@@ -111,7 +111,7 @@ export class AllMissionsComponent  implements OnInit{
     this.confirmBoxService.customFour('Are you sure you want to delete this mission?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.missionService.delete6({id:mission_id}).subscribe(() => {
+          this.missionService.deleteMission({id:mission_id}).subscribe(() => {
             this.getAllMission();
             this.alertService.alertSuccess('Deleted successfully');
             this.alertService.alertSuccess('Deletion successfully completed');

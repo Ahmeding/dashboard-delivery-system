@@ -8,15 +8,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { FraisMissionDto } from '../../models/frais-mission-dto';
-import { MissionDto } from '../../models/mission-dto';
+import { MissionExpenseRequest } from '../../models/mission-expense-request';
+import { MissionResponse } from '../../models/mission-response';
 
 export interface UpdateExpensesMission$Params {
   id: number;
-      body: Array<FraisMissionDto>
+      body: Array<MissionExpenseRequest>
 }
 
-export function updateExpensesMission(http: HttpClient, rootUrl: string, params: UpdateExpensesMission$Params, context?: HttpContext): Observable<StrictHttpResponse<MissionDto>> {
+export function updateExpensesMission(http: HttpClient, rootUrl: string, params: UpdateExpensesMission$Params, context?: HttpContext): Observable<StrictHttpResponse<MissionResponse>> {
   const rb = new RequestBuilder(rootUrl, updateExpensesMission.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
@@ -28,7 +28,7 @@ export function updateExpensesMission(http: HttpClient, rootUrl: string, params:
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<MissionDto>;
+      return r as StrictHttpResponse<MissionResponse>;
     })
   );
 }

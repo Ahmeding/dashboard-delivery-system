@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.View;
 
 import java.time.*;
 import java.time.temporal.ChronoUnit;
@@ -23,14 +22,15 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class AssignmentServiceImpl {
+/*
 
     private final IDriverStatsService driverStatsService;
     private final AvailabilityManager availabilityManager;
-    private final IChauffeurVehicleRepository chauffeurVehicleRepository;
+    private final DriverVehicleRepository chauffeurVehicleRepository;
     private final MissionVehicleRepository missionVehicleRepository;
     private final MissionRepository missionRepository;
-    private final IChauffeurRepository chauffeurRepository;
-    private final VehiculeRepository vehiculeRepository;
+    private final DriverRepository chauffeurRepository;
+    private final VehicleRepository vehiculeRepository;
 
     private LocalDateTime calculateNextAvailableTime(LocalDateTime missionEnd, double distance) {
         if (distance > 800) {
@@ -42,8 +42,8 @@ public class AssignmentServiceImpl {
         }
     }
     // Helper method to find expert driver (EXPERT level with least missions)
-    private Chauffeur findExpertDriver(List<Chauffeur> availableDrivers,
-                                       Map<Chauffeur, Integer> weeklyAssignmentCounts) {
+    private Driver findExpertDriver(List<Driver> availableDrivers,
+                                    Map<Driver, Integer> weeklyAssignmentCounts) {
         return availableDrivers.stream()
                 .filter(d -> d.getExperienceLevel() == DriverExperience.EXPERT)
                 .min(Comparator.comparingInt(d ->
@@ -53,8 +53,8 @@ public class AssignmentServiceImpl {
     }
 
     // Helper method to find helper driver (non-EXPERT with least missions)
-    private Chauffeur findHelperDriver(List<Chauffeur> availableDrivers,
-                                       Map<Chauffeur, Integer> weeklyAssignmentCounts) {
+    private Driver findHelperDriver(List<Driver> availableDrivers,
+                                    Map<Driver, Integer> weeklyAssignmentCounts) {
         return availableDrivers.stream()
                 .filter(d -> d.getExperienceLevel() != DriverExperience.EXPERT)
                 .min(Comparator.comparingInt(d ->
@@ -64,8 +64,8 @@ public class AssignmentServiceImpl {
     }
 
     // Helper method to find single best driver (least missions overall)
-    private List<Chauffeur> findSingleDriver(
-            List<Chauffeur> availableDrivers) {
+    private List<Driver> findSingleDriver(
+            List<Driver> availableDrivers) {
         return availableDrivers.stream()
                 .filter(d -> d.getExperienceLevel() != DriverExperience.EXPERT)
                 .min(Comparator.comparingInt(d -> d.getStats().getTotalMissions()))
@@ -76,25 +76,25 @@ public class AssignmentServiceImpl {
 
     // Helper method to update stats and collect drivers
     private void updateDriverStats(
-            List<Chauffeur> drivers,
+            List<Driver> drivers,
             Mission mission,
-            Set<Chauffeur> updatedDrivers
+            Set<Driver> updatedDrivers
     ) {
 
 
         double distance = mission.getDeliveryDestination()
-                .getServiceDelivery().getDistance();
+                .getDeliveryService().getDistance();
 
         drivers.forEach(driver -> {
             driver.ensureStatsInitialized();  // Critical safety check
             // Update next available time
             driver.setNextAvailableTime(
-                    calculateNextAvailableTime(mission.getDateFin(), distance)
+                    calculateNextAvailableTime(mission.getStartDate(), distance)
             );
             // Update stats
             DriverStats stats = driver.getStats();
             try{
-                if (mission.getDifficulty() == RouteDifficulty.DIFFICULT) {
+                if (mission.getDeliveryDestination().getDeliveryService().getDifficulty() == RouteDifficulty.HARD) {
                     stats.incrementLongTrips();
                 } else {
                     stats.incrementStandardTrips();
@@ -104,7 +104,7 @@ public class AssignmentServiceImpl {
                         driver.getId(), e.getMessage());
                 // Create emergency stats record
                 DriverStats emergencyStats = new DriverStats();
-                emergencyStats.setChauffeur(driver);
+                emergencyStats.setDriver(driver);
                 driver.setStats(emergencyStats);
                 driver.getStats().incrementStandardTrips();
             }
@@ -120,12 +120,14 @@ public class AssignmentServiceImpl {
     // =============================
     @Transactional
     public void generateWeeklyAssignments() {
-        Map<Chauffeur, Integer> weeklyAssignmentCounts = new HashMap<>(); // Track weekly assignments per driver
+        Map<Driver, Integer> weeklyAssignmentCounts = new HashMap<>(); // Track weekly assignments per driver
 
-        Map<Vehicule, Integer> weeklyVehicleAssignmentCounts = new HashMap<>(); // Track weekly assignments per vehicle
-        /* -------------------------------------------
+        Map<Vehicle, Integer> weeklyVehicleAssignmentCounts = new HashMap<>(); // Track weekly assignments per vehicle
+        */
+/* -------------------------------------------
          * 1. Define Weekly Timeframe
-         * ------------------------------------------- */
+         * ------------------------------------------- *//*
+
         // Get current week: Sunday 00:00 to Saturday 23:59
         LocalDateTime weekStart = LocalDateTime.now()
                 .with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY))
@@ -134,28 +136,30 @@ public class AssignmentServiceImpl {
         LocalDateTime weekEnd = weekStart.plusDays(6)
                 .with(LocalTime.MAX);
         // Initialize a Set to track updated drivers
-        Set<Chauffeur> updatedDrivers = new HashSet<>();
-        /* -------------------------------------------
+        Set<Driver> updatedDrivers = new HashSet<>();
+        */
+/* -------------------------------------------
          * 2. Fetch & Prepare Missions
-         * ------------------------------------------- */
+         * ------------------------------------------- *//*
+
         // Get missions occurring this week
         List<Mission> missions = missionRepository.findByDateRange(weekStart, weekEnd);
         List<Mission> failedMissions = new ArrayList<>();
         long expiredCount = missions.stream()
-                .filter(m -> m.getDateDebut().isBefore(LocalDateTime.now()))
+                .filter(m -> m.getStartDate().isBefore(LocalDateTime.now()))
                 .count();
 
         log.info("Filtered {} expired missions", expiredCount);
 
         missions.removeIf(mission ->
-                mission.getDateFin().isAfter(weekEnd) ||
-                        mission.getDateDebut().isBefore(weekStart) ||
-                        mission.getDateDebut().isBefore(LocalDateTime.now())
+                mission.getEndDate().isAfter(weekEnd) ||
+                        mission.getStartDate().isBefore(weekStart) ||
+                        mission.getStartDate().isBefore(LocalDateTime.now())
         );
         // Auto-calculate difficulty for each mission
         missions.forEach(mission -> {
             double distance = mission.getDeliveryDestination()
-                    .getServiceDelivery()
+                    .getDeliveryService()
                     .getDistance();
 
             LocalDateTime start = mission.getDateDebut();
@@ -178,14 +182,16 @@ public class AssignmentServiceImpl {
                         .getServiceDelivery().getDistance())
         );
 
-        /* -------------------------------------------
+        */
+/* -------------------------------------------
          * 3. Prepare Resources
-         * ------------------------------------------- */
+         * ------------------------------------------- *//*
+
         chauffeurRepository.findAll()
                 .forEach(driverStatsService::createStatsForDriver);
 
-        List<Chauffeur> allDrivers = chauffeurRepository.findAll();
-        List<Vehicule> allVehicles = vehiculeRepository.findAll();
+        List<Driver> allDrivers = chauffeurRepository.findAll();
+        List<Vehicle> allVehicles = vehiculeRepository.findAll();
 
         // Weekly rotation shuffle for fairness
         long weekNumber = ChronoUnit.WEEKS.between(LocalDate.of(
@@ -194,7 +200,7 @@ public class AssignmentServiceImpl {
 
         // Initialize tracking systems
 
-        Map<Vehicule, List<TimeSlot>> vehicleAvailability =
+        Map<Vehicle, List<TimeSlot>> vehicleAvailability =
                 availabilityManager.initializeVehicleAvailability(
                         allVehicles,
                         weekStart, weekEnd);
@@ -202,9 +208,11 @@ public class AssignmentServiceImpl {
         availabilityManager.initializeDriverAvailability(
                 allDrivers, weekStart, weekEnd);
 
-        /* -------------------------------------------
+        */
+/* -------------------------------------------
          * 4. Assignment Process
-         * ------------------------------------------- */
+         * ------------------------------------------- *//*
+
 
         List<AssignmentResult> successfulAssignments = new ArrayList<>();
         logAssignmentRequirements(missions);
@@ -218,7 +226,7 @@ public class AssignmentServiceImpl {
             // --------------------------
             // Vehicle Selection
             // --------------------------
-            Vehicule vehicle = findSuitableVehicle(mission,vehicleAvailability, weeklyVehicleAssignmentCounts);
+            Vehicle vehicle = findSuitableVehicle(mission,vehicleAvailability, weeklyVehicleAssignmentCounts);
             if (vehicle == null) {
                 failedMissions.add(mission);
                 continue;
@@ -229,11 +237,11 @@ public class AssignmentServiceImpl {
             // --------------------------
 
 
-            List<DriverExperience> requiredLevels = mission.getDifficulty() == RouteDifficulty.DIFFICULT ?
+            List<DriverExperience> requiredLevels = mission.getDifficulty() == RouteDifficulty.HARD ?
                     List.of(DriverExperience.EXPERT, DriverExperience.INTERMEDIATE, DriverExperience.JUNIOR) :
                     List.of(DriverExperience.INTERMEDIATE, DriverExperience.JUNIOR);
 
-            List<Chauffeur> availableDrivers =
+            List<Driver> availableDrivers =
                     availabilityManager.getAvailableDrivers(
                                     missionSlot,
                                     requiredLevels).stream()
@@ -244,17 +252,19 @@ public class AssignmentServiceImpl {
                                     availabilityManager.isAvailable(driver,missionSlot))
                             .collect(Collectors.toList());
 
+*/
 /*             availableDrivers = availableDrivers.stream()
                     .filter(driver ->
                             (driver.getNextAvailableTime() == null ||
                                     driver.getNextAvailableTime().isBefore(missionSlot.getStart())) &&
                                     availabilityManager.isAvailable(driver, missionSlot)
                     )
-                    .collect(Collectors.toList());*/
+                    .collect(Collectors.toList());*//*
 
 
 
-            List<Chauffeur> drivers = new ArrayList<>();
+
+            List<Driver> drivers = new ArrayList<>();
             drivers = this.assignDrivers(
                     availableDrivers,
                     mission,
@@ -291,9 +301,11 @@ public class AssignmentServiceImpl {
             successfulAssignments.add(result);
         }
 
-        /* -------------------------------------------
+        */
+/* -------------------------------------------
          * 6. Finalize & Save Results
-         * ------------------------------------------- */
+         * ------------------------------------------- *//*
+
 
         // Before saving drivers
         updatedDrivers.forEach(driver -> {
@@ -304,9 +316,11 @@ public class AssignmentServiceImpl {
         });
         // Batch save all updated drivers in one query
         chauffeurRepository.saveAll(updatedDrivers);
-        /* -------------------------------------------
+        */
+/* -------------------------------------------
          * 7. Finalize & Save Results
-         * ------------------------------------------- */
+         * ------------------------------------------- *//*
+
         saveAssignments(successfulAssignments);
         logResults(successfulAssignments, failedMissions);
         updateDriverAssignmentStatus(successfulAssignments);
@@ -326,9 +340,9 @@ public class AssignmentServiceImpl {
 // ======================
 
     private void updateVehicleAvailability(
-            Vehicule vehicle,
+            Vehicle vehicle,
             TimeSlot missionSlot,
-            Map<Vehicule, List<TimeSlot>> availability) {
+            Map<Vehicle, List<TimeSlot>> availability) {
 
         availability.compute(vehicle, (v, slots) ->
                 slots.stream()
@@ -348,7 +362,7 @@ public class AssignmentServiceImpl {
     private void logResourceUtilization(
             int success,
             int failed,
-            Set<Chauffeur> updatedDrivers,
+            Set<Driver> updatedDrivers,
             List<AssignmentResult> successfulAssignments,
             int totalDrivers,
             int totalVehicles) {
@@ -380,11 +394,13 @@ public class AssignmentServiceImpl {
         return hours <= 18;
     }
 
-    /**
+    */
+/**
      * Finds vehicle with sufficient capacity and availability
-     */
-    private Vehicule findSuitableVehicle(Mission mission, Map<Vehicule,
-            List<TimeSlot>> availability, Map<Vehicule, Integer> weeklyVehicleAssignmentCounts) {
+     *//*
+
+    private Vehicle findSuitableVehicle(Mission mission, Map<Vehicle,
+            List<TimeSlot>> availability, Map<Vehicle, Integer> weeklyVehicleAssignmentCounts) {
 
         TimeSlot missionSlot = new TimeSlot(mission.getDateDebut(), mission.getDateFin());
         log.debug("Finding vehicle for mission ID {} (Volume: {}, Time: {} to {})",
@@ -392,27 +408,27 @@ public class AssignmentServiceImpl {
 
         return availability.entrySet().stream()
                 .peek(entry -> {
-                    Vehicule v = entry.getKey();
+                    Vehicle v = entry.getKey();
                     log.debug("Checking vehicle {} (Volume: {})",
-                            entry.getKey().getId(), entry.getKey().getVolume());
+                            entry.getKey().getId(), entry.getKey().getCapacity());
                     log.debug("Available slots for vehicle {}: {}",
                             entry.getKey().getId(), entry.getValue());
                     log.debug("Vehicle {} availability slots: {}",
                             entry.getKey().getId(), entry.getValue());
                     log.debug("Inspecting vehicle {} (Vol: {}, Type: {}, Active: {})",
-                            v.getId(), v.getVolume(), v.getVehicleType(), v.getIsActive());
+                            v.getId(), v.getCapacity(), v.getVehicleType(), v.getIsActive());
                 })
                 // Enhanced filtering with failure reasons
                 .filter(entry -> {
-                    Vehicule v = entry.getKey();
+                    Vehicle v = entry.getKey();
                     // Check capacity
                     boolean hasCapacity =
-                            v.getVolume()
+                            v.getCapacity()
                                     .compareTo(mission.getVolume()) >= 0;
 
                     log.debug("Vehicle {}: hasCapacity={} (Mission requires {}, Vehicle has {})",
                             entry.getKey().getId(), hasCapacity,
-                            mission.getVolume(), entry.getKey().getVolume());
+                            mission.getVolume(), entry.getKey().getCapacity());
 
                     // Check availability
                     boolean availableSlot  = entry.getValue().stream()
@@ -420,7 +436,7 @@ public class AssignmentServiceImpl {
 
                     if (!hasCapacity) {
                         log.trace("Reject vehicle {}: Insufficient capacity ({} < {})",
-                                v.getId(), v.getVolume(), mission.getVolume());
+                                v.getId(), v.getCapacity(), mission.getVolume());
                     }
                     if (!availableSlot) {
                         log.trace("Reject vehicle {}: No compatible time slots", v.getId());
@@ -428,25 +444,25 @@ public class AssignmentServiceImpl {
 
                     log.debug("Vehicle {}: Capacity={}/{} Available={}",
                             entry.getKey().getId(),
-                            entry.getKey().getVolume(),
+                            entry.getKey().getCapacity(),
                             mission.getVolume(),
                             availableSlot ? "Yes" : "No");
                     return hasCapacity && availableSlot;
                 })
                 // Better selection logic with prioritization
                 .min(Comparator.comparingInt(
-                                (Map.Entry<Vehicule, List<TimeSlot>> entry) ->
+                                (Map.Entry<Vehicle, List<TimeSlot>> entry) ->
                                         weeklyVehicleAssignmentCounts
                                                 .getOrDefault(entry.getKey(),0)
-                        ).thenComparing(entry->entry.getKey().getVolume())
+                        ).thenComparing(entry->entry.getKey().getCapacity())
                         .thenComparing(entry->entry.getValue().size(), // Secondary: Most available slots
                                 Comparator.reverseOrder()
                         ))
                 .map(entry -> {
-                    Vehicule selectedVehicle = entry.getKey();
+                    Vehicle selectedVehicle = entry.getKey();
                     log.info("Selected vehicle {} for mission {} (Vol: {}, Slots remaining: {})",
                             selectedVehicle.getId(), mission.getId(),
-                            selectedVehicle.getVolume(), entry.getValue().size());
+                            selectedVehicle.getCapacity(), entry.getValue().size());
 // Update weekly assignment count
                     weeklyVehicleAssignmentCounts.merge(selectedVehicle, 1, Integer::sum);
 
@@ -460,7 +476,8 @@ public class AssignmentServiceImpl {
                 });
     }
 
-    /**
+    */
+/**
      *
      * @param availableDrivers
      * @param mission
@@ -469,20 +486,21 @@ public class AssignmentServiceImpl {
      * @param availabilityManager
      * @param missionSlot
      * @return
-     */
-    private List<Chauffeur> assignDrivers(
-            List<Chauffeur> availableDrivers,
+     *//*
+
+    private List<Driver> assignDrivers(
+            List<Driver> availableDrivers,
             Mission mission,
-            Map<Chauffeur, Integer> weeklyAssignmentCounts,
+            Map<Driver, Integer> weeklyAssignmentCounts,
             List<Mission> allMissions, // Pass the full mission list
             AvailabilityManager availabilityManager,
             TimeSlot missionSlot ) {
 
-        List<Chauffeur> drivers = new ArrayList<>();
+        List<Driver> drivers = new ArrayList<>();
 
         log.debug("Starting driver assignment for mission {} (Difficulty: {})",
                 mission.getId(), mission.getDifficulty());
-        if (mission.getDifficulty() == RouteDifficulty.DIFFICULT) {
+        if (mission.getDifficulty() == RouteDifficulty.HARD) {
             log.debug("Processing difficult mission {}", mission.getId());
 
 
@@ -490,8 +508,8 @@ public class AssignmentServiceImpl {
             logAvailableDrivers(availableDrivers, "Initial available drivers for difficult mission");
 
             // Try expert + helper first
-            Chauffeur expert = findExpertDriver(availableDrivers,weeklyAssignmentCounts);
-            Chauffeur helper = findHelperDriver(availableDrivers,weeklyAssignmentCounts);
+            Driver expert = findExpertDriver(availableDrivers,weeklyAssignmentCounts);
+            Driver helper = findHelperDriver(availableDrivers,weeklyAssignmentCounts);
 
             if (expert != null && helper != null) {
                 drivers.add(expert);
@@ -500,7 +518,7 @@ public class AssignmentServiceImpl {
                         expert.getId(), helper.getId(), mission.getId());
             } else if (expert != null) {
                 // Expert + any available non-expert
-                Chauffeur fallbackDriver = availableDrivers
+                Driver fallbackDriver = availableDrivers
                         .stream()
                         .filter(d->d !=expert)
                         .findFirst()
@@ -516,12 +534,12 @@ public class AssignmentServiceImpl {
                 // New priority: Intermediate + Junior
                 log.debug("No experts available, trying intermidiate/junior combination");
 
-                List<Chauffeur> intermediates= availableDrivers.stream()
+                List<Driver> intermediates= availableDrivers.stream()
                         .filter(d->d.getExperienceLevel()
                                 == DriverExperience.INTERMEDIATE)
                         .collect(Collectors.toList());
 
-                List<Chauffeur> juniors = availableDrivers.stream()
+                List<Driver> juniors = availableDrivers.stream()
                         .filter(d->d.getExperienceLevel()
                                 == DriverExperience.JUNIOR)
                         .collect(Collectors.toList());
@@ -541,12 +559,12 @@ public class AssignmentServiceImpl {
                 }
                 // Then try intermediate + junior
                 else if (!intermediates.isEmpty() && !juniors.isEmpty()) {
-                    Chauffeur intermediate = intermediates.stream()
+                    Driver intermediate = intermediates.stream()
                             .min(Comparator.comparingInt(d ->
                                     weeklyAssignmentCounts.getOrDefault(d,0)))
                             .orElse(null);
 
-                    Chauffeur junior = juniors.stream()
+                    Driver junior = juniors.stream()
                             .min(Comparator.comparingInt(d ->
                                     weeklyAssignmentCounts.getOrDefault(d,0)))
                             .orElse(null);
@@ -573,7 +591,7 @@ public class AssignmentServiceImpl {
         else {
             // For standard missions, prioritize least busy non-expert driver
             // First try non-experts
-            List<Chauffeur> nonExperts = availableDrivers.stream()
+            List<Driver> nonExperts = availableDrivers.stream()
                     .filter(d -> d.getExperienceLevel() != DriverExperience.EXPERT)
                     .collect(Collectors.toList());
             if (!nonExperts.isEmpty()) {
@@ -586,12 +604,12 @@ public class AssignmentServiceImpl {
             }else {
                 // Check if all difficult missions are assigned
                 boolean allDifficultCovered = allMissions.stream()
-                        .filter(m -> m.getDifficulty() == RouteDifficulty.DIFFICULT)
+                        .filter(m -> m.getDifficulty() == RouteDifficulty.HARD)
                         .allMatch(m -> m.getAssignmentStatus() == AssignmentStatus.ASSIGNED);
 
                 if (allDifficultCovered) {
                     // Get available experts for this slot
-                    List<Chauffeur> experts = availabilityManager.getAvailableDrivers(
+                    List<Driver> experts = availabilityManager.getAvailableDrivers(
                                     missionSlot,
                                     List.of(DriverExperience.EXPERT)
                             ).stream()
@@ -605,7 +623,7 @@ public class AssignmentServiceImpl {
                             .min(Comparator.comparingInt(d ->
                                     weeklyAssignmentCounts.getOrDefault(d, 0)
                             ))  // Close min() first
-                            .map(List::of)  // Now working with Optional<Chauffeur>
+                            .map(List::of)  // Now working with Optional<Driver>
                             .orElse(Collections.emptyList());
                     if (!drivers.isEmpty()) {
                         log.info("Assigned expert driver {} to standard mission {} (fallback)",
@@ -617,7 +635,7 @@ public class AssignmentServiceImpl {
 
         // Validate driver count for dificulte missions
         // Validation and cleanup
-        if(mission.getDifficulty() == RouteDifficulty.DIFFICULT
+        if(mission.getDifficulty() == RouteDifficulty.HARD
                 && drivers.size()!=2) {
             log.warn("Failed to assign 2 drivers for difficult mission {}. Found: {}/2",
 
@@ -639,43 +657,45 @@ public class AssignmentServiceImpl {
     }
 
     // Helper method for logging
-    private void logAvailableDrivers(List<Chauffeur> drivers, String context) {
+    private void logAvailableDrivers(List<Driver> drivers, String context) {
         log.debug("{} ({} drivers): {}", context, drivers.size(), drivers.stream()
                 .map(d -> d.getId() + "(" + d.getExperienceLevel() + ")")
                 .collect(Collectors.joining(", ")));
     }
 
-    /**
+    */
+/**
      *
      * @param assignments
-     */
+     *//*
+
     private void saveAssignments(List<AssignmentResult> assignments) {
         List<MissionVehicle> missionVehicles = new ArrayList<>();
-        List<ChauffeurVehicle> chauffeurVehicles = new ArrayList<>();
+        List<DriverVehicle> driverVehicles = new ArrayList<>();
 
         for (AssignmentResult assignment : assignments) {
             // Create MissionVehicle
             MissionVehicle mv = MissionVehicle.builder()
                     .mission(assignment.getMission())
-                    .vehicule(assignment.getVehicle())
+                    .vehicle(assignment.getVehicle())
                     .assignedAt(LocalDateTime.now())
                     .build();
             missionVehicles.add(mv);
 
-            // Create ChauffeurVehicle links
-            for (Chauffeur driver : assignment.getDrivers()) {
-                ChauffeurVehicle cv = ChauffeurVehicle.builder()
+            // Create DriverVehicle links
+            for (Driver driver : assignment.getDrivers()) {
+                DriverVehicle cv = DriverVehicle.builder()
                         .missionVehicle(mv)
-                        .chauffeur(driver)
+                        .driver(driver)
                         .assignedAt(LocalDateTime.now())
                         .build();
-                chauffeurVehicles.add(cv);
+                driverVehicles.add(cv);
             }
         }
 
         // Batch save to database
         missionVehicleRepository.saveAll(missionVehicles);
-        chauffeurVehicleRepository.saveAll(chauffeurVehicles);
+        chauffeurVehicleRepository.saveAll(driverVehicles);
     }
     // =============================
     //
@@ -707,7 +727,7 @@ public class AssignmentServiceImpl {
         // Collect all unique driver IDs
         Set<Integer> driverIds = assignments.stream()
                 .flatMap(a -> a.getDrivers().stream())
-                .map(Chauffeur::getId)
+                .map(Driver::getId)
                 .collect(Collectors.toSet());
 
         // Bulk update isAssigned status
@@ -721,7 +741,7 @@ public class AssignmentServiceImpl {
 
     private void logAssignmentRequirements(List<Mission> missions) {
         long difficultMissions = missions.stream()
-                .filter(m -> m.getDifficulty() == RouteDifficulty.DIFFICULT)
+                .filter(m -> m.getDifficulty() == RouteDifficulty.HARD)
                 .count();
 
         log.info("Weekly Assignment Requirements:");
@@ -730,5 +750,6 @@ public class AssignmentServiceImpl {
         log.info("Standard missions requiring 1 driver: {}", missions.size() - difficultMissions);
         log.info("Total vehicles needed: {}", missions.size());
     }
+*/
 
 }

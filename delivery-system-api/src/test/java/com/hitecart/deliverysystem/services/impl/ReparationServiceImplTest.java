@@ -7,11 +7,11 @@ public class ReparationServiceImplTest {
 /*
     // which service we want to test
     @InjectMocks
-    private ReparationServiceImpl reparationService;
+    private RepairServiceImpl reparationService;
     @Mock
-    private ReparationRepository reparationRepository;
+    private RepairRepository reparationRepository;
     @Mock
-    private PieceRechangeRepository pieceRechangeRepository;
+    private SparePartRepository pieceRechangeRepository;
 
     @BeforeEach
     public void setUp() {
@@ -23,21 +23,21 @@ public class ReparationServiceImplTest {
     public void should_successfully_save_a_Reparation(){
 
         // given
-        List<PieceRechangeDto> pieceRechanges = new ArrayList<>();
-        PieceRechangeDto pieceRechangeDto1 = PieceRechangeDto.builder()
+        List<SparePartFullDto> spareParts = new ArrayList<>();
+        SparePartFullDto pieceRechangeDto1 = SparePartFullDto.builder()
                 .nom("Pneu")
                 .prix(BigDecimal.valueOf(100.0))
                 .reference("Ref001")
                 .build();
-        pieceRechanges.add(pieceRechangeDto1);
-        PieceRechangeDto pieceRechangeDto2 = PieceRechangeDto.builder()
+        spareParts.add(pieceRechangeDto1);
+        SparePartFullDto pieceRechangeDto2 = SparePartFullDto.builder()
                 .nom("Huile moteur")
                 .prix(BigDecimal.valueOf(50.0))
                 .reference("Ref002")
                 .build();
-        pieceRechanges.add(pieceRechangeDto2);
+        spareParts.add(pieceRechangeDto2);
 
-        VehicleDto vehiculeDto = VehicleDto.builder()
+        VehicleFullDto vehiculeDto = VehicleFullDto.builder()
                 .id(1)
                 .missionsDto(null).marque("Renault").modele("Clio").immatriculation("AB-858-ER")
                 .dateExpCtrlTec(LocalDate.from(new Date("12/04/2024").toInstant()))
@@ -47,43 +47,43 @@ public class ReparationServiceImplTest {
                 .numVin("RRTRE4557B545B545455")
                 .build();
 
-        ReparationDto reparationDto = ReparationDto.builder()
+        RepairFullDto repairFullDto = RepairFullDto.builder()
                 .cout(BigDecimal.valueOf(500))
                 .type(TypeReparation.MECANIQUE)
                 .dateDebut(new Date().toInstant())
                 .commentaire("commentaire test")
                 .dateFin(new Date().toInstant())
-                .pieceRechangesDtos(pieceRechanges)
+                .pieceRechangesDtos(spareParts)
                 .vehiculeDto(vehiculeDto)
                 .build();
 
-        List<PieceRechange> piecesRList = new ArrayList<>();
+        List<SparePart> piecesRList = new ArrayList<>();
 
 
-        Reparation reparationToSave = new Reparation();
-        reparationToSave.setCommentaire("commentaire test");
-        reparationToSave.setCout(BigDecimal.valueOf(500));
+        Repair reparationToSave = new Repair();
+        reparationToSave.setComment("commentaire test");
+        reparationToSave.setCost(BigDecimal.valueOf(500));
         reparationToSave.setType(TypeReparation.MECANIQUE);
-        reparationToSave.setDateDebut(new Date().toInstant());
-        reparationToSave.setDateFin(new Date("12/04/2024").toInstant());
-        reparationToSave.setVehicule(VehicleDto.toEntity(vehiculeDto));
-        reparationToSave.setPieceRechanges(
-                 pieceRechanges.stream()
-                .map(PieceRechangeDto::toEntity).collect(Collectors.toList()));
+        reparationToSave.setStartDate(new Date().toInstant());
+        reparationToSave.setEndDate(new Date("12/04/2024").toInstant());
+        reparationToSave.setVehicle(VehicleFullDto.toEntity(vehiculeDto));
+        reparationToSave.setSpareParts(
+                 spareParts.stream()
+                .map(SparePartFullDto::toEntity).collect(Collectors.toList()));
 
 
         // Mocking
 
         when(reparationRepository.save(reparationToSave))
-                .thenReturn(ReparationDto.toEntity(reparationDto));
+                .thenReturn(RepairFullDto.toEntity(repairFullDto));
 
         // When
 
-        ReparationDto reparationDto1  = reparationService.save(ReparationDto.fromEntity(reparationToSave));
+        RepairFullDto reparationDto1  = reparationService.save(RepairFullDto.fromEntity(reparationToSave));
 
         // then
 
-        assertEquals(reparationDto1.getCout(), reparationDto.getCout());
+        assertEquals(reparationDto1.getCost(), repairFullDto.getCost());
 
 
     }

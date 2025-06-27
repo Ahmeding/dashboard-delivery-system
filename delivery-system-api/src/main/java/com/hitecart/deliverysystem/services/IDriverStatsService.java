@@ -1,8 +1,8 @@
 package com.hitecart.deliverysystem.services;
 
-import com.hitecart.deliverysystem.model.Chauffeur;
+import com.hitecart.deliverysystem.model.Driver;
 
 public interface IDriverStatsService {
 
-public void createStatsForDriver(Chauffeur driver);
+public void createStatsForDriver(Driver driver);
 }

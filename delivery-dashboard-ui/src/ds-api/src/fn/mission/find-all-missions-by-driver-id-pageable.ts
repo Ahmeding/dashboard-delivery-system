@@ -8,14 +8,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PageResponseMissionDto } from '../../models/page-response-mission-dto';
+import { PageResponseMissionResponse } from '../../models/page-response-mission-response';
 
 export interface FindAllMissionsByDriverIdPageable$Params {
   page?: number;
   size?: number;
 }
 
-export function findAllMissionsByDriverIdPageable(http: HttpClient, rootUrl: string, params?: FindAllMissionsByDriverIdPageable$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseMissionDto>> {
+export function findAllMissionsByDriverIdPageable(http: HttpClient, rootUrl: string, params?: FindAllMissionsByDriverIdPageable$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseMissionResponse>> {
   const rb = new RequestBuilder(rootUrl, findAllMissionsByDriverIdPageable.PATH, 'get');
   if (params) {
     rb.query('page', params.page, {});
@@ -27,7 +27,7 @@ export function findAllMissionsByDriverIdPageable(http: HttpClient, rootUrl: str
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<PageResponseMissionDto>;
+      return r as StrictHttpResponse<PageResponseMissionResponse>;
     })
   );
 }

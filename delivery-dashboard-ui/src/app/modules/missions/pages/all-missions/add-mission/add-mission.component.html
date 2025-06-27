@@ -27,7 +27,7 @@
                   <option [ngValue]="undefined" selected disabled>Select Service</option>
                   <option *ngFor="let dDestination of allDeliveryDestinations"
                           [ngValue]="dDestination">
-                    {{ dDestination.serviceDelivery?.destinationCity}}
+                    {{ dDestination.deliveryService?.destinationCity}}
                   </option>
                 </select>
                 <label for="inputServ">Select Service <span class="required">*</span></label>
@@ -151,7 +151,8 @@
                         id="inputLieuArrivee"
                         [class.is-invalid]="isFieldInvalid(currentEtapeForm,'lieuArrivee')">
                         <option  [ngValue]="undefined" [selected]="true" disabled>Select Delivery Point</option>
-                        <option *ngFor="let dp of allDeliveryPointsByCity" [ngValue]="dp">{{ dp.name }} - {{ dp.addressDto?.ville }}</option>
+                        <option *ngFor="let dp of allDeliveryPointsByCity" [ngValue]="dp">{{ dp.name }} -
+                          {{ dp.address?.city }}</option>
                       </select>
                       <label for="inputLieuArrivee">Destination<span class="required">*</span></label>
                       <small *ngIf="isFieldInvalid(currentEtapeForm,'lieuArrivee')" class="required">Stage Arrival is required.</small>
@@ -174,7 +175,7 @@
                   </div>
 
                   <div class="col-md-1 d-flex align-items-center">
-                    <button class="btn btn-primary w-100"(click)="addEtape()">
+                    <button class="btn btn-primary w-100"(click)="addStopPoint()">
                       <i class="bi bi-plus-lg"></i>
                     </button>
                   </div>
@@ -212,23 +213,23 @@
             </div>
           </div>-->
           <div class="stages-list mt-4">
-            <div class="stage-item" *ngFor="let etape of etapes; let i = index">
+            <div class="stage-item" *ngFor="let etape of stopPointRequests; let i = index">
               <div class="stage-content">
                 <div class="stage-route">
                   <!-- Departure -->
                   <div class="location-group departure">
                     <div class="location">
                       <i class="bi bi-geo-alt-fill text-primary fs-5"></i>
-                      <span class="location-text">{{etape.lieuDepart}}</span>
+                      <span class="location-text">{{etape.departureLocation}}</span>
                     </div>
                     <div class="datetime">
                       <small class="date">
                         <i class="bi bi-calendar3 text-info"></i>
-                        {{convertToDate(etape.dateDepart!)}}
+                        {{convertToDate(etape.departureDate!)}}
                       </small>
                       <small class="time">
                         <i class="bi bi-clock text-warning"></i>
-                        {{convertToTime(etape.dateDepart!) }}
+                        {{convertToTime(etape.departureDate!) }}
                       </small>
                     </div>
                   </div>
@@ -241,12 +242,12 @@
                   <!-- Arrival -->
                   <div class="location-group arrival">
                     <div class="location">
-                      <span class="location-text">{{etape.lieuArrivee}} </span>
+                      <span class="location-text">{{etape.departureLocation}} </span>
                       <i class="bi bi-pin-map-fill text-success fs-5"></i>
                     </div>
                     <div class="datetime">
                       <small class="date">
-                        {{convertToDate(etape.dateArrivee!)}}
+                        {{convertToDate(etape.arrivalLocation!)}}
                         <i class="bi bi-calendar3 text-info"></i>
                       </small>
                       <small class="time">
@@ -257,7 +258,7 @@
                   </div>
                 </div>
               </div>
-              <button class="btn btn-icon" (click)="removeEtape(i)">
+              <button class="btn btn-icon" (click)="removeStopPoint(i)">
                 <i class="bi bi-x-circle text-danger"></i>
               </button>
             </div>
@@ -284,14 +285,14 @@
                     class="form-select">
                     <option [ngValue]="undefined" disabled> Select a vehicle </option>
                     <option *ngFor="let vehicle of allVehicles" [ngValue]=vehicle>
-                      {{vehicle.immatriculation}} - {{vehicle.marque}} ({{vehicle.volume}}m³)
+                      {{vehicle.registrationNbr}} - {{vehicle.brand}} ({{vehicle.volumeCapacity}}m³)
                     </option>
                   </select>
                   <label for="vehicleSelect">Vehicle<span class="required">*</span></label>
                   <small *ngIf="isFieldInvalid(currentMissionVForm,'vehicleDto')" class="required">Select a vehicle</small>
                   <span *ngIf="checkVehicleAvailability" class="spinner-border spinner-border-sm text-danger"></span>
                   <small *ngIf="checkVehicleAvailability" class="required">Check for availability...</small>
-                  <small *ngIf="assinedVehicleError" class="required">Vehicle already assigned for the selected start date</small>
+                  <small *ngIf="assignedVehicleError" class="required">Vehicle already assigned for the selected start date</small>
                 </div>
               </div>
 
@@ -344,21 +345,21 @@
           <!--<pre>{{ missionVehiclesDtoArray | json }}</pre>-->
           <!-- Selected Vehicles List -->
           <div class="vehicles-list mt-4">
-            <div class="vehicle-item" *ngFor="let v of missionVcls; let i = index">
+            <div class="vehicle-item" *ngFor="let v of missionVehicleRequests; let i = index">
               <div class="vehicle-plate">
                 <div class="plate-content">
                   <i class="bi bi-truck"></i>
-                  <span class="plate-number">{{v.vehicleDto?.immatriculation}}</span>
+                  <span class="plate-number">{{v.missionId}}</span>
                 </div>
               </div>
 
               <div class="vehicle-drivers">
-                <div class="driver" *ngFor="let driver of v.chauffeursVehicleDto">
+                <div class="driver" *ngFor="let driver of v.driverVehicles">
                   <div class="driver-avatar">
                     <i class="bi bi-person-circle"></i>
                   </div>
                   <div class="driver-info">
-                    <span class="driver-name">{{driver.chauffeurDto?.firstname}} {{driver.chauffeurDto?.lastname}}</span>
+                    <span class="driver-name">{{driver.driverId}} {{driver.driverId}}</span>
                   </div>
                 </div>
               </div>

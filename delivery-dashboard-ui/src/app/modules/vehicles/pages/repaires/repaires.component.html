@@ -38,11 +38,11 @@
             <tbody>
             <tr *ngFor="let repair of allRepairsResponse.content">
               <td>{{ repair.id}}</td>
-              <td>{{ repair.vehiculeDto?.immatriculation }}/{{ repair.vehiculeDto?.marque }} {{ repair.vehiculeDto?.modele }}</td>
+              <td>{{ repair.vehicleId }}/{{ repair.vehicleId }} {{ repair.vehicleId }}</td>
               <td>{{repair.type}}</td>
-              <td>{{repair.dateDebut }}</td>
-              <td>{{ repair.dateDebut }}</td>
-              <td>{{ repair.createdByUser?.fullname}}</td>
+              <td>{{repair.startDate }}</td>
+              <td>{{ repair.endDate }}</td>
+              <td>{{ repair.createdBy}}</td>
               <td>
                 <i class="bi bi-pen text-warning mr-3" (click)="goToUpdateRepair(repair.id!)" title="Modify"></i>
                 <i class="bi bi-eye text-info m-3" title="Détail" (click)="openRepairModal(repair)" ></i>

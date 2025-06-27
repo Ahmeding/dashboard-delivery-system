@@ -1,6 +1,6 @@
 CREATE INDEX idx_mission_dates ON mission(date_debut, date_fin);
-CREATE INDEX idx_vehicle_volume ON vehicule(volume);
-CREATE INDEX idx_driver_experience ON chauffeur(experience_level);
+CREATE INDEX idx_vehicle_volume ON vehicle(volume);
+CREATE INDEX idx_driver_experience ON driver(experience_level);
 
 
 **Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**

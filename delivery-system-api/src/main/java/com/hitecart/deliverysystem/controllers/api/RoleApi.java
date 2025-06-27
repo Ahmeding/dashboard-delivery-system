@@ -1,7 +1,8 @@
 package com.hitecart.deliverysystem.controllers.api;
 
-import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.basic.RoleDto;
+import com.hitecart.deliverysystem.dto.role.RoleRequest;
+import com.hitecart.deliverysystem.dto.role.RoleResponse;
+import com.hitecart.deliverysystem.dto.role.RoleUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
 import java.util.List;
 
 import static com.hitecart.deliverysystem.utils.Constants.*;
@@ -21,8 +21,7 @@ import static com.hitecart.deliverysystem.utils.Constants.*;
 public interface RoleApi {
 
     @PostMapping(value = CREATE_ROLE_ENDPOINT,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-
-    @Operation(
+    @Operation(operationId = "saveRole",
             description = "Ajouter/Modifier une role, cette methode permet " +
                     "d'enregistrer ou modifier une reparattion",
             responses = {
@@ -31,17 +30,37 @@ public interface RoleApi {
                             description = "L'objet role a été créé / modifié",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = RoleDto.class))
+                                    schema = @Schema(implementation = RoleResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "400",
                             description = "L'objet role n'est pas valide",
                             content = @Content(mediaType = "application/json"))
             })
-    ResponseEntity<RoleDto> save(@RequestBody RoleDto dto);
+    ResponseEntity<RoleResponse> saveRole(@RequestBody RoleRequest roleRequest);
+
+    @PatchMapping(value = UPDATE_ROLE_ENDPOINT,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(operationId = "updateRoleInfo",
+            description = "Ajouter/Modifier une role, cette methode permet " +
+                    "d'enregistrer ou modifier une reparattion",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "L'objet role a été créé / modifié",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = RoleResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "L'objet role n'est pas valide",
+                            content = @Content(mediaType = "application/json"))
+            })
+    ResponseEntity<RoleResponse> updateRoleInfo(@PathVariable("roleId")Integer roleId, @RequestBody RoleUpdateRequest roleRequest);
+
 
     @GetMapping(value = FIND_ROLE_BY_ID_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(
+    @Operation(operationId = "findRoleById",
             description = "Rechercher une role par ID! Cette methode permet de chercher une role par son ID",
             responses = {
                     @ApiResponse(
@@ -61,10 +80,11 @@ public interface RoleApi {
                     )
             }
     )
-    ResponseEntity<RoleDto> findById(@PathVariable("id") Integer id);
+    ResponseEntity<RoleResponse> findRoleById(@PathVariable("id") Integer id);
+
 
     @GetMapping(value = FIND_ALL_ROLE_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(
+    @Operation(operationId = "findAllRole",
             description = "Rechercher tout les role! Cette methode permet de retouner toutes les roles",
             responses = {
                     @ApiResponse(
@@ -76,10 +96,10 @@ public interface RoleApi {
                     )
             }
     )
-    ResponseEntity<List<RoleDto>> findAll();
+    ResponseEntity<List<RoleResponse>> findAllRole();
 
     @DeleteMapping(value = DELETE_ROLE_ENDPOINT)
-    @Operation(
+    @Operation(operationId = "deleteRole",
             description = "Supprimer une role par ID! Cette methode permet de suprimmer une role par son ID",
             responses = {
                     @ApiResponse(
@@ -98,5 +118,5 @@ public interface RoleApi {
                     )
             }
     )
-    void delete(@PathVariable("id") Integer id);
+     ResponseEntity<?> deleteRole(@PathVariable("id") Integer id);
 }

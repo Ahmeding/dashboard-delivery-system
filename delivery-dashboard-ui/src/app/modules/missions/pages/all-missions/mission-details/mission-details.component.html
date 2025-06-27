@@ -4,8 +4,8 @@
     <div class="card main-info">
       <div class="card-header">
         <h2>Mission Details</h2>
-        <div class="status-badge" [ngClass]="mission.etatMission?.toLowerCase()">
-          {{ getMissionStatus(mission.etatMission!) }}
+        <div class="status-badge" [ngClass]="mission.missionStatus?.toLowerCase()">
+          {{ getMissionStatus(mission.missionStatus!) }}
         </div>
       </div>
 
@@ -25,7 +25,7 @@
               <i class="bi bi-card-text"></i>
               <div class="info-content">
                 <label>Title</label>
-                <span>{{ mission.titre }}</span>
+                <span>{{ mission.title }}</span>
               </div>
             </div>
 
@@ -41,7 +41,7 @@
               <i class="bi bi-calendar-event"></i>
               <div class="info-content">
                 <label>Start Date</label>
-                <span>{{ formatingDateTime(mission.dateDebut!) | date: 'dd MMM yyyy' }}</span>
+                <span>{{ formatingDateTime(mission.startDate!) | date: 'dd MMM yyyy' }}</span>
               </div>
             </div>
 
@@ -49,7 +49,7 @@
               <i class="bi bi-chat-text"></i>
               <div class="info-content">
                 <label>Comment</label>
-                <span class="comment-text">{{ mission.commentaire }}</span>
+                <span class="comment-text">{{ mission.comment }}</span>
               </div>
             </div>
           </div>
@@ -60,7 +60,7 @@
               <i class="bi bi-speedometer2"></i>
               <div class="info-content">
                 <label>Starting Mileage</label>
-                <span>{{ mission.kmDebut }} km</span>
+                <span>{{ mission.startMileage }} km</span>
               </div>
             </div>
 
@@ -68,7 +68,7 @@
               <i class="bi bi-speedometer"></i>
               <div class="info-content">
                 <label>End Mileage</label>
-                <span>{{ mission.kmFin }} km</span>
+                <span>{{ mission.endMileage }} km</span>
               </div>
             </div>
 
@@ -76,7 +76,7 @@
               <i class="bi bi-calendar-check"></i>
               <div class="info-content">
                 <label>End Date</label>
-                <span>{{ formatingDateTime(mission.dateFin!) | date: 'dd MMM yyyy' }}</span>
+                <span>{{ formatingDateTime(mission.endDate!) | date: 'dd MMM yyyy' }}</span>
               </div>
             </div>
 
@@ -92,7 +92,7 @@
               <i class="bi bi-truck"></i>
               <div class="info-content">
                 <label>Vehicles</label>
-                <span>{{ mission.missionVehiclesDtos?.length }}</span>
+                <span>{{ mission.missionVehicles?.length }}</span>
               </div>
             </div>
           </div>
@@ -168,26 +168,26 @@
             </tr>
             </thead>
             <tbody>
-            <ng-container *ngFor="let v of mission.missionVehiclesDtos">
-              <tr *ngFor="let d of v.chauffeursVehicleDto">
-                <td>{{ d.chauffeurDto?.id }}</td>
+            <ng-container *ngFor="let v of mission.missionVehicles">
+              <tr *ngFor="let d of v.driverVehicles">
+                <td>{{ "d.chauffeurDto?.id" }}</td>
                 <td>
                   <div class="driver-info">
                     <div class="driver-avatar">
-                      {{ getInitials(d.chauffeurDto?.firstname, d.chauffeurDto?.lastname) }}
+                      {{ getInitials("d.chauffeurDto?.firstname", "d.chauffeurDto?.lastname") }}
                     </div>
-                    <span>{{ d.chauffeurDto?.firstname }} {{ d.chauffeurDto?.lastname }}</span>
+                    <span>{{ "d.chauffeurDto?.firstname" }} {{ "d.chauffeurDto?.lastname" }}</span>
                   </div>
                 </td>
                 <td>12/09/2024</td>
                 <td>
                   <div class="vehicle-info">
                     <i class="bi bi-truck"></i>
-                    <span>{{ v.vehicleDto?.marque }} {{ v.vehicleDto?.modele }}</span>
+                    <span>{{ "v.vehicleDto?.marque" }} {{ "v.vehicle?.modele" }}</span>
                   </div>
                 </td>
                 <td>
-                  <span class="registration-number">{{ v.vehicleDto?.immatriculation }}</span>
+                  <span class="registration-number">{{ "v.vehicleDto?.immatriculation" }}</span>
                 </td>
               </tr>
             </ng-container>

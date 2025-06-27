@@ -1,5 +1,4 @@
 import {Component, Input} from '@angular/core';
-import {MissionDto} from "../../../../../../../ds-api/src/models/mission-dto";
 import {DayPlan} from "../models/mission.model";
 import {isToday, startOfDay} from "date-fns";
 
@@ -21,7 +20,7 @@ export class StatusCardComponent {
     if(!this.weekDaysForWeekStatus) return 0;
     const currentDay= this.weekDaysForWeekStatus.find(day=>isToday(startOfDay(day.date)));
     return currentDay?.missions.filter(mission=>
-    mission.etatMission==="COMPLETED").length||0;
+    mission.missionStatus==="COMPLETED").length||0;
   }
   get currentDayOnTrack(): number {
     if (!this.weekDaysForWeekStatus) return 0;
@@ -29,7 +28,7 @@ export class StatusCardComponent {
       isToday(startOfDay(day.date))
     );
     return currentDay?.missions?.filter(mission =>
-      mission.etatMission === 'PLANNED' // Update with your actual status property
+      mission.missionStatus === 'PLANNED' // Update with your actual status property
     ).length || 0;
   }
   get totalWeeklyMissions(): number {
@@ -52,7 +51,7 @@ export class StatusCardComponent {
       isToday(startOfDay(day.date))
     );
     return currentDay?.missions?.filter(mission =>
-      mission.etatMission === 'IN_PROGRESS' // Update with your actual status property
+      mission.missionStatus === 'IN_PROGRESS' // Update with your actual status property
     ).length || 0;
   }
   get currentDayMissions():number{

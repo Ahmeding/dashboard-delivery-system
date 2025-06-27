@@ -10,37 +10,37 @@
         <!-- Row 1: Marque/Model and Date PMC -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Marque/Model:</span> {{ selectedVehicle.marque }} {{ selectedVehicle.modele }}
+            <span class="text-primary">Marque/Model:</span> {{ selectedVehicle.brand }} {{ selectedVehicle.model }}
           </div>
           <div class="col-md-6">
-            <span class="text-primary">Date PMC:</span> {{ selectedVehicle.datePMC }}
+            <span class="text-primary">Date PMC:</span> {{ selectedVehicle.dfcDate }}
           </div>
         </div>
 
         <!-- Row 2: Immatriculation and Capacity -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Immat. N°:</span> {{ selectedVehicle.immatriculation }}
+            <span class="text-primary">Immat. N°:</span> {{ selectedVehicle.registrationNbr }}
           </div>
           <div class="col-md-6">
-            <span class="text-primary">Capacity:</span> {{ selectedVehicle.volume }} m<sup>3</sup>
+            <span class="text-primary">Capacity:</span> {{ selectedVehicle.volumeCapacity }} m<sup>3</sup>
           </div>
         </div>
 
         <!-- Row 3: Milage and Vin -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Milage:</span> {{ selectedVehicle.kilometrage }}
+            <span class="text-primary">Milage:</span> {{ selectedVehicle.mileage }}
           </div>
           <div class="col-md-6">
-            <span class="text-primary">VIN:</span> {{ selectedVehicle.numVin }}
+            <span class="text-primary">VIN:</span> {{ selectedVehicle.vinNbr }}
           </div>
         </div>
 
         <!-- Row 4: Fuel Type and Number of Missions -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Fuel:</span> {{ selectedVehicle.typecarburant }}
+            <span class="text-primary">Fuel:</span> {{ selectedVehicle.energyType }}
           </div>
           <div class="col-md-6">
             <span class="text-primary">Number of Missions:</span> <!--{{ selectedVehicle.missionCount || 'N/A' }}-->

@@ -18,7 +18,7 @@ import { signin } from '../fn/authentication-enregistrement/signin';
 import { Signin$Params } from '../fn/authentication-enregistrement/signin';
 import { signup } from '../fn/authentication-enregistrement/signup';
 import { Signup$Params } from '../fn/authentication-enregistrement/signup';
-import { UtilisateurDto } from '../models/utilisateur-dto';
+import { UserResponse } from '../models/user-response';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationEnregistrementService extends BaseService {
@@ -37,7 +37,7 @@ export class AuthenticationEnregistrementService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  signup$Response(params: Signup$Params, context?: HttpContext): Observable<StrictHttpResponse<UtilisateurDto>> {
+  signup$Response(params: Signup$Params, context?: HttpContext): Observable<StrictHttpResponse<UserResponse>> {
     return signup(this.http, this.rootUrl, params, context);
   }
 
@@ -49,9 +49,9 @@ export class AuthenticationEnregistrementService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  signup(params: Signup$Params, context?: HttpContext): Observable<UtilisateurDto> {
+  signup(params: Signup$Params, context?: HttpContext): Observable<UserResponse> {
     return this.signup$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UtilisateurDto>): UtilisateurDto => r.body)
+      map((r: StrictHttpResponse<UserResponse>): UserResponse => r.body)
     );
   }
 

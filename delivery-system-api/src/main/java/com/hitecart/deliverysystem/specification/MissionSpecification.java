@@ -11,9 +11,9 @@ public class MissionSpecification {
     public static Specification<Mission> withChauffeurId(Integer chauffeurId) {
         return (root,query, criteriaBuilder)->{
             Join<Object,Object> missionVehiclesJoin=
-                    root.join("missionVehicules");
-            Join<Object,Object> vehicleChauffeursJoin= missionVehiclesJoin.join("chauffeurVehiculeList");
-            return criteriaBuilder.equal(vehicleChauffeursJoin.get("chauffeur").get("id"), chauffeurId);
+                    root.join("missionVehicles");
+            Join<Object,Object> vehicleChauffeursJoin= missionVehiclesJoin.join("chauffeurVehicleList");
+            return criteriaBuilder.equal(vehicleChauffeursJoin.get("driver").get("id"), chauffeurId);
         };
     }
 

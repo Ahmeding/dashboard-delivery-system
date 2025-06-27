@@ -12,25 +12,23 @@
       <!-- Service Delivery Selection -->
       <div class="form-group">
         <select
-          (change)="setAddressLocation(destinationForm.get('serviceDeliveryId')?.value)"
-          id="serviceDelivery"
+          id="deliveryService"
           class="form-select"
           formControlName="serviceDeliveryId"
-          [class.is-invalid]="destinationForm.get('serviceDeliveryId')?.invalid
-                && destinationForm.get('serviceDeliveryId')?.touched"
+          [class.is-invalid]="isValidField(destinationForm,'serviceDeliveryId')"
+          (change)="setAddressLocation(destinationForm.get('serviceDeliveryId')?.value)"
         >
           <option value="">Select a service delivery</option>
           <option *ngFor="let service of serviceDeliveries" [ngValue]="service">
-            {{service.title}}
+            {{ service.title }}
           </option>
         </select>
-        <label for="serviceDelivery">
+        <label for="deliveryService">
           <i class="bi bi-truck"></i>
-          Service Delivery
+          Service Delivery <sup class="text-danger">*</sup>
         </label>
-        <div class="error-message" *ngIf="destinationForm.get('serviceDeliveryId')?.invalid
-                && destinationForm.get('serviceDeliveryId')?.touched">
-          Destination City is required
+        <div class="error-message" *ngIf="isValidField(destinationForm,'serviceDeliveryId')">
+          <i class="bi bi-exclamation-circle"></i>&nbsp;Destination City is required
         </div>
       </div>
 
@@ -53,17 +51,18 @@
             </thead>
             <tbody>
             <tr *ngFor="let point of deliveryPoints; let i = index">
-              <td>{{point.name}}</td>
+              <td>{{ point.name }}</td>
               <td>
-                  <span class="badge" [class.bg-primary]="point.deliveryPointType === 'SHOP'" [class.bg-success]="point.deliveryPointType === 'DEPOT'">
-                    {{point.deliveryPointType}}
+                  <span class="badge" [class.bg-primary]="point.type === 'SHOP'"
+                        [class.bg-success]="point.type === 'DEPOT'">
+                    {{ point.type }}
                   </span>
               </td>
-              <td>{{point.addressDto?.ville}}</td>
+              <td>{{ point.address?.city }}</td>
               <td>
                 <div class="contact-info">
-                  <span>{{point.contact?.firstname}} {{point.contact?.lastname}}</span>
-                  <small>{{point.contact?.email}}</small>
+                  <span>{{ point.contact?.firstname }} {{ point.contact?.lastname }}</span>
+                  <small>{{ point.contact?.email }}</small>
                 </div>
               </td>
               <td>
@@ -93,11 +92,10 @@
               <div class="form-group">
                 <input
                   type="text"
-                  id ="name"
+                  id="name"
                   class="form-control"
                   placeholder=""
-                  [class.is-invalid]="currentPointForm.get('name')?.invalid
-                && currentPointForm.get('name')?.touched"
+                  [class.is-invalid]="isValidField(currentPointForm,'name')"
                   formControlName="name">
                 <label for="name">
                   <i class="bi bi-building text-info"></i>
@@ -105,32 +103,33 @@
                 </label>
                 <div class="error-message" *ngIf="currentPointForm.get('name')?.invalid
                 && currentPointForm.get('name')?.touched">
-                  Delivery Point Name is required
+                  <i class="bi bi-exclamation-circle"></i>&nbsp;Delivery Point Name is required
                 </div>
               </div>
             </div>
             <div class="col-md-3">
               <div class="form-group">
-                <select class="form-select" id="dpCategory" [class.is-invalid]="currentPointForm.get('deliveryPointCategoryId')?.invalid
-                && currentPointForm.get('deliveryPointCategoryId')?.touched" formControlName="deliveryPointCategoryId">
+                <select class="form-select" id="dpCategory"
+                        [class.is-invalid]="isValidField(currentPointForm,'deliveryPointCategoryId')"
+                        formControlName="deliveryPointCategoryId">
                   <option value="" disabled selected>Select Categroy</option>
-                  <option *ngFor="let dpCat of dpCategories" [value]="dpCat.id" >{{ dpCat.name }}</option>
+                  <option *ngFor="let dpCat of dpCategories" [value]="dpCat.id">{{ dpCat.name }}</option>
                 </select>
                 <label for="dpCategory">
                   <i class="bi bi-stars text-warning"></i>
                   Catergory
                 </label>
-                <div class="error-message" *ngIf="currentPointForm.get('deliveryPointCategoryId')?.invalid
-                && currentPointForm.get('deliveryPointCategoryId')?.touched">
-                  Delivery Point Category is required
+                <div class="error-message" *ngIf="isValidField(currentPointForm,'deliveryPointCategoryId')">
+                    <i class="bi bi-exclamation-circle"></i>&nbsp; Delivery Point Category is required
                 </div>
               </div>
             </div>
 
             <div class="col-md-3">
               <div class="form-group">
-                <select class="form-select" id="dpType" [class.is-invalid]="currentPointForm.get('deliveryPointType')?.invalid
-                && currentPointForm.get('deliveryPointType')?.touched" formControlName="deliveryPointType">
+                <select class="form-select" id="dpType"
+                        [class.is-invalid]="isValidField(currentPointForm,'deliveryPointType')"
+                        formControlName="deliveryPointType">
                   <option value="" disabled selected>Select type</option>
                   <option value="SHOP">Shop</option>
                   <option value="DEPOT">Depot</option>
@@ -139,24 +138,23 @@
                   <i class="bi bi-tags text-info"></i>
                   Type
                 </label>
-                <div class="error-message" *ngIf="currentPointForm.get('deliveryPointType')?.invalid
-                && currentPointForm.get('deliveryPointType')?.touched">
-                  Delivery Point Type is required
+                <div class="error-message" *ngIf="isValidField(currentPointForm,'deliveryPointType')">
+                  <i class="bi bi-exclamation-circle"></i>&nbsp;Delivery Point Type is required
                 </div>
               </div>
             </div>
 
             <div class="col-md-3">
               <div class="form-group">
-                <input type="time" id ="scheduletime" class="form-control" placeholder="" [class.is-invalid]="currentPointForm.get('schedule')?.invalid
-                && currentPointForm.get('schedule')?.touched" formControlName="schedule">
+                <input type="time" id="scheduletime" class="form-control" placeholder=""
+                       [class.is-invalid]="isValidField(currentPointForm,'schedule')"
+                       formControlName="schedule">
                 <label for="scheduletime">
                   <i class="bi bi-clock text-info"></i>
                   Schedule
                 </label>
-                <div class="error-message" *ngIf="currentPointForm.get('schedule')?.invalid
-                && currentPointForm.get('schedule')?.touched">
-                  Schedule Time is required
+                <div class="error-message" *ngIf="isValidField(currentPointForm,'schedule')">
+                  <i class="bi bi-exclamation-circle"></i>&nbsp; Schedule Time is required
                 </div>
               </div>
             </div>
@@ -177,24 +175,21 @@
                 <div class="col-md-6">
                   <div class="rp-control">
                     <div class="input-group">
-            <span class="input-group-icon">
-              <i class="bi bi-arrow-repeat"></i>
-            </span>
+                      <span class="input-group-icon">
+                        <i class="bi bi-arrow-repeat"></i>
+                      </span>
                       <select
                         formControlName="recurrenceInterval"
                         class="form-select"
-                        [class.is-invalid]="currentPointForm.get('recurrencePatternDto.recurrenceInterval')?.invalid &&
-                       currentPointForm.get('recurrencePatternDto.recurrenceInterval')?.touched"
-                      >
+                        [class.is-invalid]="isValidField(currentPointForm,'recurrencePatternDto.recurrenceInterval')">
                         <option value="">Select recurrence interval</option>
                         <option value="DAILY">Daily</option>
                         <option value="WEEKLY">Weekly</option>
                         <option value="MONTHLY">Monthly</option>
                       </select>
                     </div>
-                    <div class="error-message" *ngIf="currentPointForm.get('recurrencePatternDto.recurrenceInterval')?.invalid &&
-                                    currentPointForm.get('recurrencePatternDto.recurrenceInterval')?.touched">
-                      Recurrence interval is required
+                    <div class="error-message" *ngIf="isValidField(currentPointForm,'recurrencePatternDto.recurrenceInterval')">
+              <i class="bi bi-exclamation-circle"></i>&nbsp;Recurrence interval is required
                     </div>
                   </div>
                 </div>
@@ -203,17 +198,20 @@
                 <div class="col-md-6">
                   <div class="rp-date-range">
                     <div class="input-group">
-            <span class="input-group-icon">
-              <i class="bi bi-calendar-event"></i>
-            </span>
+                      <span class="input-group-icon">
+                        <i class="bi bi-calendar-event"></i>
+                      </span>
                       <input
                         type="date"
                         formControlName="startDate"
                         class="form-control"
-                        [class.is-invalid]="currentPointForm.get('recurrencePatternDto.startDate')?.invalid &&
-                           currentPointForm.get('recurrencePatternDto.startDate')?.touched"
+                        [class.is-invalid]="isValidField(currentPointForm,'recurrencePatternDto.startDate')"
                       >
+                      <div class="error-message" *ngIf="isValidField(currentPointForm,'recurrencePatternDto.startDate')">
+                <i class="bi bi-exclamation-circle"></i>&nbsp;Recurrence start date is required
+                      </div>
                     </div>
+
                     <div class="date-range-separator">
                       <i class="bi bi-arrow-right"></i>
                     </div>
@@ -225,9 +223,11 @@
                         type="date"
                         formControlName="endDate"
                         class="form-control"
-                        [class.is-invalid]="currentPointForm.get('recurrencePatternDto.endDate')?.invalid &&
-                           currentPointForm.get('recurrencePatternDto.endDate')?.touched"
+                        [class.is-invalid]="isValidField(currentPointForm,'recurrencePatternDto.endDate')"
                       >
+                      <div class="error-message" *ngIf="isValidField(currentPointForm,'recurrencePatternDto.endDate')">
+                <i class="bi bi-exclamation-circle"></i>&nbsp;Recurrence end date is required
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -236,14 +236,15 @@
                 <div class="col-12">
                   <div class="rp-days">
                     <label class="days-label">Select Days</label>
-                    <div class="days-grid">
+                    <div class="days-grid"  [ngClass]="{'days-error':  daysArray.invalid && (daysArray.touched || formSubmitted)}">
                       <div class="day-item" *ngFor="let day of weekDays">
                         <input
                           type="checkbox"
                           [id]="day.value"
                           [value]="day.value"
                           (change)="updateDayOfWeek(day.value, $event)"
-                          [checked]="getDayeOfWeekArray().includes(day.value)"
+                          [checked]="daysArray.value.includes(day.value)"
+                          [attr.aria-describedby]="'day-error' + day.label"
                         >
                         <label [for]="day.value" class="day-card">
                           <i class="bi bi-circle-fill"></i>
@@ -251,16 +252,14 @@
                         </label>
                       </div>
                     </div>
-                    <div class="error-message" *ngIf="currentPointForm.get('recurrencePatternDto.daysOfWeek')?.invalid &&
-                                    currentPointForm.get('recurrencePatternDto.daysOfWeek')?.touched">
-                      At least one day must be selected
+                    <div class="error-message" *ngIf=" daysArray.invalid && (daysArray.touched || formSubmitted)">
+                      <i class="bi bi-exclamation-circle"></i>&nbsp; At least one day must be selected
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
 
 
           <!-- Contact -->
@@ -272,45 +271,41 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <input (click)="inputFillDataOnClick()" type="text" class="form-control" id="firstname" placeholder="" [class.is-invalid]="currentPointForm.get('contact.firstname')?.invalid
-                  && currentPointForm.get('contact.firstname')?.touched" formControlName="firstname">
+                  <input (click)="inputFillDataOnClick()" type="text" class="form-control" id="firstname" placeholder=""
+                         [class.is-invalid]="isValidField(currentPointForm,'contact.firstname')" formControlName="firstname">
                   <label for="firstname">First Name</label>
-                  <div class="error-message" *ngIf="currentPointForm.get('contact.firstname')?.invalid
-                  && currentPointForm.get('contact.firstname')?.touched">
-                    Firstname is required
+                  <div class="error-message" *ngIf="isValidField(currentPointForm,'contact.firstname')">
+                    <i class="bi bi-exclamation-circle"></i>&nbsp; Firstname is required
                   </div>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <input type="text" class="form-control" id="lastname" placeholder="" [class.is-invalid]="currentPointForm.get('contact.lastname')?.invalid
-                  && currentPointForm.get('contact.lastname')?.touched" formControlName="lastname">
+                  <input type="text" class="form-control" id="lastname" placeholder="" [class.is-invalid]="isValidField(currentPointForm,'contact.lastname')"
+                         formControlName="lastname">
                   <label for="lastname">Last Name</label>
-                  <div class="error-message" *ngIf="currentPointForm.get('contact.lastname')?.invalid
-                  && currentPointForm.get('contact.lastname')?.touched">
-                    Lastname is required
+                  <div class="error-message" *ngIf="isValidField(currentPointForm,'contact.lastname')">
+                    <i class="bi bi-exclamation-circle"></i>&nbsp;Lastname is required
                   </div>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <input type="email" class="form-control" id="email" placeholder="" [class.is-invalid]="currentPointForm.get('contact.email')?.invalid
-                  && currentPointForm.get('contact.email')?.touched" formControlName="email">
+                  <input type="email" class="form-control" id="email" placeholder="" [class.is-invalid]="isValidField(currentPointForm,'contact.email')"
+                         formControlName="email">
                   <label for="email">Email</label>
-                  <div class="error-message" *ngIf="currentPointForm.get('contact.email')?.invalid
-                  && currentPointForm.get('contact.email')?.touched">
-                    Email is required
+                  <div class="error-message" *ngIf="isValidField(currentPointForm,'contact.email')">
+                    <i class="bi bi-exclamation-circle"></i>&nbsp;Email is required
                   </div>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <input type="tel" class="form-control" id="phonenum" placeholder="" [class.is-invalid]="currentPointForm.get('contact.phoneNum')?.invalid
-                  && currentPointForm.get('contact.phoneNum')?.touched" formControlName="phoneNum">
+                  <input type="tel" class="form-control" id="phonenum" placeholder="" [class.is-invalid]="isValidField(currentPointForm,'contact.phoneNum')"
+                         formControlName="phoneNum">
                   <label for="phonenum">Phone</label>
-                  <div class="error-message" *ngIf="currentPointForm.get('contact.phoneNum')?.invalid
-                  && currentPointForm.get('contact.phoneNum')?.touched">
-                    Phone N° is required
+                  <div class="error-message" *ngIf="isValidField(currentPointForm,'contact.phoneNum')">
+                    <i class="bi bi-exclamation-circle"></i>&nbsp;Phone N° is required
                   </div>
                 </div>
               </div>
@@ -325,52 +320,47 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <input type="text" class="form-control" id="" placeholder="" [class.is-invalid]="currentPointForm.get('addressDto.adresse1')?.invalid
-                   && currentPointForm.get('addressDto.adresse1')?.touched" formControlName="adresse1">
-                  <label >Address Line 1</label>
-                  <div class="error-message" *ngIf="currentPointForm.get('addressDto.adresse1')?.invalid
-                   && currentPointForm.get('addressDto.adresse1')?.touched">
-                    Address Line 1 is required
+                  <input type="text" class="form-control" id="" placeholder="" [class.is-invalid]="isValidField(currentPointForm,'addressDto.adresse1')"
+                         formControlName="adresse1">
+                  <label>Address Line 1</label>
+                  <div class="error-message" *ngIf="isValidField(currentPointForm,'addressDto.adresse1')">
+                    <i class="bi bi-exclamation-circle"></i>&nbsp;Address Line 1 is required
                   </div>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <input type="text" class="form-control" id="address2" placeholder="" [class.is-invalid]="" formControlName="adresse2">
+                  <input type="text" class="form-control" id="address2" placeholder=""
+                         formControlName="adresse2">
                   <label for="address2">Address Line 2</label>
 
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <input type="text" class="form-control" id="postalcode" placeholder="" [class.is-invalid]="currentPointForm.get('addressDto.codepostal')?.invalid
-                && currentPointForm.get('addressDto.codepostal')?.touched" formControlName="codepostal">
+                  <input type="text" class="form-control" id="postalcode" placeholder="" [class.is-invalid]="isValidField(currentPointForm,'addressDto.codepostal')" formControlName="codepostal">
+
                   <label for="postalcode">Postal Code</label>
-                  <div class="error-message" *ngIf="currentPointForm.get('addressDto.codepostal')?.invalid
-                && currentPointForm.get('addressDto.codepostal')?.touched">
-                    Postal Code is required
+                  <div class="error-message" *ngIf="isValidField(currentPointForm,'addressDto.codepostal')">
+                    <i class="bi bi-exclamation-circle"></i>&nbsp;Postal Code is required
                   </div>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <input type="text" class="form-control" id="city" placeholder="" [class.is-invalid]="currentPointForm.get('addressDto.ville')?.invalid
-                && currentPointForm.get('addressDto.ville')?.touched" formControlName="ville">
+                  <input type="text" class="form-control" id="city" placeholder="" [class.is-invalid]="isValidField(currentPointForm,'addressDto.ville')" formControlName="ville">
                   <label for="city">City</label>
-                  <div class="error-message" *ngIf="currentPointForm.get('addressDto.ville')?.invalid
-                && currentPointForm.get('addressDto.ville')?.touched">
-                    City is required
+                  <div class="error-message" *ngIf="isValidField(currentPointForm,'addressDto.ville')">
+                    <i class="bi bi-exclamation-circle"></i>&nbsp;City is required
                   </div>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <input type="text" class="form-control" id="country" placeholder="" [class.is-invalid]="currentPointForm.get('addressDto.pays')?.invalid
-                && currentPointForm.get('addressDto.pays')?.touched" formControlName="pays">
+                  <input type="text" class="form-control" id="country" placeholder="" [class.is-invalid]="isValidField(currentPointForm,'addressDto.pays')" formControlName="pays">
                   <label for="country">Country</label>
-                  <div class="error-message" *ngIf="currentPointForm.get('addressDto.pays')?.invalid
-                && currentPointForm.get('addressDto.pays')?.touched">
-                    Country is required
+                  <div class="error-message" *ngIf="isValidField(currentPointForm,'addressDto.pays')">
+                    <i class="bi bi-exclamation-circle"></i>&nbsp;Country is required
                   </div>
                 </div>
               </div>
@@ -382,7 +372,7 @@
               <i class="bi bi-x-circle"></i>
               Cancel
             </button>
-            <button type="button" class="btn btn-primary" (click)="addDeliveryPoint()" [disabled]="!currentPointForm.valid">
+            <button type="button" class="btn btn-primary" (click)="addDeliveryPoint()">
               <i class="bi bi-plus-circle"></i>
               Add Point
             </button>
@@ -391,7 +381,8 @@
       </div>
       <!-- Add Point Button -->
       <div class="add-point-button" *ngIf="!currentPointForm">
-        <button type="button" class="btn btn-outline-primary" (click)="createDeliveryPoint()">
+        <button type="button" class="btn btn-outline-primary" (click)="createDeliveryPoint()"
+        [disabled]="!destinationForm.get('serviceDeliveryId')?.valid">
           <i class="bi bi-plus-lg"></i>
           Add New Delivery Point
         </button>
@@ -404,7 +395,8 @@
       <i class="bi bi-x-lg"></i>
       Cancel
     </button>
-    <button type="button" class="btn btn-primary" (click)="save()" [disabled]="!destinationForm.valid || deliveryPoints.length === 0">
+    <button type="button" class="btn btn-primary" (click)="save()"
+            [disabled]="!destinationForm.valid || deliveryPoints.length === 0">
       <i class="bi bi-check-lg"></i>
       Save Destination
     </button>

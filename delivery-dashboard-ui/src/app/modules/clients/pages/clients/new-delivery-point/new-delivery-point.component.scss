@@ -247,7 +247,7 @@
           }
 
           .form-select {
-            background: transparent;
+            background: var(--bg-color);
             border: none;
             color: var(--text-color);
             padding: 0.5rem;
@@ -314,9 +314,9 @@
               opacity: 0;
 
               &:checked + .day-card {
-                background: rgba(var(--primary-rgb), 0.1);
-                border-color: var(--primary-color);
-                color: var(--primary-color);
+                background: rgba(var(--success-rgb), 0.1);
+                border-color: var(--success-color);
+                color: var(--success-color);
 
                 i {
                   opacity: 1;
@@ -351,6 +351,12 @@
                 font-size: 0.8125rem;
                 font-weight: 500;
               }
+            }
+          }
+          /* Add this class for days error state */
+          &.days-error {
+            .day-item .day-card {
+              border-color: var(--danger-color);
             }
           }
         }

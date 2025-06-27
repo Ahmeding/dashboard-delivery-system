@@ -1,7 +1,8 @@
 package com.hitecart.deliverysystem.services.security;
 
 import com.hitecart.deliverysystem.model.Role;
-import com.hitecart.deliverysystem.model.Utilisateur;
+import com.hitecart.deliverysystem.model.User;
+import com.hitecart.deliverysystem.model.enums.RoleType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -40,10 +40,10 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String generateRefreshToken(Map<String, Object> extraClaims, Utilisateur user) {
+    public String generateRefreshToken(Map<String, Object> extraClaims, User user) {
 
         // Add roles to refresh token if needed
-        List<String> roles = user.getRoles().stream()
+        List<RoleType> roles = user.getRoles().stream()
                 .map(Role::getName)
                 .collect(Collectors.toList());
         extraClaims.put("roles", roles);
@@ -59,15 +59,15 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String generateToken(Map<String, Object> claims,UserDetails userDetails) {
         // add roles to claims automatically
-        if(userDetails instanceof Utilisateur) {
-            Utilisateur utilisateur = (Utilisateur) userDetails;
-            List<String> roles =  utilisateur.getRoles()
+        if(userDetails instanceof User) {
+            User user = (User) userDetails;
+            List<RoleType> roles =  user.getRoles()
                     .stream()
                     .map(Role::getName)
                     .toList();
             claims.put("roles", roles);
-            claims.put("username", utilisateur.getEmail());
-            claims.put("userId", utilisateur.getId());
+            claims.put("username", user.getEmail());
+            claims.put("userId", user.getId());
         }
 
          return createToken(claims, userDetails);
@@ -111,7 +111,6 @@ public class JwtServiceImpl implements JwtService {
 
 
     private Key getSiginKey() {
-         log.error(SECURE_256BIT_BASE64_SECRET);
         byte[] keyBytes= Decoders.BASE64.decode(SECURE_256BIT_BASE64_SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }

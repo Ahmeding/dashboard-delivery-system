@@ -1,7 +1,7 @@
 package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.dao.DriverStatsRepository;
-import com.hitecart.deliverysystem.model.Chauffeur;
+import com.hitecart.deliverysystem.model.Driver;
 import com.hitecart.deliverysystem.model.DriverStats;
 import com.hitecart.deliverysystem.services.IDriverStatsService;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +18,10 @@ public class DriverStatsServiceImpl implements IDriverStatsService {
 
     @Transactional
     @Override
-    public void createStatsForDriver(Chauffeur driver) {
+    public void createStatsForDriver(Driver driver) {
         if (!driverStatsRepository.findByDriverId(driver.getId()).isPresent()) {
             DriverStats newStats = new DriverStats();
-            newStats.setChauffeur(driver);
+            newStats.setDriver(driver);
             driverStatsRepository.save(newStats);
             log.warn("Created missing stats record for driver {}", driver.getId());
         }

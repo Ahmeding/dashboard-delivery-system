@@ -36,37 +36,14 @@
           id="createdAt"
           class="form-control"
           name="createdAt"
-          [(ngModel)]="expense.createdAt"
+          [(ngModel)]="expense.expenseDate"
           placeholder=" "
           required />
         <label for="createdAt">Created At</label>
       </div>
 
-      <!-- Created By Field -->
-      <div class="form-group">
-        <input
-          type="number"
-          id="createdBy"
-          class="form-control"
-          name="createdBy"
-          [(ngModel)]="expense.createdBy"
-          placeholder=" "
-          required />
-        <label for="createdBy">Created By (ID)</label>
-      </div>
 
-      <!-- Last Modified By Field -->
-      <div class="form-group">
-        <input
-          type="number"
-          id="lastModifiedBy"
-          class="form-control"
-          name="lastModifiedBy"
-          [(ngModel)]="expense.lastModifiedBy"
-          placeholder=" "
-          required />
-        <label for="lastModifiedBy">Last Modified By (ID)</label>
-      </div>
+
 
       <!-- Mission Details (Optional) -->
       <div class="form-group">
@@ -74,7 +51,7 @@
           type="text"
           id="mission"
           class="form-control"
-          name="missionDto"
+          name="missionBasicDto"
           [(ngModel)]="expense.missionId"
           placeholder=" " >
           <option>fdgdfhfdh</option>

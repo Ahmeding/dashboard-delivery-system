@@ -1,10 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {AdresseDto} from "../../../../../ds-api/src/models/adresse-dto";
-import {ChauffeurDto} from "../../../../../ds-api/src/models/chauffeur-dto";
-import {PageResponseChauffeurDto} from "../../../../../ds-api/src/models/page-response-chauffeur-dto";
 import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
 import {AlertService} from "../../../../services/alert/alert.service";
-import {ChauffeurService} from "../../../../../ds-api/src/services/chauffeur.service";
 import {NgForm} from "@angular/forms";
 import {Router} from "@angular/router";
 import {
@@ -13,6 +9,12 @@ import {
 import {ViewDriverModalComponent} from "./view-driver-modal/view-driver-modal.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {StringUtilsService} from "../../../../services/string-utils/string-utils.service";
+import {AddressRequest} from "../../../../../ds-api/src/models/address-request";
+import {AddressResponse} from "../../../../../ds-api/src/models/address-response";
+import {DriverRequest} from "../../../../../ds-api/src/models/driver-request";
+import {PageResponseDriverResponse} from "../../../../../ds-api/src/models/page-response-driver-response";
+import {DriverResponse} from "../../../../../ds-api/src/models/driver-response";
+import {DriverService} from "../../../../../ds-api/src/services/driver.service";
 
 @Component({
   selector: 'app-drivers',
@@ -21,12 +23,12 @@ import {StringUtilsService} from "../../../../services/string-utils/string-utils
 })
 export class DriversComponent implements OnInit{
 
-  address:AdresseDto={};
-  selectedAddress:AdresseDto | undefined={};
+  addressReq!:AddressRequest;
+  selectedAddress:AddressResponse | undefined={};
   isAddNewFormSubmitted:boolean=false;
-  driver:ChauffeurDto={};
-  allDriversResponse: PageResponseChauffeurDto={};
-  selectedDriver: ChauffeurDto={};
+  driver!:DriverRequest;
+  allDriversResponse: PageResponseDriverResponse={};
+  selectedDriver: DriverResponse={};
   page: number = 0;
   size: number = 5;
 
@@ -37,7 +39,7 @@ export class DriversComponent implements OnInit{
     private confirmBoxService:ConfirmBoxEvokeService,
     private alertService:AlertService,
     private stringUtilsService:StringUtilsService,
-    private chauffeurService:ChauffeurService,
+    private driverService:DriverService,
     private router:Router
   ) {
   }
@@ -47,7 +49,7 @@ export class DriversComponent implements OnInit{
   }
 
   getAllDrivers(){
-    this.chauffeurService.findAllDrivers({
+    this.driverService.findAllDriversPageable({
       page: this.page,
       size: this.size
     }).subscribe({
@@ -63,7 +65,7 @@ export class DriversComponent implements OnInit{
   }
 
   updateDriverStatus(id: number, isActive: boolean) {console.log("====================== "+ isActive);
-    this.chauffeurService.updateIsActive3({
+    this.driverService.updateDriverIsActive({
       id:id,isactive:isActive
     }).subscribe({
       next:(res)=>{
@@ -102,10 +104,10 @@ export class DriversComponent implements OnInit{
     this.isAddNewFormSubmitted = true;
     if(form.valid){
       if(this.driver.id!==null){
-        this.driver.address=this.address;
-        this.driver.enabled=false;
-        console.log(this.driver.dateOfBirth);
-        this.chauffeurService.save18({
+        this.driver.address=this.addressReq;
+       // this.driver.enable=false;
+        console.log(this.driver.birthDate);
+        this.driverService.saveDriver({
           body:this.driver
         }) .subscribe({
           next:()=>{
@@ -119,7 +121,7 @@ export class DriversComponent implements OnInit{
           }
         })
       }else{
-        this.chauffeurService.save18({
+        this.driverService.saveDriver({
           body:this.driver
         }) .subscribe({
           next:()=>{
@@ -137,12 +139,12 @@ export class DriversComponent implements OnInit{
     }
   }
 
-  updateDriver(driver: ChauffeurDto, editForm: NgForm) {
+  updateDriver(driver: DriverRequest, editForm: NgForm) {
     this.isAddNewFormSubmitted = true;
     editForm.form.markAllAsTouched();
 
     if(editForm.valid){
-      this.chauffeurService.save18({
+      this.driverService.saveDriver({
         body:driver
       }).subscribe({
         next:(res)=>{
@@ -165,13 +167,13 @@ export class DriversComponent implements OnInit{
   }
 
   driverEdit(id: number | undefined) {
-    this.chauffeurService.findById18({
+    this.driverService.findDriverById({
       id:id as number
     }).subscribe({
       next:(res)=>{
         this.selectedDriver=res;
-        const dateString =  JSON.stringify(this.selectedDriver.dateOfBirth);
-        this.selectedDriver.dateOfBirth=this.convertDate(JSON.parse(dateString))
+        /*const dateString =  JSON.stringify(this.selectedDriver.dateOfBirth);
+        this.selectedDriver.dateOfBirth=this.convertDate(JSON.parse(dateString))*/
         this.selectedAddress=this.selectedDriver.address
       },
       error:(err)=>{
@@ -190,7 +192,7 @@ export class DriversComponent implements OnInit{
 
   private resetForm(form: NgForm) {
     form.resetForm();  // Reset the form state and clear input values
-    this.driver = {};   // Reset the driver object to its initial state
+    this.driver!;   // Reset the driver object to its initial state
     this.isAddNewFormSubmitted = false; // Reset the submitted state
   }
 
@@ -227,7 +229,7 @@ export class DriversComponent implements OnInit{
     this.router.navigate(['drivers','new-driver']);
   }
 
-  openDriverModal(driver: ChauffeurDto) {
+  openDriverModal(driver: DriverResponse) {
     const modalRef = this.modalService.open(ViewDriverModalComponent, { size: 'xl' });
     modalRef.componentInstance.selectedDriver = driver;  // Pass data to modal
   }
@@ -252,7 +254,7 @@ export class DriversComponent implements OnInit{
   }
 
   private deleteDriver(driver_id: number) {
-    this.chauffeurService.delete16({
+    this.driverService.deleteDriver({
       id:driver_id
     }).subscribe({
       next:(res)=>{

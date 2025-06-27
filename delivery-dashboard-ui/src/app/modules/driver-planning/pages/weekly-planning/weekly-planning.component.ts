@@ -7,7 +7,6 @@ import {
 import {DayPlan, MissionCard} from "../../../missions/pages/planning/weekly-planning/models/mission.model";
 import {addDays, format, startOfWeek, isToday, isBefore, startOfDay} from 'date-fns';
 import {MissionResponse} from "../../../../../ds-api/src/models/mission-response";
-import {DateUtilsService} from "../../../../services/date-utils/date-utils.service";
 import {FormBuilder} from "@angular/forms";
 import {MissionService} from "../../../../../ds-api/src/services/mission.service";
 import {Router} from "@angular/router";
@@ -95,7 +94,7 @@ export class WeeklyPlanningComponent implements  OnInit {
 
     this.isLoading = true;
 
-    this.missionService.findAllMissionsByDriver().subscribe({
+    this.missionService.findAllMissionsByConnectedDriver().subscribe({
       next:(allMissions)=>{
 
         console.log(allMissions.length);
@@ -116,13 +115,13 @@ export class WeeklyPlanningComponent implements  OnInit {
     this.weekDays.forEach(day => day.missions = []);
     // Filter missions based on search text
     const filteredMissions = missions.filter(mission =>
-      mission.titre?.toLowerCase().includes(this.filterText)
+      mission.title?.toLowerCase().includes(this.filterText)
     );
 
 
     // Distribute missions to appropriate days
     missions.forEach(mission => {
-      const missionDate = new Date(mission.dateDebut!);
+      const missionDate = new Date(mission.startDate!);
       const dayIndex = this.weekDays.findIndex(day =>
         day.date.toDateString() === missionDate.toDateString()
       );
@@ -134,8 +133,8 @@ export class WeeklyPlanningComponent implements  OnInit {
     // Sort missions by time for each day
     this.weekDays.forEach(day => {
       day.missions.sort((a, b) =>
-        new Date(a.dateDebut!).getTime() -
-        new Date(b.dateDebut!).getTime()
+        new Date(a.startDate!).getTime() -
+        new Date(b.startDate!).getTime()
       );
     });
   }

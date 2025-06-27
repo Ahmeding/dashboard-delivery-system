@@ -1,18 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import {FormGroup, NgForm} from "@angular/forms";
-import {ClientDto} from "../../../../../../ds-api/src/models/client-dto";
-import {CommandeClientDto} from "../../../../../../ds-api/src/models/commande-client-dto";
-import {
-  PageResponseCommandeClientResponse
-} from "../../../../../../ds-api/src/models/page-response-commande-client-response";
-import {ServiceDeliveryDto} from "../../../../../../ds-api/src/models/service-delivery-dto";
-import {LigneCommandeClientDto} from "../../../../../../ds-api/src/models/ligne-commande-client-dto";
-import {CommandeClientResponse} from "../../../../../../ds-api/src/models/commande-client-response";
-import {CommandeClientService} from "../../../../../../ds-api/src/services/commande-client.service";
+import {PageResponseOrderResponse} from "../../../../../../ds-api/src/models/page-response-order-response";
+import {OrderRequest} from "../../../../../../ds-api/src/models/order-request";
+import {OrderResponse} from "../../../../../../ds-api/src/models/order-response";
+import {ClientResponse} from "../../../../../../ds-api/src/models/client-response";
+import {DeliveryServiceResponse} from "../../../../../../ds-api/src/models/delivery-service-response";
+import {OrderLineResponse} from "../../../../../../ds-api/src/models/order-line-response";
+import {OrderService} from "../../../../../../ds-api/src/services/order.service";
 import {ClientService} from "../../../../../../ds-api/src/services/client.service";
-import {ServiceDeliveryService} from "../../../../../../ds-api/src/services/service-delivery.service";
+import {DeliveryServiceService} from "../../../../../../ds-api/src/services/delivery-service.service";
 import {AlertService} from "../../../../../services/alert/alert.service";
-import {UtilisateurService} from "../../../../../../ds-api/src/services/utilisateur.service";
+import {UserService} from "../../../../../../ds-api/src/services/user.service";
+import {OrderLineRequest} from "../../../../../../ds-api/src/models/order-line-request";
 
 @Component({
   selector: 'app-new-order',
@@ -21,7 +20,7 @@ import {UtilisateurService} from "../../../../../../ds-api/src/services/utilisat
 })
 export class NewOrderComponent implements OnInit{
 
-  testOrder: CommandeClientDto={
+/*  testOrder: CommandeClientDto={
     code: "CMD0003",
     dateCommnde: "2024-10-23T07:15:13.717Z",
     clientId: 3,
@@ -43,31 +42,30 @@ export class NewOrderComponent implements OnInit{
       }
     ],
     etatCommande: "IN_PROGRESS"
-  }
+  }*/
   page: number = 0;
   size: number =5;
-  allOrdersResponse: PageResponseCommandeClientResponse={};
-  newOrder: CommandeClientDto= {};
-  selectedToEditOrder: CommandeClientDto= {};
+  allOrdersResponse: PageResponseOrderResponse={};
+  newOrder!: OrderRequest;
+  selectedToEditOrder: OrderResponse= {};
   isFormAddNewSubmitted: boolean= false;
-  allClients: ClientDto[]=[]
+  allClients: ClientResponse[]=[]
 
-  allServiceDeliveries: ServiceDeliveryDto[]=[];
-  selectedServiceDelivery: ServiceDeliveryDto|undefined={};
-  allSelectedServiceDeliveries: ServiceDeliveryDto[]=[];
+  allServiceDeliveries: DeliveryServiceResponse[]=[];
+  selectedServiceDelivery: DeliveryServiceResponse|undefined={};
 
-  orderLine:  LigneCommandeClientDto ={};
-  orderlines: LigneCommandeClientDto[]=[];
-  selectedOrder: CommandeClientResponse = {};
+  orderLine:  OrderLineResponse ={};
+  orderLines: OrderLineResponse[]=[];
+  selectedOrder: OrderResponse = {};
   isEditMode: boolean=false;
 
 
   constructor(
-    private cmdClientService:CommandeClientService,
+    private orderService:OrderService,
     private clientService:ClientService,
-    private servDeliveryService: ServiceDeliveryService,
+    private deliveryServiceService: DeliveryServiceService,
     private alertService: AlertService,
-    private userService:UtilisateurService
+    private userService:UserService
   ) {}
 
   ngOnInit(): void {
@@ -78,7 +76,7 @@ export class NewOrderComponent implements OnInit{
 
 
   private getAllOrders() {
-    this.cmdClientService.findAllCommandeClients({
+    this.orderService.findAllOrdersPageable({
       page:this.page,
       size:this.size
     }).subscribe({
@@ -147,7 +145,7 @@ export class NewOrderComponent implements OnInit{
   }
 
   private getAllClients() {
-    this.clientService.findAll17().subscribe({
+    this.clientService.findAllClient().subscribe({
       next:(clientsResponse)=>{
         this.allClients=clientsResponse;
       }
@@ -158,10 +156,10 @@ export class NewOrderComponent implements OnInit{
 
     this.isFormAddNewSubmitted=true;
     form.form.markAllAsTouched();
-    this.newOrder.ligneCommandeClientsDtos=this.orderlines;
-    this.newOrder.etatCommande= "IN_PROGRESS"
+    //this.newOrder.orderLines =this.orderLines;
+    this.newOrder.orderStatus= "IN_PROGRESS"
     console.log(this.newOrder);
-    this.cmdClientService.save16({body:this.newOrder}).subscribe({
+    this.orderService.saveOrder({body:this.newOrder}).subscribe({
       next:(resp)=>{
         this.getAllOrders();
         this.resetForm(form);
@@ -176,12 +174,12 @@ export class NewOrderComponent implements OnInit{
   }
   private resetForm(form: NgForm) {
     form.resetForm();  // Reset the form state and clear input values
-    this.newOrder = {};   // Reset the driver object to its initial state
+    this.newOrder!;   // Reset the driver object to its initial state
     this.isFormAddNewSubmitted = false; // Reset the submitted state
   }
 
   private getAllServDelivery() {
-    this.servDeliveryService.findAll3().subscribe({
+    this.deliveryServiceService.findAllDeliveryService().subscribe({
       next:(allSDResponse)=>{
         this.allServiceDeliveries=allSDResponse;
       },
@@ -204,30 +202,32 @@ export class NewOrderComponent implements OnInit{
       this.alertService.alertWarning("Please select a service before adding")
       return;
     }
-    const exists= this.orderlines.some(orderL=>orderL.serviceDeliveryDtoId===this.selectedServiceDelivery?.id)
+    const exists= this.orderLines.some(orderL=>orderL.deliveryService?.id===this.selectedServiceDelivery?.id)
     if(exists){
       this.alertService.alertWarning("This service has already been added.")
       return;
     }
-    const newOrdeLine :LigneCommandeClientDto = {
-      serviceDeliveryDtoId : this.selectedServiceDelivery.id,
-      quantite: 2 as number,
-      prixUnitaire: this.selectedServiceDelivery.basicTripCost,
+    const newOrdeLine :OrderLineRequest = {
+      deliveryServiceId : this.selectedServiceDelivery.id,
+      quantity: 2 as number,
+      unitPrice: this.selectedServiceDelivery.basicTripCost as number,
+      orderId: this.newOrder.id as number,
+      ttcPrice:0,
       tva: 20,
     }
 
-    this.orderLine.serviceDeliveryDtoId=this.selectedServiceDelivery.id;
-    this.orderlines.push(newOrdeLine);
+    //this.orderLine.deliveryService?.id=this.selectedServiceDelivery.id as number;
+    this.orderLines.push(newOrdeLine);
     this.selectedServiceDelivery = undefined;
   }
 
   deleteServDelivery(i: number) {
-    this.orderlines.splice(i,1);
+    this.orderLines.splice(i,1);
   }
 
   onQteChange(event: any, index: number) {
     const selectedQte = event.target.value as number;
-    this.orderlines[index].quantite=selectedQte;
+    this.orderLines[index].quantity=selectedQte;
 
   }
 
@@ -242,12 +242,12 @@ export class NewOrderComponent implements OnInit{
   }
 
   editOrder(id: number | undefined) {
-    this.cmdClientService.findById16({id:id as number}).subscribe({
+    this.orderService.findOrderById({id:id as number}).subscribe({
       next:(order)=>{
         this.selectedToEditOrder = order;
-        this.orderlines = this.selectedToEditOrder.ligneCommandeClientsDtos as Array<CommandeClientDto>;
+        this.orderLines = this.selectedToEditOrder.orderLines as Array<OrderLineResponse>;
         console.log(this.selectedToEditOrder);
-        const dateString = JSON.stringify(this.selectedOrder.dateCommnde);
+        const dateString = JSON.stringify(this.selectedOrder.orderDate);
         console.log("---------------"+this.convertDate(JSON.parse((dateString))));
         /* this.selectedToEditOrder.dateCommnde = this.convertDate(JSON.parse((dateString))) as Date;*/
       }

@@ -2,7 +2,7 @@ package com.hitecart.deliverysystem.services.impl;
 
 import com.hitecart.deliverysystem.dao.RoleRepository;
 import com.hitecart.deliverysystem.model.Role;
-import com.hitecart.deliverysystem.model.enums.RoleName;
+import com.hitecart.deliverysystem.model.enums.RoleType;
 import com.hitecart.deliverysystem.services.IRoleInitializerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,13 +14,13 @@ public class RoleInitializerServieceImpl implements IRoleInitializerService {
 
     @Override
     public void init() {
-        createRoleIfNotFound(RoleName.ROLE_ADMIN.name());
-        createRoleIfNotFound(RoleName.ROLE_USER.name());
-        createRoleIfNotFound(RoleName.ROLE_DRIVER.name());
+        createRoleIfNotFound(RoleType.ROLE_ADMIN);
+        createRoleIfNotFound(RoleType.ROLE_USER);
+        createRoleIfNotFound(RoleType.ROLE_DRIVER);
     }
 
-    private void createRoleIfNotFound(String roleName) {
-        if(!roleRepository.existsByName(roleName)){
+    private void createRoleIfNotFound(RoleType roleName) {
+        if(!roleRepository.existsByName(roleName.name())){
             Role role = new Role();
             role.setName(roleName);
             roleRepository.save(role);

@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 public class DriverAssignmentHistory extends AbstractEntity {
 
     @ManyToOne
-    @JoinColumn(name = "chauffeur_id")
-    private Chauffeur chauffeur;
+    @JoinColumn(name = "driver_id")
+    private Driver driver;
 
     @ManyToOne
     @JoinColumn(name = "mission_id")

@@ -1,7 +1,7 @@
 package com.hitecart.deliverysystem.controllers.api;
 
-import com.hitecart.deliverysystem.dto.basic.NotificationDto;
-import com.hitecart.deliverysystem.dto.basic.RoleDto;
+import com.hitecart.deliverysystem.dto.notification.NotificationRequest;
+import com.hitecart.deliverysystem.dto.notification.NotificationResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,9 +22,8 @@ public interface NotificationApi {
 
     @PutMapping(value = UPDATE_NOTIFICATION_ENDPOINT,consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
 
-    @Operation(
-            summary = "Mark As Read",
-            operationId = "markAsRead",  // ← stable, custom ID
+    @Operation( operationId = "markAsRead",
+            summary = "Mark As Read", // ← stable, custom ID
 
             description = "Modifier une role, cette methode permet " +
                     "modifier une reparattion",
@@ -34,20 +33,19 @@ public interface NotificationApi {
                             description = "L'objet role a été créé / modifié",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = NotificationDto.class))
+                                    schema = @Schema(implementation = NotificationResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "400",
                             description = "L'objet role n'est pas valide",
                             content = @Content(mediaType = "application/json"))
             })
-    ResponseEntity<NotificationDto> markAsRead(@RequestBody NotificationDto dto);
+    ResponseEntity<NotificationResponse> markAsRead(@RequestBody NotificationRequest notificationRequest);
 
     @PreAuthorize("#userId == authentication.principal.id")
     @GetMapping(value = FIND_ALL_NOTIFICATION_BY_USERID_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(
-            summary = "find All Notifications By User id",
-            operationId = "findAllByUserID",  // ← stable, custom ID
+    @Operation( operationId = "findAllByUserID",
+            summary = "find All Notifications By User id", // ← stable, custom ID
 
             description = "Rechercher tout les notif! Cette methode permet de retouner toutes les roles",
             responses = {
@@ -60,6 +58,6 @@ public interface NotificationApi {
                     )
             }
     )
-    ResponseEntity<List<NotificationDto>> findAllByUserID(@PathVariable("userId") Integer userId);
+    ResponseEntity<List<NotificationResponse>> findAllByUserID(@PathVariable("userId") Integer userId);
 
 }

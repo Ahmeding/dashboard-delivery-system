@@ -1,13 +1,13 @@
 package com.hitecart.deliverysystem;
 
-import com.hitecart.deliverysystem.exception.EntityNotFoundException;
+import com.hitecart.deliverysystem.dao.UserRepository;
 import com.hitecart.deliverysystem.model.DeliveryPointCategory;
 import com.hitecart.deliverysystem.model.Role;
-import com.hitecart.deliverysystem.model.Utilisateur;
-import com.hitecart.deliverysystem.dao.IDeliveryPointCategoryRepository;
+import com.hitecart.deliverysystem.model.User;
+import com.hitecart.deliverysystem.dao.DeliveryPointCategoryRepository;
 import com.hitecart.deliverysystem.dao.RoleRepository;
-import com.hitecart.deliverysystem.dao.UtilisateurRepository;
-import com.hitecart.deliverysystem.services.impl.ChauffeurServiceImpl;
+import com.hitecart.deliverysystem.model.enums.RoleType;
+import com.hitecart.deliverysystem.services.impl.DriverServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,65 +29,84 @@ public class DeliverysystemApplication {
 
 	private final PasswordEncoder passwordEncoder;
 	public static void main(String[] args) {
-
 		SpringApplication.run(DeliverysystemApplication.class, args);
-
 	}
 
 
 
 	@Bean
 	public CommandLineRunner runner(RoleRepository roleRepository,
-									UtilisateurRepository userRepo,
-									IDeliveryPointCategoryRepository dpcRepository,
-									ChauffeurServiceImpl driverService) {
+									UserRepository userRepo,
+									DeliveryPointCategoryRepository dpcRepository,
+									DriverServiceImpl driverService) {
 		return args -> {//CodeGeneratorExecutor.executeCodeGenerator();
 
-			Utilisateur connectedUser =  userRepo.findByEmail("admin@gmail.com").orElseThrow(() ->new EntityNotFoundException("not found user"));
-			Role userRole = roleRepository.findByName("ROLE_USER").orElseGet(()->{
+			User admindUser =  userRepo.findByEmail("admin@gmail.com")
+					.orElseGet( () ->{
+							Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)
+									.orElseGet(()->
+									roleRepository.save(
+											Role.builder()
+													.name(RoleType.ROLE_ADMIN)
+													.createdBy(0)
+													.build()
+									));
+								return userRepo.save(
+								User.builder()
+										.email("admin@gmail.com")
+										.password(passwordEncoder.encode("admin"))
+										.firstname("Admin")
+										.lastname("Admin")
+										.phoneNbr("+1234567890")
+										.roles(List.of(adminRole))
+										.enabled(true)
+										.createdBy(0)
+										.build()
+								);
+							}
+							);
+
+			Role userRole = roleRepository.findByName(RoleType.ROLE_USER).orElseGet(()->{
 				return roleRepository.save( Role.builder()
-								 .name("ROLE_USER")
-								.createdBy(1)
+								 .name(RoleType.ROLE_USER)
+								 .createdBy(admindUser.getId())
 								 .build());}
 			);
 
-			List<Role> roleList  =  new ArrayList<>();
-			roleList.add(userRole);
-
-			if(userRepo.findByEmail("admin3@gmail.com").isEmpty()){
-				userRepo.save(
-						Utilisateur.builder()
+			userRepo.findByEmail("user@gmail.com").orElseGet(()->{
+				return userRepo.save(
+						User.builder()
 								.password(passwordEncoder.encode("admin"))
-								.email("admin3@gmail.com")
-								.createdBy(connectedUser.getId())
+								.email("user@gmail.com")
+								.createdBy(admindUser.getId())
 								.enabled(true)
-								.firstname("Admin3")
-								.lastname("Admin")
-								.phoneNum("+3322785698")
-								.roles(roleList)
+								.firstname("user")
+								.lastname("user")
+								.phoneNbr("+3322785698")
+								.roles(List.of(userRole))
 								.build()
 				);
-			}
-
+			});
 			if(dpcRepository.findAll().isEmpty()){
 				dpcRepository.save(
-						DeliveryPointCategory.builder().name("Standard-Range").
-						description("Companies in this category offer basic, cost-effective delivery services. Their pricing reflects standard shipping costs without extra premiums.")
-								.createdBy(1)
+						DeliveryPointCategory.builder()
+								.name("Standard-Range")
+								.description("Companies in this category offer basic, cost-effective delivery services. Their pricing reflects standard shipping costs without extra premiums.")
+								.createdBy(admindUser.getId())
 								.additionalFees(0.0)
 								.build()
 				);
 				dpcRepository.save(
 						DeliveryPointCategory.builder().name("Mid-Range")
 								.description("These companies balance affordability with enhanced security measures. They keep delivery costs moderate while implementing additional protocols to ensure safer transit.")
-								.createdBy(1)
+								.createdBy(admindUser.getId())
 								.additionalFees(10.0)
 								.build()
 				);
 				dpcRepository.save(
 						DeliveryPointCategory.builder().name("Hight-End")
 								.description("Serving high-value goods, these companies charge premium delivery fees. Their services include advanced, secure logistics and specialized handling to match the elevated value of the items.")
-								.createdBy(1)
+								.createdBy(admindUser.getId())
 								.additionalFees(20.0)
 								.build()
 				);

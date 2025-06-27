@@ -8,11 +8,11 @@
     <div class="time-destination">
       <span class="time">{{ getStartTime() }}</span>
       <span class="mission-title" [style.color]="getDestinationColor()">
-        {{ mission.titre }}
+        {{ mission.title }}
       </span>
     </div>
     <div class="status">
-      <i [class]="'bi ' + getStatusIcon()" [title]="mission.etatMission"></i>
+      <i [class]="'bi ' + getStatusIcon()" [title]="mission.missionStatus"></i>
     </div>
   </div>
 
@@ -28,18 +28,18 @@
       </div>
     </div>
 
-    <div class="resources-container" *ngIf="mission.missionVehiclesDtos?.length">
+    <div class="resources-container" *ngIf="mission.missionVehicles?.length">
       <div class="resources-scroll">
-        <ng-container *ngFor="let mv of mission.missionVehiclesDtos">
+        <ng-container *ngFor="let mv of mission.missionVehicles">
           <div class="resource-group">
             <div class="resource-badge vehicle">
               <i class="bi bi-truck"></i>
-              <span class="plate">{{ mv.vehicleDto?.immatriculation }}</span>
+              <span class="plate">{{ "mv.vehicle?.immatriculation" }}</span>
             </div>
             <div class="drivers-list">
-              <div class="resource-badge driver" *ngFor="let driver of mv.chauffeursVehicleDto">
+              <div class="resource-badge driver" *ngFor="let driver of mv.driverVehicles">
                 <i class="bi bi-person-badge"></i>
-                <span class="name">{{ driver.chauffeurDto?.firstname }}</span>
+                <span class="name">{{ "driver.driverId?.firstname "}}</span>
               </div>
             </div>
           </div>

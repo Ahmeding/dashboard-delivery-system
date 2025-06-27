@@ -1,12 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {MissionDto} from "../../../../../ds-api/src/models/mission-dto";
 import {ActivatedRoute} from "@angular/router";
 import {MissionService} from "../../../../../ds-api/src/services/mission.service";
-import { convertResponseToDto } from 'src/app/services/dto-converters/mission-converter';
-import {FraisMissionDto} from "../../../../../ds-api/src/models/frais-mission-dto";
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../../../services/alert/alert.service";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
+import {MissionResponse} from "../../../../../ds-api/src/models/mission-response";
+import {MissionExpenseResponse} from "../../../../../ds-api/src/models/mission-expense-response";
+import {MissionExpenseRequest} from "../../../../../ds-api/src/models/mission-expense-request";
+import {MissionRequest} from "../../../../../ds-api/src/models/mission-request";
+import {MissionStartEndRequest} from "../../../../../ds-api/src/models/mission-start-end-request";
 
 @Component({
   selector: 'app-manage-trip-mission',
@@ -14,11 +16,11 @@ import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
   styleUrls: ['./manage-trip-mission.component.scss']
 })
 export class ManageTripMissionComponent implements OnInit {
-  mission!: MissionDto;
+  mission!: MissionResponse;
   expenseTypes = ['CARBURANT', 'ADDBLUE', 'EAU_LAVGLASSE', 'ELECTRICITE', 'AUTRE_SERVICE'];
   editForm!: FormGroup;
 
-  expensesArrayTmp: FraisMissionDto[] = [];
+  expensesArrayTmp: MissionExpenseRequest[] = [];
   currentExpenseForm!:FormGroup;
 
 
@@ -47,7 +49,7 @@ export class ManageTripMissionComponent implements OnInit {
     return this.editForm.get('expenses') as FormArray;
   }
 
-  createExpense(expense?: FraisMissionDto) {
+  createExpense(expense?: MissionExpenseRequest) {
    this.currentExpenseForm= this.fb.group({
       id: [expense?.id || null],
       name: [expense?.name || '', Validators.required],
@@ -75,7 +77,7 @@ export class ManageTripMissionComponent implements OnInit {
   }
 
   loadMission(id: number) {
-    this.missionService.findById7({id:id}).subscribe(mission => {
+    this.missionService.findMissionById({id:id}).subscribe(mission => {
       this.mission = mission;
       this.editForm.patchValue({
         kmDebut: mission.kmDebut,
@@ -83,21 +85,24 @@ export class ManageTripMissionComponent implements OnInit {
       });
 
       if (mission.fraisMissionDtoList) {
-        mission.fraisMissionDtoList.forEach((expense: FraisMissionDto | undefined) => {
+        mission.fraisMissionDtoList.forEach((expense: MissionExpenseRequest | undefined) => {
           this.expenses.push(this.createExpense(expense));
         });
       }
     });
   }
 
+  missionStartEndReq!: MissionStartEndRequest;
   saveMission() {
+
+    alert("crete expense not updation mission!!!")
     if (this.editForm.valid) {
-      const updatedMission: MissionDto = {
+     /* const missionStartEndReq: MissionStartEndRequest = {
         ...this.mission,
-        kmDebut: this.editForm.value.kmDebut,
-        kmFin: this.editForm.value.kmFin,
-        fraisMissionDtoList: this.editForm.value.expenses
-      };
+        startMileage: this.editForm.value.kmDebut,
+        endMileage: this.editForm.value.kmFin,
+
+      };*/
 
      /* this.missionService.update({id:this.mission.id as number,body:updatedMission}).subscribe({
         next: () => alert('Mission updated successfully!'),

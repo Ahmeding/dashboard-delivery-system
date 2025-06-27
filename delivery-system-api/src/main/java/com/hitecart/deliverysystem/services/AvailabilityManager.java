@@ -2,7 +2,7 @@ package com.hitecart.deliverysystem.services;
 
 import com.hitecart.deliverysystem.model.*;
 import com.hitecart.deliverysystem.model.enums.DriverExperience;
-import com.hitecart.deliverysystem.dao.IChauffeurVehicleRepository;
+import com.hitecart.deliverysystem.dao.DriverVehicleRepository;
 import com.hitecart.deliverysystem.dao.MissionVehicleRepository;
 import com.hitecart.deliverysystem.utils.TimeSlot;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +18,13 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AvailabilityManager {
-    private final IChauffeurVehicleRepository chauffeurVehicleRepository;
+    private final DriverVehicleRepository driverVehicleRepository;
     private final MissionVehicleRepository missionVehicleRepository;
     // Track vehicle time slots (REQUIRED)
-    private final Map<Vehicule, List<TimeSlot>> vehicleAvailability = new ConcurrentHashMap<>();
-    private Map<Chauffeur, List<TimeSlot>> driverAvailability = new HashMap<>();
+    private final Map<Vehicle, List<TimeSlot>> vehicleAvailability = new ConcurrentHashMap<>();
+    private Map<Driver, List<TimeSlot>> driverAvailability = new HashMap<>();
 
-    public void blockResources(Vehicule vehicle, List<Chauffeur> drivers, TimeSlot slot) {
+    public void blockResources(Vehicle vehicle, List<Driver> drivers, TimeSlot slot) {
         log.info("Blocking resources for mission {} to {}", slot.getStart(), slot.getEnd());
 
         // Block vehicle availability
@@ -49,17 +49,17 @@ public class AvailabilityManager {
     }
 
     public void
-    initializeDriverAvailability(List<Chauffeur> drivers, LocalDateTime start, LocalDateTime end) {
+    initializeDriverAvailability(List<Driver> drivers, LocalDateTime start, LocalDateTime end) {
 
             // Step 1: Fetch all assignments for all drivers in one query
-            List<ChauffeurVehicle> allAssignments = chauffeurVehicleRepository
+            List<DriverVehicle> allAssignments = driverVehicleRepository
                     .findChauffeurVehiclesByDriversAndDateRange(drivers, start, end);
 
             // Step 2: Group assignments by driver (KEY FIX!)
-            Map<Chauffeur, List<ChauffeurVehicle>>
+            Map<Driver, List<DriverVehicle>>
                     assignmentsByDriver = allAssignments.stream()
                     .collect(Collectors
-                            .groupingBy(ChauffeurVehicle::getChauffeur));
+                            .groupingBy(DriverVehicle::getDriver));
 
         drivers.forEach(driver -> {
                     List<TimeSlot> availability =
@@ -87,11 +87,11 @@ public class AvailabilityManager {
                     ));
         }
 
-    public List<Chauffeur> getAvailableDrivers(TimeSlot slot,
-                                               List<DriverExperience> requiredLevels) {
+    public List<Driver> getAvailableDrivers(TimeSlot slot,
+                                            List<DriverExperience> requiredLevels) {
         return driverAvailability.entrySet().stream()
                 .filter(entry ->{
-                    Chauffeur driver = entry.getKey();
+                    Driver driver = entry.getKey();
                     boolean levelMatch = requiredLevels.contains(driver.getExperienceLevel());
                             boolean slotAvailable = entry.getValue().stream()
                                     .anyMatch(availableSlot -> availableSlot.covers(slot));
@@ -110,7 +110,7 @@ public class AvailabilityManager {
     }
     // ========== NEW FUNCTIONALITY ========== //
 
-    public void blockDriverTime(Chauffeur driver, TimeSlot missionSlot) {
+    public void blockDriverTime(Driver driver, TimeSlot missionSlot) {
         driverAvailability.computeIfPresent(driver, (k, currentSlots) ->
                 currentSlots.stream()
                         .flatMap(slot -> slot.subtract(missionSlot).stream())
@@ -118,7 +118,7 @@ public class AvailabilityManager {
         );
         log.debug("Blocked {} for {}", driver.getId(), missionSlot);
     }
-    private List<TimeSlot> subtractCooldownPeriods(Chauffeur driver, List<TimeSlot> availability) {
+    private List<TimeSlot> subtractCooldownPeriods(Driver driver, List<TimeSlot> availability) {
         if (driver.getNextAvailableTime() != null) {
             TimeSlot cooldown = new TimeSlot(
                     driver.getNextAvailableTime().minusHours(2), // Cooldown buffer
@@ -135,8 +135,8 @@ public class AvailabilityManager {
     // ========== IMPROVED SAFETY CHECKS ========== //
 
     private List<TimeSlot> subtractAssignments(List<TimeSlot> availability,
-                                               List<ChauffeurVehicle> assignments) {
-        for (ChauffeurVehicle assignment : assignments) {
+                                               List<DriverVehicle> assignments) {
+        for (DriverVehicle assignment : assignments) {
             TimeSlot occupied = extractOccupiedTimeSlot(assignment);
             if (occupied == null) continue;
 
@@ -212,11 +212,11 @@ public class AvailabilityManager {
      */
     private TimeSlot extractOccupiedTimeSlot(AbstractEntity assignment) {
         try {
-            if (assignment instanceof ChauffeurVehicle) {
-                ChauffeurVehicle cv = (ChauffeurVehicle) assignment;
+            if (assignment instanceof DriverVehicle) {
+                DriverVehicle cv = (DriverVehicle) assignment;
                 MissionVehicle mv = cv.getMissionVehicle();
                 if (mv == null || mv.getMission() == null) return null;
-                return new TimeSlot(mv.getMission().getDateDebut(), mv.getMission().getDateFin());
+                return new TimeSlot(mv.getMission().getStartDate(), mv.getMission().getEndDate());
             }
             else if (assignment instanceof MissionVehicle) {
                 MissionVehicle mv = (MissionVehicle) assignment;
@@ -225,8 +225,8 @@ public class AvailabilityManager {
                     return null;
                 }
                 return new TimeSlot(
-                        mv.getMission().getDateDebut(),
-                        mv.getMission().getDateFin());
+                        mv.getMission().getStartDate(),
+                        mv.getMission().getEndDate());
             } else {
                 throw new IllegalArgumentException("Unsupported assignment type: " + assignment.getClass());
             }
@@ -237,7 +237,7 @@ public class AvailabilityManager {
     }
 
 
-    public boolean isAvailable(Chauffeur driver, TimeSlot missionSlot) {
+    public boolean isAvailable(Driver driver, TimeSlot missionSlot) {
         // Check 1: Driver's existing assignments don't overlap with mission slot
         // Combined check: availability slots + cooldown time
 
@@ -253,10 +253,10 @@ public class AvailabilityManager {
         return slotAvailable && cooldownPassed;
 
       /*  boolean hasNoOverlap = driver.getAssignments().stream()
-                .map(ChauffeurVehicle::getMissionVehicle)
+                .map(DriverVehicle::getMissionVehicle)
                 .map(MissionVehicle::getMission)
                 .noneMatch(mission ->
-                        new TimeSlot(mission.getDateDebut(), mission.getDateFin())
+                        new TimeSlot(mission.getStartDate(), mission.getEndDate())
                                 .overlapsWith(missionSlot)
                 );
         // Check 2: Driver's next available time (cooldown period)
@@ -268,15 +268,15 @@ public class AvailabilityManager {
     }
 
     // Optimized vehicle availability initialization
-    public Map<Vehicule, List<TimeSlot>> initializeVehicleAvailability(List<Vehicule> vehicles,
-                                                                       LocalDateTime start,
-                                                                       LocalDateTime end) {
+    public Map<Vehicle, List<TimeSlot>> initializeVehicleAvailability(List<Vehicle> vehicles,
+                                                                      LocalDateTime start,
+                                                                      LocalDateTime end) {
         // Single query to fetch all assignments for all vehicles
         List<MissionVehicle> allAssignments = missionVehicleRepository.findByVehiculesAndTime(vehicles, start, end);
 
         // Group assignments by vehicle
-        Map<Vehicule, List<MissionVehicle>> assignmentsByVehicle = allAssignments.stream()
-                .collect(Collectors.groupingBy(MissionVehicle::getVehicule));
+        Map<Vehicle, List<MissionVehicle>> assignmentsByVehicle = allAssignments.stream()
+                .collect(Collectors.groupingBy(MissionVehicle::getVehicle));
 
         // Process vehicles in parallel
         return vehicles.parallelStream()
@@ -296,7 +296,7 @@ public class AvailabilityManager {
                 ));
     }
     // Update availability after assignment
-    public void markDriverBusy(Chauffeur driver, TimeSlot slot) {
+    public void markDriverBusy(Driver driver, TimeSlot slot) {
         driverAvailability.computeIfPresent(driver, (k, slots) ->
                 slots.stream()
                         .flatMap(available -> available.subtract(slot).stream())

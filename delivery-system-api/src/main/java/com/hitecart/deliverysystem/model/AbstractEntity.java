@@ -26,16 +26,21 @@ public class AbstractEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @CreatedDate
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "createdat", nullable = false, updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
+
     @LastModifiedDate
     @Column(name = "updatedat")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedAt;
+
     @CreatedBy
     @Column(nullable = false,updatable = false)
     private Integer createdBy;
+
     @LastModifiedBy
     @Column(insertable = false)
     private Integer lastModifiedBy;

@@ -17,7 +17,7 @@
         <select id="vehicle" class="form-control" formControlName="vehiculeDto"
         [class.is-invalid]="repairForm.get('vehiculeDto')?.invalid && repairForm.get('vehiculeDto')?.touched">
           <option [ngValue]="undefined" disabled selected>Select Vehicle</option>
-          <option *ngFor="let v of allVehicles" [ngValue]="v">[{{v.immatriculation}}]&nbsp;{{v.marque}}&nbsp;{{v.modele}}</option>
+          <option *ngFor="let v of allVehicles" [ngValue]="v">[{{v.registrationNbr}}]&nbsp;{{v.brand}}&nbsp;{{v.model}}</option>
         </select>
         <label for="vehicle">Select Vehicle</label>
         <small class="invalid-feedback">Vehicle is required</small>
