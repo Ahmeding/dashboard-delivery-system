@@ -15,7 +15,7 @@ class FraisMissionServiceImplTest {
     }
 
     @Test
-    void findByIdMission() {
+    void findByMissionId() {
     }
 
     @Test

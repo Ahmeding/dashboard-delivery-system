@@ -1,6 +1,6 @@
 package com.hitecart.deliverysystem.config;
 
-import com.hitecart.deliverysystem.model.Utilisateur;
+import com.hitecart.deliverysystem.model.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,7 +19,7 @@ public class ApplicationAuditAware implements AuditorAware<Integer> {
         {
            return Optional.empty();
         }
-        Utilisateur userPrincial = (Utilisateur) authentication.getPrincipal();
+        User userPrincial = (User) authentication.getPrincipal();
         return Optional.ofNullable(userPrincial.getId());
     }
 }

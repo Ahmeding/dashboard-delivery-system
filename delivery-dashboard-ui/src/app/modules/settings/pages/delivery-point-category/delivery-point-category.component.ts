@@ -1,14 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {
-  PageResponseDeliveryPointCategoryDto
-} from "../../../../../ds-api/src/models/page-response-delivery-point-category-dto";
-import {ServiceDeliveryDto} from "../../../../../ds-api/src/models/service-delivery-dto";
-import {DeliveryPointCategoryDto} from "../../../../../ds-api/src/models/delivery-point-category-dto";
+
 import {DeliveryPointCategoriesService} from "../../../../../ds-api/src/services/delivery-point-categories.service";
 import {NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {NewDpCategoryModalComponent} from "./new-dp-category-modal/new-dp-category-modal.component";
 import {AlertService} from "../../../../services/alert/alert.service";
 import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
+import {
+  PageResponseDeliveryPointCatResponse
+} from "../../../../../ds-api/src/models/page-response-delivery-point-cat-response";
+import {DeliveryPointCatResponse} from "../../../../../ds-api/src/models/delivery-point-cat-response";
+import {DeliveryPointCategoryRequest} from "../../../../../ds-api/src/models/delivery-point-category-request";
 
 @Component({
   selector: 'app-delivery-point-category',
@@ -17,10 +18,10 @@ import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
 })
 export class DeliveryPointCategoryComponent implements OnInit{
   searchTerm: any;
-  allDeliveryPointCategoryResponse: PageResponseDeliveryPointCategoryDto={};
+  allDeliveryPointCategoryResponse: PageResponseDeliveryPointCatResponse={};
   page: number=0;
   size:number=5;
-  selectedDelivPointCategory: DeliveryPointCategoryDto={};
+  selectedDelivPointCategory: DeliveryPointCatResponse={};
 
 constructor(private alertService:AlertService,
             private confirmBoxService:ConfirmBoxEvokeService,
@@ -33,7 +34,7 @@ constructor(private alertService:AlertService,
   }
 
   private getAllDeliveryPointCategories() {
-    this.deliveryPointCategoryService.findAllDeliveryPointCategories({
+    this.deliveryPointCategoryService.findAllDeliveryPointCategory({
       page:this.page,
       size:this.size
     }).subscribe({
@@ -80,7 +81,7 @@ constructor(private alertService:AlertService,
     )
   }
 
-  editDelivPointCategory(dpCategory: DeliveryPointCategoryDto) {
+  editDelivPointCategory(dpCategory: DeliveryPointCatResponse) {
     const modalRef =this.modalService.open(NewDpCategoryModalComponent,{
       size:'lg',
       centered:true,
@@ -134,10 +135,10 @@ constructor(private alertService:AlertService,
   }
 
   private confirmDeletingCategory(categoryId: number) {
-    this.deliveryPointCategoryService.delete8({id:categoryId}).subscribe({
+    this.deliveryPointCategoryService.deleteDeliveryPointCategory({id:categoryId}).subscribe({
       next:()=>{this.alertService.alertInfo("Category deleted successfully.");
         this.getAllDeliveryPointCategories()},
-      error:(err)=>{this.alertService.alertWaring("An error occurred while deleting the category. Please try again.");
+      error:(err)=>{this.alertService.alertWarning("An error occurred while deleting the category. Please try again.");
         console.log(err);
       }
     })

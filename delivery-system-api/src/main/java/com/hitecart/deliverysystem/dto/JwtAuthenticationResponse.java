@@ -1,12 +1,13 @@
 package com.hitecart.deliverysystem.dto;
 
-import lombok.Data;
+import com.hitecart.deliverysystem.dto.user.UserResponse;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class JwtAuthenticationResponse {
 
-    private String token;
-    private String refreshToken;
-    private boolean isAuthenicated;
-    private UtilisateurDto user;
+    private String access_token;
+    private String refresh_token;
 }

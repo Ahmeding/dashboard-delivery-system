@@ -1,13 +1,14 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {VehiculeDto} from "../../../../../ds-api/src/models/vehicule-dto";
-import {PageResponseVehiculeDto} from "../../../../../ds-api/src/models/page-response-vehicule-dto";
 import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
 import {AlertService} from "../../../../services/alert/alert.service";
-import {VehiculeService} from "../../../../../ds-api/src/services/vehicule.service";
 import {NgForm} from "@angular/forms";
 import {Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ViewVehiculeModalComponent} from "./view-vehicule-modal/view-vehicule-modal.component";
+import {VehicleResponse} from "../../../../../ds-api/src/models/vehicle-response";
+import {PageResponseVehicleResponse} from "../../../../../ds-api/src/models/page-response-vehicle-response";
+import {VehicleRequest} from "../../../../../ds-api/src/models/vehicle-request";
+import {VehicleService} from "../../../../../ds-api/src/services/vehicle.service";
 
 @Component({
   selector: 'app-vehicles',
@@ -16,10 +17,10 @@ import {ViewVehiculeModalComponent} from "./view-vehicule-modal/view-vehicule-mo
 })
 export class VehiclesComponent implements OnInit{
   @ViewChild('infoVehicleModal') infoVehicleModal!: TemplateRef<any>;
-  allVehicles:VehiculeDto[]=[];
-  allVehiclesResponse: PageResponseVehiculeDto={};
-  selectedVehicle: VehiculeDto={};
-  newVehicle: VehiculeDto={};
+  allVehicles:VehicleResponse[]=[];
+  allVehiclesResponse: PageResponseVehicleResponse={};
+  selectedVehicle: VehicleResponse={};
+  newVehicle!: VehicleRequest;
 
   isFormAddNewSubmitted: boolean=false;
   page: number=0;
@@ -30,14 +31,14 @@ export class VehiclesComponent implements OnInit{
     private router:Router,
     private confirmBoxService:ConfirmBoxEvokeService,
     private alertService:AlertService,
-    private vehicleService: VehiculeService) {
+    private vehicleService: VehicleService) {
   }
 
   ngOnInit(): void {
     this.getAllVehicles();
   }
 private getAllVehicles() {
-    this.vehicleService.findAllVehicules({
+    this.vehicleService.findAllVehicle({
       page:this.page,
       size:this.size
     }).subscribe({
@@ -69,7 +70,7 @@ private getAllVehicles() {
     this.confirmBoxService.customFour(`Are you sure you want to ${action} this vehicle?`, '', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.vehicleService.updateIsActive(
+          this.vehicleService.updateVehicleIsActive(
             {
               id:vehicle_id,
               isactive:!isActive
@@ -99,7 +100,7 @@ private getAllVehicles() {
   }
 private resetForm(form: NgForm) {
     form.resetForm();
-    this.newVehicle={}
+    this.newVehicle!;
     this.isFormAddNewSubmitted=false;
   }
   deleteVehicle(vehicle_id: number) {
@@ -110,7 +111,7 @@ private resetForm(form: NgForm) {
     this.confirmBoxService.customFour('Are you sure you want to delete this vehicle?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.vehicleService.delete({id:vehicle_id}).subscribe(() => {
+          this.vehicleService.deleteVehicle({id:vehicle_id}).subscribe(() => {
             this.getAllVehicles();
             this.alertService.alertSuccess('Deletion successfully completed');
           });
@@ -152,8 +153,8 @@ private resetForm(form: NgForm) {
     }
 
   }*/
-private saveVehicle(vehicleToSave: VehiculeDto, form: NgForm) {
-    this.vehicleService.save1({
+private saveVehicle(vehicleToSave: VehicleRequest, form: NgForm) {
+    this.vehicleService.saveVehicle({
       body:vehicleToSave
     }).subscribe({
       next:(res)=>{
@@ -205,7 +206,7 @@ private saveVehicle(vehicleToSave: VehiculeDto, form: NgForm) {
     this.router.navigate(['vehicles','edit-vehicle',id])
   }
 
-  openVehicleModal(vehicle: VehiculeDto) {
+  openVehicleModal(vehicle: VehicleResponse) {
     const modalRef = this.modalService.open(ViewVehiculeModalComponent, { size: 'xl' });
     modalRef.componentInstance.selectedVehicle = vehicle;  // Pass data to modal
   }

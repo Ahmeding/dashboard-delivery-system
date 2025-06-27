@@ -40,11 +40,11 @@
             <tbody>
             <tr *ngFor="let contract of allContractsResponse.content">
               <td>{{ contract.id}}</td>
-              <td>{{ capitalizeName(contract.chauffeurDto?.firstname) }}&nbsp;{{ capitalizeName(contract.chauffeurDto?.lastname) }}</td>
-              <td>{{ contract.typeContrat}}</td>
-              <td>{{formatDate(contract.dateDebut) }}</td>
-              <td>{{formatDate(contract.dateFin)}}</td>
-              <td>{{ capitalizeName(contract.createdByUser?.fullname) }}</td>
+              <td>{{ "drover name" }}&nbsp;{{ capitalizeName("lastname") }}</td>
+              <td>{{ contract.contractType}}</td>
+              <td>{{formatDate(contract.startDate) }}</td>
+              <td>{{formatDate(contract.endDate)}}</td>
+              <td>{{ capitalizeName("created by") }}</td>
               <td>{{ formatDateTime(contract.createdAt) }}</td>
               <td>
                 <i class="bi bi-pen text-warning mr-2" data-toggle="modal"

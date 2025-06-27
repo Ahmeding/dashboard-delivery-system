@@ -1,17 +1,16 @@
 import {Component, OnInit} from '@angular/core';
-import {PageResponseReparationDto} from "../../../../../ds-api/src/models/page-response-reparation-dto";
-import {ReparationDto} from "../../../../../ds-api/src/models/reparation-dto";
-import {ReparationService} from "../../../../../ds-api/src/services/reparation.service";
 import {Router} from "@angular/router";
-import {PageResponseContratDto} from "../../../../../ds-api/src/models/page-response-contrat-dto";
-import {ContratService} from "../../../../../ds-api/src/services/contrat.service";
-import {ContratDto} from "../../../../../ds-api/src/models/contrat-dto";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ViewContractModalComponent} from "./view-contract-modal/view-contract-modal.component";
 import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
 import {AlertService} from "../../../../services/alert/alert.service";
 import {DateUtilsService} from "../../../../services/date-utils/date-utils.service";
 import {StringUtilsService} from "../../../../services/string-utils/string-utils.service";
+import {
+  PageResponseEmploymentContractResponse
+} from "../../../../../ds-api/src/models/page-response-employment-contract-response";
+import {EmploymentContractResponse} from "../../../../../ds-api/src/models/employment-contract-response";
+import {EmploymentContractService} from "../../../../../ds-api/src/services/employment-contract.service";
 
 @Component({
   selector: 'app-contracts',
@@ -20,10 +19,10 @@ import {StringUtilsService} from "../../../../services/string-utils/string-utils
 })
 export class ContractsComponent implements OnInit{
 
-  allContractsResponse: PageResponseContratDto={};
+  allContractsResponse: PageResponseEmploymentContractResponse={};
   page: number=0;
   size: number=4;
-  selectedContract: ContratDto={};
+  selectedContract: EmploymentContractResponse={};
 
   constructor(
     private confirmBoxService:ConfirmBoxEvokeService,
@@ -31,12 +30,12 @@ export class ContractsComponent implements OnInit{
     private dateUtilSdervice:DateUtilsService,
     private stringUtilsService:StringUtilsService,
     private modalService: NgbModal,
-    private contratService:ContratService,
+    private contratService:EmploymentContractService,
               private router:Router) {
   }
 
   getAllContracts(){
-    this.contratService.findAllContrats({
+    this.contratService.findAllEmploymentContractsPageable({
       page:this.page,
       size:this.size
     }).subscribe({
@@ -50,7 +49,7 @@ export class ContractsComponent implements OnInit{
 
   formatDate(dateString: string | undefined):string{
 
-   return this.dateUtilSdervice.formatToDate(dateString as string);
+   return dateString as string;
   }
 
   goToPreviousPage() {
@@ -98,7 +97,7 @@ export class ContractsComponent implements OnInit{
     this.confirmBoxService.customFour('Are you sure you want to delete this contract?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.contratService.delete12({id:contract_id}).subscribe(() => {
+          this.contratService.deleteEmploymentContract({id:contract_id}).subscribe(() => {
             this.getAllContracts();
             this.alertService.alertSuccess('Deletion successfully completed');
           });
@@ -114,14 +113,13 @@ export class ContractsComponent implements OnInit{
     this.router.navigate(['drivers','edit-contract',id])
   }
 
-  openDriverModal(contract: ContratDto) {
+  openDriverModal(contract: EmploymentContractResponse) {
     const modalRef = this.modalService.open(ViewContractModalComponent,{'size':'xl'});
     modalRef.componentInstance.selectedContract= contract;
   }
 
   formatDateTime(dateTimeString: string | undefined):string {
-    console.log("=================> "+JSON.stringify(dateTimeString) );
-    return this.dateUtilSdervice.formatDateTime(dateTimeString);
+    return dateTimeString as string;
   }
 
   capitalizeName(name: string | undefined) {

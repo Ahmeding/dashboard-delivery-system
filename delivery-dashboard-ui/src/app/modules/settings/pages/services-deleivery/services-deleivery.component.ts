@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {ServiceDeliveryService} from "../../../../../ds-api/src/services/service-delivery.service";
 import {Router} from "@angular/router";
-import {PageResponseUtilisateurDto} from "../../../../../ds-api/src/models/page-response-utilisateur-dto";
-import {PageResponseServiceDeliveryDto} from "../../../../../ds-api/src/models/page-response-service-delivery-dto";
-import {ServiceDeliveryDto} from "../../../../../ds-api/src/models/service-delivery-dto";
 import {AlertService} from "../../../../services/alert/alert.service";
 import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
+import {
+  PageResponseDeliveryServiceResponse
+} from "../../../../../ds-api/src/models/page-response-delivery-service-response";
+import {DeliveryServiceResponse} from "../../../../../ds-api/src/models/delivery-service-response";
+import {DeliveryServiceService} from "../../../../../ds-api/src/services/delivery-service.service";
 
 @Component({
   selector: 'app-services-deleivery',
@@ -14,17 +15,17 @@ import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
 })
 export class ServicesDeleiveryComponent implements OnInit{
 
-  allServiceDeliveryResponse: PageResponseServiceDeliveryDto={};
+  allDeliveryServiceResponse!: PageResponseDeliveryServiceResponse;
   page: number=0;
   size:number=5;
-  selectedServdelivery: ServiceDeliveryDto={};
+  selectedServdelivery!: DeliveryServiceResponse;
   searchTerm: any;
 
 
 
   constructor(
     private confirmBoxService:ConfirmBoxEvokeService,
-    private serviceDeliveryService:ServiceDeliveryService,
+    private DeliveryServiceService:DeliveryServiceService,
     private router:Router,
     private alertService:AlertService) {}
 
@@ -38,12 +39,12 @@ export class ServicesDeleiveryComponent implements OnInit{
   }
 
   private getAllServiceDel() {
-    this.serviceDeliveryService.findAllServicesDelivery({
+    this.DeliveryServiceService.findAllDeliveryServicesPageable({
       page:this.page,
       size:this.size
     }).subscribe({
       next:(servDeliveryRep)=>{
-        this.allServiceDeliveryResponse=servDeliveryRep;
+        this.allDeliveryServiceResponse=servDeliveryRep;
       },error:(err)=>{
       console.log(err);
     }
@@ -88,11 +89,11 @@ export class ServicesDeleiveryComponent implements OnInit{
 
 
   get  isLastPage():boolean{
-    return this.page == this.allServiceDeliveryResponse.totalPages as number -1;
+    return this.page == this.allDeliveryServiceResponse.totalPages as number -1;
   }
 
   goToLastPage() {
-    this.page=this.allServiceDeliveryResponse.totalPages as number -1;
+    this.page=this.allDeliveryServiceResponse.totalPages as number -1;
   }
 
   goToFirstPage() {
@@ -115,7 +116,7 @@ export class ServicesDeleiveryComponent implements OnInit{
 
   private confirmDeliting(id_service: number) {
     console.log(id_service);
-        this.serviceDeliveryService.delete2({id:id_service}).subscribe({
+        this.DeliveryServiceService.deleteDeliveryService({id:id_service}).subscribe({
           next:(resp)=>{
             this.alertService.alertInfo("deleting successfull")
             this.getAllServiceDel();
@@ -145,8 +146,9 @@ export class ServicesDeleiveryComponent implements OnInit{
   }
 
   private updateDeliveryServiceStatus(idServDelivery: number, updateIsActive: boolean) {
-    this.serviceDeliveryService.updateEnabled({
-      id:idServDelivery,isenabled:updateIsActive
+    this.DeliveryServiceService.updateDeliveryServiceEnabled({
+      enable:updateIsActive,
+      id:idServDelivery,
     }).subscribe({
       next:(res)=>{
 
@@ -154,7 +156,7 @@ export class ServicesDeleiveryComponent implements OnInit{
         this.alertService.alertSuccess("Delivery Service successfully deactivated");
       },
       error:(err)=>{
-        this.alertService.alertWaring("Delivery Service deactivation failed");
+        this.alertService.alertWarning("Delivery Service deactivation failed");
       }
     })
   }

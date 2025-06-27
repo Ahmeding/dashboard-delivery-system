@@ -1,0 +1,271 @@
+.weekly-planning {
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+
+
+  .planning-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    h2 {
+      color: var(--text-color);
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      .btn-icon {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        transition: all 0.2s ease;
+        cursor: pointer;
+
+        &:hover {
+          background: var(--primary-color);
+          border-color: var(--primary-color);
+          color: white;
+        }
+
+        i {
+          font-size: 1.1rem;
+        }
+      }
+
+      .week-range {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: var(--text-color);
+        min-width: 200px;
+        text-align: center;
+      }
+    }
+  }
+
+  .planning-table {
+    overflow-x: auto;
+
+    .planning-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.75rem;
+      min-width: 1000px;
+
+      .day-column {
+        background: var(--bg-color);
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+
+        &.today {
+          border: 2px solid var(--primary-color);
+          box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
+
+          .day-header {
+            background: linear-gradient(135deg, var(--primary-color), darken(#3498db, 10%));
+
+            .day-name, .day-date {
+              color: white;
+            }
+          }
+        }
+
+        .day-header {
+          padding: 0.75rem;
+          text-align: center;
+          background: var(--bg-color);
+          border-bottom: 1px solid var(--border-color);
+          border-radius: 12px 12px 0 0;
+
+          .day-name {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-color);
+          }
+
+          .day-date {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+          }
+        }
+
+        .missions-container {
+          padding: 0.75rem;
+          min-height: 200px;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+
+          .mission-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+
+            &:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+              .mission-actions {
+                opacity: 1;
+              }
+            }
+
+            .mission-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 0.5rem;
+
+              .mission-time-status {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+
+                .status-indicator {
+                  font-size: 0.9rem;
+                }
+
+                .mission-time {
+                  font-size: 0.75rem;
+                  color: var(--text-muted);
+                }
+              }
+
+              .mission-actions {
+                display: flex;
+                gap: 0.25rem;
+                opacity: 0;
+                transition: opacity 0.2s ease;
+
+                .btn-action {
+                  padding: 0.25rem;
+                  border: none;
+                  background: transparent;
+                  color: var(--text-muted);
+                  border-radius: 4px;
+                  cursor: pointer;
+
+                  &:hover {
+                    color: var(--primary-color);
+                    background: rgba(var(--primary-rgb), 0.1);
+                  }
+
+                  i {
+                    font-size: 0.9rem;
+                  }
+                }
+              }
+            }
+
+            .mission-title {
+              font-size: 0.9rem;
+              font-weight: 600;
+              color: var(--text-color);
+              margin: 0 0 0.5rem;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+
+            .mission-details {
+              display: flex;
+              gap: 1rem;
+
+              .detail-item {
+                display: flex;
+                align-items: center;
+                gap: 0.35rem;
+                font-size: 0.75rem;
+                color: var(--text-muted);
+
+                i {
+                  font-size: 0.9rem;
+                }
+              }
+            }
+          }
+
+          .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            gap: 0.5rem;
+
+            i {
+              font-size: 1.25rem;
+            }
+
+            span {
+              font-size: 0.8rem;
+            }
+          }
+
+          .btn-new-mission {
+            margin-top: auto;
+            padding: 0.5rem;
+            border: 1px dashed var(--border-color);
+            background: transparent;
+            color: var(--text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+
+            i {
+              font-size: 0.9rem;
+            }
+
+            span {
+              font-size: 0.85rem;
+            }
+
+            &:hover {
+              color: var(--primary-color);
+              border-color: var(--primary-color);
+              background: rgba(var(--primary-rgb), 0.05);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Dark theme specific styles
+:host-context(.dark-theme) {
+  .mission-card {
+    background: var(--bg-color) !important;
+  }
+
+  .btn-new-mission:hover {
+    background: rgba(var(--primary-rgb), 0.15) !important;
+  }
+}

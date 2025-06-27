@@ -1,34 +1,26 @@
 package com.hitecart.deliverysystem.services.security;
 
-import com.flickr4java.flickr.auth.Auth;
-import com.hitecart.deliverysystem.dto.*;
+import com.hitecart.deliverysystem.dao.UserRepository;
+import com.hitecart.deliverysystem.dto.JwtAuthenticationResponse;
+import com.hitecart.deliverysystem.dto.RefreshTokenRequest;
+import com.hitecart.deliverysystem.dto.SigninRequest;
+import com.hitecart.deliverysystem.dto.SignupRequest;
+import com.hitecart.deliverysystem.dto.user.UserResponse;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
-import com.hitecart.deliverysystem.exception.InvalidOperationException;
-import com.hitecart.deliverysystem.exception.RequiredFieldException;
-import com.hitecart.deliverysystem.model.Token;
-import com.hitecart.deliverysystem.model.Utilisateur;
-import com.hitecart.deliverysystem.repository.RoleRepository;
-import com.hitecart.deliverysystem.repository.TokenRepository;
-import com.hitecart.deliverysystem.repository.UtilisateurRepository;
-import com.hitecart.deliverysystem.validator.ChauffeurValidator;
-import com.hitecart.deliverysystem.validator.LoginValidator;
+import com.hitecart.deliverysystem.mapper.UserMapper;
+import com.hitecart.deliverysystem.model.User;
+import com.hitecart.deliverysystem.dao.RoleRepository;
+import com.hitecart.deliverysystem.dao.TokenRepository;
+import com.hitecart.deliverysystem.model.enums.RoleType;
 import com.hitecart.deliverysystem.validator.SignupRequestValidator;
-import com.hitecart.deliverysystem.validator.UtilisateurValidator;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,29 +30,30 @@ import java.util.List;
 @Slf4j
 public class AuthentificationServiceImpl implements AuthentificationService{
 
-    private final UtilisateurRepository utilisateurRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final RoleRepository roleRepository;
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
+    private final UserMapper userMapper;
 
 
     @Override
-    public UtilisateurDto signup(SignupRequest request) {
-        var userRole = roleRepository.findByName("USER")
+    public UserResponse signup(SignupRequest request) {
+        var userRole = roleRepository.findByName(RoleType.ROLE_USER)
                 .orElseThrow(()->new IllegalStateException("ROLE USER was not initialized"));
         checkDto(request,
-                "Utilisateur n'est valid",
+                "User n'est valid",
                 "l'utilisateur n'est pas valid");
 
             Integer createdBy=-1;
-        if(utilisateurRepository.findAll().isEmpty()){
+        if(userRepository.findAll().isEmpty()){
             createdBy=0;
         }
 
 
-        var userToRegister = Utilisateur.builder()
+        var userToRegister = User.builder()
                 .lastname(request.getLastName())
                 .firstname(request.getFirstName())
                 .email(request.getEmail())
@@ -70,7 +63,7 @@ public class AuthentificationServiceImpl implements AuthentificationService{
                 .roles(List.of(userRole))
                 .createdBy(createdBy)
                 .build();
-        return UtilisateurDto.fromEntity(utilisateurRepository.save(userToRegister));
+        return userMapper.toResponse(userRepository.save(userToRegister));
     }
 
     @Override
@@ -81,7 +74,7 @@ public class AuthentificationServiceImpl implements AuthentificationService{
         }*/
         /*
         var user = utilisateurRepository.findByEmail(signinRequest.getEmail())
-                .orElseThrow(() -> new BadCredentialsException("Adresse email ou mot de passe invalide"));
+                .orElseThrow(() -> new BadCredentialsException("Address email ou mot de passe invalide"));
 
 */
         var auth = authenticationManager.authenticate(
@@ -90,15 +83,15 @@ public class AuthentificationServiceImpl implements AuthentificationService{
                   signinRequest.getPassword())
         );
         var claims = new HashMap<String, Object>();
-        var user=(Utilisateur) auth.getPrincipal();
+        var user=(User) auth.getPrincipal();
         claims.put("fullName", user.fullName());
         JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
 
         var jwt = jwtService.generateToken(claims,user);
         var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
-        jwtAuthenticationResponse.setUser(UtilisateurDto.fromEntity(user));
-        jwtAuthenticationResponse.setToken(jwt);
-        jwtAuthenticationResponse.setRefreshToken(refreshToken);
+        //jwtAuthenticationResponse.setUser(userMapper.toResponse(user));
+        jwtAuthenticationResponse.setAccess_token(jwt);
+        jwtAuthenticationResponse.setRefresh_token(refreshToken);
 
 
         return jwtAuthenticationResponse;
@@ -108,15 +101,15 @@ public class AuthentificationServiceImpl implements AuthentificationService{
     public JwtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
 
         String userEmail= jwtService.extractUsername(refreshTokenRequest.getToken());
-        Utilisateur utilisateur = utilisateurRepository.findByEmail(userEmail).orElseThrow();
+        User user = userRepository.findByEmail(userEmail).orElseThrow();
         var claims = new HashMap<String, Object>();
 
-        if(jwtService.isTokenValid(refreshTokenRequest.getToken(),utilisateur)){
-            claims.put("fullName", utilisateur.fullName());
-            var jwt= jwtService.generateToken(claims,utilisateur);
+        if(jwtService.isTokenValid(refreshTokenRequest.getToken(), user)){
+            claims.put("fullName", user.fullName());
+            var jwt= jwtService.generateToken(claims, user);
             JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
-            jwtAuthenticationResponse.setToken(jwt);
-            jwtAuthenticationResponse.setRefreshToken(refreshTokenRequest.getToken());
+            jwtAuthenticationResponse.setAccess_token(jwt);
+            jwtAuthenticationResponse.setRefresh_token(refreshTokenRequest.getToken());
             return jwtAuthenticationResponse;
         }
         return null;
@@ -147,7 +140,7 @@ public class AuthentificationServiceImpl implements AuthentificationService{
         List<String> errors = SignupRequestValidator.validate(signupRequest);
         if (!errors.isEmpty()) {
             log.error(logMsg, signupRequest);
-            throw new InvalidEntityException(exceptionMsg, ErrorCodes.UTILISATEUR_NOT_VALID, errors);
+            throw new InvalidEntityException(exceptionMsg, ErrorCodes.USER_NOT_VALID, errors);
 
         }
     }

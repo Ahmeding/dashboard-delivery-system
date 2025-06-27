@@ -1,28 +1,13 @@
 package com.hitecart.deliverysystem.services.impl;
 
-import com.hitecart.deliverysystem.dto.ChauffeurDto;
-import com.hitecart.deliverysystem.model.Chauffeur;
-import com.hitecart.deliverysystem.repository.ChauffeurRepository;
-import com.hitecart.deliverysystem.repository.ContratRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-
-import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class ChauffeurServiceImplTest {
 /*
     @InjectMocks
-    ChauffeurServiceImpl chauffeurService;
+    DriverServiceImpl chauffeurService;
     @Mock
     private ChauffeurRepository chauffeurRepository;
     @Mock
-    private ContratRepository contratRepository;
+    private EmploymentContractRepository contratRepository;
 
     @BeforeEach
     void setUp(){
@@ -31,7 +16,7 @@ class ChauffeurServiceImplTest {
 
     @Test
     public void test_save_chauffeur(){
-        ChauffeurDto chauffeurDto = ChauffeurDto.builder()
+        DriverFullDto driverFullDto = DriverFullDto.builder()
                 .nom("Adel")
                 .prenom("Salim")
                 .adresseEmail("adel.s@gmail.com")
@@ -44,23 +29,23 @@ class ChauffeurServiceImplTest {
                 .build();
 
 
-        Chauffeur chauffeurToSave = new Chauffeur();
-        chauffeurToSave.setNom("Adel");
+        Driver chauffeurToSave = new Driver();
+        chauffeurToSave.setName("Adel");
         chauffeurToSave.setPrenom("Salim");
-        chauffeurToSave.setAdresseEmail("adel.s@gmail.com");
+        chauffeurToSave.setEmailAddress("adel.s@gmail.com");
         chauffeurToSave.setDateNaissance(new Date("12/12/1998").toInstant());
-        chauffeurToSave.setNumSecu("471471458455845845845");
+        chauffeurToSave.setSecuNbr("471471458455845845845");
         chauffeurToSave.setNumTel("0675757584");
         chauffeurToSave.setTypePermi("B");
         chauffeurToSave.setMotDePasse("456566464");
         chauffeurToSave.setRib("FR58542154778963558845874");
 
         // Mock Calls
-        Mockito.when(chauffeurRepository.save(ChauffeurDto.toEntity( chauffeurDto))).thenReturn(chauffeurToSave);
+        Mockito.when(chauffeurRepository.save(DriverFullDto.toEntity( driverFullDto))).thenReturn(chauffeurToSave);
         // When
-        ChauffeurDto dto =chauffeurService.save(ChauffeurDto.fromEntity(chauffeurToSave));
+        DriverFullDto dto =chauffeurService.save(DriverFullDto.fromEntity(chauffeurToSave));
         // Then
-        assertEquals(dto.getTypePermi(), chauffeurDto.getTypePermi());
+        assertEquals(dto.getTypePermi(), driverFullDto.getTypePermi());
 
     }
 

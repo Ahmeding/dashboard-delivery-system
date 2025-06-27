@@ -7,5 +7,5 @@ export interface SignupRequest {
   firstName?: string;
   lastName?: string;
   password?: string;
-  role?: 'ADMIN' | 'USER';
+  role?: 'ROLE_ADMIN' | 'ROLE_USER' | 'ROLE_DRIVER';
 }

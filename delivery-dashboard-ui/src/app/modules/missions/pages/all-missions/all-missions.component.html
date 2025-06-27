@@ -53,14 +53,14 @@
         <td>
           <span class="ref-number">#{{mission.id}}</span>
         </td>
-        <td>{{mission.titre}}</td>
+        <td>{{mission.title}}</td>
         <td>
           <div class="drivers-list">
-            <ng-container *ngIf="mission.missionVehiclesDtos?.length">
-              <ng-container *ngFor="let mvehicle of mission.missionVehiclesDtos">
-                <div *ngFor="let driver of mvehicle.chauffeursVehicleDto" class="driver-badge">
+            <ng-container *ngIf="mission.missionVehicles?.length">
+              <ng-container *ngFor="let mvehicle of mission.missionVehicles">
+                <div *ngFor="let driver of mvehicle.driverVehicles" class="driver-badge">
                   <i class="bi bi-person-circle me-1"></i>
-                  {{driver.chauffeurDto?.firstname}} {{driver.chauffeurDto?.lastname}}
+                  {{"driver.chauffeurDto?.firstname"}} {{"driver.chauffeurDto?.lastname"}}
                 </div>
               </ng-container>
             </ng-container>
@@ -68,11 +68,11 @@
         </td>
         <td>
           <div class="vehicles-list">
-            <ng-container *ngIf="mission.missionVehiclesDtos?.length">
-              <div *ngFor="let vehicle of mission.missionVehiclesDtos" class="license-plate">
+            <ng-container *ngIf="mission.missionVehicles?.length">
+              <div *ngFor="let vehicle of mission.missionVehicles" class="license-plate">
                 <div class="license-plate-content">
                   <i class="bi bi-truck"></i>
-                  <span class="plate-number">{{vehicle.vehicleDto?.immatriculation}}</span>
+                  <span class="plate-number">{{"vehicle.vehicleDto?.immatriculation"}}</span>
                 </div>
               </div>
             </ng-container>
@@ -84,13 +84,13 @@
             </span>
         </td>
         <td>
-          <div class="status-badge" [ngClass]="mission.etatMission?.toLowerCase()">
-            <i [class]="'bi ' + getStatusIcon(mission.etatMission!)"></i>
-            <span class="status-text">{{getStatusLabel(mission.etatMission!)}}</span>
+          <div class="status-badge" [ngClass]="mission.missionStatus?.toLowerCase()">
+            <i [class]="'bi ' + getStatusIcon(mission.missionStatus!)"></i>
+            <span class="status-text">{{getStatusLabel(mission.missionStatus!)}}</span>
           </div>
         </td>
         <td>
-          <span class="date">{{mission.dateDebut | date:'medium'}}</span>
+          <span class="date">{{mission.startDate | date:'medium'}}</span>
         </td>
         <td>
           <div class="actions">

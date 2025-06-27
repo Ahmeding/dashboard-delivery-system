@@ -16,7 +16,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     private tokenService:TokenService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const token:string =this.tokenService.token;
+    const token:string =this.tokenService.token as string;
     console.log("interceptor start ");
     let authReq = request;
     if(token){
@@ -40,23 +40,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
           this.router.navigate(['login']);
         }*/
         return throwError(()=>err);
-
       })
-
     );
-    /*else{
-      return next.handle(request).pipe(catchError(
-        (err)=>{
-          console.log(err);
-          if(err.status === 401 || err.status === 403 ){
-            this.router.navigate(['login']);
-            console.log(err.status);
-            this.tokenService.logout();
-          }
-          return throwError(()=>err);
-        }
-      ));
-    }*/
-
   }
 }

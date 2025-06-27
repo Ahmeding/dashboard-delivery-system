@@ -1,49 +1,89 @@
 package com.hitecart.deliverysystem.validator;
 
-import com.hitecart.deliverysystem.dto.ClientDto;
+import com.hitecart.deliverysystem.dto.client.ClientRequest;
+import com.hitecart.deliverysystem.dto.client.ClientUpdateRequest;
+import com.hitecart.deliverysystem.utils.EmailValidator;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClientValidator {
-    public static List<String> validate(ClientDto dto){
-        List<String> errors= new ArrayList<>();
-
-        if(dto==null){
-           errors.add("Veuillez renseigner le nom du client !");
-           errors.add("Veuillez renseigner le prenom du client !");
-           errors.add("Veuillez renseigner le numreo du telephone  du client !");
-           errors.add("Veuillez renseigner l'adresse email du client !");
-           errors.add("Veuillez renseigner l'adresse email du client !");
-/*           errors.add("Veuillez renseigner une description du client !");
-           errors.add("Veuillez renseigner la siren du client !");
-           errors.add("Veuillez renseigner la siret du client !");*/
-           errors.addAll(AdresseValidator.validate(null));
+    public static List<String> validate(ClientRequest request) {
+        List<String> errors = new ArrayList<>();
+        if (request == null) {
+            errors.add("Please provide the client's last name!");
+            errors.add("Please provide the client's first name!");
+            errors.add("Please provide the client's phone number!");
+            errors.add("Please provide the client's email address!");
+            errors.add("Please provide the client's email address!");
+            /* errors.add("Please provide a description of the client!");
+               errors.add("Please provide the client's SIREN number!");
+               errors.add("Please provide the client's SIRET number!"); */
+            errors.addAll(AdresseValidator.validate(null));
         }
-       if(!StringUtils.hasLength(dto.getLastname())){
-           errors.add("Veuillez renseigner le nom du client !");
 
-       }
-       if(!StringUtils.hasLength(dto.getFirstname())){
-           errors.add("Veuillez renseigner le prenom du client !");
-       }
-       if(!StringUtils.hasLength(dto.getPhoneNum())){
-           errors.add("Veuillez renseigner le numreo du telephone  du client !");
-       }
-       if(!StringUtils.hasLength(dto.getEmail())){
-           errors.add("Veuillez renseigner l'adresse email du client !");
-       }
-      /* if(!StringUtils.hasLength(dto.getDescription())){
-           errors.add("Veuillez renseigner une description du client !");
-       }
-       if(!StringUtils.hasLength(dto.getSiren())){
-           errors.add("Veuillez renseigner la siren du client !");
-       }
-       if(!StringUtils.hasLength(dto.getSiret())){
-           errors.add("Veuillez renseigner la siret du client !");
-       }*/
-           errors.addAll(AdresseValidator.validate(dto.getAddress()));
-    return errors;
+        if (!StringUtils.hasLength(request.lastname())) {
+            errors.add("Please provide the client's last name!");
+        }
+        if (!StringUtils.hasLength(request.firstname())) {
+            errors.add("Please provide the client's first name!");
+        }
+        if (!StringUtils.hasLength(request.phoneNbr())) {
+            errors.add("Please provide the client's phone number!");
+        }
+        if (!StringUtils.hasLength(request.email()) || !EmailValidator.isValidEmail(request.email())) {
+            errors.add("Please provide a valid email address!");
+        }
+        /* if (!StringUtils.hasLength(request.getDescription())) {
+             errors.add("Please provide a description of the client!");
+        }
+        if (!StringUtils.hasLength(request.getSiren())) {
+             errors.add("Please provide the client's SIREN number!");
+        }
+        if (!StringUtils.hasLength(request.getSiret())) {
+             errors.add("Please provide the client's SIRET number!");
+        } */
+        errors.addAll(AdresseValidator.validate(request.address()));
+        return errors;
+    }
+
+    public static List<String> validate(ClientUpdateRequest request) {
+        List<String> errors = new ArrayList<>();
+        if (request == null) {
+            errors.add("Please provide the client's last name!");
+            errors.add("Please provide the client's first name!");
+            errors.add("Please provide the client's phone number!");
+            errors.add("Please provide the client's email address!");
+            errors.add("Please provide the client's email address!");
+            /* errors.add("Please provide a description of the client!");
+               errors.add("Please provide the client's SIREN number!");
+               errors.add("Please provide the client's SIRET number!"); */
+            errors.addAll(AdresseValidator.validate(null));
+        }
+
+        if (!StringUtils.hasLength(request.lastname())) {
+            errors.add("Please provide the client's last name!");
+        }
+        if (!StringUtils.hasLength(request.firstname())) {
+            errors.add("Please provide the client's first name!");
+        }
+        if (!StringUtils.hasLength(request.phoneNbr())) {
+            errors.add("Please provide the client's phone number!");
+        }
+        if (!StringUtils.hasLength(request.email()) || !EmailValidator.isValidEmail(request.email())) {
+            errors.add("Please provide a valid email address!");
+        }
+        /* if (!StringUtils.hasLength(request.getDescription())) {
+             errors.add("Please provide a description of the client!");
+        }
+        if (!StringUtils.hasLength(request.getSiren())) {
+             errors.add("Please provide the client's SIREN number!");
+        }
+        if (!StringUtils.hasLength(request.getSiret())) {
+             errors.add("Please provide the client's SIRET number!");
+        } */
+        errors.addAll(AdresseValidator.validate(request.address()));
+        return errors;
     }
 }

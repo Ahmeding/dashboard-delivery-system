@@ -1,6 +1,6 @@
 package com.hitecart.deliverysystem.services.security;
 
-import com.hitecart.deliverysystem.repository.UtilisateurRepository;
+import com.hitecart.deliverysystem.dao.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UtilisateurRepository utilisateurRepository;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
-        return utilisateurRepository.findByEmail(userEmail).orElseThrow(
+        return userRepository.findByEmail(userEmail).orElseThrow(
                 () -> new UsernameNotFoundException("User not found with userEmail: " + userEmail)
         );
     }

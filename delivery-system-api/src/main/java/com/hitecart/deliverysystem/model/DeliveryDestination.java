@@ -6,6 +6,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,21 +18,27 @@ import java.util.List;
 @Table(name = "delivery_destination")
 public class DeliveryDestination extends AbstractEntity {
 
+
+    @Column(name= "reference",unique = true, updatable = false)
     private String reference;
-
-    @OneToMany(mappedBy = "deliveryDestination")
+    @OneToMany(
+            mappedBy = "deliveryDestination",
+            cascade = CascadeType.ALL, // Propagate operations to DeliveryPoint
+            orphanRemoval = true, // Remove DeliveryPoint if deleted
+            fetch = FetchType.LAZY
+    )
     private List<DeliveryPoint> deliveryPoints =new ArrayList<>();
-
     @ManyToOne
-    @JoinColumn(name = "service_delivery_id",nullable = false)
-    private ServiceDelivery serviceDelivery;
-
+    @JoinColumn(name = "delivery_service_id",nullable = false)
+    private DeliveryService deliveryService;
     @OneToMany(mappedBy = "deliveryDestination")
     private List<Mission> missions =new ArrayList<>();
+
+
     @PrePersist
     private void generateReference() {
         if(this.reference == null || this.reference.isEmpty()){
-            this.reference = "DD-"+System.currentTimeMillis();
+            this.reference = "DD-" + UUID.randomUUID().toString().substring(0, 8);
         }
     }
 }

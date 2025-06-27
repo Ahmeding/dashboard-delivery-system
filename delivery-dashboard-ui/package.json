@@ -13,7 +13,7 @@
     "ds-api:create-dist": "mkdir -p tools/openapi/dist && mkdir -p tools/openapi/src",
     "ds-api:download": "cp C:/Users/Asus/Desktop/java-angular-project/delivery-system/delivery-system-api/target/deliverysystem-1.0.0.jar ./tools/openapi/dist && cp C:/Users/Asus/Desktop/java-angular-project/delivery-system/delivery-system-api/target/openapi.json ./tools/openapi/src",
     "ds-api:extract": "node ./tools/openapi/src/openapi.json 1.0.0",
-    "ds-api:openapi-gen": "./node_modules/.bin/ng-openapi-gen -i ./tools/openapi/src/openapi.json -o src/ds-api/src"
+    "ds-api:openapi-gen": "./node_modules/.bin/ng-openapi-gen -i ./tools/openapi/src/openapi.json -o src/ds-api/src --ignoreUnusedModels=false"
   },
   "private": true,
   "dependencies": {
@@ -36,8 +36,9 @@
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.2",
     "chart.js": "^3.9.1",
-    "date-fns": "^2.30.0",
+    "date-fns": "^4.1.0",
     "flatpickr": "^4.6.13",
+    "net": "^1.0.2",
     "ng-openapi-gen": "^0.52.0",
     "ng2-charts": "^3.1.2",
     "ngx-bootstrap": "^11.0.2",

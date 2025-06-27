@@ -1,18 +1,21 @@
 package com.hitecart.deliverysystem.services;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.ClientDto;
+import com.hitecart.deliverysystem.dto.client.ClientRequest;
+import com.hitecart.deliverysystem.dto.client.ClientResponse;
+import com.hitecart.deliverysystem.dto.client.ClientUpdateRequest;
 
 import java.util.List;
 
 public interface ClientService {
-    ClientDto save(ClientDto dto);
-    ClientDto findById(Integer id);
-    ClientDto findByEmail(String email);
-    List<ClientDto> findAll();
+    ClientResponse save(ClientRequest request);
+    ClientResponse updateClientInfo(Integer clientId,ClientUpdateRequest request);
+    ClientResponse findById(Integer id);
+    ClientResponse findByEmail(String email);
+    List<ClientResponse> findAll();
     void delete(Integer id);
 
-    ClientDto updateIsActive(Integer id, Boolean isActive);
+    ClientResponse updateIsActive(Integer id, Boolean isActive);
 
-    PageResponse<ClientDto> findAllClients(int page, int size);
+    PageResponse<ClientResponse> findAllClients(int page, int size);
 }

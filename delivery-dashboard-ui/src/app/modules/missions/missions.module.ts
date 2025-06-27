@@ -17,40 +17,49 @@ import { MissionCardComponent } from './pages/planning/weekly-planning/mission-c
 import {PlanningService} from "./pages/planning/weekly-planning/services/planning-service";
 import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
 import {NgSelectModule} from "@ng-select/ng-select";
+import {EditMissionModalComponent} from "./pages/planning/edit-mission-modal/edit-mission-modal.component";
+import { StatusCardComponent } from './pages/planning/weekly-planning/status-card/status-card.component';
 
 
 @NgModule({
-  declarations: [
-    AllMissionsComponent,
-    PlanningComponent,
-    ExpensesComponent,
-    MissionDetailsComponent,
-    NewExpenseComponent,
-    AddMissionComponent,
-    ReviewMissionComponent,
+    declarations: [
+        AllMissionsComponent,
+        PlanningComponent,
+        ExpensesComponent,
+        MissionDetailsComponent,
+        NewExpenseComponent,
+        AddMissionComponent,
+        ReviewMissionComponent,
+        WeeklyPlanningComponent,
+        NewWeeklyPlanningModalComponent,
+        MissionCardComponent,
+        EditMissionModalComponent,
+        StatusCardComponent,
+    ],
+    imports: [
+        CommonModule,
+        MissionsRoutingModule,
+        FormsModule,
+        NgForOf,
+        NgIf,
+        ReactiveFormsModule,
+        RouterLink,
+        FormsModule,
+        NgForOf,
+        NgIf,
+        ReactiveFormsModule,
+        RouterLink,
+        RouterModule.forChild([
+            {path: 'new', component: AddMissionComponent}
+        ]),
+        BsDatepickerModule,
+        NgSelectModule
+    ],
+  exports: [
     WeeklyPlanningComponent,
-    NewWeeklyPlanningModalComponent,
+    StatusCardComponent,
     MissionCardComponent,
   ],
-  imports: [
-    CommonModule,
-    MissionsRoutingModule,
-    FormsModule,
-    NgForOf,
-    NgIf,
-    ReactiveFormsModule,
-    RouterLink,
-    FormsModule,
-    NgForOf,
-    NgIf,
-    ReactiveFormsModule,
-    RouterLink,
-    RouterModule.forChild([
-      {path: 'new', component: AddMissionComponent}
-    ]),
-    BsDatepickerModule,
-    NgSelectModule
-  ],
-  providers: [PlanningService]
+    providers: [PlanningService]
 })
 export class MissionsModule { }

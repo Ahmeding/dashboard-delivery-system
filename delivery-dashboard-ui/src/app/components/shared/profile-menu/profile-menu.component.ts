@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import {TokenService} from "../../../services/token/token.service";
 
 @Component({
   selector: 'app-profile-menu',
@@ -13,7 +14,7 @@ export class ProfileMenuComponent {
     avatar: 'assets/avatar.png'
   };
 
-  constructor(private router: Router) {}
+  constructor(private tokenService:TokenService, private router: Router) {}
 
   navigateToProfile() {
     this.router.navigate(['/settings/profile']);
@@ -21,6 +22,7 @@ export class ProfileMenuComponent {
 
   logout() {
     // Implement logout logic here
+    this .tokenService.logout();
     console.log('Logging out...');
   }
 

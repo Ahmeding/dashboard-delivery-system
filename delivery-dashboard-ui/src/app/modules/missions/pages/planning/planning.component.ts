@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {PageResponseMissionDto} from "../../../../../ds-api/src/models/page-response-mission-dto";
 import {MissionService} from "../../../../../ds-api/src/services/mission.service";
+import {PageResponseMissionResponse} from "../../../../../ds-api/src/models/page-response-mission-response";
 
 @Component({
   selector: 'app-planning',
@@ -11,7 +11,7 @@ export class PlanningComponent  implements OnInit{
 
   page: number=0;
   size: number=10
-  allMyMissionsResponse: PageResponseMissionDto={};
+  allMyMissionsResponse: PageResponseMissionResponse={};
   isLoading: boolean = false;
 
   constructor(
@@ -24,7 +24,7 @@ export class PlanningComponent  implements OnInit{
     this.getAllMyMissions();
   }
   private getAllMyMissions() {
-    this.missionsServices.findAllMissionsByDriverId({
+    this.missionsServices.findAllMissionsByDriverIdPageable({
       page:0
       ,size:10
     }).subscribe({

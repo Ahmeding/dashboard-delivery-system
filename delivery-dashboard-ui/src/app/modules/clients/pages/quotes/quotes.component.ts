@@ -1,23 +1,18 @@
 import {Component, OnInit} from '@angular/core';
-import {
-  PageResponseCommandeClientResponse
-} from "../../../../../ds-api/src/models/page-response-commande-client-response";
-import {CommandeClientDto} from "../../../../../ds-api/src/models/commande-client-dto";
-import {ClientDto} from "../../../../../ds-api/src/models/client-dto";
-import {ServiceDeliveryDto} from "../../../../../ds-api/src/models/service-delivery-dto";
-import {LigneCommandeClientDto} from "../../../../../ds-api/src/models/ligne-commande-client-dto";
-import {CommandeClientResponse} from "../../../../../ds-api/src/models/commande-client-response";
-import {CommandeClientService} from "../../../../../ds-api/src/services/commande-client.service";
+
 import {ClientService} from "../../../../../ds-api/src/services/client.service";
-import {ServiceDeliveryService} from "../../../../../ds-api/src/services/service-delivery.service";
 import {AlertService} from "../../../../services/alert/alert.service";
 import {Router} from "@angular/router";
 import {NgForm} from "@angular/forms";
-import {DevisDto} from "../../../../../ds-api/src/models/devis-dto";
-import {PageResponseDevisDtoResponse} from "../../../../../ds-api/src/models/page-response-devis-dto-response";
-import {LigneDevisDto} from "../../../../../ds-api/src/models/ligne-devis-dto";
-import {DevisDtoResponse} from "../../../../../ds-api/src/models/devis-dto-response";
-import {DevisService} from "../../../../../ds-api/src/services/devis.service";
+import {PageResponseQuoteResponse} from "../../../../../ds-api/src/models/page-response-quote-response";
+import {QuoteRequest} from "../../../../../ds-api/src/models/quote-request";
+import {ClientResponse} from "../../../../../ds-api/src/models/client-response";
+import {DeliveryServiceResponse} from "../../../../../ds-api/src/models/delivery-service-response";
+import {QuoteLineRequest} from "../../../../../ds-api/src/models/quote-line-request";
+import {QuoteResponse} from "../../../../../ds-api/src/models/quote-response";
+import {QuoteService} from "../../../../../ds-api/src/services/quote.service";
+import {DeliveryServiceService} from "../../../../../ds-api/src/services/delivery-service.service";
+import {QuoteLineResponse} from "../../../../../ds-api/src/models/quote-line-response";
 
 @Component({
   selector: 'app-quotes',
@@ -28,26 +23,25 @@ export class QuotesComponent implements OnInit{
 
   page: number = 0;
   size: number =5;
-  allQuotesResponse: PageResponseDevisDtoResponse={};
-  newQuote: DevisDto= {};
-  selectedToEditOrder: CommandeClientDto= {};
-  selectedToEditQuote: DevisDto= {};
+  allQuotesResponse: PageResponseQuoteResponse={};
+  newQuote!: QuoteRequest;
+  selectedToEditQuote: QuoteResponse={};
   isFormAddNewSubmitted: boolean= false;
-  allClients: ClientDto[]=[]
+  allClients: ClientResponse[]=[]
 
-  allServiceDeliveries: ServiceDeliveryDto[]=[];
-  selectedServiceDelivery: ServiceDeliveryDto|undefined={};
-  allSelectedServiceDeliveries: ServiceDeliveryDto[]=[];
+  allServiceDeliveries: DeliveryServiceResponse[]=[];
+  selectedServiceDelivery: DeliveryServiceResponse|undefined={};
 
-  orderLine:  LigneDevisDto ={};
-  orderlines: LigneDevisDto[]=[];
-  selectedQuote: DevisDtoResponse = {};
+  orderLine!:  QuoteLineRequest;
+  quotelines: QuoteLineRequest[]=[];
+  selectedQuote!: QuoteResponse;
+  private quotelinesResp!: Array<QuoteResponse>;
 
 
   constructor(
-    private devisService:DevisService,
+    private quoteService:QuoteService,
     private clientService:ClientService,
-    private servDeliveryService: ServiceDeliveryService,
+    private deliveryServiceService: DeliveryServiceService,
     private alertService: AlertService,
     private router:Router
   ) {}
@@ -60,13 +54,13 @@ export class QuotesComponent implements OnInit{
 
 
   private getAllQuotes() {
-    this.devisService.findAllDevis({
+    this.quoteService.findAllQuotesPageable({
       page:this.page,
       size:this.size
     }).subscribe({
-      next:(orders)=>{
-        console.log(orders);
-        this.allQuotesResponse=orders;
+      next:(pageableQuotes)=>{
+        console.log(pageableQuotes);
+        this.allQuotesResponse=pageableQuotes;
       },
       error:(err)=>{
         console.log(err);
@@ -129,7 +123,7 @@ export class QuotesComponent implements OnInit{
   }
 
   private getAllClients() {
-    this.clientService.findAll16().subscribe({
+    this.clientService.findAllClient().subscribe({
       next:(clientsResponse)=>{
         this.allClients=clientsResponse;
       }
@@ -140,10 +134,10 @@ export class QuotesComponent implements OnInit{
 
     this.isFormAddNewSubmitted=true;
     form.form.markAllAsTouched();
-    this.newQuote.ligneDevisDtos=this.orderlines;
-    this.newQuote.etatDevis= "PENDING_APPROVAL"
+    this.newQuote.quoteLines=this.quotelines;
+    this.newQuote.quoteStatus= "PENDING_APPROVAL"
     console.log(this.newQuote);
-    this.devisService.save10({body:this.newQuote}).subscribe({
+    this.quoteService.saveQuote({body:this.newQuote}).subscribe({
       next:(resp)=>{
         this.getAllQuotes();
         this.resetForm(form);
@@ -158,12 +152,12 @@ export class QuotesComponent implements OnInit{
   }
   private resetForm(form: NgForm) {
     form.resetForm();  // Reset the form state and clear input values
-    this.newQuote = {};   // Reset the driver object to its initial state
+    this.newQuote!;   // Reset the driver object to its initial state
     this.isFormAddNewSubmitted = false; // Reset the submitted state
   }
 
   private getAllServDelivery() {
-    this.servDeliveryService.findAll3().subscribe({
+    this.deliveryServiceService.findAllDeliveryService().subscribe({
       next:(allSDResponse)=>{
         this.allServiceDeliveries=allSDResponse;
       },
@@ -184,33 +178,35 @@ export class QuotesComponent implements OnInit{
     this.isFormAddNewSubmitted=true;
 
     if (!this.selectedServiceDelivery || !this.selectedServiceDelivery.id) {
-      this.alertService.alertWaring("Please select a service before adding")
+      this.alertService.alertWarning("Please select a service before adding")
       return;
     }
-    const exists= this.orderlines.some(orderL=>orderL.serviceDeliveryDto?.id===this.selectedServiceDelivery?.id)
+    const exists= this.quotelines.some(orderL=>orderL.deliveryServiceId===this.selectedServiceDelivery?.id)
     if(exists){
-      this.alertService.alertWaring("This service has already been added.")
+      this.alertService.alertWarning("This service has already been added.")
       return;
     }
-    const newOrdeLine :LigneDevisDto = {
-      serviceDeliveryDto : this.selectedServiceDelivery,
-      quantite: 2 as number,
-      prixUnitaire: this.selectedServiceDelivery.basicTripCost,
+    const newOrdeLine :QuoteLineRequest = {
+      deliveryServiceId : this.selectedServiceDelivery.id,
+      quantity: 2 as number,
+      unitPrice: this.selectedServiceDelivery.basicTripCost as number,
       tva: 20,
+      quoteId:0,
+      ttcPrice:0
     }
 
-    this.orderLine.serviceDeliveryDto=this.selectedServiceDelivery;
-    this.orderlines.push(newOrdeLine);
+    this.orderLine.deliveryServiceId=this.selectedServiceDelivery.id;
+    this.quotelines.push(newOrdeLine);
     this.selectedServiceDelivery = undefined;
   }
 
   deleteServDelivery(i: number) {
-    this.orderlines.splice(i,1);
+    this.quotelines.splice(i,1);
   }
 
   onQteChange(event: any, index: number) {
     const selectedQte = event.target.value as number;
-    this.orderlines[index].quantite=selectedQte;
+    this.quotelines[index].quantity=selectedQte;
 
   }
 
@@ -223,12 +219,12 @@ export class QuotesComponent implements OnInit{
   }
 
   editQuote(id: number | undefined) {
-    this.devisService.findById10({id:id as number}).subscribe({
+    this.quoteService.findQuoteById({id:id as number}).subscribe({
       next:(quote)=>{
-        this.selectedToEditQuote = quote as DevisDto;
-        this.orderlines = this.selectedToEditQuote.ligneDevisDtos as Array<DevisDto>;
+        this.selectedToEditQuote = quote as QuoteResponse;
+        this.quotelinesResp = this.selectedToEditQuote.quoteLines as Array<QuoteResponse>;
         console.log(this.selectedToEditQuote);
-        const dateString = JSON.stringify(this.selectedQuote.dateDevis);
+        const dateString = JSON.stringify(this.selectedQuote.quoteDate);
         console.log("---------------"+this.convertDate(JSON.parse((dateString))));
         /* this.selectedToEditQuote.dateCommnde = this.convertDate(JSON.parse((dateString))) as Date;*/
       }

@@ -1,60 +1,3 @@
-/*
-host {
-  display: block;
-}
-
-.modal-content {
-  background-color: var(--card-bg);
-  color: var(--text-color);
-  border: 1px solid var(--border-color);
-}
-
-.modal-header {
-  border-bottom: 1px solid var(--border-color);
-}
-
-.modal-footer {
-  border-top: 1px solid var(--border-color);
-}
-
-.form-control, .form-select {
-  background-color: var(--bg-color);
-  border: 1px solid var(--border-color);
-  color: var(--text-color);
-
-  &::placeholder {
-    color: var(--text-muted);
-  }
-
-  option {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-  }
-}
-
-.form-control:focus, .form-select:focus {
-  background-color: var(--bg-color);
-  border-color: var(--primary-color);
-  color: var(--text-color);
-  box-shadow: none;
-}
-
-.form-label {
-  color: var(--text-color);
-}
-
-.btn-close {
-  filter: invert(var(--bs-dark-rgb));
-}
-
-.modal-title {
-  color: var(--text-color);
-}
-
-.invalid-feedback {
-  color: var(--danger-color);
-}
-*/
 .delivery-destination-modal {
   background-color: var(--card-bg);
   color: var(--text-color);
@@ -84,39 +27,6 @@ host {
     padding: 1.5rem;
     max-height: 70vh;
     overflow-y: auto;
-/*
-    .form-group {
-      margin-bottom: 1.25rem;
-
-      label {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
-        color: var(--text-color);
-        font-weight: 500;
-
-        i {
-          color: var(--primary-color);
-        }
-      }
-
-      .form-control, .form-select {
-        background-color: var(--bg-color) ;
-        border: 1px solid var(--border-color);
-        color: var(--text-color);
-        padding: 0.625rem 1rem;
-
-        &:focus {
-          border-color: var(--primary-color);
-          box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
-        }
-
-        &::placeholder {
-          color: var(--text-muted);
-        }
-      }
-    }*/
 
     .error-message {
       margin-top: 0.5rem;
@@ -250,6 +160,506 @@ host {
     }
   }
 
+  .recurrence-section {
+    background: var(--bg-color);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin: 1.25rem 0;
+
+    h6 {
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+
+      i {
+        color: var(--primary-color);
+      }
+    }
+
+    .input-wrapper {
+      position: relative;
+
+      .icon-prefix {
+        position: absolute;
+        left: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+      }
+
+      .form-control,
+      .form-select {
+        padding-left: 2.5rem;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        height: 42px;
+      }
+    }
+
+    .date-range {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+
+      .separator {
+        color: var(--text-muted);
+      }
+    }
+
+    .weekdays {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+
+      .day-item {
+        flex: 1;
+        min-width: 90px;
+
+        input[type="checkbox"] {
+          position: absolute;
+          opacity: 0;
+
+          &:checked + label {
+            background: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+          }
+        }
+
+        label {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          padding: 0.5rem;
+          background: var(--card-bg);
+          border: 1px solid var(--border-color);
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 0.875rem;
+          width: 100%;
+          margin: 0;
+          color: var(--text-color);
+
+          i {
+            font-size: 0.875rem;
+            color: currentColor;
+          }
+        }
+      }
+    }
+  }
+
+  .modal-footer {
+    border-top: 1px solid var(--border-color);
+    padding: 1rem 1.5rem;
+
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.25rem;
+
+      i {
+        font-size: 1.25rem;
+      }
+
+      &.btn-outline-secondary {
+        border-color: var(--border-color);
+        color: var(--text-color);
+
+        &:hover {
+          background-color: var(--bg-color);
+        }
+      }
+
+      &.btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+
+        &:hover {
+          background-color: rgba(var(--primary-rgb), 0.9);
+        }
+
+        &:disabled {
+          background-color: var(--text-muted);
+          border-color: var(--text-muted);
+        }
+      }
+    }
+  }
+}
+
+.modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+
+  &:hover {
+    background: var(--text-muted);
+  }
+}
+
+@media (max-width: 768px) {
+  .delivery-destination-modal {
+    .recurrence-section {
+      .date-range {
+        flex-direction: column;
+      }
+
+      .weekdays .day-item {
+        min-width: 70px;
+      }
+    }
+  }
+}
+
+
+/*
+.delivery-destination-modal {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+
+  .modal-header {
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 1.5rem;
+
+    .modal-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-color);
+
+      i {
+        color: var(--primary-color);
+        font-size: 1.25rem;
+      }
+    }
+
+    .btn-close {
+      filter: invert(var(--bs-dark-rgb));
+    }
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+    max-height: 70vh;
+    overflow-y: auto;
+
+    .error-message {
+      margin-top: 0.5rem;
+      color: var(--danger-color);
+      font-size: 0.675rem;
+    }
+
+    .delivery-points-section {
+      margin: 1.5rem 0;
+
+      h6 {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-color);
+        margin-bottom: 1rem;
+
+        i {
+          color: var(--primary-color);
+        }
+      }
+
+      .table {
+        color: var(--text-color);
+
+        th {
+          background-color: var(--bg-color);
+          border-bottom: 1px solid var(--border-color);
+          color: var(--text-color);
+          font-weight: 600;
+        }
+
+        td {
+          vertical-align: middle;
+          border-bottom: 1px solid var(--border-color);
+
+          .badge {
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+          }
+
+          .contact-info {
+            display: flex;
+            flex-direction: column;
+
+            small {
+              color: var(--text-muted);
+            }
+          }
+
+          .btn-icon {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.25rem;
+
+            &:hover {
+              background-color: rgba(var(--danger-rgb), 0.1);
+            }
+          }
+        }
+      }
+    }
+
+
+    .recurrence-section {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: var(--bg-color);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+
+      h6 {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        color: var(--text-color);
+        font-weight: 600;
+
+        i {
+          color: var(--primary-color);
+          font-size: 1.25rem;
+        }
+      }
+    }
+
+    .input-wrapper {
+      position: relative;
+
+      .icon-prefix {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        z-index: 1;
+      }
+
+      .form-control,
+      .form-select {
+        padding-left: 2.75rem;
+        height: 48px;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        border-radius: 8px;
+
+        &:focus {
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+        }
+
+        &.is-invalid {
+          border-color: var(--danger-color);
+        }
+      }
+    }
+
+    .date-range {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      .form-group {
+        flex: 1;
+      }
+
+      .separator {
+        color: var(--text-muted);
+        padding: 0 0.5rem;
+      }
+    }
+
+!*    .weekdays-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+
+      .day-toggle {
+        margin: 0;
+        position: relative; // Added for better positioning context for absolute children
+
+        input {
+          position: absolute;
+          opacity: 0;
+          // The <label> element itself handles the click and toggles the checkbox.
+          // The input is visually hidden but functionally present.
+
+          &:checked + .day-label {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+
+            i {
+              color: white;
+            }
+          }
+        }
+
+        .day-label {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          padding: 0.75rem;
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          cursor: pointer;
+          background: var(--card-bg); // Default background
+          color: var(--text-color);
+          // MODIFICATION: Added comment about transitions.
+          // Transitions on properties like background-color, border-color, and color can be
+          // performance-intensive, especially with multiple elements.
+          // If "heaviness" or slow load times are observed, consider simplifying these transitions
+          // (e.g., shorter duration, fewer properties, or removing them if ergonomics allow).
+          //transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+
+          &:hover {
+            border-color: var(--primary-color);
+          }
+
+          i {
+            color: var(--text-muted);
+            font-size: 1rem;
+          }
+        }
+      }
+    }*!
+
+    .weekdays-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .day-toggle {
+      flex: 1;
+      min-width: 100px;
+
+      input {
+        display: none;
+
+        &:checked + .day-label {
+          background: var(--primary-color);
+          color: #fff;
+        }
+      }
+
+      .day-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        cursor: pointer;
+        color: var(--text-color);
+
+        &:hover {
+          border-color: var(--primary-color);
+        }
+
+        i {
+          color: currentColor;
+          font-size: 1rem;
+        }
+      }
+    }
+
+
+
+    .add-point-section {
+      background-color: var(--bg-color);
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+
+      .section-header {
+        margin-bottom: 1.25rem;
+
+        h6 {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin: 0;
+          color: var(--text-color);
+
+          i {
+            color: var(--success-color);
+          }
+        }
+      }
+
+      .address-section, .contact-section {
+        margin-top: 1.5rem;
+
+        h6 {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          color: var(--text-color);
+          margin-bottom: 1rem;
+
+          i {
+            color: var(--primary-color);
+          }
+        }
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border-color);
+      }
+    }
+
+    .add-point-button {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5rem;
+
+      .btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+
+        i {
+          font-size: 1.25rem;
+        }
+      }
+    }
+  }
+
   .modal-footer {
     border-top: 1px solid var(--border-color);
     padding: 1rem 1.5rem;
@@ -309,3 +719,46 @@ host {
     }
   }
 }
+
+
+@media (max-width: 768px) {
+  .date-range { // This part is not directly related to weekdays, but present in original
+    flex-direction: column;
+    gap: 1rem;
+
+    .separator {
+      transform: rotate(90deg);
+    }
+  }
+
+ !* .weekdays-grid {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+
+    // MODIFICATION: Corrected selector for .day-label styling in mobile view
+    .day-toggle .day-label {
+      padding: 0.5rem;
+      font-size: 0.875rem;
+    }
+  }*!
+
+  .weekdays-grid {
+    .day-toggle {
+      min-width: 80px;
+
+      .day-label {
+        padding: 0.5rem;
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
+
+:host-context(.dark-theme) {
+  // This rule targets .day-label within .day-toggle when the host has .dark-theme.
+  // It sets a default background for the labels in dark mode.
+  // The :checked styles for .day-label should still override this due to higher specificity or order of definition.
+  .day-toggle .day-label {
+    background: var(--bg-color);
+  }
+}
+*/

@@ -9,13 +9,13 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { SignupRequest } from '../../models/signup-request';
-import { UtilisateurDto } from '../../models/utilisateur-dto';
+import { UserResponse } from '../../models/user-response';
 
 export interface Signup$Params {
       body: SignupRequest
 }
 
-export function signup(http: HttpClient, rootUrl: string, params: Signup$Params, context?: HttpContext): Observable<StrictHttpResponse<UtilisateurDto>> {
+export function signup(http: HttpClient, rootUrl: string, params: Signup$Params, context?: HttpContext): Observable<StrictHttpResponse<UserResponse>> {
   const rb = new RequestBuilder(rootUrl, signup.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/json');
@@ -26,7 +26,7 @@ export function signup(http: HttpClient, rootUrl: string, params: Signup$Params,
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<UtilisateurDto>;
+      return r as StrictHttpResponse<UserResponse>;
     })
   );
 }

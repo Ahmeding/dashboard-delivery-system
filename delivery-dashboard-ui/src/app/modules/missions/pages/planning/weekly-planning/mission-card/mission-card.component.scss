@@ -1,133 +1,22 @@
+// src/app/components/mission-card/mission-card.component.scss
 .mission-card {
-  background: var(--card-bg);
-  border-radius: 6px;
-  border: 1px solid var(--border-color);
+  --card-height: 90px; // Increased height
+  --border-radius: 6px;
+  --badge-height: 18px;
+
+  position: relative;
+  min-height: var(--card-height);
+  height: auto; // Changed to auto
+  border-radius: var(--border-radius);
   padding: 0.5rem;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.25rem;
   font-size: 0.75rem;
-  transition: transform 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: all 0.2s ease;
 
   &:hover {
     transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-  }
-
-  .mission-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.25rem;
-
-    .time-destination {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-
-      .time {
-        font-weight: 600;
-        color: var(--text-color);
-      }
-
-      .destination-tag {
-        font-size: 0.7rem;
-        font-weight: 500;
-      }
-    }
-
-    .status {
-      i {
-        font-size: 0.85rem;
-      }
-    }
-  }
-
-  .mission-content {
-    .title {
-      margin: 0;
-      font-size: 0.75rem;
-      color: var(--text-color);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .resources {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-top: 0.25rem;
-
-      .vehicles, .drivers {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-        color: var(--text-muted);
-        font-size: 0.7rem;
-
-        i {
-          font-size: 0.8rem;
-        }
-
-        .count {
-          font-weight: 500;
-        }
-      }
-
-      .actions {
-        margin-left: auto;
-
-        .action-btn {
-          padding: 0;
-          background: none;
-          border: none;
-          color: var(--text-muted);
-          cursor: pointer;
-          width: 20px;
-          height: 20px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 4px;
-
-          &:hover {
-            background: var(--bg-color);
-            color: var(--primary-color);
-          }
-
-          i {
-            font-size: 0.85rem;
-          }
-        }
-      }
-    }
-  }
-}
-
-// Dark theme adjustments
-:host-context(.dark-theme) {
-  .mission-card {
-    background: var(--bg-color);
-  }
-}
-
-/*
-.mission-card {
-  background: var(--card-bg);
-  border-radius: 8px;
-  padding: 0.75rem;
-  border: 1px solid var(--border-color);
-  transition: all 0.2s ease;
-  font-size: 0.85rem;
-  margin-bottom: 0.5rem;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);a
-
-  .mission-actions {
-    opacity: 1;
-  }
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .mission-header {
@@ -136,123 +25,298 @@
     align-items: flex-start;
     margin-bottom: 0.5rem;
 
-    .mission-time-status {
+    .time-destination {
       display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
 
-      .status-indicator {
-        font-size: 0.9rem;
-      }
+    .time {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-color);
+      opacity: 0.8;
+    }
 
-      .mission-time {
-        font-size: 0.75rem;
-        color: var(--text-muted);
-      }
+    .mission-title {
+      font-size: 0.8rem;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 150px;
+    }
 
-      .mission-tag {
-        font-size: 0.7rem;
-        padding: 0.2rem 0.5rem;
-        border-radius: 12px;
+    .status i {
+      font-size: 0.9rem;
+    }
+  }
+
+  .mission-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; // Increased gap
+  }
+
+  .info-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .info-badge {
+    height: var(--badge-height);
+    display: inline-flex;
+    align-items: center;
+    padding: 0 0.35rem;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    color: var(--text-color);
+    background: rgba(0, 0, 0, 0.04);
+
+    i {
+      font-size: 0.7rem;
+      margin-right: 0.25rem;
+      opacity: 0.7;
+    }
+
+    &.volume {
+      color: var(--primary-color);
+      background: rgba(var(--primary-rgb), 0.08);
+    }
+
+    &.id {
+      font-family: monospace;
+      background: rgba(0, 0, 0, 0.03);
+      color: var(--text-muted);
+    }
+  }
+
+  .resources-container {
+    position: relative;
+    margin-top: 0.25rem;
+    padding-bottom: 0.25rem; // Added padding
+  }
+
+  .resources-scroll {
+    display: flex;
+    flex-wrap: wrap; // Changed to wrap
+    gap: 0.35rem; // Reduced gap
+    max-height: none; // Removed max-height
+  }
+
+  .resource-group {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    flex-wrap: wrap; // Added wrap
+    max-width: 100%; // Ensure groups don't overflow
+  }
+
+  .resource-badge {
+    height: var(--badge-height);
+    display: inline-flex;
+    align-items: center;
+    border-radius: 3px;
+    padding: 0 0.35rem;
+    font-size: 0.6rem;
+    white-space: nowrap;
+
+    i {
+      font-size: 0.65rem;
+      margin-right: 0.2rem;
+    }
+
+    &.vehicle {
+      background: rgba(var(--primary-rgb), 0.08);
+      color: var(--primary-color);
+
+      .plate {
+        font-family: monospace;
         font-weight: 500;
       }
     }
 
-    .mission-actions {
-      display: flex;
-      gap: 0.25rem;
-      opacity: 0;
-      transition: opacity 0.2s ease;
+    &.driver {
+      background: rgba(var(--success-rgb), 0.08);
+      color: var(--success-color);
 
-      .btn-action {
-        padding: 0.25rem;
-        border: none;
-        background: transparent;
-        color: var(--text-muted);
-        border-radius: 4px;
-        cursor: pointer;
-
-        &:hover {
-          color: var(--primary-color);
-          background: rgba(var(--primary-rgb), 0.1);
-        }
-
-        i {
-          font-size: 0.9rem;
-        }
+      .name {
+        max-width: 60px;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }
 
-  .mission-title {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-color);
-    margin: 0 0 0.5rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .mission-resources {
+  .drivers-list {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    flex-wrap: wrap; // Added wrap
+    gap: 0.25rem;
+  }
 
-    .resources-section {
-      .resources-header {
-        display: flex;
-        align-items: center;
-        gap: 0.35rem;
-        font-size: 0.75rem;
-        color: var(--text-muted);
-        margin-bottom: 0.25rem;
+  .action-btn {
+    position: absolute;
+    bottom: 0.25rem;
+    right: 0.25rem;
+    width: 15px;
+    height: 20px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 3px;
+    opacity: 0.7;
+    transition: all 0.2s ease;
 
-        i {
-          font-size: 0.85rem;
+    &:hover {
+      opacity: 1;
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--primary-color);
+    }
+
+    i {
+      font-size: 0.8rem;
+    }
+  }
+
+  // New menu container styles
+  .menu-container {
+    position: absolute;
+    bottom: 28px;
+    right: 0;
+    background: var(--menu-bg, #fff);
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 100;
+    min-width: 100px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.2s ease;
+    border: 1px solid var(--menu-border,#eee);
+
+    &.visible{
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .menu-option{
+      display: flex;
+      align-items: center;
+      padding: 6px 12px;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      background: var(--menu-option-bg,#fff);
+      margin:2px;
+      border-radius: 3px;
+      color: var(--text-color,#333);
+      transition: all 0.2s ease;
+
+      i{
+        font-size: 0.9rem;
+        min-width: 18px;
+      }
+      &.km-option{
+        color: var(--km-color,#2c7be5);
+        i{
+          color: var(--km-icon-color,#2c7be5);
         }
       }
+      &.expenses-option{
+        color: var(--expenses-color,#27b187);
+        i{
+          color:var(--expenses-icon-color,#27b187)
+        }
+      }
+      &:hover{
+        background: var(--menu-hover-bg, rgba(0,0,0,0.05));
+        color: var(--km-color,#2c7be5);
 
-      .resources-chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.35rem;
-
-        .chip {
-          display: flex;
-          align-items: center;
-          gap: 0.25rem;
-          padding: 0.15rem 0.5rem;
-          background: var(--bg-color);
-          border-radius: 12px;
-          font-size: 0.7rem;
-          color: var(--text-color);
-          border: 1px solid var(--border-color);
-
-          i {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-          }
-
-          &.plate-number {
-            font-family: monospace;
-            font-weight: 500;
-          }
+        &.expenses-option{
+          color:var(--expenses-color,#27b187)
         }
       }
     }
+
   }
 }
 
 // Dark theme adjustments
 :host-context(.dark-theme) {
   .mission-card {
-    background: var(--bg-color);
+    .info-badge {
+      background: rgba(255, 255, 255, 0.06);
 
-    .resources-chips .chip {
-      background: var(--card-bg);
+      &.volume {
+        background: rgba(var(--primary-rgb), 0.15);
+      }
+
+      &.id {
+        background: rgba(255, 255, 255, 0.04);
+      }
+    }
+
+    .resource-badge {
+      &.vehicle {
+        background: rgba(var(--primary-rgb), 0.15);
+      }
+
+      &.driver {
+        background: rgba(var(--success-rgb), 0.15);
+      }
+    }
+
+    .action-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .menu-container {
+      background: var(--dark-bg);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+      .menu-option{
+      background: var(--menu-option-bg, #3d3d3d);
+      &:hover {
+        background: var(--menu-hover-bg,#4d4d4d);
+      }
+      &.km-option{
+        --km-color:#6ea8fe;
+        --km-icon-color:#6ea8fe;
+      }
+      &.expenses-option{
+        --expenses-color: #2ca67a;
+        --expenses-icon-color: #2ca67a;
+      }
+    }
     }
   }
 }
-*/
+
+// Mobile optimizations
+@media (max-width: 768px) {
+  .mission-card {
+    --card-height: 85px;
+    --badge-height: 16px;
+
+    .mission-header .mission-title {
+      max-width: 120px;
+    }
+
+    .resource-badge {
+      font-size: 0.55rem;
+
+      i {
+        font-size: 0.6rem;
+      }
+
+      &.driver .name {
+        max-width: 50px;
+      }
+    }
+  }
+}

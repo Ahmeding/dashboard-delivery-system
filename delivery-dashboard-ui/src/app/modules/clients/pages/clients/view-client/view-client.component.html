@@ -41,7 +41,7 @@
               <i class="bi bi-cart-check"></i>
               <div class="info-content">
                 <label>Total Orders</label>
-                <span>{{client.commandeClientsDtos?.length}}</span>
+                <span>{{client.orders?.length}}</span>
               </div>
             </div>
           </div>
@@ -52,7 +52,7 @@
               <i class="bi bi-telephone"></i>
               <div class="info-content">
                 <label>Contact</label>
-                <span>{{client.phoneNum}}</span>
+                <span>{{client.phoneNbr}}</span>
               </div>
             </div>
 
@@ -68,7 +68,7 @@
               <i class="bi bi-calendar-check"></i>
               <div class="info-content">
                 <label>Created</label>
-                <span>{{ formatDate(client.createdAt!)}}</span>
+                <span>{{ client.createdAt!}}</span>
               </div>
             </div>
 
@@ -76,7 +76,7 @@
               <i class="bi bi-geo-alt"></i>
               <div class="info-content">
                 <label>Total Delivery Points</label>
-                <span>{{client.deliveryPointDtos?.length}}</span>
+                <span>{{client.deliveryPoints?.length}}</span>
               </div>
             </div>
 
@@ -132,30 +132,30 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngIf="client.deliveryPointDtos?.length===0"><td colspan="7" align="center">No Delivery Point Saved Yet</td></tr>
-          <tr *ngFor="let point of client.deliveryPointDtos">
+          <tr *ngIf="client.deliveryPoints?.length===0"><td colspan="7" align="center">No Delivery Point Saved Yet</td></tr>
+          <tr *ngFor="let point of client.deliveryPoints">
             <td>{{point.name}}</td>
-            <td>{{point.addressDto?.ville}}</td>
+            <td>{{point.address?.city}}</td>
             <td>
               <div class="contact-info">
                 <span class="contact-name">{{point.contact?.firstname}}&nbsp;{{point.contact?.lastname}}</span>
-                <span class="contact-phone">{{point.contact?.phoneNum}}</span>
+                <span class="contact-phone">{{point.contact?.phoneNbr}}</span>
                 <span class="contact-email">{{point.contact?.email}}</span>
               </div>
             </td>
             <td>
               <div class="address-info">
-                <span>{{point.addressDto?.adresse1}}</span>
-                <span>{{point.addressDto?.ville}}, {{point.addressDto?.codepostal}}</span>
+                <span>{{point.address?.street}}</span>
+                <span>{{point.address?.city}}, {{point.address?.postalCode}}</span>
               </div>
             </td>
             <td>
 <!--                <span class="status-badge" [class]="getStatusClass(point.deliveryPointType!)">
                   {{point.deliveryPointType}}
                 </span>-->
-              <span class="status-badge" [class]="getStatusClass(point.deliveryPointType)">
-                <i [class]="getTypeIcon(point.deliveryPointType)"></i>
-                {{point.deliveryPointType}}
+              <span class="status-badge" [class]="getStatusClass(point.type)">
+                <i [class]="getTypeIcon(point.type)"></i>
+                {{point.type}}
               </span>
             </td>
             <td>

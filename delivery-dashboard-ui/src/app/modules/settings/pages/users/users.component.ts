@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {PageResponseUtilisateurDto} from "../../../../../ds-api/src/models/page-response-utilisateur-dto";
-import {UtilisateurDto} from "../../../../../ds-api/src/models/utilisateur-dto";
 import {Router} from "@angular/router";
-import {UtilisateurService} from "../../../../../ds-api/src/services/utilisateur.service";
+import {PageResponseUserResponse} from "../../../../../ds-api/src/models/page-response-user-response";
+import {UserResponse} from "../../../../../ds-api/src/models/user-response";
+import {UserService} from "../../../../../ds-api/src/services/user.service";
 
 @Component({
   selector: 'app-users',
@@ -10,15 +10,15 @@ import {UtilisateurService} from "../../../../../ds-api/src/services/utilisateur
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit{
-  allUsersResponse: PageResponseUtilisateurDto={};
-  selectedUser: UtilisateurDto={};
+  allUsersResponse: PageResponseUserResponse={};
+  selectedUser: UserResponse={};
   page:number=0;
   size:number=5;
   pageSize: any;
   searchTerm: any;
 
   constructor(private router:Router,
-              private userService:UtilisateurService) {
+              private userService:UserService) {
   }
 
   ngOnInit(): void {
@@ -26,7 +26,7 @@ export class UsersComponent implements OnInit{
   }
 
   getAllUsers(){
-    this.userService.findAllUtilisateurs({
+    this.userService.findAllUser({
       page:this.page,
       size:this.size
     }).subscribe({

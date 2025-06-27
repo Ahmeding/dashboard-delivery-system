@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {InputFillUtilsService} from "../../../../../services/input-fill-utils/input-fill-utils.service";
-import {ClientDto} from "../../../../../../ds-api/src/models/client-dto";
 import {AlertService} from "../../../../../services/alert/alert.service";
 import {ClientService} from "../../../../../../ds-api/src/services/client.service";
 import {fileName} from "ng-openapi-gen/lib/gen-utils";
-import {DeliveryPointDto} from "../../../../../../ds-api/src/models/delivery-point-dto";
+import {ClientRequest} from "../../../../../../ds-api/src/models/client-request";
+import {DeliveryPointRequest} from "../../../../../../ds-api/src/models/delivery-point-request";
+import {ClientResponse} from "../../../../../../ds-api/src/models/client-response";
 
 
 @Component({
@@ -17,12 +18,11 @@ import {DeliveryPointDto} from "../../../../../../ds-api/src/models/delivery-poi
 export class NewClientComponent implements OnInit {
 
 
-  clientValue: ClientDto={};
+  clientValue!: ClientRequest;
   clientForm: FormGroup= new FormGroup({});
   isEditMode = false;
   isSubmitting = false;
   clientId: number | null = null;
-  DeliveryPoint! :DeliveryPointDto;
 
 
   constructor(
@@ -49,25 +49,25 @@ export class NewClientComponent implements OnInit {
       firstname: [this.clientValue.firstname||'', Validators.required],
       lastname: [this.clientValue.lastname||'', Validators.required],
       email: [this.clientValue.email||'', [Validators.required, Validators.email]],
-      phoneNum: [this.clientValue.phoneNum||'', Validators.required],
+      phoneNum: [this.clientValue.phoneNbr||'', Validators.required],
       siren: [this.clientValue.siren||''],
       siret: [this.clientValue.siret||''],
       description: [this.clientValue.description||''],
       address: this.fb.group({
-        adresse1: [this.clientValue.address?.adresse1||'', Validators.required],
-        adresse2: [this.clientValue.address?.adresse2||''],
-        ville: [this.clientValue.address?.ville||'', Validators.required],
-        codepostal: [this.clientValue.address?.codepostal||'', Validators.required],
-        pays: [this.clientValue.address?.pays||'', Validators.required]
+        adresse1: [this.clientValue.address?.street||'', Validators.required],
+        adresse2: [this.clientValue.address?.additionalInfo||''],
+        ville: [this.clientValue.address?.city||'', Validators.required],
+        codepostal: [this.clientValue.address?.postalCode||'', Validators.required],
+        pays: [this.clientValue.address?.country||'', Validators.required]
       })
     });
   }
 
   private loadClient(id: number) {
-    this.clientService.findById16({id:id as number}).subscribe({
+    this.clientService.findClientById({id:id as number}).subscribe({
       next: (client) => {
         this.clientValue=client;
-        this.clientForm.patchValue(this.clientValue as ClientDto);
+        this.clientForm.patchValue(this.clientValue as ClientResponse);
       },
       error: (error) => {
         console.error('Error loading client:', error);
@@ -77,11 +77,13 @@ export class NewClientComponent implements OnInit {
   onSubmit() {
     if (this.clientForm.valid) {
       this.isSubmitting = true;
-      const clientData = this.clientForm.value;
+      const clientData : ClientRequest = this.clientForm.value as ClientRequest;
 
       const request$ = this.isEditMode
-        ? this.clientService.save16({body:clientData})
-        : this.clientService.save16({body:clientData});
+        ? this.clientService.saveClient({body:clientData})
+        : this.clientService.updateClientInfo({
+          clientId:clientData.id as number,
+          body:clientData});
 
       request$.subscribe({
         next: () => {
@@ -110,8 +112,8 @@ export class NewClientComponent implements OnInit {
     }
   }
 
-  saveClient(clientValue: ClientDto, sucessAction: string, failedAction:string){
-    this.clientService.save16({body:clientValue}).subscribe({
+  saveClient(clientValue: ClientRequest, sucessAction: string, failedAction:string){
+    this.clientService.saveClient({body:clientValue}).subscribe({
       next:(response)=>{
         this.alertService.alertSuccess(sucessAction + " completed successfully!")
         this.router.navigate(['clients/all']);

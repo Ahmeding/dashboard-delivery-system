@@ -13,8 +13,8 @@
           <form  [formGroup]="contractForm" (ngSubmit)="onSubmit()">
             <div class="row g-4">
               <div class="col-md-6"><div class="form-group">
-                <select id="driver" class="form-control" formControlName="chauffeurDto"
-                        [class.is-invalid]="contractForm.get('chauffeurDto')?.invalid && contractForm.get('chauffeurDto')?.touched">
+                <select id="driver" class="form-control" formControlName="driverBasicDto"
+                        [class.is-invalid]="contractForm.get('driverBasicDto')?.invalid && contractForm.get('driverBasicDto')?.touched">
                   <option [ngValue]="undefined" disabled selected>Select Vehicle</option>
                   <option *ngFor="let d of allDrivers" [ngValue]="d">{{d.firstname}}&nbsp;{{d.lastname}}</option>
                 </select>

@@ -1,17 +1,16 @@
   import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
-import {DeliveryPointDto} from "../../../../../../ds-api/src/models/delivery-point-dto";
 import {DeliveryPointsService} from "../../../../../../ds-api/src/services/delivery-points.service";
 import {ClientService} from "../../../../../../ds-api/src/services/client.service";
-import {DeliveryDestinationDto} from "../../../../../../ds-api/src/models/delivery-destination-dto";
-import {ServiceDeliveryDto} from "../../../../../../ds-api/src/models/service-delivery-dto";
-import {ServiceDeliveryService} from "../../../../../../ds-api/src/services/service-delivery.service";
-import {DeliveryPointCategoryDto} from "../../../../../../ds-api/src/models/delivery-point-category-dto";
 import {DeliveryPointCategoriesService} from "../../../../../../ds-api/src/services/delivery-point-categories.service";
 import {DeliveryDestinationService} from "../../../../../../ds-api/src/services/delivery-destination.service";
 import {InputFillUtilsService} from "../../../../../services/input-fill-utils/input-fill-utils.service";
   import {AlertService} from "../../../../../services/alert/alert.service";
+  import {DeliveryPointResponse} from "../../../../../../ds-api/src/models/delivery-point-response";
+  import {DeliveryServiceResponse} from "../../../../../../ds-api/src/models/delivery-service-response";
+  import {DeliveryPointCatResponse} from "../../../../../../ds-api/src/models/delivery-point-cat-response";
+  import {DeliveryServiceService} from "../../../../../../ds-api/src/services/delivery-service.service";
 
 
 @Component({
@@ -25,23 +24,30 @@ export class NewDeliveryPointModalComponent implements OnInit{
   @Input() clientId!: number;
   @Input() dpointId!: number;
 
-  deliveryDestination:DeliveryDestinationDto={};
-  deliveryPoint:DeliveryPointDto={};
 
-  selectedDeliveryPoint:DeliveryPointDto={};
-  serviceDeliveries: ServiceDeliveryDto[]=[];
-  deliveryPoints: DeliveryPointDto[]=[];
-  dpCategories:DeliveryPointCategoryDto[]=[];
-  selectedDeliveryService!:ServiceDeliveryDto;
+  selectedDeliveryPoint:DeliveryPointResponse={};
+  serviceDeliveries: DeliveryServiceResponse[]=[];
+  deliveryPoints: DeliveryPointResponse[]=[];
+  dpCategories:DeliveryPointCatResponse[]=[];
+  selectedDeliveryService!:DeliveryServiceResponse;
 
   destinationForm!: FormGroup;
   deliveryPointForm!: FormGroup;
   currentPointForm: FormGroup | null = null;
+  weekDays = [
+    { label: 'Sun', value: 'SUNDAY' },
+    { label: 'Mon', value: 'MONDAY' },
+    { label: 'Tue', value: 'TUESDAY' },
+    { label: 'Wed', value: 'WEDNESDAY' },
+    { label: 'Thu', value: 'THURSDAY' },
+    { label: 'Fri', value: 'FRIDAY' },
+    { label: 'Sat', value: 'SATURDAY' }
+  ];
 
   constructor(
     private fillInputService: InputFillUtilsService,
     private dpCategoryService:DeliveryPointCategoriesService,
-    private serviceDeliveryService:ServiceDeliveryService,
+    private deliveryServiceService:DeliveryServiceService,
     private deliveryPointsService:DeliveryPointsService,
     private dDestinationService:DeliveryDestinationService,
     public activeModal: NgbActiveModal,
@@ -112,7 +118,7 @@ export class NewDeliveryPointModalComponent implements OnInit{
   }
 
   getDeliveryPointById(){
-    this.deliveryPointsService.findById11({id:this.dpointId}).subscribe({
+    this.deliveryPointsService.findDeliveryPointById({id:this.dpointId}).subscribe({
       next:(dpResp)=>{
         this.selectedDeliveryPoint=dpResp;
         console.log(this.selectedDeliveryPoint);
@@ -166,14 +172,13 @@ export class NewDeliveryPointModalComponent implements OnInit{
       this.destinationForm.get("serviceDeliveryId")?.setValue(this.selectedDeliveryService.id)
       const deliveryDest=this.destinationForm.getRawValue();
       console.log( );
-      this.dDestinationService.save12({body:deliveryDest}).subscribe({
+      this.dDestinationService.saveDeliveryDestination({body:deliveryDest}).subscribe({
         next:(dpResp)=>{
           console.log(dpResp);
-
           this.alertService.alertSuccess("New Delivery Point added successfully!");
           this.activeModal.close(this.destinationForm.value);
         },error:(err)=>{
-          this.alertService.alertWaring("An error occurred while adding the new delivery point. ["+ err.error.msg+"]");
+          this.alertService.alertWarning("An error occurred while adding the new delivery point. ["+ err.error.msg+"]");
           console.log(err.error.msg);
         }
       })
@@ -184,7 +189,7 @@ export class NewDeliveryPointModalComponent implements OnInit{
 
 
   private getAllServiceDelivery() {
-    this.serviceDeliveryService.findAll3().subscribe({
+    this.deliveryServiceService.findAllDeliveryService().subscribe({
       next:(response)=>{
         this.serviceDeliveries=response;
       }
@@ -193,7 +198,7 @@ export class NewDeliveryPointModalComponent implements OnInit{
   }
 
   private getAllCategories() {
-    this.dpCategoryService.findAll9().subscribe({
+    this.dpCategoryService.findAllDeliveryPointCategory().subscribe({
       next:(dpCatRep)=>{
         this.dpCategories=dpCatRep;
       },error:(err)=>{
@@ -226,7 +231,7 @@ export class NewDeliveryPointModalComponent implements OnInit{
     }
   }
 
-  setAddressLocation(selectedDeliveryService: ServiceDeliveryDto) {
+  setAddressLocation(selectedDeliveryService: DeliveryServiceResponse) {
    this.selectedDeliveryService = this.destinationForm.get("serviceDeliveryId")?.value;
     console.log(selectedDeliveryService.destinationCity+"----------------");
   }

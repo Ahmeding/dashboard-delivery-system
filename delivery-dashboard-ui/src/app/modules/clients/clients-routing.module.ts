@@ -8,23 +8,38 @@ import {NewOrderComponent} from "./pages/orders/new-order/new-order.component";
 import {NewQuoteComponent} from "./pages/quotes/new-quote/new-quote.component";
 import {ViewClientComponent} from "./pages/clients/view-client/view-client.component";
 import {authGuard} from "../../services/guard/auth.guard";
+import {NewDeliveryPointComponent} from "./pages/clients/new-delivery-point/new-delivery-point.component";
 
 const routes: Routes = [
-  { path: 'all', component: ClientsComponent,canActivate:[authGuard] },
+  {
+    path: 'all',
+    component: ClientsComponent,
+    canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'new-client', component: NewClientComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'view-client/:id', component: ViewClientComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
+  { path: 'new-delivery-points/:id', component: NewDeliveryPointComponent,
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'edit-client/:id', component: NewClientComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'orders', component: OrdersComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'new-order', component: NewOrderComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'quotes', component: QuotesComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'new-quote', component: NewQuoteComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
 
 ];
 

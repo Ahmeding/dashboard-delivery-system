@@ -1,7 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {ClientDto} from "../../../../../ds-api/src/models/client-dto";
-import {AdresseDto} from "../../../../../ds-api/src/models/adresse-dto";
-import {PageResponseClientDto} from "../../../../../ds-api/src/models/page-response-client-dto";
 import {ConfirmBoxEvokeService} from "@costlydeveloper/ngx-awesome-popup";
 import {AlertService} from "../../../../services/alert/alert.service";
 import {ClientService} from "../../../../../ds-api/src/services/client.service";
@@ -9,9 +6,13 @@ import {NgForm} from "@angular/forms";
 import {Router} from "@angular/router";
 import {ViewClientModalComponent} from "./view-client-modal/view-client-modal.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {DeliveryPointDto} from "../../../../../ds-api/src/models/delivery-point-dto";
 import {NewDeliveryPointModalComponent} from "./new-delivery-point-modal/new-delivery-point-modal.component";
 import {Client} from "stompjs";
+import {TokenService} from "../../../../services/token/token.service";
+import {DeliveryPointRequest} from "../../../../../ds-api/src/models/delivery-point-request";
+import {ClientResponse} from "../../../../../ds-api/src/models/client-response";
+import {AddressRequest} from "../../../../../ds-api/src/models/address-request";
+import {PageResponseClientResponse} from "../../../../../ds-api/src/models/page-response-client-response";
 
 @Component({
   selector: 'app-clients',
@@ -20,32 +21,39 @@ import {Client} from "stompjs";
 })
 export class ClientsComponent implements OnInit{
 
-  deliveryPoint:DeliveryPointDto = {}
-  allClients:ClientDto[]=[];
-  selectedClient: ClientDto={};
-  newClient: ClientDto={};
+  selectedClient: ClientResponse={};
 
   isFormAddNewSubmitted: boolean=false;
-  address: AdresseDto={};
+  address!: AddressRequest;
   page: number=0;
   size: number=5;
-  allClientsResponse: PageResponseClientDto = {};
+  allClientsResponse: PageResponseClientResponse = {};
   searchTerm: any;
   pageSize: any;
-
+// Inside your component class
+  private activeModalRef: any;
   constructor(
+    private tokenService:TokenService,
     private modalService: NgbModal,
     private router:Router,
     private confirmBoxService:ConfirmBoxEvokeService,
     private alertService:AlertService,
     private clientService: ClientService) {
+    // Subscribe to token changes
+
+    this.tokenService.tokenChanges.subscribe((token) => {
+      if (!token && this.activeModalRef) {
+        this.activeModalRef.close(); // Close the modal
+        this.activeModalRef = null;
+      }
+    });
   }
 
   ngOnInit(): void {
     this.getAllClients();
   }
   private getAllClients() {
-    this.clientService.findAllClients({
+    this.clientService.findAllClient({
       page:this.page,
       size:this.size
     }).subscribe({
@@ -69,7 +77,7 @@ export class ClientsComponent implements OnInit{
     this.confirmBoxService.customFour(`Are you sure you want to ${action} this client?`, '', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.clientService.updateIsActive2(
+          this.clientService.updateClientIsActive(
             {
               id:client_id,
               isactive:updatedStatus
@@ -94,7 +102,7 @@ export class ClientsComponent implements OnInit{
     this.confirmBoxService.customFour('Are you sure you want to delete this client?', 'This action is irreversible!', 'Confirme', 'Cancel').subscribe(
       resp => {
         if (resp.success) {
-          this.clientService.delete14({id:client_id}).subscribe(() => {
+          this.clientService.deleteClient({id:client_id}).subscribe(() => {
             this.getAllClients();
             this.alertService.alertSuccess('Deletion successfully completed');
           });
@@ -145,7 +153,7 @@ export class ClientsComponent implements OnInit{
     this.router.navigate(['clients','new-client']);
   }
 
-  viewClientDetails(client: ClientDto) {
+  viewClientDetails(client: ClientResponse) {
     const modalRef = this.modalService.open(ViewClientModalComponent, { size: 'xl' });
     modalRef.componentInstance.selectedClient = client;  // Pass data to modal
   }
@@ -169,27 +177,31 @@ export class ClientsComponent implements OnInit{
     return client.deliveryDestinationsDto.reduce((sum,dest)=>sum+(dest.deliveryPointsDto?.length||0),0);
   }*/
   openAddNewDPModal(client: any) {
-    const modalRef = this.modalService.open(NewDeliveryPointModalComponent, {
+    this.activeModalRef = this.modalService.open(NewDeliveryPointModalComponent, {
       size: 'xl',
       centered: true,
       backdrop: 'static'
     });
 
-    modalRef.componentInstance.clientId = client.id;
+    this.activeModalRef.componentInstance.clientId = client.id;
 
-    modalRef.result.then((result) => {
+    this.activeModalRef.result.then((result :any) => {
       if (result) {
         // Handle the new delivery point data
         console.log('New delivery point:', result);
         this.getAllClients();
         // Add your API call here
       }
-    }).catch((error) => {
+    }).catch((error :any) => {
       console.log('Modal dismissed');
     });
   }
 
   goToClientDetails(id: number | undefined) {
     this.router.navigate(['clients','view-client',id]);
+  }
+
+  openNewDeliveyPoint(idClient: number) {
+    this.router.navigate(['clients','new-delivery-points',idClient]);
   }
 }

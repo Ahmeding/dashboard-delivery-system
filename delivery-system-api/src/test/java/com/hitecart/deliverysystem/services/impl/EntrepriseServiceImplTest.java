@@ -15,7 +15,7 @@ class EntrepriseServiceImplTest {
     }
 
     @Test
-    void findByRaisonSocial() {
+    void findByName() {
     }
 
     @Test

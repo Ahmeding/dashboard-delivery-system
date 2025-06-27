@@ -1,10 +1,9 @@
 package com.hitecart.deliverysystem.controllers.api;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.ClientDto;
-import com.hitecart.deliverysystem.dto.ClientDto;
-import com.hitecart.deliverysystem.dto.VehiculeDto;
-import com.hitecart.deliverysystem.utils.Constants;
+import com.hitecart.deliverysystem.dto.client.ClientRequest;
+import com.hitecart.deliverysystem.dto.client.ClientResponse;
+import com.hitecart.deliverysystem.dto.client.ClientUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,13 +20,13 @@ import static com.hitecart.deliverysystem.utils.Constants.*;
 @RequestMapping(CLIENT_ENDPOINT)
 @Tag(name = "Client")
 public interface ClientApi {
-
     @PostMapping(
             value = CREATE_CLIENT_ENDPOINT,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @Operation(
+    @Operation(operationId = "saveClient",
+
             description = "Ajouter/Modifier un client, cette methode permet " +
                     "d'enregistrer ou modifier un client",
             responses = {
@@ -36,21 +35,46 @@ public interface ClientApi {
                             description = "L'objet Client a été créé / modifié",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ClientDto.class))
+                                    schema = @Schema(implementation = ClientResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "400",
                             description = "L'objet Client n'est pas valide",
                             content = @Content(mediaType = "application/json"))
             })
-    ResponseEntity<ClientDto> save(@RequestBody ClientDto dto);
+    ResponseEntity<ClientResponse> saveClient(@RequestBody ClientRequest clientRequest);
+
+    @PatchMapping(
+            value = UPDATE_CLIENT_ENDPOINT,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(operationId = "updateClientInfo",
+
+            description = "Modifier un client, cette methode permet " +
+                    "modifier un client",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "L'objet Client a été  modifié",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ClientResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "L'objet Client n'est pas valide",
+                            content = @Content(mediaType = "application/json"))
+            })
+    ResponseEntity<ClientResponse> updateClientInfo(@PathVariable("clientId") Integer clientId ,@RequestBody ClientUpdateRequest request);
 
     @GetMapping(
             value = FIND_CLIENT_BY_ID_ENDPOINT,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
 
-    @Operation(
+    @Operation(operationId = "findClientById",
+
             description = "Rechercher un Client par ID! Cette methode permet de chercher un client par son ID",
             responses = {
                     @ApiResponse(
@@ -70,12 +94,14 @@ public interface ClientApi {
                     )
             }
     )
-    ResponseEntity<ClientDto> findById(@PathVariable("id") Integer id);
+    ResponseEntity<ClientResponse> findClientById(@PathVariable("id") Integer id);
+
     @GetMapping(
             value = FIND_CLIENT_BY_EMAIL_ENDPOINT,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @Operation(
+    @Operation(operationId = "findClientByEmail",
+
             description = "Rechercher un Client par son email ID! Cette methode permet de chercher un client par son email",
             responses = {
                     @ApiResponse(
@@ -95,12 +121,14 @@ public interface ClientApi {
                     )
             }
     )
-    ResponseEntity<ClientDto> findByEmail(@PathVariable("email") String email);
+    ResponseEntity<ClientResponse> findClientByEmail(@PathVariable("email") String email);
+
     @GetMapping(
             value = FIND_ALL_CLIENT_ENDPOINT,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @Operation(
+    @Operation(operationId = "findAllClient",
+
             description = "Rechercher tout les Client! Cette methode permet de retouner tous les clients",
             responses = {
                     @ApiResponse(
@@ -112,13 +140,15 @@ public interface ClientApi {
                     )
             }
     )
-    ResponseEntity<List<ClientDto>> findAll();
+    ResponseEntity<List<ClientResponse>> findAllClient();
 
-    @PutMapping(value = UPDATE_ISACTIVE_CLIENT_ENDPOINT,produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<ClientDto> updateIsActive(@PathVariable("id") Integer id, @PathVariable("isactive") Boolean isActive);
+    @PutMapping(value = UPDATE_ISACTIVE_CLIENT_ENDPOINT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(operationId = "updateClientIsActive")
+    ResponseEntity<ClientResponse> updateClientIsActive(@PathVariable("id") Integer id, @PathVariable("isactive") Boolean isActive);
 
     @DeleteMapping(value = DELETE_CLIENT_ENDPOINT)
-    @Operation(
+    @Operation(operationId = "deleteClient",
+
             description = "Supprimer un Client par ID! Cette methode permet de suprimmer un client par son ID",
             responses = {
                     @ApiResponse(
@@ -137,12 +167,12 @@ public interface ClientApi {
                     )
             }
     )
-    void delete(@PathVariable("id") Integer id);
+    ResponseEntity<?> deleteClient(@PathVariable("id") Integer id);
 
-    @GetMapping(value =FIND_ALL_CLIENT_PAGEABLE_ENDPOINT,
-            produces =MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<PageResponse<ClientDto>> findAllClients(
-      @RequestParam(name = "page",defaultValue = "1", required = false) int page,
-      @RequestParam(name = "size",defaultValue = "10", required = false) int size
-    );
+    @GetMapping(value = FIND_ALL_CLIENT_PAGEABLE_ENDPOINT,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(operationId = "findAllClientsPageable")
+    ResponseEntity<PageResponse<ClientResponse>> findAllClientsPageable(
+            @RequestParam(name = "page", defaultValue = "1", required = false) int page,
+            @RequestParam(name = "size", defaultValue = "10", required = false) int size);
 }

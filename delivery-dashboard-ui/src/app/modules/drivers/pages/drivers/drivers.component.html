@@ -45,9 +45,9 @@
             <tr *ngFor="let driver of allDriversResponse.content">
               <td>{{ driver.id }}</td>
               <td>{{ capitalizeName(driver.firstname) }}&nbsp;{{ capitalizeName(driver.lastname) }}</td>
-              <td>{{ driver.phoneNum }}</td>
+              <td>{{ driver.phoneNbr }}</td>
               <td>{{ driver.email }}</td>
-              <td>{{ driver.drivingLicenseType }}</td>
+              <td>{{ driver.drivinglicenseType }}</td>
               <td>Not Yet</td>
               <td><i
                 [ngClass]="driver.enabled
@@ -154,7 +154,7 @@
               </div>
               <div class="col-md-6">
                 <div class="form-floating mb-3 mb-md-0">
-                  <span class="text-primary">Birth Date</span>: {{selectedDriver.dateOfBirth}}
+                  <span class="text-primary">Birth Date</span>: {{"selectedDriver.dateOfBirth"}}
                 </div>
               </div>
             </div>
@@ -163,7 +163,7 @@
             <div class="row mb-3">
               <div class="col-md-6">
                 <div class="form-floating mb-3 mb-md-0">
-                  <span class="text-primary">Phone number</span>: {{selectedDriver.phoneNum}}
+                  <span class="text-primary">Phone number</span>: {{selectedDriver.phoneNbr}}
                 </div>
               </div>
               <div class="col-md-6">
@@ -177,12 +177,12 @@
             <div class="row mb-3">
               <div class="col-md-6">
                 <div class="form-floating mb-3 mb-md-0">
-                  <span class="text-primary">Address</span>: {{selectedDriver.address?.adresse1}}
+                  <span class="text-primary">Address</span>: {{selectedDriver.address?.street}}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-floating mb-3 mb-md-0">
-                  <span class="text-primary">Adresse 2</span>: {{selectedDriver.address?.adresse2}}
+                  <span class="text-primary">Adresse 2</span>: {{selectedDriver.address?.additionalInfo}}
                 </div>
               </div>
             </div>
@@ -191,12 +191,13 @@
             <div class="row mb-3">
               <div class="col-md-6">
                 <div class="form-floating mb-3 mb-md-0">
-                  <span for="inputCodePostale" class="text-primary">Postal code & City</span>: {{selectedDriver.address?.codepostal}} {{selectedDriver.address?.ville}}
+                  <span for="inputCodePostale" class="text-primary">Postal code & City</span>:
+                  {{selectedDriver.address?.postalCode}} {{selectedDriver.address?.city}}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-floating mb-3 mb-md-0">
-                  <span for="inputPays" class="text-primary">Country</span>: {{selectedDriver.address?.pays}}
+                  <span for="inputPays" class="text-primary">Country</span>: {{selectedDriver.address?.country}}
                 </div>
               </div>
             </div>
@@ -210,7 +211,7 @@
               </div>
               <div class="col-md-6">
                 <div class="form-floating mb-3 mb-md-0">
-                  <span class="text-primary">Type Permis</span>: {{selectedDriver.drivingLicenseType}}
+                  <span class="text-primary">Type Permis</span>: {{selectedDriver.drivinglicenseType}}
                 </div>
               </div>
             </div>
@@ -218,7 +219,7 @@
             <div class="row mb-3">
               <div class="col-md-6">
                 <div class="form-floating mb-3 mb-md-0">
-                  <span class="text-primary">S. Security N°</span>: {{selectedDriver.numSecu}}
+                  <span class="text-primary">S. Security N°</span>: {{selectedDriver.secuNbr}}
                 </div>
               </div>
               <div class="col-md-6">

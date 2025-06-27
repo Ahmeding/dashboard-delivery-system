@@ -10,7 +10,7 @@
           id="nom"
           class="form-control"
           name="nom"
-          [(ngModel)]="expense.nom"
+          [(ngModel)]="expense.name"
           placeholder=" "
           required />
         <label for="nom">Name</label>
@@ -22,7 +22,7 @@
           id="commentaire"
           class="form-control"
           name="commentaire"
-          [(ngModel)]="expense.commentaire"
+          [(ngModel)]="expense.comment"
           placeholder=" "
           rows="3"
           required></textarea>
@@ -36,37 +36,14 @@
           id="createdAt"
           class="form-control"
           name="createdAt"
-          [(ngModel)]="expense.createdAt"
+          [(ngModel)]="expense.expenseDate"
           placeholder=" "
           required />
         <label for="createdAt">Created At</label>
       </div>
 
-      <!-- Created By Field -->
-      <div class="form-group">
-        <input
-          type="number"
-          id="createdBy"
-          class="form-control"
-          name="createdBy"
-          [(ngModel)]="expense.createdBy"
-          placeholder=" "
-          required />
-        <label for="createdBy">Created By (ID)</label>
-      </div>
 
-      <!-- Last Modified By Field -->
-      <div class="form-group">
-        <input
-          type="number"
-          id="lastModifiedBy"
-          class="form-control"
-          name="lastModifiedBy"
-          [(ngModel)]="expense.lastModifiedBy"
-          placeholder=" "
-          required />
-        <label for="lastModifiedBy">Last Modified By (ID)</label>
-      </div>
+
 
       <!-- Mission Details (Optional) -->
       <div class="form-group">
@@ -74,33 +51,13 @@
           type="text"
           id="mission"
           class="form-control"
-          name="missionDto"
-          [(ngModel)]="expense.missionDto"
+          name="missionBasicDto"
+          [(ngModel)]="expense.missionId"
           placeholder=" " >
           <option>fdgdfhfdh</option>
         </select>
         <label for="mission">Mission Title</label>
       </div>
-
-      <!-- Ligne Frais (Expense Lines) -->
-     <!-- <div class="form-group">
-        <label >Expense Lines</label>
-        <div *ngFor="let line of expense.lignesFraisMissionDto; let i = index">
-          <input
-            type="text"
-            class="form-control my-2"
-            [(ngModel)]="line.type"
-            name="lignesFrais-{{i}}"
-            placeholder="Line Detail" />
-          <input
-            type="number"
-            class="form-control my-2"
-            [(ngModel)]="line.cout"
-            name="amount-{{i}}"
-            placeholder="Amount" />
-        </div>
-      </div>-->
-
       <button
         type="submit"
         class="btn btn-primary btn-block"

@@ -11,22 +11,24 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { delete10 } from '../fn/delivery-point/delete-10';
-import { Delete10$Params } from '../fn/delivery-point/delete-10';
-import { DeliveryPointDto } from '../models/delivery-point-dto';
-import { findAll11 } from '../fn/delivery-point/find-all-11';
-import { FindAll11$Params } from '../fn/delivery-point/find-all-11';
-import { findAllByCity } from '../fn/delivery-point/find-all-by-city';
-import { FindAllByCity$Params } from '../fn/delivery-point/find-all-by-city';
-import { findAllDeliveryPoints } from '../fn/delivery-point/find-all-delivery-points';
-import { FindAllDeliveryPoints$Params } from '../fn/delivery-point/find-all-delivery-points';
-import { findById11 } from '../fn/delivery-point/find-by-id-11';
-import { FindById11$Params } from '../fn/delivery-point/find-by-id-11';
-import { PageResponseDeliveryPointDto } from '../models/page-response-delivery-point-dto';
-import { save11 } from '../fn/delivery-point/save-11';
-import { Save11$Params } from '../fn/delivery-point/save-11';
-import { updateIsActive1 } from '../fn/delivery-point/update-is-active-1';
-import { UpdateIsActive1$Params } from '../fn/delivery-point/update-is-active-1';
+import { deleteDeliveryPoint } from '../fn/delivery-point/delete-delivery-point';
+import { DeleteDeliveryPoint$Params } from '../fn/delivery-point/delete-delivery-point';
+import { DeliveryPointResponse } from '../models/delivery-point-response';
+import { findAllDeliveryPoint } from '../fn/delivery-point/find-all-delivery-point';
+import { FindAllDeliveryPoint$Params } from '../fn/delivery-point/find-all-delivery-point';
+import { findAllDeliveryPointByCity } from '../fn/delivery-point/find-all-delivery-point-by-city';
+import { FindAllDeliveryPointByCity$Params } from '../fn/delivery-point/find-all-delivery-point-by-city';
+import { findAllDeliveryPointsPageable } from '../fn/delivery-point/find-all-delivery-points-pageable';
+import { FindAllDeliveryPointsPageable$Params } from '../fn/delivery-point/find-all-delivery-points-pageable';
+import { findDeliveryPointById } from '../fn/delivery-point/find-delivery-point-by-id';
+import { FindDeliveryPointById$Params } from '../fn/delivery-point/find-delivery-point-by-id';
+import { PageResponseDeliveryPointResponse } from '../models/page-response-delivery-point-response';
+import { saveDeliveryPoint } from '../fn/delivery-point/save-delivery-point';
+import { SaveDeliveryPoint$Params } from '../fn/delivery-point/save-delivery-point';
+import { updateDeliveryPointInfo } from '../fn/delivery-point/update-delivery-point-info';
+import { UpdateDeliveryPointInfo$Params } from '../fn/delivery-point/update-delivery-point-info';
+import { updateDeliveryPointIsActive } from '../fn/delivery-point/update-delivery-point-is-active';
+import { UpdateDeliveryPointIsActive$Params } from '../fn/delivery-point/update-delivery-point-is-active';
 
 @Injectable({ providedIn: 'root' })
 export class DeliveryPointService extends BaseService {
@@ -34,197 +36,226 @@ export class DeliveryPointService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `updateIsActive1()` */
-  static readonly UpdateIsActive1Path = '/delivery-points/is-active/{id}/{isactive}';
+  /** Path part for operation `updateDeliveryPointIsActive()` */
+  static readonly UpdateDeliveryPointIsActivePath = '/delivery-points/is-active/{id}/{isactive}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateIsActive1()` instead.
+   * To access only the response body, use `updateDeliveryPointIsActive()` instead.
    *
    * This method doesn't expect any request body.
    */
-  updateIsActive1$Response(params: UpdateIsActive1$Params, context?: HttpContext): Observable<StrictHttpResponse<DeliveryPointDto>> {
-    return updateIsActive1(this.http, this.rootUrl, params, context);
+  updateDeliveryPointIsActive$Response(params: UpdateDeliveryPointIsActive$Params, context?: HttpContext): Observable<StrictHttpResponse<DeliveryPointResponse>> {
+    return updateDeliveryPointIsActive(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `updateIsActive1$Response()` instead.
+   * To access the full response (for headers, for example), `updateDeliveryPointIsActive$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  updateIsActive1(params: UpdateIsActive1$Params, context?: HttpContext): Observable<DeliveryPointDto> {
-    return this.updateIsActive1$Response(params, context).pipe(
-      map((r: StrictHttpResponse<DeliveryPointDto>): DeliveryPointDto => r.body)
+  updateDeliveryPointIsActive(params: UpdateDeliveryPointIsActive$Params, context?: HttpContext): Observable<DeliveryPointResponse> {
+    return this.updateDeliveryPointIsActive$Response(params, context).pipe(
+      map((r: StrictHttpResponse<DeliveryPointResponse>): DeliveryPointResponse => r.body)
     );
   }
 
-  /** Path part for operation `save11()` */
-  static readonly Save11Path = '/delivery-points/create';
+  /** Path part for operation `saveDeliveryPoint()` */
+  static readonly SaveDeliveryPointPath = '/delivery-points/create';
 
   /**
    * Ajouter/Modifier un deliveryPoint, cette methode permet d'enregistrer ou modifier un deliveryPoint
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save11()` instead.
+   * To access only the response body, use `saveDeliveryPoint()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save11$Response(params: Save11$Params, context?: HttpContext): Observable<StrictHttpResponse<DeliveryPointDto>> {
-    return save11(this.http, this.rootUrl, params, context);
+  saveDeliveryPoint$Response(params: SaveDeliveryPoint$Params, context?: HttpContext): Observable<StrictHttpResponse<DeliveryPointResponse>> {
+    return saveDeliveryPoint(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier un deliveryPoint, cette methode permet d'enregistrer ou modifier un deliveryPoint
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save11$Response()` instead.
+   * To access the full response (for headers, for example), `saveDeliveryPoint$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save11(params: Save11$Params, context?: HttpContext): Observable<DeliveryPointDto> {
-    return this.save11$Response(params, context).pipe(
-      map((r: StrictHttpResponse<DeliveryPointDto>): DeliveryPointDto => r.body)
+  saveDeliveryPoint(params: SaveDeliveryPoint$Params, context?: HttpContext): Observable<DeliveryPointResponse> {
+    return this.saveDeliveryPoint$Response(params, context).pipe(
+      map((r: StrictHttpResponse<DeliveryPointResponse>): DeliveryPointResponse => r.body)
     );
   }
 
-  /** Path part for operation `findById11()` */
-  static readonly FindById11Path = '/delivery-points/dpoint/by-id/{id}';
+  /** Path part for operation `updateDeliveryPointInfo()` */
+  static readonly UpdateDeliveryPointInfoPath = '/delivery-points/update/{deliveryPointId}';
+
+  /**
+   * Ajouter/Modifier un deliveryPoint, cette methode permet d'enregistrer ou modifier un deliveryPoint
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateDeliveryPointInfo()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateDeliveryPointInfo$Response(params: UpdateDeliveryPointInfo$Params, context?: HttpContext): Observable<StrictHttpResponse<DeliveryPointResponse>> {
+    return updateDeliveryPointInfo(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Ajouter/Modifier un deliveryPoint, cette methode permet d'enregistrer ou modifier un deliveryPoint
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateDeliveryPointInfo$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateDeliveryPointInfo(params: UpdateDeliveryPointInfo$Params, context?: HttpContext): Observable<DeliveryPointResponse> {
+    return this.updateDeliveryPointInfo$Response(params, context).pipe(
+      map((r: StrictHttpResponse<DeliveryPointResponse>): DeliveryPointResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `findDeliveryPointById()` */
+  static readonly FindDeliveryPointByIdPath = '/delivery-points/by-id/{id}';
 
   /**
    * Rechercher un DeliveryPoint par ID! Cette methode permet de chercher un deliveryPoint par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById11()` instead.
+   * To access only the response body, use `findDeliveryPointById()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById11$Response(params: FindById11$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findById11(this.http, this.rootUrl, params, context);
+  findDeliveryPointById$Response(params: FindDeliveryPointById$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findDeliveryPointById(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher un DeliveryPoint par ID! Cette methode permet de chercher un deliveryPoint par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById11$Response()` instead.
+   * To access the full response (for headers, for example), `findDeliveryPointById$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById11(params: FindById11$Params, context?: HttpContext): Observable<any> {
-    return this.findById11$Response(params, context).pipe(
+  findDeliveryPointById(params: FindDeliveryPointById$Params, context?: HttpContext): Observable<any> {
+    return this.findDeliveryPointById$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
 
-  /** Path part for operation `findAllByCity()` */
-  static readonly FindAllByCityPath = '/delivery-points/dpoint/by-city/{city}';
+  /** Path part for operation `findAllDeliveryPointByCity()` */
+  static readonly FindAllDeliveryPointByCityPath = '/delivery-points/by-city/{city}';
 
   /**
    * Rechercher un DeliveryPoint par son email ID! Cette methode permet de chercher un deliveryPoint par son email
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAllByCity()` instead.
+   * To access only the response body, use `findAllDeliveryPointByCity()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAllByCity$Response(params: FindAllByCity$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findAllByCity(this.http, this.rootUrl, params, context);
+  findAllDeliveryPointByCity$Response(params: FindAllDeliveryPointByCity$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findAllDeliveryPointByCity(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher un DeliveryPoint par son email ID! Cette methode permet de chercher un deliveryPoint par son email
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAllByCity$Response()` instead.
+   * To access the full response (for headers, for example), `findAllDeliveryPointByCity$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAllByCity(params: FindAllByCity$Params, context?: HttpContext): Observable<any> {
-    return this.findAllByCity$Response(params, context).pipe(
+  findAllDeliveryPointByCity(params: FindAllDeliveryPointByCity$Params, context?: HttpContext): Observable<any> {
+    return this.findAllDeliveryPointByCity$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
 
-  /** Path part for operation `findAll11()` */
-  static readonly FindAll11Path = '/delivery-points/all';
+  /** Path part for operation `findAllDeliveryPoint()` */
+  static readonly FindAllDeliveryPointPath = '/delivery-points/all';
 
   /**
    * Rechercher tout les DeliveryPoint! Cette methode permet de retouner tous les deliveryPoints
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll11()` instead.
+   * To access only the response body, use `findAllDeliveryPoint()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll11$Response(params?: FindAll11$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findAll11(this.http, this.rootUrl, params, context);
+  findAllDeliveryPoint$Response(params?: FindAllDeliveryPoint$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findAllDeliveryPoint(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Rechercher tout les DeliveryPoint! Cette methode permet de retouner tous les deliveryPoints
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll11$Response()` instead.
+   * To access the full response (for headers, for example), `findAllDeliveryPoint$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll11(params?: FindAll11$Params, context?: HttpContext): Observable<any> {
-    return this.findAll11$Response(params, context).pipe(
+  findAllDeliveryPoint(params?: FindAllDeliveryPoint$Params, context?: HttpContext): Observable<any> {
+    return this.findAllDeliveryPoint$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
 
-  /** Path part for operation `findAllDeliveryPoints()` */
-  static readonly FindAllDeliveryPointsPath = '/delivery-points/';
+  /** Path part for operation `findAllDeliveryPointsPageable()` */
+  static readonly FindAllDeliveryPointsPageablePath = '/delivery-points/';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAllDeliveryPoints()` instead.
+   * To access only the response body, use `findAllDeliveryPointsPageable()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAllDeliveryPoints$Response(params?: FindAllDeliveryPoints$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseDeliveryPointDto>> {
-    return findAllDeliveryPoints(this.http, this.rootUrl, params, context);
+  findAllDeliveryPointsPageable$Response(params?: FindAllDeliveryPointsPageable$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseDeliveryPointResponse>> {
+    return findAllDeliveryPointsPageable(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAllDeliveryPoints$Response()` instead.
+   * To access the full response (for headers, for example), `findAllDeliveryPointsPageable$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAllDeliveryPoints(params?: FindAllDeliveryPoints$Params, context?: HttpContext): Observable<PageResponseDeliveryPointDto> {
-    return this.findAllDeliveryPoints$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PageResponseDeliveryPointDto>): PageResponseDeliveryPointDto => r.body)
+  findAllDeliveryPointsPageable(params?: FindAllDeliveryPointsPageable$Params, context?: HttpContext): Observable<PageResponseDeliveryPointResponse> {
+    return this.findAllDeliveryPointsPageable$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseDeliveryPointResponse>): PageResponseDeliveryPointResponse => r.body)
     );
   }
 
-  /** Path part for operation `delete10()` */
-  static readonly Delete10Path = '/delivery-points/delete/{id}';
+  /** Path part for operation `deleteDeliveryPoint()` */
+  static readonly DeleteDeliveryPointPath = '/delivery-points/delete/{id}';
 
   /**
    * Supprimer un DeliveryPoint par ID! Cette methode permet de suprimmer un deliveryPoint par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete10()` instead.
+   * To access only the response body, use `deleteDeliveryPoint()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete10$Response(params: Delete10$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return delete10(this.http, this.rootUrl, params, context);
+  deleteDeliveryPoint$Response(params: DeleteDeliveryPoint$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return deleteDeliveryPoint(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Supprimer un DeliveryPoint par ID! Cette methode permet de suprimmer un deliveryPoint par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete10$Response()` instead.
+   * To access the full response (for headers, for example), `deleteDeliveryPoint$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete10(params: Delete10$Params, context?: HttpContext): Observable<any> {
-    return this.delete10$Response(params, context).pipe(
+  deleteDeliveryPoint(params: DeleteDeliveryPoint$Params, context?: HttpContext): Observable<any> {
+    return this.deleteDeliveryPoint$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

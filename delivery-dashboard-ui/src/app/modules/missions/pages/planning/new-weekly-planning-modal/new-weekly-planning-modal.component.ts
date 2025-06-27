@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {ServiceDeliveryDto} from "../../../../../../ds-api/src/models/service-delivery-dto";
+import {DeliveryServiceResponse} from "../../../../../../ds-api/src/models/delivery-service-response";
 
 
 @Component({
@@ -11,7 +11,7 @@ import {ServiceDeliveryDto} from "../../../../../../ds-api/src/models/service-de
 })
 export class NewWeeklyPlanningModalComponent implements OnInit{
   wPlanningForm!: FormGroup;
-  allDestinations: ServiceDeliveryDto[]=[];
+  allDestinations: DeliveryServiceResponse[]=[];
 
   @Input()
   dateDay!: Date;

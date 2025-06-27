@@ -45,13 +45,15 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngIf="allClientsResponse.content?.length===0"><td colspan="6" align="center">No Client Saved Yet</td></tr>
+        <tr *ngIf="allClientsResponse.content?.length===0"><td colspan="6"
+                                                               align="center">No Client Saved Yet</td></tr>
         <tr *ngFor="let client of allClientsResponse.content" class="client-row">
           <td>{{client.id}}</td>
           <td>
             <div class="client-info">
               <div class="client-avatar">
-               <a (click)="goToClientDetails(client.id)"> {{ client.firstname?.[0] }}{{ client.lastname?.[0] }}</a>
+               <a (click)="goToClientDetails(client.id)">
+                 {{ client.firstname?.[0] }}{{ client.lastname?.[0] }}</a>
               </div>
               <div class="client-details" (click)="goToClientDetails(client.id)">
                 <span class="client-name">{{client.lastname}} {{client.firstname}}</span>
@@ -62,13 +64,13 @@
           <td>
             <div class="contact-info">
               <i class="bi bi-telephone"></i>
-              {{client.phoneNum}}
+              {{client.phoneNbr}}
             </div>
           </td>
           <td>
             <div class="delivery-points">
-              <span>{{client.deliveryPointDtos?.length}}</span>
-              <button class="add-dp-btn" (click)="openAddNewDPModal(client)">
+              <span>{{client.deliveryPoints?.length}}</span>
+              <button class="add-dp-btn" (click)="openNewDeliveyPoint(client.id!)">
                 <i class="bi bi-plus-circle"></i>
                 Add Point
               </button>

@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {ReparationDto} from "../../../../../../ds-api/src/models/reparation-dto";
 import {FormControl, FormGroup, NgForm, Validators} from "@angular/forms";
-import {VehiculeDto} from "../../../../../../ds-api/src/models/vehicule-dto";
-import {VehiculeService} from "../../../../../../ds-api/src/services/vehicule.service";
-import {ReparationService} from "../../../../../../ds-api/src/services/reparation.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../../../../services/alert/alert.service";
 import {DateUtilsService} from "../../../../../services/date-utils/date-utils.service";
+import {RepairRequest} from "../../../../../../ds-api/src/models/repair-request";
+import {VehicleResponse} from "../../../../../../ds-api/src/models/vehicle-response";
+import {RepairService} from "../../../../../../ds-api/src/services/repair.service";
+import {VehicleService} from "../../../../../../ds-api/src/services/vehicle.service";
 
 @Component({
   selector: 'app-new-repaire',
@@ -18,17 +18,17 @@ export class NewRepaireComponent implements OnInit{
   typesRepair:string[]=['MECANIQUE' , 'ELECTRIQUE' , 'CARROSSERIE' , 'VIDANGE_COMPLET']
   //;
 
-  repair: ReparationDto = {};
-  allVehicles: VehiculeDto[]=[];
+  repair!: RepairRequest;
+  allVehicles: VehicleResponse[]=[];
   /**---------------------**/
   repairForm: FormGroup= new FormGroup({});
-  repairValue: ReparationDto={};
+  repairValue!: RepairRequest;
   rId:number |null=null;
   constructor(
     private router:Router,
     private route:ActivatedRoute,
-    private repairService:ReparationService,
-    private vehiculeService:VehiculeService,
+    private repairService:RepairService,
+    private vehiculeService:VehicleService,
                private alertService:AlertService,
                private dateUtils:DateUtilsService) {
   }
@@ -45,11 +45,11 @@ export class NewRepaireComponent implements OnInit{
   }
 
   private getAllVehicles() {
-    this.vehiculeService.findAll1().subscribe({
+    this.vehiculeService.findAllVehicle().subscribe({
       next:(allVehiclesRep)=>{
         this.allVehicles=allVehiclesRep;
         this.repairForm.patchValue({
-          vehiculeDto: this.repairValue?.vehiculeDto || null
+          vehiculeDto: this.repairValue?.vehicleId || null
         });
       },
       error:(err)=>{
@@ -62,17 +62,17 @@ export class NewRepaireComponent implements OnInit{
   initForm(){
     this.repairForm= new FormGroup({
       id: new FormControl(this.repairValue?.id || null), // Ensure id is included
-      vehiculeDto: new FormControl(this.repairValue?.vehiculeDto || null,Validators.required),
+      vehiculeDto: new FormControl(this.repairValue?.vehicleId || null,Validators.required),
       type: new FormControl(this.repairValue?.type || '',Validators.required),
-      dateDebut: new FormControl(this.repairValue?.dateDebut || '',Validators.required),
-      dateFin: new FormControl(this.repairValue?.dateFin || '',Validators.required),
-      dateProchainRep: new FormControl(this.repairValue?.dateProchainRep || ''),
-      commentaire: new FormControl(this.repairValue?.commentaire),
+      dateDebut: new FormControl(this.repairValue?.startDate || '',Validators.required),
+      dateFin: new FormControl(this.repairValue?.endDate || '',Validators.required),
+      dateProchainRep: new FormControl(this.repairValue?.nextRepairDate || ''),
+      commentaire: new FormControl(this.repairValue?.comment),
     });
   }
 
   loadRepairToEdit(rId:number){
-    this.repairService.findById4({id:rId}).subscribe({
+    this.repairService.findRepairById({id:rId}).subscribe({
       next:(repairToEditResponse)=>{
         this.repairValue= repairToEditResponse;
    /*     if(this.repairValue.dateDebut){
@@ -89,17 +89,17 @@ export class NewRepaireComponent implements OnInit{
         this.repairForm.controls['vehiculeDto'].setValue(this.repairValue.vehiculeDto);
 */
         // Find and set the matching vehicle object reference
-        console.log(this.repairValue.vehiculeDto?.id);
-        const matchingVehicle = this.allVehicles.find(v => v.id === this.repairValue.vehiculeDto?.id);
+        console.log(this.repairValue.vehicleId);
+        const matchingVehicle = this.allVehicles.find(v => v.id === this.repairValue.vehicleId);
         console.log(matchingVehicle);
         this.repairForm.patchValue({
 
           vehiculeDto: matchingVehicle, // Set the vehicle reference
           type: this.repairValue.type,
-          dateDebut: this.dateUtils.setToInputDate(this.repairValue.dateDebut),
-          dateFin: this.dateUtils.setToInputDate(this.repairValue.dateFin),
-          dateProchainRep: this.dateUtils.setToInputDate(this.repairValue.dateProchainRep),
-          commentaire: this.repairValue.commentaire
+          dateDebut: this.dateUtils.setToInputDate(this.repairValue.startDate),
+          dateFin: this.dateUtils.setToInputDate(this.repairValue.endDate),
+          dateProchainRep: this.dateUtils.setToInputDate(this.repairValue.nextRepairDate),
+          commentaire: this.repairValue.comment
         });
 
         console.log(this.repairValue);
@@ -112,7 +112,7 @@ export class NewRepaireComponent implements OnInit{
 
   onSubmit() {
     if(this.repairForm.valid){
-      const repairData: ReparationDto=this.repairForm.value;
+      const repairData: RepairRequest=this.repairForm.value;
 
       if(this.repairValue?.id){
         repairData.id =this.repairValue.id;
@@ -125,8 +125,8 @@ export class NewRepaireComponent implements OnInit{
     }
   }
 
-  saveRepair(repairData: ReparationDto, successMsg: string, errorMsg: string){
-  this.repairService.save4({body:repairData}).subscribe({
+  saveRepair(repairData: RepairRequest, successMsg: string, errorMsg: string){
+  this.repairService.saveRepair({body:repairData}).subscribe({
     next:(response)=>{
       this.alertService.alertSuccess(successMsg+" completed successfully!")
       this.router.navigate(['vehicles/repairs']);

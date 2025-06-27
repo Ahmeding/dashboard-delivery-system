@@ -1,26 +1,28 @@
 package com.hitecart.deliverysystem.validator;
 
-import com.hitecart.deliverysystem.dto.DeliveryPointCategoryDto;
-import com.hitecart.deliverysystem.dto.DeliveryPointDto;
+import com.hitecart.deliverysystem.dto.deliverypointcategory.DeliveryPointCategoryRequest;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DeliveryPointCategoryValidator {
-    public static List<String> validate(DeliveryPointCategoryDto dto){
+    public static List<String> validate(DeliveryPointCategoryRequest request){
         List<String> errors= new ArrayList<>();
+        if (request == null) {
+            errors.add("Please provide the category name!");
+            errors.add("Please provide the value of the additional fees!");
+            return errors;
+        }
 
-        if(dto==null){
-            errors.add("Veuillez renseigner le nom de la categorie !");
-            errors.add("Veuillez renseigner La valeur des frais supplémentaires !");
+        if (request.name() == null || !StringUtils.hasLength(request.name())) {
+            errors.add("Please provide the category name!");
         }
-        if(dto.getName() == null || !StringUtils.hasLength(dto.getName())){
-            errors.add("Veuillez renseigner le nom de la categorie !");
+        if (request.additionalFees() == null) {
+            errors.add("Please provide the value of the additional fees!");
         }
-        if(dto.getAdditionalFees()==null){
-            errors.add("Veuillez renseigner La valeur des frais supplémentaires !");
-        }
+
         return errors;
+
     }
 }

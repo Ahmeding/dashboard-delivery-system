@@ -44,10 +44,10 @@
           <td>
             <div class="user-info">
               <div class="user-avatar">
-                {{user.fullname?.[0]}}
+                {{user.firstname}}
               </div>
               <div class="user-details">
-                <span class="user-name">{{user.fullname}}</span>
+                <span class="user-name">{{user.firstname}}</span>
                 <span class="user-email">{{user.email}}</span>
               </div>
             </div>
@@ -55,14 +55,14 @@
           <td>
             <div class="contact-info">
               <i class="bi bi-telephone"></i>
-              <span>{{user.phoneNum}}</span>
+              <span>{{user.phoneNbr}}</span>
             </div>
           </td>
           <td>
             <div class="created-info">
               <div class="creator">
                 <i class="bi bi-person"></i>
-                <span>{{user.createdByUser}}</span>
+                <span>{{user.firstname}}</span>
               </div>
               <div class="created-date">
                 <i class="bi bi-calendar3"></i>

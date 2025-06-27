@@ -2,11 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {MissionService} from "../../../../../../ds-api/src/services/mission.service";
 import {ActivatedRoute} from "@angular/router";
 import {Chart} from "chart.js";
-import {MissionDto} from "../../../../../../ds-api/src/models/mission-dto";
-import {ChauffeurDto} from "../../../../../../ds-api/src/models/chauffeur-dto";
-import {VehiculeDto} from "../../../../../../ds-api/src/models/vehicule-dto";
 import {AlertService} from "../../../../../services/alert/alert.service";
 import {DateUtilsService} from "../../../../../services/date-utils/date-utils.service";
+import {MissionResponse} from "../../../../../../ds-api/src/models/mission-response";
+import {DriverResponse} from "../../../../../../ds-api/src/models/driver-response";
+import {VehicleResponse} from "../../../../../../ds-api/src/models/vehicle-response";
 
 @Component({
   selector: 'app-mission-details',
@@ -16,11 +16,10 @@ import {DateUtilsService} from "../../../../../services/date-utils/date-utils.se
 export class MissionDetailsComponent implements OnInit{
 
   id!:number;
-  datetime!:string
-  mission:MissionDto={};
-  drivers:ChauffeurDto[]=[];
-  v!:VehiculeDto;
-  vehicles:VehiculeDto[]=[];
+  mission:MissionResponse={};
+  drivers:DriverResponse[]=[];
+  v!:VehicleResponse;
+  vehicles:VehicleResponse[]=[];
   driversNdCars:any[]= [];
 
 constructor(
@@ -69,18 +68,18 @@ constructor(
   }*/
 
   loadMission(){
-    this.missionService.findById6({id:this.id}).subscribe(
+    this.missionService.findMissionById({id:this.id}).subscribe(
       {
         next:(loadedMission)=>{
           this.mission=loadedMission;
           // Use the formatDate method to convert assignedAt
-         this.mission.missionVehiclesDtos?.forEach((vehculeMission)=>{
-           vehculeMission.chauffeursVehicleDto?.forEach(
+         /*this.mission.missionVehicles.forEach((vehculeMission)=>{
+           vehculeMission.driverVehicles.forEach(
              (d)=>{
                this.drivers.push(d)
              }
            )
-         });
+         });*/
 
         },
         error:()=>{

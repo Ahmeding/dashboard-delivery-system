@@ -20,17 +20,17 @@
         <!-- Row 2: Immatriculation and Capacity -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Phone. N°:</span> {{ selectedDriver.phoneNum }}
+            <span class="text-primary">Phone. N°:</span> {{ selectedDriver.phoneNbr }}
           </div>
           <div class="col-md-6">
-            <span class="text-primary">Created By :</span> {{ selectedDriver.createdByUser?.fullname}} m<sup>3</sup>
+            <span class="text-primary">Created By :</span> {{ "selectedDriver.createdByUser?.fullname"}} m<sup>3</sup>
           </div>
         </div>
 
         <!-- Row 3: Milage and Vin -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Birth Date:</span> {{ selectedDriver.dateOfBirth }}
+            <span class="text-primary">Birth Date:</span> {{ "selectedDriver.birthdate"}}
           </div>
           <div class="col-md-6">
             <span class="text-primary">Driving License N°:</span> {{ selectedDriver.drivinglicenseNbr }}
@@ -40,7 +40,7 @@
         <!-- Row 4: Fuel Type and Number of Missions -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Driving License Type:</span> {{ selectedDriver.drivingLicenseType }}
+            <span class="text-primary">Driving License Type:</span> {{ selectedDriver.drivinglicenseType }}
           </div>
           <div class="col-md-6">
             <span class="text-primary">Number of Missions:</span> <!--{{ selectedDriver.missionCount || 'N/A' }}-->

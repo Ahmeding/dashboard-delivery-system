@@ -10,27 +10,27 @@
         <!-- Row 1: Marque/Model and Date PMC -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Driver:</span> {{ selectedContract.chauffeurDto?.firstname }} {{ selectedContract.chauffeurDto?.lastname }}
+            <span class="text-primary">Driver:</span> {{ "selectedContract.driverId?.firstname" }} {{ "selectedContract.chauffeurDto?.lastname" }}
           </div>
           <div class="col-md-6">
-            <span class="text-primary">Type:</span> {{ selectedContract.typeContrat }}
+            <span class="text-primary">Type:</span> {{ selectedContract.contractType }}
           </div>
         </div>
 
         <!-- Row 2: Immatriculation and Capacity -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Start Date</span> {{ selectedContract.dateDebut }}
+            <span class="text-primary">Start Date</span> {{ selectedContract.startDate }}
           </div>
           <div class="col-md-6">
-            <span class="text-primary">End Date</span> {{ selectedContract.dateFin }} m<sup>3</sup>
+            <span class="text-primary">End Date</span> {{ selectedContract.endDate }} m<sup>3</sup>
           </div>
         </div>
 
         <!-- Row 3: Milage and Vin -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <span class="text-primary">Created By:</span> {{ selectedContract.createdByUser }}
+            <span class="text-primary">Created By:</span> {{ "selectedContract.createdByUser" }}
           </div>
         </div>
 

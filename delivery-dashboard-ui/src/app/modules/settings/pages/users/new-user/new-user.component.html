@@ -82,7 +82,7 @@
                 id="phoneNum"
                 name="phoneNum"
                 required
-                [(ngModel)]="user.phoneNum"
+                [(ngModel)]="user.phoneNbr"
                 placeholder=" "
                 [class.is-invalid]="phoneInput.invalid && phoneInput.touched"
                 #phoneInput="ngModel"
@@ -129,7 +129,7 @@
               <select
                 id="role"
                 name="role"
-                [(ngModel)]="user.role"
+                [(ngModel)]="user.roles"
                 required
                 [class.is-invalid]="roleInput.invalid && roleInput.touched"
                 #roleInput="ngModel"

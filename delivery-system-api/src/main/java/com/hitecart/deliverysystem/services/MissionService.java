@@ -1,32 +1,28 @@
 package com.hitecart.deliverysystem.services;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.MissionDto;
-import com.hitecart.deliverysystem.dto.MissionResponse;
-import com.hitecart.deliverysystem.model.enums.EtatMission;
+import com.hitecart.deliverysystem.dto.mission.MissionRequest;
+import com.hitecart.deliverysystem.dto.mission.MissionResponse;
+import com.hitecart.deliverysystem.dto.mission.MissionStartEndRequest;
+import com.hitecart.deliverysystem.dto.missionexpense.MissionExpenseRequest;
+import com.hitecart.deliverysystem.dto.stoppoint.StopPointRequest;
+import com.hitecart.deliverysystem.model.enums.MissionStatus;
+import com.hitecart.deliverysystem.model.enums.KmFlag;
 import org.springframework.security.core.Authentication;
 
 import java.time.Instant;
 import java.util.List;
 
 public interface MissionService {
-    MissionDto save(MissionDto dto);
-    MissionDto updateKilometrage(String flag,Integer idMission, double kmDebut);
-    MissionDto updateEtatMission(Integer idMission, EtatMission etatMission) ;
-//    MissionDto deleteEtape(Integer idMission, Integer idEtape);
-//    MissionDto deleteChauffeur(Integer idMission, Integer idChauffeur);
-//    MissionDto deleteVehicule(Integer idMission, Integer idVehicule);
-//    MissionDto deleteFraisMission(Integer idMission, Integer idFM);
-//    List<Etape> findAllEtapeByMissionId(Integer idMission);
-//    FraisMissionDto updateX(Integer idMF, Integer idLFM, BigDecimal qte);
-    MissionDto findById(Integer id);
-    List<MissionDto> findAllByDate(Instant dateMission);
+    MissionResponse save(MissionRequest dto);
+    MissionResponse updateMissionInfo(Integer missionId,MissionRequest dto);
+    MissionResponse updateExpensesMission(Integer idMission, List<MissionExpenseRequest> expenses) ;
+    MissionResponse updateMissionStopPoints(Integer idMission, List<StopPointRequest> stopPointRequests) ;
+    MissionResponse findById(Integer id);
+    List<MissionResponse> findAllByDate(Instant dateMission);
     List<MissionResponse> findAll();
     void delete(Integer id);
-
-    void generateMissions();
-    List<Integer> checkOverlappingVehicles(MissionDto dto);
-    List<Integer> checkOverlappingDrivers(MissionDto dto);
-    PageResponse<MissionDto> findAllMissions(int page, int size);
-    PageResponse<MissionDto> findAllMissionsByDriverId(int page, int size, Authentication connectedUser);
+    PageResponse<MissionResponse> findAllMissions(int page, int size);
+    PageResponse<MissionResponse> findAllMissionsByDriverId(int page, int size, Authentication connectedUser);
+    List<MissionResponse> findAllMissionsByDriver(Authentication connectedUser);
 }

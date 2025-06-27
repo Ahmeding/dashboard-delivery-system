@@ -1,30 +1,29 @@
 package com.hitecart.deliverysystem.validator;
 
-import com.hitecart.deliverysystem.dto.DeliveryDestinationDto;
-import com.hitecart.deliverysystem.dto.DeliveryPointContactDto;
-import org.springframework.util.StringUtils;
+import com.hitecart.deliverysystem.dto.deliverydestination.DeliveryDestinationRequest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DeliveryDestinationValidator {
 
-    public static List<String> validate(DeliveryDestinationDto dto) {
+    public static List<String> validate(DeliveryDestinationRequest request) {
         List<String> errors = new ArrayList<>();
-
-        if (dto == null) {
-            errors.add("Veuillez renseigner le client");
-            errors.add("Veuillez renseigner le service");
-            errors.add("Veuillez renseigner les points de livraison");
-            errors.add("Veuillez renseigner l'email'");
+        if (request == null) {
+            errors.add("Please specify the client");
+            errors.add("Please specify the service");
+            errors.add("Please specify the delivery points");
             return errors;
         }
-        if (dto.getServiceDeliveryId()== null) {
-            errors.add("Veuillez renseigner le service'");
+
+        if (request.deliveryServiceId() == null) {
+            errors.add("Please specify the service");
         }
-        if (dto.getDeliveryPointsDto()== null || dto.getDeliveryPointsDto().isEmpty()) {
-            errors.add("Veuillez renseigner les points de livraison");
+        if (request.deliveryPoints() == null || request.deliveryPoints().isEmpty()) {
+            errors.add("Please specify the delivery points");
         }
+
         return errors;
+
     }
 }

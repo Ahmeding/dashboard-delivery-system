@@ -2,7 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {DeliveryPointCategoriesService} from "../../../../../../ds-api/src/services/delivery-point-categories.service";
-import {DeliveryPointCategoryDto} from "../../../../../../ds-api/src/models/delivery-point-category-dto";
+import {DeliveryPointCatResponse} from "../../../../../../ds-api/src/models/delivery-point-cat-response";
+import {DeliveryPointCategoryRequest} from "../../../../../../ds-api/src/models/delivery-point-category-request";
 
 
 @Component({
@@ -12,8 +13,8 @@ import {DeliveryPointCategoryDto} from "../../../../../../ds-api/src/models/deli
 })
 export class NewDpCategoryModalComponent implements OnInit{
 
- @Input()selectedDpCategory : DeliveryPointCategoryDto={};
-  dpCategoryValue:DeliveryPointCategoryDto={}
+ @Input()selectedDpCategory : DeliveryPointCatResponse={};
+  dpCategoryValue!:DeliveryPointCategoryRequest;
   dpCategoryForm!: FormGroup;
 
   constructor(
@@ -27,7 +28,7 @@ export class NewDpCategoryModalComponent implements OnInit{
   this.dpCategoryValue=this.dpCategoryForm.value;
     console.log(this.dpCategoryValue);
 
-    this.dpCategoryService.save9({body:this.dpCategoryValue}).subscribe({
+    this.dpCategoryService.saveDeliveryPointCategory({body:this.dpCategoryValue}).subscribe({
       next:(rep)=>{
         console.log(rep);
         this.activeModal.close(this.dpCategoryForm.value)

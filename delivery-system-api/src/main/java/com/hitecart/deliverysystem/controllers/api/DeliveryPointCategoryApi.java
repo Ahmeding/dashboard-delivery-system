@@ -1,8 +1,8 @@
 package com.hitecart.deliverysystem.controllers.api;
 
 import com.hitecart.deliverysystem.common.PageResponse;
-import com.hitecart.deliverysystem.dto.DeliveryPointCategoryDto;
-import com.hitecart.deliverysystem.dto.DeliveryPointCategoryDto;
+import com.hitecart.deliverysystem.dto.deliverypointcategory.DeliveryPointCategoryRequest;
+import com.hitecart.deliverysystem.dto.deliverypointcategory.DeliveryPointCatResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,7 +25,8 @@ public interface DeliveryPointCategoryApi {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @Operation(
+    @Operation(operationId = "saveDeliveryPointCategory",
+
             description = "Ajouter/Modifier une delivery Point categroy, cette methode permet " +
                     "d'enregistrer ou modifier un delivery Point categroy",
             responses = {
@@ -34,21 +35,46 @@ public interface DeliveryPointCategoryApi {
                             description = "L'objet DeliveryPoint a été créé / modifié",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = DeliveryPointCategoryDto.class))
+                                    schema = @Schema(implementation = DeliveryPointCatResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "400",
                             description = "L'objet DeliveryPoint n'est pas valide",
                             content = @Content(mediaType = "application/json"))
             })
-    ResponseEntity<DeliveryPointCategoryDto> save(@RequestBody DeliveryPointCategoryDto dto);
+    ResponseEntity<DeliveryPointCatResponse> saveDeliveryPointCategory(@RequestBody DeliveryPointCategoryRequest deliveryPointCategoryRequest);
+
+    @PatchMapping(
+            value = UPDATE_DELIVERY_POINT_CATEGORY_ENDPOINT,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(operationId = "updateDeliveryPointCategoryInfo",
+
+            description = "Ajouter/Modifier une delivery Point categroy, cette methode permet " +
+                    "d'enregistrer ou modifier un delivery Point categroy",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "L'objet DeliveryPoint a été créé / modifié",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = DeliveryPointCatResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "L'objet DeliveryPoint n'est pas valide",
+                            content = @Content(mediaType = "application/json"))
+            })
+    ResponseEntity<DeliveryPointCatResponse> updateDeliveryPointCategoryInfo(@PathVariable("deliveryPointCatId") Integer deliveryPointCatId,@RequestBody DeliveryPointCategoryRequest dto);
 
     @GetMapping(
             value = FIND_DELIVERY_POINT_CATEGORY_BY_ID_ENDPOINT,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
 
-    @Operation(
+    @Operation(operationId = "findDeliveryPointCategoryById",
+
             description = "Rechercher un DeliveryPoint par ID! Cette methode permet de chercher un delivery Point categroy par son ID",
             responses = {
                     @ApiResponse(
@@ -68,12 +94,14 @@ public interface DeliveryPointCategoryApi {
                     )
             }
     )
-    ResponseEntity<DeliveryPointCategoryDto> findById(@PathVariable("id") Integer id);
+    ResponseEntity<DeliveryPointCatResponse> findDeliveryPointCategoryById(@PathVariable("id") Integer id);
+
     @GetMapping(
             value = FIND_DELIVERY_POINT_CATEGORY_BY_NAME_ENDPOINT,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @Operation(
+    @Operation(operationId = "findDeliveryPointCategoryByName",
+
             description = "Rechercher un DeliveryPoint par son ID! Cette methode permet de chercher un delivery Point categroy par son email",
             responses = {
                     @ApiResponse(
@@ -93,12 +121,14 @@ public interface DeliveryPointCategoryApi {
                     )
             }
     )
-    ResponseEntity<DeliveryPointCategoryDto> findByName(@PathVariable("name") String name);
+    ResponseEntity<DeliveryPointCatResponse> findDeliveryPointCategoryByName(@PathVariable("name") String name);
+
     @GetMapping(
             value = FIND_ALL_DELIVERY_POINT_CATEGORY_ENDPOINT,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @Operation(
+    @Operation(operationId = "findAllDeliveryPointCategory",
+
             description = "Rechercher tout les DeliveryPoint! Cette methode permet de retouner tous les delivery Point categroys",
             responses = {
                     @ApiResponse(
@@ -110,10 +140,11 @@ public interface DeliveryPointCategoryApi {
                     )
             }
     )
-    ResponseEntity<List<DeliveryPointCategoryDto>> findAll();
+    ResponseEntity<List<DeliveryPointCatResponse>> findAllDeliveryPointCategory();
 
     @DeleteMapping(value = DELETE_DELIVERY_POINT_CATEGORY_ENDPOINT)
-    @Operation(
+    @Operation(operationId = "deleteDeliveryPointCategory",
+
             description = "Supprimer un DeliveryPoint par ID! Cette methode permet de suprimmer un delivery Point categroy par son ID",
             responses = {
                     @ApiResponse(
@@ -132,12 +163,14 @@ public interface DeliveryPointCategoryApi {
                     )
             }
     )
-    void delete(@PathVariable("id") Integer id);
+    ResponseEntity<?> deleteDeliveryPointCategory(@PathVariable("id") Integer id);
 
-    @GetMapping(value =FIND_ALL_DELIVERY_POINT_CATEGORY_PAGEABLE_ENDPOINT,
-            produces =MediaType.APPLICATION_JSON_VALUE  )
-    ResponseEntity<PageResponse<DeliveryPointCategoryDto>> findAllDeliveryPointCategories(
-      @RequestParam(name = "page",defaultValue = "1", required = false) int page,
-      @RequestParam(name = "size",defaultValue = "10", required = false) int size
+    @GetMapping(value = FIND_ALL_DELIVERY_POINT_CATEGORY_PAGEABLE_ENDPOINT,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(operationId = "findAllDeliveryPointCategoriesPageable"
+    )
+    ResponseEntity<PageResponse<DeliveryPointCatResponse>> findAllDeliveryPointCategoriesPageable(
+            @RequestParam(name = "page", defaultValue = "1", required = false) int page,
+            @RequestParam(name = "size", defaultValue = "10", required = false) int size
     );
 }

@@ -1,0 +1,465 @@
+.delivery-destination {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+
+  .dd-header {
+    padding: 1rem 1.5rem;
+    background: var(--bg-color);
+    border-bottom: 1px solid var(--border-color);
+
+    .dd-title {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      i {
+        color: var(--primary-color);
+        font-size: 1.3rem;
+      }
+    }
+  }
+
+  .dd-body {
+    padding: 1.5rem;
+    background: var(--card-bg);
+    max-height: 70vh;
+    overflow-y: auto;
+
+    .form-group {
+      margin-bottom: 1.25rem;
+
+      .form-control, .form-select {
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        transition: border-color 0.2s ease;
+
+        &:focus {
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
+        }
+      }
+
+      label {
+        color: var(--text-muted);
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+    }
+
+    .delivery-points-section {
+      margin: 1.5rem 0;
+
+      h6 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-color);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        i {
+          color: var(--primary-color);
+        }
+      }
+
+      .table {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 0.75rem;
+        overflow: hidden;
+
+        th {
+          background: var(--bg-color);
+          padding: 1rem;
+          font-weight: 600;
+          color: var(--text-color);
+          border-bottom: 2px solid var(--border-color);
+
+          .th-content {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            i {
+              color: var(--text-muted);
+              font-size: 0.875rem;
+            }
+          }
+        }
+
+        td {
+          padding: 0.875rem 1rem;
+          background: var(--card-bg);
+          color: var(--text-color);
+          border-bottom: 1px solid var(--border-color);
+
+          .badge {
+            background: rgba(var(--primary-rgb), 0.1);
+            color: var(--primary-color);
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            font-weight: 500;
+          }
+
+          .contact-info {
+            small {
+              color: var(--text-muted);
+            }
+          }
+
+          .btn-icon {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.25rem;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+
+            &:hover {
+              background: var(--primary-color);
+              color: white;
+              border-color: var(--primary-color);
+
+              &.text-danger {
+                background: var(--danger-color);
+                border-color: var(--danger-color);
+              }
+            }
+          }
+        }
+
+        tbody tr:hover {
+          background: var(--bg-color);
+        }
+      }
+    }
+
+    .contact-section, .address-section {
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+
+      h6 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-color);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+
+        i {
+          color: var(--primary-color);
+        }
+      }
+
+      .form-control {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+
+        &:focus {
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
+        }
+      }
+    }
+
+    .error-message {
+      color: var(--danger-color);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      padding-left: 0.5rem;
+    }
+
+    .add-point-button .btn {
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba(var(--primary-rgb), 0.1);
+      }
+    }
+  }
+
+  /* Recurrence Pattern Section */
+  .recurrence-pattern {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+
+    .rp-header {
+      margin-bottom: 1rem;
+
+      .rp-title {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--text-color);
+        margin: 0;
+        font-weight: 500;
+
+        i {
+          color: var(--primary-color);
+          font-size: 1.1rem;
+        }
+      }
+    }
+
+    .rp-body {
+      .rp-control {
+        margin-bottom: 1rem;
+
+        .input-group {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: var(--bg-color);
+          border-radius: 6px;
+          padding: 0.375rem;
+          transition: border-color 0.2s ease;
+
+          &-icon {
+            color: var(--text-muted);
+            padding: 0 0.75rem;
+          }
+
+          .form-select {
+            background: var(--bg-color);
+            border: none;
+            color: var(--text-color);
+            padding: 0.5rem;
+            width: 100%;
+
+            &:focus {
+              box-shadow: none;
+            }
+          }
+        }
+      }
+
+      .rp-date-range {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+
+        .input-group {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: var(--bg-color);
+          border-radius: 6px;
+          padding: 0.5rem;
+
+          .form-control {
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            padding: 0.5rem;
+            width: 100%;
+
+            &::-webkit-calendar-picker-indicator {
+              filter: invert(var(--theme-invert));
+            }
+          }
+        }
+
+        .date-range-separator {
+          color: var(--text-muted);
+          padding: 0 0.25rem;
+        }
+      }
+
+      .rp-days {
+        .days-label {
+          display: block;
+          color: var(--text-muted);
+          margin-bottom: 0.75rem;
+          font-size: 0.875rem;
+        }
+
+        .days-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+          gap: 0.5rem;
+
+          .day-item {
+            position: relative;
+
+            input[type="checkbox"] {
+              position: absolute;
+              opacity: 0;
+
+              &:checked + .day-card {
+                background: rgba(var(--success-rgb), 0.1);
+                border-color: var(--success-color);
+                color: var(--success-color);
+
+                i {
+                  opacity: 1;
+                }
+              }
+            }
+
+            .day-card {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 0.25rem;
+              padding: 0.5rem;
+              background: var(--bg-color);
+              border: 1px solid var(--border-color);
+              border-radius: 4px;
+              cursor: pointer;
+              transition: all 0.2s ease;
+              color: var(--text-color);
+
+              &:hover {
+                border-color: var(--primary-color);
+              }
+
+              i {
+                font-size: 0.75rem;
+                opacity: 0;
+                transition: opacity 0.2s ease;
+              }
+
+              span {
+                font-size: 0.8125rem;
+                font-weight: 500;
+              }
+            }
+          }
+          /* Add this class for days error state */
+          &.days-error {
+            .day-item .day-card {
+              border-color: var(--danger-color);
+            }
+          }
+        }
+      }
+    }
+  }
+  .dd-footer {
+    padding: 1rem 1.5rem;
+    background: var(--bg-color);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+
+    .btn {
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+
+      &.btn-primary {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+
+        &:hover {
+          opacity: 0.9;
+        }
+
+        &:disabled {
+          background: var(--text-muted);
+          border-color: var(--text-muted);
+        }
+      }
+
+      &.btn-outline-secondary {
+        border-color: var(--border-color);
+        color: var(--text-color);
+
+        &:hover {
+          background: var(--bg-color);
+        }
+      }
+    }
+  }
+}
+
+.dd-body::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.dd-body::-webkit-scrollbar-track {
+  background: var(--bg-color);
+  border-radius: 3px;
+}
+
+.dd-body::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+
+  &:hover {
+    background: var(--text-muted);
+  }
+}
+
+@media (max-width: 768px) {
+  .delivery-destination {
+    border-radius: 0.5rem;
+
+    .dd-header {
+      padding: 1rem;
+    }
+
+    .dd-body {
+      padding: 1rem;
+
+      .contact-section, .address-section {
+        padding: 1rem;
+      }
+    }
+    .recurrence-pattern {
+      .rp-date-range {
+        flex-direction: column;
+
+        .date-range-separator {
+          transform: rotate(90deg);
+        }
+      }
+
+      .days-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .dd-footer {
+      flex-direction: column-reverse;
+      gap: 0.75rem;
+      padding: 1rem;
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+}

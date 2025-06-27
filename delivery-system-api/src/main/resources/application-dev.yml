@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/delivery_db?createDatabaseIfNotExist=true #jdbc:mysql://localhost:3306/delivery_db?createDatabaseIfNotExist=true&userSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:postgresql://localhost:5432/ds_db?createDatabaseIfNotExist=true #jdbc:mysql://localhost:3306/delivery_db?createDatabaseIfNotExist=true&userSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: postgres #root
     password: admin #
     driver-class-name: org.postgresql.Driver #com.mysql.cj.jdbc.Driver
@@ -9,17 +9,28 @@ spring:
       ddl:-auto: update
     show-sql: false
     properties:
+
       dialect: org.hibernate.dialect.PostgreSQLDialect #org.hibernate.dialect.MySQL8Dialect
       hibernate:
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
         session_factory:
           statement_inspector: com.hitecart.deliverysystem.interceptor.Interceptor
     database   : postgresql #MYSQL
 
   jackson:
     serialization.write-date-keys-as-timestamps: false
+    time-zone: UTC
+    date-format: yyyy-MM-dd'T'HH:mm:ss
 
 server:
   port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+
 #  servlet:
 #    context-path: /api/v1/
 flickr:
@@ -27,3 +38,17 @@ flickr:
   apiSecret: 44cb0abb59042a17
   appKey: 72157720904761931-ed09cbdb9cd327d0
   appSecret: e4d84547efa4c530
+jwt:
+  secret: "EAqQ+S5bV4X3MCvg0i5jqvk2rfaHQX67NOeIy7xliXY="
+application:
+  cors:
+    origins: "http://localhost:4200"
+
+
+logging:
+  level:
+    com.hitecart.deliverysystem: debug
+    org:
+      springframework:
+        web: debug
+        validation: trace

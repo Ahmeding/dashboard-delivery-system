@@ -1,7 +1,6 @@
 import {Component, NgIterable, OnInit} from '@angular/core';
-import {UtilisateurDto} from "../../../../../ds-api/src/models/utilisateur-dto";
-import {UtilisateurService} from "../../../../../ds-api/src/services/utilisateur.service";
 import {Router} from "@angular/router";
+import {UserService} from "../../../../../ds-api/src/services/user.service";
 
 interface Mission {
   id: number;
@@ -91,10 +90,10 @@ export class MyProfileComponent implements OnInit{
 
   constructor(
     private router:Router,
-    private userService:UtilisateurService) {
+    private userService:UserService) {
   }
 getUserById(){
-    this.userService.findById2({id:3}).subscribe(
+    this.userService.findUserById({id:3}).subscribe(
       {
         next:(userRep)=>{
           this.user=userRep;

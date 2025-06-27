@@ -1,5 +1,6 @@
 package com.hitecart.deliverysystem.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -25,15 +26,21 @@ public class AbstractEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @CreatedDate
     @Column(name = "createdat", nullable = false, updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
+
     @LastModifiedDate
     @Column(name = "updatedat")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedAt;
+
     @CreatedBy
     @Column(nullable = false,updatable = false)
     private Integer createdBy;
+
     @LastModifiedBy
     @Column(insertable = false)
     private Integer lastModifiedBy;

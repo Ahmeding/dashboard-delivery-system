@@ -11,20 +11,27 @@ import {authGuard} from "../../services/guard/auth.guard";
 
 const routes: Routes = [
   { path: 'all', component: AllMissionsComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'add-mission/:dateDay', component: AddMissionComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'mission-details/:id', component: MissionDetailsComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
 
   { path: 'planning', component: PlanningComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'w-planning', component: WeeklyPlanningComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN','ROLE_USER']} },
   { path: 'expenses', component: ExpensesComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   { path: 'new-expense', component: NewExpenseComponent,
-        canActivate:[authGuard] },
+        canActivate:[authGuard],
+    data: {roles: ['ROLE_ADMIN']} },
   ];
 
 @NgModule({

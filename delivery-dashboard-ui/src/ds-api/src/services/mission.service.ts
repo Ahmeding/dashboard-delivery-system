@@ -11,33 +11,30 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { checkOverlappingDrivers } from '../fn/mission/check-overlapping-drivers';
-import { CheckOverlappingDrivers$Params } from '../fn/mission/check-overlapping-drivers';
-import { checkOverlappingVehicles } from '../fn/mission/check-overlapping-vehicles';
-import { CheckOverlappingVehicles$Params } from '../fn/mission/check-overlapping-vehicles';
-import { delete5 } from '../fn/mission/delete-5';
-import { Delete5$Params } from '../fn/mission/delete-5';
-import { findAll6 } from '../fn/mission/find-all-6';
-import { FindAll6$Params } from '../fn/mission/find-all-6';
-import { findAllByDate } from '../fn/mission/find-all-by-date';
-import { FindAllByDate$Params } from '../fn/mission/find-all-by-date';
-import { findAllMissions } from '../fn/mission/find-all-missions';
-import { FindAllMissions$Params } from '../fn/mission/find-all-missions';
-import { findAllMissionsByDriverId } from '../fn/mission/find-all-missions-by-driver-id';
-import { FindAllMissionsByDriverId$Params } from '../fn/mission/find-all-missions-by-driver-id';
-import { findById6 } from '../fn/mission/find-by-id-6';
-import { FindById6$Params } from '../fn/mission/find-by-id-6';
-import { generateMissions } from '../fn/mission/generate-missions';
-import { GenerateMissions$Params } from '../fn/mission/generate-missions';
-import { MissionDto } from '../models/mission-dto';
+import { deleteMission } from '../fn/mission/delete-mission';
+import { DeleteMission$Params } from '../fn/mission/delete-mission';
+import { findAllMission } from '../fn/mission/find-all-mission';
+import { FindAllMission$Params } from '../fn/mission/find-all-mission';
+import { findAllMissionByDate } from '../fn/mission/find-all-mission-by-date';
+import { FindAllMissionByDate$Params } from '../fn/mission/find-all-mission-by-date';
+import { findAllMissionsByConnectedDriver } from '../fn/mission/find-all-missions-by-connected-driver';
+import { FindAllMissionsByConnectedDriver$Params } from '../fn/mission/find-all-missions-by-connected-driver';
+import { findAllMissionsByDriverIdPageable } from '../fn/mission/find-all-missions-by-driver-id-pageable';
+import { FindAllMissionsByDriverIdPageable$Params } from '../fn/mission/find-all-missions-by-driver-id-pageable';
+import { findAllMissionsPageable } from '../fn/mission/find-all-missions-pageable';
+import { FindAllMissionsPageable$Params } from '../fn/mission/find-all-missions-pageable';
+import { findMissionById } from '../fn/mission/find-mission-by-id';
+import { FindMissionById$Params } from '../fn/mission/find-mission-by-id';
 import { MissionResponse } from '../models/mission-response';
-import { PageResponseMissionDto } from '../models/page-response-mission-dto';
-import { save6 } from '../fn/mission/save-6';
-import { Save6$Params } from '../fn/mission/save-6';
-import { updateEtatMission } from '../fn/mission/update-etat-mission';
-import { UpdateEtatMission$Params } from '../fn/mission/update-etat-mission';
-import { updateKilometrage } from '../fn/mission/update-kilometrage';
-import { UpdateKilometrage$Params } from '../fn/mission/update-kilometrage';
+import { PageResponseMissionResponse } from '../models/page-response-mission-response';
+import { saveMission } from '../fn/mission/save-mission';
+import { SaveMission$Params } from '../fn/mission/save-mission';
+import { updateExpensesMission } from '../fn/mission/update-expenses-mission';
+import { UpdateExpensesMission$Params } from '../fn/mission/update-expenses-mission';
+import { updateMissionInfo } from '../fn/mission/update-mission-info';
+import { UpdateMissionInfo$Params } from '../fn/mission/update-mission-info';
+import { updateStopPointMission } from '../fn/mission/update-stop-point-mission';
+import { UpdateStopPointMission$Params } from '../fn/mission/update-stop-point-mission';
 
 @Injectable({ providedIn: 'root' })
 export class MissionService extends BaseService {
@@ -45,338 +42,345 @@ export class MissionService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `checkOverlappingVehicles()` */
-  static readonly CheckOverlappingVehiclesPath = '/missions/vehicles-check';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `checkOverlappingVehicles()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  checkOverlappingVehicles$Response(params: CheckOverlappingVehicles$Params, context?: HttpContext): Observable<StrictHttpResponse<{
-}>> {
-    return checkOverlappingVehicles(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `checkOverlappingVehicles$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  checkOverlappingVehicles(params: CheckOverlappingVehicles$Params, context?: HttpContext): Observable<{
-}> {
-    return this.checkOverlappingVehicles$Response(params, context).pipe(
-      map((r: StrictHttpResponse<{
-}>): {
-} => r.body)
-    );
-  }
-
-  /** Path part for operation `checkOverlappingDrivers()` */
-  static readonly CheckOverlappingDriversPath = '/missions/drivers-check';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `checkOverlappingDrivers()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  checkOverlappingDrivers$Response(params: CheckOverlappingDrivers$Params, context?: HttpContext): Observable<StrictHttpResponse<{
-}>> {
-    return checkOverlappingDrivers(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `checkOverlappingDrivers$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  checkOverlappingDrivers(params: CheckOverlappingDrivers$Params, context?: HttpContext): Observable<{
-}> {
-    return this.checkOverlappingDrivers$Response(params, context).pipe(
-      map((r: StrictHttpResponse<{
-}>): {
-} => r.body)
-    );
-  }
-
-  /** Path part for operation `save6()` */
-  static readonly Save6Path = '/missions/create';
+  /** Path part for operation `saveMission()` */
+  static readonly SaveMissionPath = '/missions/create';
 
   /**
    * Ajouter/Modifier une mission, cette methode permet d'enregistrer ou modifier une mission
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `save6()` instead.
+   * To access only the response body, use `saveMission()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save6$Response(params: Save6$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return save6(this.http, this.rootUrl, params, context);
+  saveMission$Response(params: SaveMission$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return saveMission(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Ajouter/Modifier une mission, cette methode permet d'enregistrer ou modifier une mission
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `save6$Response()` instead.
+   * To access the full response (for headers, for example), `saveMission$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  save6(params: Save6$Params, context?: HttpContext): Observable<any> {
-    return this.save6$Response(params, context).pipe(
+  saveMission(params: SaveMission$Params, context?: HttpContext): Observable<any> {
+    return this.saveMission$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }
 
-  /** Path part for operation `updateEtatMission()` */
-  static readonly UpdateEtatMissionPath = '/missions/update/{id}/{etatMission}';
+  /** Path part for operation `updateMissionInfo()` */
+  static readonly UpdateMissionInfoPath = '/missions/update/{missionId}';
 
   /**
+   * Modifier une mission, cette methode permet modifier une mission
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateMissionInfo()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateMissionInfo$Response(params: UpdateMissionInfo$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return updateMissionInfo(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Modifier une mission, cette methode permet modifier une mission
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateMissionInfo$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateMissionInfo(params: UpdateMissionInfo$Params, context?: HttpContext): Observable<any> {
+    return this.updateMissionInfo$Response(params, context).pipe(
+      map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `updateStopPointMission()` */
+  static readonly UpdateStopPointMissionPath = '/missions/update/stop-point/{id}';
+
+  /**
+   * update Etapes Mission.
+   *
    * Modifier l'etat d'une mission, cette methode permet modifier l'etat d' une mission
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateEtatMission()` instead.
+   * To access only the response body, use `updateStopPointMission()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateEtatMission$Response(params: UpdateEtatMission$Params, context?: HttpContext): Observable<StrictHttpResponse<MissionDto>> {
-    return updateEtatMission(this.http, this.rootUrl, params, context);
+  updateStopPointMission$Response(params: UpdateStopPointMission$Params, context?: HttpContext): Observable<StrictHttpResponse<MissionResponse>> {
+    return updateStopPointMission(this.http, this.rootUrl, params, context);
   }
 
   /**
+   * update Etapes Mission.
+   *
    * Modifier l'etat d'une mission, cette methode permet modifier l'etat d' une mission
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `updateEtatMission$Response()` instead.
+   * To access the full response (for headers, for example), `updateStopPointMission$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateEtatMission(params: UpdateEtatMission$Params, context?: HttpContext): Observable<MissionDto> {
-    return this.updateEtatMission$Response(params, context).pipe(
-      map((r: StrictHttpResponse<MissionDto>): MissionDto => r.body)
+  updateStopPointMission(params: UpdateStopPointMission$Params, context?: HttpContext): Observable<MissionResponse> {
+    return this.updateStopPointMission$Response(params, context).pipe(
+      map((r: StrictHttpResponse<MissionResponse>): MissionResponse => r.body)
     );
   }
 
-  /** Path part for operation `updateKilometrage()` */
-  static readonly UpdateKilometragePath = '/missions/update/{flag}/{id}/{kilometrage}';
+  /** Path part for operation `updateExpensesMission()` */
+  static readonly UpdateExpensesMissionPath = '/missions/update/expenses/{id}';
 
   /**
-   * Mettre à jour le kilomtratge debut/fin d'une mission, cette methode permet Mettre à jour le kilomtratge debut/fin d' une mission
+   * update Expenses Mission.
+   *
+   * Modifier l'etat d'une mission, cette methode permet modifier l'etat d' une mission
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateKilometrage()` instead.
+   * To access only the response body, use `updateExpensesMission()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateKilometrage$Response(params: UpdateKilometrage$Params, context?: HttpContext): Observable<StrictHttpResponse<MissionDto>> {
-    return updateKilometrage(this.http, this.rootUrl, params, context);
+  updateExpensesMission$Response(params: UpdateExpensesMission$Params, context?: HttpContext): Observable<StrictHttpResponse<MissionResponse>> {
+    return updateExpensesMission(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * Mettre à jour le kilomtratge debut/fin d'une mission, cette methode permet Mettre à jour le kilomtratge debut/fin d' une mission
+   * update Expenses Mission.
+   *
+   * Modifier l'etat d'une mission, cette methode permet modifier l'etat d' une mission
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `updateKilometrage$Response()` instead.
+   * To access the full response (for headers, for example), `updateExpensesMission$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateKilometrage(params: UpdateKilometrage$Params, context?: HttpContext): Observable<MissionDto> {
-    return this.updateKilometrage$Response(params, context).pipe(
-      map((r: StrictHttpResponse<MissionDto>): MissionDto => r.body)
+  updateExpensesMission(params: UpdateExpensesMission$Params, context?: HttpContext): Observable<MissionResponse> {
+    return this.updateExpensesMission$Response(params, context).pipe(
+      map((r: StrictHttpResponse<MissionResponse>): MissionResponse => r.body)
     );
   }
 
-  /** Path part for operation `findById6()` */
-  static readonly FindById6Path = '/missions/mission/{id}';
+  /** Path part for operation `findAllMissionsByConnectedDriver()` */
+  static readonly FindAllMissionsByConnectedDriverPath = '/missions/logged/driver';
 
   /**
-   * Supprimer une Mission par ID! Cette methode permet de suprimmer une mission par son ID
+   * find All Missions By Driver.
+   *
+   *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findById6()` instead.
+   * To access only the response body, use `findAllMissionsByConnectedDriver()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById6$Response(params: FindById6$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findById6(this.http, this.rootUrl, params, context);
+  findAllMissionsByConnectedDriver$Response(params?: FindAllMissionsByConnectedDriver$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<MissionResponse>>> {
+    return findAllMissionsByConnectedDriver(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * Supprimer une Mission par ID! Cette methode permet de suprimmer une mission par son ID
+   * find All Missions By Driver.
+   *
+   *
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findById6$Response()` instead.
+   * To access the full response (for headers, for example), `findAllMissionsByConnectedDriver$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findById6(params: FindById6$Params, context?: HttpContext): Observable<any> {
-    return this.findById6$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
-    );
-  }
-
-  /** Path part for operation `generateMissions()` */
-  static readonly GenerateMissionsPath = '/missions/gener-mission';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `generateMissions()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  generateMissions$Response(params?: GenerateMissions$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return generateMissions(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `generateMissions$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  generateMissions(params?: GenerateMissions$Params, context?: HttpContext): Observable<void> {
-    return this.generateMissions$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
-    );
-  }
-
-  /** Path part for operation `findAllMissionsByDriverId()` */
-  static readonly FindAllMissionsByDriverIdPath = '/missions/driver';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAllMissionsByDriverId()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  findAllMissionsByDriverId$Response(params?: FindAllMissionsByDriverId$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseMissionDto>> {
-    return findAllMissionsByDriverId(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAllMissionsByDriverId$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  findAllMissionsByDriverId(params?: FindAllMissionsByDriverId$Params, context?: HttpContext): Observable<PageResponseMissionDto> {
-    return this.findAllMissionsByDriverId$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PageResponseMissionDto>): PageResponseMissionDto => r.body)
-    );
-  }
-
-  /** Path part for operation `findAllByDate()` */
-  static readonly FindAllByDatePath = '/missions/date/{dateMission}';
-
-  /**
-   * Rechercher une Mission par date! Cette methode permet de chercher une mission par une date
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAllByDate()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  findAllByDate$Response(params: FindAllByDate$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return findAllByDate(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Rechercher une Mission par date! Cette methode permet de chercher une mission par une date
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAllByDate$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  findAllByDate(params: FindAllByDate$Params, context?: HttpContext): Observable<any> {
-    return this.findAllByDate$Response(params, context).pipe(
-      map((r: StrictHttpResponse<any>): any => r.body)
-    );
-  }
-
-  /** Path part for operation `findAll6()` */
-  static readonly FindAll6Path = '/missions/all';
-
-  /**
-   * Rechercher tout les Missions! Cette methode permet de retouner toutes les missions
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll6()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  findAll6$Response(params?: FindAll6$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<MissionResponse>>> {
-    return findAll6(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Rechercher tout les Missions! Cette methode permet de retouner toutes les missions
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll6$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  findAll6(params?: FindAll6$Params, context?: HttpContext): Observable<Array<MissionResponse>> {
-    return this.findAll6$Response(params, context).pipe(
+  findAllMissionsByConnectedDriver(params?: FindAllMissionsByConnectedDriver$Params, context?: HttpContext): Observable<Array<MissionResponse>> {
+    return this.findAllMissionsByConnectedDriver$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<MissionResponse>>): Array<MissionResponse> => r.body)
     );
   }
 
-  /** Path part for operation `findAllMissions()` */
-  static readonly FindAllMissionsPath = '/missions/';
+  /** Path part for operation `findAllMissionsByDriverIdPageable()` */
+  static readonly FindAllMissionsByDriverIdPageablePath = '/missions/driver';
 
   /**
+   * find All Missions By Driver Id Pageable.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAllMissions()` instead.
+   * To access only the response body, use `findAllMissionsByDriverIdPageable()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAllMissions$Response(params?: FindAllMissions$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseMissionDto>> {
-    return findAllMissions(this.http, this.rootUrl, params, context);
+  findAllMissionsByDriverIdPageable$Response(params?: FindAllMissionsByDriverIdPageable$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseMissionResponse>> {
+    return findAllMissionsByDriverIdPageable(this.http, this.rootUrl, params, context);
   }
 
   /**
+   * find All Missions By Driver Id Pageable.
+   *
+   *
+   *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAllMissions$Response()` instead.
+   * To access the full response (for headers, for example), `findAllMissionsByDriverIdPageable$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAllMissions(params?: FindAllMissions$Params, context?: HttpContext): Observable<PageResponseMissionDto> {
-    return this.findAllMissions$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PageResponseMissionDto>): PageResponseMissionDto => r.body)
+  findAllMissionsByDriverIdPageable(params?: FindAllMissionsByDriverIdPageable$Params, context?: HttpContext): Observable<PageResponseMissionResponse> {
+    return this.findAllMissionsByDriverIdPageable$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseMissionResponse>): PageResponseMissionResponse => r.body)
     );
   }
 
-  /** Path part for operation `delete5()` */
-  static readonly Delete5Path = '/missions/delete/{id}';
+  /** Path part for operation `findMissionById()` */
+  static readonly FindMissionByIdPath = '/missions/by-id/{id}';
 
   /**
    * Supprimer une Mission par ID! Cette methode permet de suprimmer une mission par son ID
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `delete5()` instead.
+   * To access only the response body, use `findMissionById()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete5$Response(params: Delete5$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
-    return delete5(this.http, this.rootUrl, params, context);
+  findMissionById$Response(params: FindMissionById$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findMissionById(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Supprimer une Mission par ID! Cette methode permet de suprimmer une mission par son ID
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `delete5$Response()` instead.
+   * To access the full response (for headers, for example), `findMissionById$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  delete5(params: Delete5$Params, context?: HttpContext): Observable<any> {
-    return this.delete5$Response(params, context).pipe(
+  findMissionById(params: FindMissionById$Params, context?: HttpContext): Observable<any> {
+    return this.findMissionById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `findAllMissionByDate()` */
+  static readonly FindAllMissionByDatePath = '/missions/by-date/{dateMission}';
+
+  /**
+   * Rechercher une Mission par date! Cette methode permet de chercher une mission par une date
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllMissionByDate()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllMissionByDate$Response(params: FindAllMissionByDate$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return findAllMissionByDate(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Rechercher une Mission par date! Cette methode permet de chercher une mission par une date
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllMissionByDate$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllMissionByDate(params: FindAllMissionByDate$Params, context?: HttpContext): Observable<any> {
+    return this.findAllMissionByDate$Response(params, context).pipe(
+      map((r: StrictHttpResponse<any>): any => r.body)
+    );
+  }
+
+  /** Path part for operation `findAllMission()` */
+  static readonly FindAllMissionPath = '/missions/all';
+
+  /**
+   * find All Missions.
+   *
+   * Rechercher tout les Missions! Cette methode permet de retouner toutes les missions
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllMission()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllMission$Response(params?: FindAllMission$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<MissionResponse>>> {
+    return findAllMission(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * find All Missions.
+   *
+   * Rechercher tout les Missions! Cette methode permet de retouner toutes les missions
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllMission$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllMission(params?: FindAllMission$Params, context?: HttpContext): Observable<Array<MissionResponse>> {
+    return this.findAllMission$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<MissionResponse>>): Array<MissionResponse> => r.body)
+    );
+  }
+
+  /** Path part for operation `findAllMissionsPageable()` */
+  static readonly FindAllMissionsPageablePath = '/missions/';
+
+  /**
+   * find All Missions pageable.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllMissionsPageable()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllMissionsPageable$Response(params?: FindAllMissionsPageable$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseMissionResponse>> {
+    return findAllMissionsPageable(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * find All Missions pageable.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllMissionsPageable$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllMissionsPageable(params?: FindAllMissionsPageable$Params, context?: HttpContext): Observable<PageResponseMissionResponse> {
+    return this.findAllMissionsPageable$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseMissionResponse>): PageResponseMissionResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteMission()` */
+  static readonly DeleteMissionPath = '/missions/delete/{id}';
+
+  /**
+   * Supprimer une Mission par ID! Cette methode permet de suprimmer une mission par son ID
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteMission()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteMission$Response(params: DeleteMission$Params, context?: HttpContext): Observable<StrictHttpResponse<any>> {
+    return deleteMission(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Supprimer une Mission par ID! Cette methode permet de suprimmer une mission par son ID
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteMission$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteMission(params: DeleteMission$Params, context?: HttpContext): Observable<any> {
+    return this.deleteMission$Response(params, context).pipe(
       map((r: StrictHttpResponse<any>): any => r.body)
     );
   }

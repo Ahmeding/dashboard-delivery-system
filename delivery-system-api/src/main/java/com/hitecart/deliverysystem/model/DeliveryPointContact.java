@@ -2,12 +2,10 @@ package com.hitecart.deliverysystem.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,8 +15,8 @@ public class DeliveryPointContact {
     private String firstname;
     @Column(name = "lastname")
     private String lastname;
-    @Column(name = "phone_num")
-    private String phoneNum;
+    @Column(name = "phone_nbr")
+    private String phoneNbr;
     @Column(name = "email")
     private String email;
 }

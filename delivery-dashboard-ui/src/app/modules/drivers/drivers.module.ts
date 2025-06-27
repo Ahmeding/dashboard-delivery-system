@@ -12,14 +12,17 @@ import { ViewContractModalComponent } from './pages/contracts/view-contract-moda
 
 
 @NgModule({
-  declarations: [
-    DriversComponent,
-    ContractsComponent,
-    NewContractComponent,
-    NewDriverComponent,
-    ViewDriverModalComponent,
-    ViewContractModalComponent
-  ],
+    declarations: [
+        DriversComponent,
+        ContractsComponent,
+        NewContractComponent,
+        NewDriverComponent,
+        ViewDriverModalComponent,
+        ViewContractModalComponent
+    ],
+    exports: [
+        DriversComponent
+    ],
     imports: [
         CommonModule,
         DriversRoutingModule,

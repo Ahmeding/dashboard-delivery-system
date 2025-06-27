@@ -1,0 +1,94 @@
+<div class="manage-trip-form-container">
+  <div class="form-header">
+    <h2>{{ false ? 'Edit' : 'New' }} Edit Mission Km & Expenses</h2>
+  </div>
+
+  <form class="form-content" [formGroup]="editForm" (ngSubmit)="saveMission()">
+  <h2>{{mission.title}}</h2>
+
+  <!-- Kilometer Fields -->
+  <div class="row mb-4 form-group">
+    <div class="col-md-6">
+      <div class="form-floating" >
+        <input type="number" formControlName="kmDebut" class="form-control">
+        <label class="form-label">Start Kilometer</label>
+        <div *ngIf="editForm.get('kmDebut')?.invalid && editForm.get('kmDebut')?.touched"
+             class="text-danger">
+          Valid start kilometer is required
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-floating">
+      <input type="number" formControlName="kmFin" class="form-control">
+      <label class="form-label">End Kilometer</label>
+      <div *ngIf="editForm.get('kmFin')?.invalid && editForm.get('kmFin')?.touched"
+           class="text-danger">
+        Valid end kilometer is required
+      </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Expenses Section -->
+  <form [formGroup]="currentExpenseForm">
+    <h4>Mission Expenses</h4>
+
+    <div class="expense-card mb-3 p-3 border rounded">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="form-floating">
+          <select formControlName="type" class="form-select">
+            <option *ngFor="let type of expenseTypes" [value]="type">{{type}}</option>
+          </select>
+            <label class="form-label">Expense Type</label>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-floating">
+          <input type="number" formControlName="quantity" class="form-control" min="1">
+            <label class="form-label">Quantity</label>
+          </div>
+          </div>
+
+        <div class="col-md-2">
+          <div class="form-floating">
+          <input type="number" formControlName="cost" class="form-control" min="0" step="0.01">
+            <label class="form-label">Cost</label>
+          </div>
+          </div>
+
+        <div class="col-md-3">
+          <div class="form-floating">
+          <input type="date" formControlName="expenseDate" class="form-control">
+            <label class="form-label">Date</label>
+          </div>
+          </div>
+
+        <div class="col-md-1 d-flex align-items-end">
+          <button type="button" class="btn btn-primary mb-3" (click)="addExpense()">
+            Add Expense
+          </button>
+        </div>
+      </div>
+
+      <div *ngFor="let exp of expensesArrayTmp">
+        <div>Carburant</div><div>80</div> <div>120€ </div><div>28/04/2025</div>
+      </div>
+      <!-- Error Messages -->
+<!--      <div *ngIf="expenses.at(i).invalid" class="text-danger small mt-2">
+        <div *ngIf="false">Description is required</div>
+        <div *ngIf="false">Quantity must be at least 1</div>
+        <div *ngIf="false">Cost cannot be negative</div>
+        <div *ngIf="false">Date is required</div>
+      </div>-->
+    </div>
+  </form>
+
+  <button type="submit" class="btn btn-success" [disabled]="editForm.invalid">
+    Save Changes
+  </button>
+</form>
+</div>

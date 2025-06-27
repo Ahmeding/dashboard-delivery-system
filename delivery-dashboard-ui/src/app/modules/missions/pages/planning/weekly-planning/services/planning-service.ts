@@ -19,26 +19,25 @@ export class PlanningService {
     return of(this.getMockMissions()).pipe(
       map(missions => missions.map(mission => ({
         ...mission,
-        destinationColor: getDestinationColor(mission.deliveryDestinationResponse?.serviceDelivery?.destinationCity!)
+        destinationColor: getDestinationColor(mission.deliveryDestination?.deliveryService?.destinationCity!)
       })))
     );
   }
 
   private getMockMissions(): MissionResponse[] {
     return [
-      {
+    /*  {
         id: 1,
-        titre: 'Delivery to Client A',
-        dateDebut:  "[2024,12,09,10,30]",
-        dateFin: '2024-12-09T10:30',
-        etatMission: 'PLANNED',
-        deliveryDestinationResponse: {serviceDelivery:{destinationCity:"Paris"}},
-        missionVehiclesDtos: [
-          { id: 1,chauffeursVehicleDto:[{missionVehicleId:1,chauffeurDto:{
-            firstname:"john"
-              }}] ,vehicleDto: {immatriculation:'ABC123', vehicleType: 'VAN',} },
+        title: 'Delivery to Client A',
+        startDate:  "[2024,12,09,10,30]",
+        endDate: '2024-12-09T10:30',
+        missionStatus: 'PLANNED',
+        deliveryDestination: {deliveryService:{destinationCity:"Paris"}},
+        missionVehicles: [
+          { id: 1,driverVehicles:[{missionVehicleId:1,driverId:1}] ,
+            vehicleId: {immatriculation:'ABC123', vehicleType: 'VAN',} },
         ],
-      },
+      },*/
 
       // Add more mock missions...
     ];

@@ -1,12 +1,8 @@
 <div class="weekly-planning">
+<app-status-card [weekDaysForWeekStatus]= "weekDays"></app-status-card>
   <!-- Page Heading -->
-  <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h4 class="lead">
-    </h4>
-    <a class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
-      class="fas fa-plus fa-sm text-white-50"></i>&nbsp;New Weekly Planning</a>
-  </div>
-
+  <!-- New Stats Card -->
+  <!-- Stats Dashboard -->
   <div class="planning-header">
     <h2>Weekly Planning</h2>
     <div class="controls">
@@ -36,42 +32,11 @@
           *ngFor="let mission of day.missions"
           [mission]="mission"
           (edit)="onEditMission($event)"
-          (delete)="onDeleteMission($event)">
+          (delete)="onDeleteMission($event)"
+        >
         </app-mission-card>
         <div class="missions-container">
 
-          <!--
-
-
-          <div class="mission-card" *ngFor="let mission of day.missions">
-            <div class="mission-header">
-              <div class="mission-time-status">
-                <i [class]="'status-indicator bi ' + getStatusIcon(mission.status)"></i>
-                <span class="mission-time">{{ mission.startTime }} - {{ mission.endTime }}</span>
-              </div>
-              <div class="mission-actions">
-                <button class="btn-action" title="Edit">
-                  <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn-action" title="Delete">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </div>
-            </div>
-
-            <h3 class="mission-title">{{ mission.title }}</h3>
-
-            <div class="mission-details">
-              <div class="detail-item">
-                <i class="bi bi-person-circle"></i>
-                <span>{{ mission.driver }}</span>
-              </div>
-              <div class="detail-item">
-                <i class="bi bi-truck"></i>
-                <span>{{ mission.vehicle }}</span>
-              </div>
-            </div>
-          </div>-->
 
           <div class="empty-state" *ngIf="day.missions.length === 0">
             <i class="bi bi-calendar-x"></i>
