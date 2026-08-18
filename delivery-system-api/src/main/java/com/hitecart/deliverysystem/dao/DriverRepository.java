@@ -23,6 +23,7 @@ public interface DriverRepository extends JpaRepository<Driver,Integer> {
 
    Optional<Driver> findDriverByEmail(String email);
    List<Driver> findAllByEnabled(Boolean isActive);
+
    @Query("""
             SELECT driver
             FROM Driver driver

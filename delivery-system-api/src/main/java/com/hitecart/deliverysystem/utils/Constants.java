@@ -38,6 +38,17 @@ public interface Constants {
     String UPDATE_ISACTIVE_CLIENT_ENDPOINT = "/is-active/{id}/{isactive}";
     /////////////////////////////////////////////////////////////////////
 
+    String CLAIM_ENDPOINT = "/claims";
+    String CREATE_CLAIM_ENDPOINT = "/create";
+    String UPDATE_CLAIM_ENDPOINT = "/update/{claimId}";
+    String FIND_CLAIM_BY_ID_ENDPOINT = "/by-id/{id}";
+    String FIND_CLAIM_BY_TYPE_ENDPOINT = "/by-type/{type}";
+    String FIND_CLAIM_BY_STATUS_ENDPOINT = "/by-status/{status}";
+    String FIND_ALL_CLAIM_ENDPOINT = "/all";
+    String FIND_ALL_CLAIM_PAGEABLE_ENDPOINT = "/all/claims";
+    String DELETE_CLAIM_ENDPOINT = "/delete/{id}";
+    String UPDATE_CLAIM_STATUS_ENDPOINT = "/status/{id}/{status}";
+    /////////////////////////////////////////////////////////////////////
     String DELIVERY_POINT_ENDPOINT = "/delivery-points";
     String CREATE_DELIVERY_POINT_ENDPOINT = "/create";
     String UPDATE_DELIVERY_POINT_ENDPOINT = "/update/{deliveryPointId}";
@@ -62,9 +73,9 @@ public interface Constants {
     String FEEDBACK_ENDPOINT = "/feedbacks";
     String CREATE_FEEDBACK_ENDPOINT = "/create";
     String UPDATE_FEEDBACK_ENDPOINT = "/update/{feedbackId}";
-    String FIND_FEEDBACK_BY_ID_ENDPOINT = "/by-id/{id}";
-    String DELETE_FEEDBACK_BY_ID_ENDPOINT = "/by-id/{id}";
-    String FIND_ALL_FEEDBACK_PAGEABLE_BY_DRIVER_ID_ENDPOINT = "/{driverId}";
+    String FIND_FEEDBACKS_BY_DRIVER_ID_ENDPOINT = "/by-driver-id/{driverId}";
+    String DELETE_FEEDBACK_BY_ID_ENDPOINT = "/delete/by-id/{feedbackId}";
+    String FIND_ALL_FEEDBACK_PAGEABLE_BY_DRIVER_ID_ENDPOINT = "/pageable/by-driver-id/{driverId}";
 
     ////////////////////////////////////////////////////////////////////
 
@@ -73,7 +84,7 @@ public interface Constants {
     String UPDATE_DELIVERY_DESTINATION_ENDPOINT = "/update/{deliveryDestinationId}";
     String FIND_DELIVERY_DESTINATION_BY_ID_ENDPOINT = "/by-id/{id}";
     String FIND_DELIVERY_DESTINATION_BY_CLIENT_ID_ENDPOINT = "/by-client/{clientId}";
-    String FIND_DELIVERY_DESTINATION_BY_DELIVERYSERVICE_ID_ENDPOINT = "/by-delivery-serv/{deliveryServId}";
+    String FIND_DELIVERY_DESTINATION_BY_DELIVERY_SERVICE_ID_ENDPOINT = "/by-delivery-serv/{deliveryServId}";
     String FIND_ALL_DELIVERY_DESTINATION_ENDPOINT = "/all";
     String FIND_ALL_DELIVERY_DESTINATION_PAGEABLE_ENDPOINT = "/";
     String DELETE_DELIVERY_DESTINATION_ENDPOINT = "/delete/{id}";

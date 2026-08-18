@@ -12,7 +12,7 @@ import com.hitecart.deliverysystem.mapper.UserMapper;
 import com.hitecart.deliverysystem.model.Notification;
 import com.hitecart.deliverysystem.model.User;
 import com.hitecart.deliverysystem.model.enums.NotificationStatus;
-import com.hitecart.deliverysystem.services.INotificationService;
+import com.hitecart.deliverysystem.services.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -25,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class NotificationServiceImpl implements INotificationService {
+public class NotificationServiceImpl implements NotificationService {
 
     private final INotificationRepository iNotificationRepository;
     private final SimpMessagingTemplate messagingTemplate;

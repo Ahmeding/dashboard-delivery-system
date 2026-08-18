@@ -1,3 +1,6 @@
+git push github feature/feedback && git push bitbucket feature/feedback
+
+
 CREATE INDEX idx_mission_dates ON mission(date_debut, date_fin);
 CREATE INDEX idx_vehicle_volume ON vehicle(volume);
 CREATE INDEX idx_driver_experience ON driver(experience_level);

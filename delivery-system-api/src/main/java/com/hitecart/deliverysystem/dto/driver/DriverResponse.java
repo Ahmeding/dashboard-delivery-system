@@ -64,6 +64,7 @@ public class DriverResponse {
     private Integer createdBy;
     private Integer lastModifiedBy;
 
+    private double rate;
     private DriverStats stats;
 
     private List<Integer> employmentContractsIds;

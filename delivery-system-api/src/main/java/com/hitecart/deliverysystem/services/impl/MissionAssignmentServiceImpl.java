@@ -112,6 +112,7 @@ public class MissionAssignmentServiceImpl implements MissionAssignmentService {
                     existingMissionVehicle != null ? "EXISTING" : "NEW");
 
             if (existingMissionVehicle != null) {
+                checkVehicleStatus(existingMissionVehicle.getVehicle());
                 // Update existing assignment
                 existingMissionVehicle.setAssignedAt(missionVehicleRequest.assignedAt());
                 updateDriverVehicles(existingMissionVehicle, missionVehicleRequest.driverVehicles());
@@ -238,12 +239,17 @@ public class MissionAssignmentServiceImpl implements MissionAssignmentService {
             DriverVehicle existingDriverVehicle = existingDriversMap.get(driverId);
 
             if (existingDriverVehicle != null) {
+                checkDriverAccountStatus(existingDriverVehicle.getDriver());
                 // Keep existing driver assignment
                 updatedDrivers.add(existingDriverVehicle);
             } else {
                 // Create new driver assignment
                 DriverVehicle newDriverVehicle = new DriverVehicle();
-                newDriverVehicle.setDriver(driverRepository.findById(driverId).orElseThrow());
+                Driver newDriver = driverRepository.findById(driverId).orElseThrow(
+                        () -> new EntityNotFoundException("Driver with ID :: "+ driverId + " not found")
+                );
+                checkDriverAccountStatus(newDriver);
+                newDriverVehicle.setDriver(newDriver);
                 missionVehicle.addDriverVehicle(newDriverVehicle);
                 updatedDrivers.add(newDriverVehicle);
             }
@@ -255,6 +261,8 @@ public class MissionAssignmentServiceImpl implements MissionAssignmentService {
                 .collect(Collectors.toList());
         toRemove.forEach(missionVehicle::removeDriverVehicle);
     }
+
+
 
     /**
      * Adds new drivers to a vehicle assignment.
@@ -506,11 +514,11 @@ public class MissionAssignmentServiceImpl implements MissionAssignmentService {
             MissionVehicleRequest request,
             Mission mission
     ) {
+        Vehicle vehicle =  vehicleRepository.getReferenceById(request.vehicleId());
+        checkVehicleStatus(vehicle);
         MissionVehicle newMissionVehicle = new MissionVehicle();
         newMissionVehicle.setAssignedAt(request.assignedAt());
-        newMissionVehicle.setVehicle(
-                vehicleRepository.getReferenceById(request.vehicleId())
-        );
+        newMissionVehicle.setVehicle(vehicle);
         newMissionVehicle.setMission(mission);
         return newMissionVehicle;
     }
@@ -586,5 +594,27 @@ public class MissionAssignmentServiceImpl implements MissionAssignmentService {
         sendNotificationsAsync(driverIds, missionId);
     }
 
+    /**
+     * Check the vehicle's status (to assign this vehicle the vehicle must be enabled)
+     * @param vehicle
+     */
+    private void checkVehicleStatus(Vehicle vehicle){
+        if(!vehicle.getIsActive()){
+            throw new InvalidOperationException("Vehicle is not active",ErrorCodes.MISSION_NOT_VALID_OPERATION);
+        }
+    }
 
+    /**
+     *  Check the driver's account (to assign this driver, the account must be enabled and not locked)
+     * @param driver
+     */
+    private void checkDriverAccountStatus(Driver driver) {
+        if (driver.isAccountLocked() && !driver.isEnabled()) {
+            throw new InvalidOperationException(
+                    "Cannot assign the driver " + driver.fullName() +
+                            ". Please verify that the account is not locked or disabled.",
+                    ErrorCodes.MISSION_NOT_VALID_OPERATION
+            );
+        }
+    }
 }

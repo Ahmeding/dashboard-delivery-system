@@ -31,39 +31,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dao.*;
-import com.hitecart.deliverysystem.dto.client.ClientRequest;
-import com.hitecart.deliverysystem.dto.client.ClientResponse;
-import com.hitecart.deliverysystem.dto.client.ClientUpdateRequest;
-import com.hitecart.deliverysystem.dto.role.RoleRequest;
-import com.hitecart.deliverysystem.dto.user.UserUpdateRequest;
-import com.hitecart.deliverysystem.exception.EntityNotFoundException;
-import com.hitecart.deliverysystem.exception.ErrorCodes;
-import com.hitecart.deliverysystem.exception.InvalidEntityException;
-import com.hitecart.deliverysystem.exception.InvalidOperationException;
-import com.hitecart.deliverysystem.mapper.ClientMapper;
 import com.hitecart.deliverysystem.model.*;
-import com.hitecart.deliverysystem.model.enums.RoleType;
-import com.hitecart.deliverysystem.services.ClientService;
 import com.hitecart.deliverysystem.utils.CapitalizeFirstLetter;
 import com.hitecart.deliverysystem.utils.CheckDuplicat;
 import com.hitecart.deliverysystem.utils.CheckParmasUtil;
-import com.hitecart.deliverysystem.validator.ClientValidator;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Service implementation for client management operations.
@@ -364,12 +336,12 @@ public class ClientServiceImpl implements ClientService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<Client> clients = clientRepository.findAllClients(pageable);
 
-        List<ClientResponse> clientsDto = clients.stream()
+        List<ClientResponse> clientsResponse = clients.stream()
                 .map(clientMapper::toClientResponse)
                 .toList();
 
         return new PageResponse<>(
-                clientsDto,
+                clientsResponse,
                 clients.getNumber(),
                 clients.getSize(),
                 clients.getTotalElements(),

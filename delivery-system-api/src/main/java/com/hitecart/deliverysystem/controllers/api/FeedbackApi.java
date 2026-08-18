@@ -2,8 +2,9 @@ package com.hitecart.deliverysystem.controllers.api;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dto.client.ClientResponse;
-import com.hitecart.deliverysystem.dto.feedback.FeedBackResponse;
+import com.hitecart.deliverysystem.dto.feedback.FeedbackResponse;
 import com.hitecart.deliverysystem.dto.feedback.FeedbackRequest;
+import com.hitecart.deliverysystem.model.Feedback;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.hitecart.deliverysystem.utils.Constants.*;
 
@@ -42,7 +45,7 @@ public interface FeedbackApi {
                             description = "L'objet Client n'est pas valide",
                             content = @Content(mediaType = "application/json"))
             })
-    ResponseEntity<Integer> saveFeedback(@RequestBody FeedbackRequest feedBackRequest, Authentication connectedUser);
+    ResponseEntity<FeedbackResponse> saveFeedback(@RequestBody FeedbackRequest feedBackRequest, Authentication connectedUser);
 
 
 
@@ -68,14 +71,25 @@ public interface FeedbackApi {
                             description = "L'objet Client n'est pas valide",
                             content = @Content(mediaType = "application/json"))
             })
-    ResponseEntity<Integer> updateFeedbackInfo(@RequestBody FeedbackRequest feedBackRequest, Authentication connectedUser);
+    ResponseEntity<FeedbackResponse> updateFeedbackInfo(@PathVariable("feedbackId") Integer feedbackId, @RequestBody FeedbackRequest feedBackRequest, Authentication connectedUser);
+
+
+
+
+    @GetMapping(value = FIND_FEEDBACKS_BY_DRIVER_ID_ENDPOINT,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(operationId = "findAllFeedBackByDriver")
+    ResponseEntity<List<FeedbackResponse>> findAllFeedBackByDriver(
+            @PathVariable("driverId") Integer driverId,
+            Authentication connectedUser);
+
 
 
 
     @GetMapping(value = FIND_ALL_FEEDBACK_PAGEABLE_BY_DRIVER_ID_ENDPOINT,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(operationId = "findAllFeedBackByDriverPageable")
-    ResponseEntity<PageResponse<FeedBackResponse>> findAllFeedBackByDriverPageable(
+    ResponseEntity<PageResponse<FeedbackResponse>> findAllFeedBackByDriverPageable(
             @PathVariable("driverId") Integer driverId,
             @RequestParam(name = "page", defaultValue = "1", required = false) int page,
             @RequestParam(name = "size", defaultValue = "10", required = false)int size,
@@ -102,5 +116,5 @@ public interface FeedbackApi {
                     )
             }
     )
-    ResponseEntity<?> deleteFeedback(Integer feedbackId, Authentication connectedUser);
+    ResponseEntity<?> deleteFeedback(@PathVariable("feedbackId") Integer feedbackId, Authentication connectedUser);
 }

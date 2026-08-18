@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FeedBackResponse{
+public class FeedbackResponse {
+    private Integer id;
     private Double note;
     private String comment;
     private boolean ownFeedback;
@@ -21,4 +22,5 @@ public class FeedBackResponse{
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Schema(type = "string", format = "date-time", example = "2025-05-27T06:00:00")
     private LocalDateTime updatedAt;
+    private Integer createdBy;
 }

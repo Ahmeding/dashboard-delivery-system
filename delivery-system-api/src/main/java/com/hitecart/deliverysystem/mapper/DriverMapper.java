@@ -33,6 +33,7 @@ public interface DriverMapper {
     @Mapping(target = "assignmentIds", source = "assignments")
     @Mapping(target = "roles", source = "roles")
     @Mapping(target = "stats", source = "stats")
+    @Mapping(target = "rate" , expression = "java(entity.getRate())")
     DriverResponse toResponse(Driver entity);
 
     default List<Integer> mapEmploymentContractsIds(List<EmploymentContract> employmentContracts) {
@@ -42,7 +43,7 @@ public interface DriverMapper {
     }
 
     default List<Integer> mapAssignmentIds(List<DriverVehicle> assignments) {
-        return assignments == null ?null:assignments.stream()
+        return assignments == null ? null:assignments.stream()
                 .map(DriverVehicle::getId)
                 .collect(Collectors.toList());
     }

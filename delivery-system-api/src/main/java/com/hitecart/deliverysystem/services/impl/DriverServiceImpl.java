@@ -24,10 +24,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -191,16 +193,25 @@ public class DriverServiceImpl implements DriverService {
         checkID(id, "Le parametre ID driver est null",
                 "Impossible de trouver un driver avec un ID null");
 
-        Driver driverById = driverRepository.findById(id).orElseThrow(
+        Driver existingDriver = driverRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(
                         "Opps! Aucun driver avec l'id : "
                                 + id + "n'a ete trouvé dans la base donnée",
                         ErrorCodes.DRIVER_NOT_FOUND)
         );
 
-        return driverMapper.toResponse(driverById);
+        DriverResponse driverResponse = driverMapper.toResponse(existingDriver);
+        //driverResponse.setRate(existingDriver.getRate());
+        return driverResponse;
     }
-
+    public void uploadDriverProfilePicture(MultipartFile file, Authentication connectedUser, Integer driverId) {
+        Driver driver = driverRepository.findById(driverId)
+                .orElseThrow(() -> new EntityNotFoundException("No driver found with ID:: " + driverId));
+        User user = ((User) connectedUser.getPrincipal());
+        /*var profilePicture = fileStorageService.saveFile(file, driverId, user.getId());
+        driver.setBookCover(profilePicture);*/
+        driverRepository.save(driver);
+    }
     @Override
     public DriverResponse findByEmail(String email) {
         checkEmail(email, "ERREUR ! Le parametre EMAIL driver est null ",

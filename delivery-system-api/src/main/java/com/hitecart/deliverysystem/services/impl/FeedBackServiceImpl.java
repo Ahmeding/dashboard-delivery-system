@@ -4,18 +4,24 @@ import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.dao.DriverRepository;
 import com.hitecart.deliverysystem.dao.FeedBackRepository;
 import com.hitecart.deliverysystem.dto.feedback.FeedbackRequest;
-import com.hitecart.deliverysystem.dto.feedback.FeedBackResponse;
+import com.hitecart.deliverysystem.dto.feedback.FeedbackResponse;
+import com.hitecart.deliverysystem.dto.notification.NotificationRequest;
 import com.hitecart.deliverysystem.exception.EntityNotFoundException;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
 import com.hitecart.deliverysystem.exception.InvalidOperationException;
-import com.hitecart.deliverysystem.mapper.FeedBackMapper;
+import com.hitecart.deliverysystem.mapper.FeedbackMapper;
+import com.hitecart.deliverysystem.mapper.NotificationMapper;
+import com.hitecart.deliverysystem.mapper.NotificationMapperImpl;
 import com.hitecart.deliverysystem.model.Driver;
 import com.hitecart.deliverysystem.model.Feedback;
+import com.hitecart.deliverysystem.model.Notification;
 import com.hitecart.deliverysystem.model.User;
+import com.hitecart.deliverysystem.model.enums.NotificationStatus;
 import com.hitecart.deliverysystem.services.FeedbackService;
-import com.hitecart.deliverysystem.validator.ClientValidator;
+import com.hitecart.deliverysystem.services.NotificationService;
 import com.hitecart.deliverysystem.validator.FeedbackValidator;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -35,7 +41,9 @@ public class FeedBackServiceImpl implements FeedbackService {
 
     private final FeedBackRepository feedBackRepository;
     private final DriverRepository driverRepository;
-    private final FeedBackMapper feedBackMapper;
+    private final FeedbackMapper feedBackMapper;
+    private final NotificationService notificationService;
+    private final NotificationMapper notificationMapper;
 
     /***
      *
@@ -44,7 +52,7 @@ public class FeedBackServiceImpl implements FeedbackService {
      * @return Integer
      */
     @Override
-    public Integer save(FeedbackRequest feedbackRequest, Authentication connectedUser) {
+    public FeedbackResponse save(FeedbackRequest feedbackRequest, Authentication connectedUser) {
         checkRequest(
                 feedbackRequest,
                 "Feedback n'est pas valid",
@@ -60,21 +68,27 @@ public class FeedBackServiceImpl implements FeedbackService {
      * @param connectedUser
      * @return Integer
      */
-    private Integer savingFeedback(FeedbackRequest feedbackRequest, Authentication connectedUser ) {
+    private FeedbackResponse savingFeedback(FeedbackRequest feedbackRequest, Authentication connectedUser ) {
 
         Driver driver = driverRepository.findById(feedbackRequest.driverId())
                 .orElseThrow(() -> new EntityNotFoundException("No driver found with ID:: " + feedbackRequest.driverId()));
-        if (driver.isAccountNonExpired() || !driver.isAccountLocked()) {
+ /*       if (!driver.isAccountLocked()) {
             throw new InvalidOperationException("You cannot give a feedback for and expired Driver or driver with lockedDriver");
-        }
+        }*/
 
         User user = ((User) connectedUser.getPrincipal());
         if (Objects.equals(driver.getId(), user.getId())) {
             throw new InvalidOperationException("You cannot give feedback to your self");
         }
-        Feedback feedback = feedBackMapper.toFeedback(feedbackRequest);
-        return feedBackRepository.save(feedback).getId();
+        checkIfCurrentLoggedUserAlreadySetFeedbackToGivenDriver(user,feedbackRequest.driverId());
+        Feedback feedbackToSave = feedBackMapper.toEntity(feedbackRequest);
+        FeedbackResponse feedbackResponse = feedBackMapper.toResponse(feedBackRepository.save(feedbackToSave),user.getId());
+        sendNotification(user,feedbackRequest.driverId());
+        return feedbackResponse;
+
     }
+
+
 
     /**
      *
@@ -83,13 +97,32 @@ public class FeedBackServiceImpl implements FeedbackService {
      * @return Integer
      */
     @Override
-    public Integer updateFeedbackInfo(FeedbackRequest feedBackRequest, Authentication connectedUser) {
-        feedBackRepository.findById(feedBackRequest.id()).orElseThrow(
-                ()-> new EntityNotFoundException("Feedback with ::ID : " + feedBackRequest.id() +" not found.")
+    public FeedbackResponse updateFeedbackInfo(Integer feedbackId, FeedbackRequest feedBackRequest, Authentication connectedUser) {
+        if(feedbackId <=0){
+            throw new InvalidOperationException("Invalid feedback ID" , ErrorCodes.FEEDBACK_NOT_VALID_OPERATION);
+        }
+        if(feedBackRequest ==null){
+            throw new InvalidOperationException("Invalid feedback request" , ErrorCodes.FEEDBACK_NOT_VALID_OPERATION);
+        }
+        if(connectedUser == null){
+            throw new InvalidOperationException("Invalid Connected user" ,ErrorCodes.FEEDBACK_NOT_VALID_OPERATION);
+        }
+
+        Feedback existingFeedback = feedBackRepository.findById(feedbackId).orElseThrow(
+                ()-> new EntityNotFoundException("Feedback with ::ID : " + feedbackId +" not found.")
         );
 
+        User currentUser =  (User) connectedUser.getPrincipal();
 
-        return savingFeedback(feedBackRequest,connectedUser);
+        if(!existingFeedback.getCreatedBy().equals(currentUser.getId())){
+            throw new InvalidOperationException("You are not the owner of the feedback, you cannot editing !",
+                    ErrorCodes.FEEDBACK_NOT_VALID_OPERATION);
+        }
+        feedBackMapper.updateFeedbackFromRequest(feedBackRequest,existingFeedback);
+
+        Feedback updatedFeedback = feedBackRepository.save(existingFeedback);
+
+        return feedBackMapper.toResponse(updatedFeedback,currentUser.getId());
     }
 
     /***
@@ -98,21 +131,21 @@ public class FeedBackServiceImpl implements FeedbackService {
      * @param page
      * @param size
      * @param connectedUser
-     * @return PageResponse<FeedBackResponse>
+     * @return PageResponse<FeedbackResponse>
      */
     @Override
     @Transactional
-    public PageResponse<FeedBackResponse> findAllFeedBackByDriver(Integer driverId, int page, int size, Authentication connectedUser) {
+    public PageResponse<FeedbackResponse> findAllFeedBackByDriver(Integer driverId, int page, int size, Authentication connectedUser) {
         Pageable pageable = PageRequest.of(page, size);
         User user = (User) connectedUser.getPrincipal();
         Page<Feedback> feedbacks = feedBackRepository.findAllByDriverId(driverId,pageable);
-        List<FeedBackResponse> feedBackResponses = feedbacks.stream()
-                .map(f->feedBackMapper.toFeedBackResponse(f,user.getId()))
+        List<FeedbackResponse> feedbackRespons = feedbacks.stream()
+                .map(f->feedBackMapper.toResponse(f,user.getId()))
                 .toList();
 
 
         return new PageResponse<>(
-                feedBackResponses,
+                feedbackRespons,
                 feedbacks.getNumber(),
                 feedbacks.getSize(),
                 feedbacks.getTotalElements(),
@@ -120,6 +153,25 @@ public class FeedBackServiceImpl implements FeedbackService {
                 feedbacks.isFirst(),
                 feedbacks.isLast()
         );
+    }
+
+    @Override
+    public List<FeedbackResponse> findAllFeedBackByDriver(Integer driverId, Authentication connectedUser) {
+        if(connectedUser == null) {
+            throw new InvalidOperationException("You are not logged in",ErrorCodes.FEEDBACK_NOT_VALID_OPERATION);
+        }
+        if(driverId == null || driverId <= 0) {
+            throw new InvalidOperationException("Invalid driver id",ErrorCodes.FEEDBACK_NOT_VALID_OPERATION);
+        }
+        driverRepository.findById(driverId).orElseThrow(()-> new EntityNotFoundException("Driver with ID :: "+ driverId
+                + " does not exists", ErrorCodes.DRIVER_NOT_FOUND));
+
+        User user= (User) connectedUser.getPrincipal();
+        List<Feedback> feedbacks= feedBackRepository.findFeedbackByDriverId(driverId);
+        List<FeedbackResponse> feedbackRespons = feedbacks.stream()
+                .map(feedback -> feedBackMapper.toResponse(feedback,user.getId()))
+                .toList();
+        return feedbackRespons;
     }
 
     @Override
@@ -133,7 +185,7 @@ public class FeedBackServiceImpl implements FeedbackService {
 
         User user = (User) connectedUser.getPrincipal();
         if(!Objects.equals(feedback.getCreatedBy(), user.getId())){
-            throw new InvalidOperationException("You cannot delete a feedback not yours");
+            throw new InvalidOperationException("You cannot delete a feedback not yours", ErrorCodes.FEEDBACK_NOT_VALID_OPERATION);
         }
 
         feedBackRepository.deleteById(feedbackId);
@@ -153,4 +205,34 @@ public class FeedBackServiceImpl implements FeedbackService {
             throw new InvalidEntityException(msgException, errorCode,errors);
         }
     }
+
+
+    private void sendNotification(User user, Integer driverId) {
+        notificationService.sendNotification(
+                driverId,
+                notificationMapper.toRequest(
+                        Notification.builder()
+                                .title(
+                                        user.getFirstname() + " " + user.getLastname()
+                                                +  " left you feedback")
+                                .message("You have received new feedback from "
+                                        + user.getFirstname()
+                                        + " "
+                                        + user.getLastname()
+                                        + ". Check it out now!")
+                                .status(NotificationStatus.SEND)
+                                .user(User.builder().id(driverId).build())
+                                .build()
+                )
+        );
+    }
+
+    private void checkIfCurrentLoggedUserAlreadySetFeedbackToGivenDriver(User user, Integer driverId) {
+        feedBackRepository.findFeedbackByOwnerIdByDriverId(user.getId(),driverId).ifPresent(existing->{
+            throw new InvalidOperationException("You've already submitted feedback for this driver. " +
+                    "You can only submit one feedback per driver.",ErrorCodes.FEEDBACK_NOT_VALID_OPERATION);
+        });
+    }
+
+
 }

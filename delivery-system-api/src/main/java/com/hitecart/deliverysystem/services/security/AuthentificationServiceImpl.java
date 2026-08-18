@@ -8,6 +8,7 @@ import com.hitecart.deliverysystem.dto.SignupRequest;
 import com.hitecart.deliverysystem.dto.user.UserResponse;
 import com.hitecart.deliverysystem.exception.ErrorCodes;
 import com.hitecart.deliverysystem.exception.InvalidEntityException;
+import com.hitecart.deliverysystem.exception.InvalidOperationException;
 import com.hitecart.deliverysystem.mapper.UserMapper;
 import com.hitecart.deliverysystem.model.User;
 import com.hitecart.deliverysystem.dao.RoleRepository;
@@ -17,6 +18,7 @@ import com.hitecart.deliverysystem.validator.SignupRequestValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -68,15 +70,20 @@ public class AuthentificationServiceImpl implements AuthentificationService{
 
     @Override
     public JwtAuthenticationResponse signin(SigninRequest signinRequest) {
-        // List<String> errors =LoginValidator.validate(signinRequest);
-        /* if(!errors.isEmpty()) {
-            throw new RequiredFieldException("Veuillez rensiegner les le login et le mode passe!",ErrorCodes.BAD_CREDENTIALS, errors);
-        }*/
-        /*
-        var user = utilisateurRepository.findByEmail(signinRequest.getEmail())
-                .orElseThrow(() -> new BadCredentialsException("Address email ou mot de passe invalide"));
 
-*/
+        var existingUser = userRepository.findByEmail(signinRequest.getEmail())
+                .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
+
+        if(!existingUser.isEnabled()){
+            throw new InvalidOperationException("An error occurred: your account is currently disabled. " +
+                    "Please contact support for assistance.");
+        }
+
+
+        if(existingUser.isAccountLocked()){
+            throw new InvalidOperationException("An error occurred: your account is currently Locked. " +
+                    "Please contact support for assistance.");
+        }
         var auth = authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(
                   signinRequest.getEmail(),

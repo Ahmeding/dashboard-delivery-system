@@ -2,8 +2,9 @@ package com.hitecart.deliverysystem.controllers.user;
 
 import com.hitecart.deliverysystem.common.PageResponse;
 import com.hitecart.deliverysystem.controllers.api.FeedbackApi;
-import com.hitecart.deliverysystem.dto.feedback.FeedBackResponse;
+import com.hitecart.deliverysystem.dto.feedback.FeedbackResponse;
 import com.hitecart.deliverysystem.dto.feedback.FeedbackRequest;
+import com.hitecart.deliverysystem.model.Feedback;
 import com.hitecart.deliverysystem.services.FeedbackService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -21,17 +23,22 @@ public class FeedbackController implements FeedbackApi {
     private final FeedbackService feedbackService;
 
     @Override
-    public ResponseEntity<Integer> saveFeedback(FeedbackRequest feedBackRequest, Authentication connectedUser) {
+    public ResponseEntity<FeedbackResponse> saveFeedback(FeedbackRequest feedBackRequest, Authentication connectedUser) {
         return ResponseEntity.ok(feedbackService.save(feedBackRequest, connectedUser));
     }
 
     @Override
-    public ResponseEntity<Integer> updateFeedbackInfo(FeedbackRequest feedBackRequest, Authentication connectedUser) {
-        return ResponseEntity.ok(feedbackService.updateFeedbackInfo(feedBackRequest, connectedUser));
+    public ResponseEntity<FeedbackResponse> updateFeedbackInfo(Integer feedbackId , FeedbackRequest feedBackRequest, Authentication connectedUser) {
+        return ResponseEntity.ok(feedbackService.updateFeedbackInfo(feedbackId,feedBackRequest, connectedUser));
     }
 
     @Override
-    public ResponseEntity<PageResponse<FeedBackResponse>> findAllFeedBackByDriverPageable(Integer driverId, int page, int size, Authentication connectedUser) {
+    public ResponseEntity<List<FeedbackResponse>> findAllFeedBackByDriver(Integer driverId, Authentication connectedUser) {
+        return ResponseEntity.ok(feedbackService.findAllFeedBackByDriver(driverId,connectedUser));
+    }
+
+    @Override
+    public ResponseEntity<PageResponse<FeedbackResponse>> findAllFeedBackByDriverPageable(Integer driverId, int page, int size, Authentication connectedUser) {
         return ResponseEntity.ok(feedbackService.findAllFeedBackByDriver(driverId, page, size, connectedUser));
     }
 

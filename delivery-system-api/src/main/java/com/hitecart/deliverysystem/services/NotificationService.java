@@ -5,7 +5,7 @@ import com.hitecart.deliverysystem.dto.notification.NotificationResponse;
 
 import java.util.List;
 
-public interface INotificationService {
+public interface NotificationService {
     void sendNotification(Integer userId, NotificationRequest request);
 
     NotificationResponse markAsRead(NotificationRequest dto);
