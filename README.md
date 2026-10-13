@@ -1,60 +1,251 @@
-git push github feature/feedback && git push bitbucket feature/feedback
+# Delivery System
 
+Plateforme de gestion de livraisons et de flotte. Elle permet de suivre les missions, de gérer les chauffeurs, 
+les véhicules et leurs réparations, ainsi que les clients, les devis et les commandes, depuis un tableau de bord d'administration.
 
-CREATE INDEX idx_mission_dates ON mission(date_debut, date_fin);
-CREATE INDEX idx_vehicle_volume ON vehicle(volume);
-CREATE INDEX idx_driver_experience ON driver(experience_level);
+[![Backend CI](https://github.com/[utilisateur]/delivery-system/actions/workflows/pipeline-backend.yml/badge.svg)](https://github.com/[utilisateur]/delivery-system/actions/workflows/pipeline-backend.yml)
+[![Frontend CI](https://github.com/[utilisateur]/delivery-system/actions/workflows/pipeline-frontend.yml/badge.svg)](https://github.com/[utilisateur]/delivery-system/actions/workflows/pipeline-frontend.yml)
 
+## Sommaire
 
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+- [Fonctionnalités](#fonctionnalités)
+- [Architecture](#architecture)
+- [Stack technique](#stack-technique)
+- [Prérequis](#prérequis)
+- [Démarrage rapide avec Docker](#démarrage-rapide-avec-docker)
+- [Développement local](#développement-local)
+- [Configuration](#configuration)
+- [Documentation de l'API](#documentation-de-lapi)
+- [Tests](#tests)
+- [Déploiement et CI/CD](#déploiement-et-cicd)
+- [Structure du projet](#structure-du-projet)
+- [Feuille de route](#feuille-de-route)
+- [Contribuer](#contribuer)
+- [Licence](#licence)
+- [Auteur](#auteur)
 
+## Fonctionnalités
 
+- **Authentification** : inscription, connexion, renouvellement du token JWT et gestion des rôles.
+- **Utilisateurs** : administration des comptes et de leurs droits d'accès.
+- **Chauffeurs** : fiches, contrats de travail, statistiques et affectation aux véhicules.
+- **Flotte et maintenance** : véhicules, réparations et pièces de rechange.
+- **Missions** : création, affectation des chauffeurs et des véhicules, démarrage et clôture, suivi du kilométrage et des frais.
+- **Points de livraison** : catégories, destinations, contacts et arrêts.
+- **Clients** : gestion des clients, des devis, des commandes et des réclamations.
+- **Notifications** en temps réel via WebSocket, et retours utilisateurs.
+- **Tableau de bord** : indicateurs et statistiques de l'activité.
 
+## Architecture
 
+```
+┌──────────────┐    HTTP / WebSocket    ┌──────────────────┐        ┌──────────────┐
+│   Frontend   │ ─────────────────────▶ │   Backend API    │ ─────▶ │  PostgreSQL  │
+│  Angular 16  │   (proxy nginx /api)   │  Spring Boot 3.2 │  JDBC  │              │
+│  port 8088   │                        │    port 8080     │        │  port 5432   │
+└──────────────┘                        └──────────────────┘        └──────────────┘
+```
 
+Le backend est organisé en couches : les `controllers` exposent l'API, les `services` contiennent la logique métier et les `dao` (Spring Data JPA) accèdent à la base. Des DTO et des mappers séparent le contrat de l'API du modèle de données.
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+## Stack technique
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+| Couche | Technologies |
+|---|---|
+| Backend | Java 17, Spring Boot 3.2, Spring Security, Spring Data JPA, jjwt, WebSocket, springdoc-openapi |
+| Base de données | PostgreSQL |
+| Frontend | Angular 16, Bootstrap 5, ng-bootstrap, Chart.js, FullCalendar, SockJS et STOMP |
+| Client API | Généré à partir de la spécification OpenAPI avec `ng-openapi-gen` |
+| Conteneurs | Docker, Docker Compose, nginx |
+| CI/CD | GitHub Actions : compilation, tests, construction des images, publication sur Docker Hub et déploiement SSH |
 
----
+## Prérequis
 
+Pour lancer l'application avec Docker, il suffit d'avoir **Docker** et **Docker Compose**.
 
+Pour le développement local, il faut :
 
-## Edit a file
+- JDK 17
+- Maven, ou le wrapper `mvnw` fourni dans le projet
+- Node.js 18 ou supérieur, avec npm
+- PostgreSQL 15 ou supérieur
 
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
+## Démarrage rapide avec Docker
 
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
+```bash
+git clone https://github.com/[utilisateur]/delivery-system.git
+cd delivery-system
+docker compose up -d
+```
 
----
+Une fois les conteneurs démarrés, les services sont accessibles aux adresses suivantes :
 
-## Create a file
+| Service | Adresse |
+|---|---|
+| Application web | http://localhost:8088 |
+| API | http://localhost:8080/api/v1 |
+| Documentation Swagger | http://localhost:8080/api/v1/swagger-ui/index.html |
 
-Next, you’ll add a new file to this repository.
+Pour arrêter l'application :
 
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
+```bash
+docker compose down
+```
 
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
+> **Avant toute mise en production**, remplace les mots de passe et les secrets présents dans `docker-compose.yml` par des valeurs propres à ton environnement (voir [Configuration](#configuration)).
 
----
+## Développement local
 
-## Clone a repository
+### 1. Base de données
 
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
+Le plus simple est de démarrer uniquement PostgreSQL avec Docker :
 
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
+```bash
+docker compose up -d postgres
+```
 
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+Tu peux aussi utiliser une instance PostgreSQL installée localement, à condition de créer la base `delivery_db` et de renseigner les identifiants correspondants dans la configuration.
+
+### 2. Backend
+
+```bash
+cd delivery-system-api
+./mvnw spring-boot:run
+```
+
+Sous Windows, utilise `mvnw.cmd spring-boot:run`.
+
+Le profil `dev` est actif par défaut. L'API écoute sur le port `8080` et son chemin de base est `/api/v1`.
+
+### 3. Frontend
+
+```bash
+cd delivery-dashboard-ui
+npm install
+npx ng serve
+```
+
+L'interface est disponible sur http://localhost:4200. Le backend autorise cette origine par défaut.
+
+### Régénérer le client API
+
+Lorsque les endpoints de l'API changent, il faut régénérer le client Angular à partir de la spécification OpenAPI exportée par le backend :
+
+```bash
+cd delivery-dashboard-ui
+npx ng-openapi-gen -i ./tools/openapi/src/openapi.json -o src/ds-api/src --ignoreUnusedModels=false
+```
+
+## Configuration
+
+### Variables d'environnement
+
+Le backend lit ses paramètres sensibles depuis des variables d'environnement. Le tableau suivant liste les variables prises en charge.
+
+| Variable | Rôle | Exemple |
+|---|---|---|
+| `SPRING_PROFILES_ACTIVE` | Profil Spring actif (`dev` ou `prod`) | `prod` |
+| `DB_URL` | URL JDBC de la base PostgreSQL | `jdbc:postgresql://postgres-sql-ds:5432/delivery_db` |
+| `DB_USERNAME` | Utilisateur de la base | `postgres` |
+| `DB_PASSWORD` | Mot de passe de la base | *(secret)* |
+| `JWT_SECRET` | Clé de signature des JWT, encodée en Base64, d'au moins 256 bits | *(secret)* |
+| `EMAIL_HOSTNAME` | Serveur SMTP | `smtp.example.com` |
+| `EMAIL_USERNAME` | Identifiant SMTP | `no-reply@example.com` |
+| `EMAIL_PASSWORD` | Mot de passe SMTP | *(secret)* |
+| `CORS_ORIGINS` | Origines autorisées à appeler l'API | `https://app.example.com` |
+
+Ne versionne jamais de secrets dans le dépôt. En développement, place-les dans un fichier `.env` local, qui est ignoré par Git. En CI, utilise les secrets GitHub Actions. Un modèle `.env.example` est fourni pour référence.
+
+### Profils
+
+- **`dev`** : journalisation détaillée, affichage des requêtes SQL et mise à jour automatique du schéma. Ce profil ne doit pas être utilisé en production.
+- **`prod`** : journalisation réduite et documentation Swagger désactivée.
+
+## Documentation de l'API
+
+La spécification OpenAPI est générée automatiquement par springdoc-openapi :
+
+- Interface Swagger UI : `/api/v1/swagger-ui/index.html`
+- Spécification JSON : `/api/v1/v3/api-docs`
+
+Pour appeler les endpoints protégés, obtiens un token auprès de `POST /api/v1/auth/signin`, puis transmets-le dans l'en-tête HTTP :
+
+```
+Authorization: Bearer <votre_token>
+```
+
+## Tests
+
+| Périmètre | Commande |
+|---|---|
+| Backend (unitaires et intégration) | `cd delivery-system-api && ./mvnw test` |
+| Frontend (Karma et Jasmine) | `cd delivery-dashboard-ui && npx ng test` |
+
+La CI exécute ces tests à chaque push.
+
+## Déploiement et CI/CD
+
+Deux pipelines GitHub Actions sont définis dans `.github/workflows/` :
+
+- **`pipeline-backend.yml`** : compilation, tests unitaires, packaging Maven, construction et publication de l'image `ds-api` sur Docker Hub, puis déploiement sur le serveur via SSH.
+- **`pipeline-frontend.yml`** : construction et publication de l'image `ds-ui` sur Docker Hub, puis déploiement sur le serveur via SSH.
+
+Les secrets suivants doivent être configurés dans *Settings → Secrets and variables → Actions* :
+
+- `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`
+- `SSH_PRIVATE_KEY`, `VPS_USERNAME`, `VPS_IP`
+- `EMAIL_HOSTNAME`, `EMAIL_USERNAME`, `EMAIL_PASSWORD`
+
+Sur le serveur, le déploiement exécute `docker compose pull` puis `docker compose up -d` à partir du `docker-compose.yml` copié pendant la CI.
+
+## Structure du projet
+
+```
+delivery-system/
+├── .github/workflows/          # Pipelines CI/CD
+├── docker/
+│   ├── backend/Dockerfile      # Image de l'API
+│   └── frontend/Dockerfile     # Image de l'interface
+├── delivery-system-api/        # Backend Spring Boot
+│   └── src/main/java/.../
+│       ├── controllers/        # Points d'entrée REST
+│       ├── services/           # Logique métier
+│       ├── dao/                # Repositories Spring Data
+│       ├── model/              # Entités JPA
+│       ├── dto/                # Objets de transfert
+│       ├── mapper/             # Conversion entités / DTO
+│       └── config/             # Sécurité, CORS, WebSocket, OpenAPI
+├── delivery-dashboard-ui/      # Frontend Angular
+│   └── src/app/
+│       ├── modules/            # Fonctionnalités (missions, chauffeurs…)
+│       ├── services/           # Services, guards, intercepteurs
+│       └── components/         # Composants partagés
+├── docker-compose.yml          # Orchestration locale et production
+└── README.md
+```
+
+## Feuille de route
+
+- [ ] Autorisations par rôle sur l'ensemble des endpoints
+- [ ] Couverture de tests unitaires et d'intégration
+- [ ] Migrations de base de données avec Flyway
+- [ ] Pagination systématique des listes
+- [ ] Rotation des refresh tokens et révocation des sessions
+- [ ] Internationalisation (français et anglais)
+- [ ] Mise à jour vers les dernières versions de Spring Boot et d'Angular
+
+## Contribuer
+
+1. Fais un fork du dépôt.
+2. Crée une branche : `git checkout -b feat/ma-fonctionnalite`.
+3. Rédige des messages de commit clairs, de préférence au format [Conventional Commits](https://www.conventionalcommits.org/fr/) (`feat:`, `fix:`, `docs:`…).
+4. Vérifie que les tests passent.
+5. Ouvre une Pull Request qui décrit le changement et son contexte.
+
+## Licence
+
+Ce projet est distribué sous licence [MIT](LICENSE).
+
+## Auteur
+
+[Ahmed](https://github.com/Ahmeding), [ton e-mail ou ton profil LinkedIn]
