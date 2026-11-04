@@ -16,7 +16,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Extarct Prohject FE Version
@@ -26,7 +26,7 @@ jobs:
           sudo apt-get install -y jq
           echo "VERSION=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
       - name: Login To Dockerhub
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
