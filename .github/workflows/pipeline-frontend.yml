@@ -3,7 +3,7 @@ name: DS Frontend Pipeline
 on:
   push:
     branches:
-      - create-backend-pipeline
+      - feature/stock #create-backend-pipeline
     paths:
       - delivery-dashboard-ui/**
       - docker/frontend/**

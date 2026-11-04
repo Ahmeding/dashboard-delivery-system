@@ -3,14 +3,12 @@ name: DS Backend API Pipeline
 on:
   push:
     branches:
-      - create-backend-pipeline
+      - feature/stock #create-backend-pipeline
     paths:
       - delivery-system-api/**
       - docker/backend/**
       - 'docker-compose.yml'
       - .github/workflows/*-backend.yml
-
-
 jobs:
   compile: # action
     runs-on: self-hosted #  where , which machine
@@ -40,6 +38,7 @@ jobs:
 
 
 
+
   unit-tests: # this is a second jobs , we can put it in the 1stjob as a step, but we prefer optiimise the
     runs-on: self-hosted
     name: Unit tests
@@ -62,6 +61,7 @@ jobs:
         run: |
           cd delivery-system-api
           ./mvnw clean test
+
 
 
   build:
@@ -89,6 +89,7 @@ jobs:
           ./mvnw clean package
 
  
+
 
   build-image: # build docker image
     name: Build Docker Image
@@ -134,6 +135,7 @@ jobs:
           build-args: |
             PROFILE=dev
             APP_VERSION=${{steps.extract_version.outputs.VERSION}}
+
 
   deploy:
     name: Deploy Backend

@@ -55,7 +55,7 @@ import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.compone
     }),
     BrowserAnimationsModule,
     NgSelectModule,
-    ApiModule.forRoot({rootUrl:'http://localhost:8080/api/v1'})//'http://20.238.16.155:8080/api/v1'})
+    ApiModule.forRoot({rootUrl:'http://192.168.158.128:8080/api/v1'})//'http://20.238.16.155:8080/api/v1'})
   ],
   providers: [
     ThemeService,
