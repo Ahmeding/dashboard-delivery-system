@@ -20,12 +20,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Extarct Prohject FE Version
+      - name: Extract Project FE Version
         id: extract_version
         run: |
           cd delivery-dashboard-ui
-          sudo apt-get install -y jq
-          echo "VERSION=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
+          echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
       - name: Login To Dockerhub
         uses: docker/login-action@v4
         with:
@@ -35,6 +35,8 @@ jobs:
 
       - name: Debug VERSION
         run: echo "VERSION is ${{ steps.extract_version.outputs.VERSION }}"
+
+
       - name: Build & Push to DockerHub
         uses: docker/build-push-action@v7
         with:
