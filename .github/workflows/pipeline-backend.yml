@@ -20,13 +20,13 @@ jobs:
     name: Compile Project # job name
     steps: # the 1st one
       - name: Chekout code  # step's name
-        uses: actions/checkout@v4 # this case wi will run a predifine action , it can be un custom action , an existing action , ower owen action or run a commande
+        uses: actions/checkout@v5 # this case wi will run a predifine action , it can be un custom action , an existing action , ower owen action or run a commande
         with: # some parameter
           fetch-depth: 0 # I wan't to chechkout the sub branches
 
       # the 2nd one
       - name: Setup JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: 17
           distribution: 'corretto'
@@ -49,12 +49,12 @@ jobs:
     name: Unit tests
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Setup JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: 17
           distribution: 'corretto'
@@ -75,12 +75,12 @@ jobs:
     needs: [compile, unit-tests]
     steps:
       - name: Checkout code(build)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Setup JDK(build)
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: 17
           distribution: 'corretto'
@@ -102,11 +102,11 @@ jobs:
     needs: [build]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Setup JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: 17
           distribution: 'corretto'
@@ -147,24 +147,42 @@ jobs:
     runs-on: self-hosted
     needs: [build-image]
     steps:
-      - name: set up ssh agent
-        uses: webfactory/ssh-agent@v0.7.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+
+      #- name: set up ssh agent
+      #  uses: webfactory/ssh-agent@v0.9.0
+      #  with:
+      #    ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # recuperer le docker compse.yml depuis github
+      - name: Checkout code
+        uses: actions/checkout@v5
+      # 2. Créer le dossier et copier le fichier (en LOCAL, sans SSH)
       - name: Create Deployment Folder
-        run: ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ci-cd"
+        #run: ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ci-cd"
+        run: |
+          mkdir -p ci-cd
+          cp docker-compose.yml ci-cd/docker-compose.yml
 
-      - name: Copy Docker-compose file
-        run: scp docker-compose.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:ci-cd/docker-compose.yml
+      #- name: Copy Docker-compose file
+      #  run: scp docker-compose.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:ci-cd/docker-compose.yml
 
+      # 3. Déployer avec Docker Compose (en LOCAL)
       - name: Set ENV variable and deploy
         run: |
-          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}<<EOF
-          export EMAIL_HOSTNAME=${{secrets.EMAIL_HOSTNAME}}
-          export EMAIL_USERNAME=${{secrets.EMAIL_USERNAME}}
-          export EMAIL_PASSWORD=${{secrets.EMAIL_PASSWORD}}
           cd ci-cd
+          echo "EMAIL_HOSTNAME=${{secrets.EMAIL_HOSTNAME}}" > .env
+          echo "EMAIL_USERNAME=${{secrets.EMAIL_USERNAME}}" > .env
+          echo "EMAIL_PASSWORD=${{secrets.EMAIL_PASSWORD}}" > .env
+          
           docker compose -f docker-compose.yml pull -q
           docker compose -f docker-compose.yml up -d
-          EOF
+
+        #  ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}<<EOF
+        #  export EMAIL_HOSTNAME=${{secrets.EMAIL_HOSTNAME}}
+        #  export EMAIL_USERNAME=${{secrets.EMAIL_USERNAME}}
+        #  export EMAIL_PASSWORD=${{secrets.EMAIL_PASSWORD}}
+        #  cd ci-cd
+        #  docker compose -f docker-compose.yml pull -q
+        #  docker compose -f docker-compose.yml up -d
+        #  EOF
