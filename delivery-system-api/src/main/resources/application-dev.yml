@@ -42,7 +42,7 @@ jwt:
   secret: "EAqQ+S5bV4X3MCvg0i5jqvk2rfaHQX67NOeIy7xliXY="
 application:
   cors:
-    origins: "http://localhost:4200" #http://192.168.158.128:8088,http://192.168.158.128:8080
+    origins: "http://localhost:4200, http://192.168.158.128:8088"  #http://192.168.158.128:8088,http://192.168.158.128:8080
 
 
 logging:
