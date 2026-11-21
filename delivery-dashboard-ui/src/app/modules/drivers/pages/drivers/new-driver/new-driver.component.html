@@ -57,10 +57,10 @@
               </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <input (click)="onGeneratePhoneNumClick()" formControlName="phoneNum" id="phoneNum" type="text" class="form-control" placeholder=""
-                         [class.is-invalid]="driverForm.get('phoneNum')?.invalid && driverForm.get('phoneNum')?.touched">
-                  <label for="phoneNum">Phone Number</label>
-                  <small class="invalid-feedback" *ngIf="driverForm.get('phoneNum')?.invalid && driverForm.get('phoneNum')?.touched">
+                  <input (click)="onGeneratePhoneNumClick()" formControlName="phoneNbr" id="phoneNbr" type="text" class="form-control" placeholder=""
+                         [class.is-invalid]="driverForm.get('phoneNbr')?.invalid && driverForm.get('phoneNbr')?.touched">
+                  <label for="phoneNbr">Phone Number</label>
+                  <small class="invalid-feedback" *ngIf="driverForm.get('phoneNbr')?.invalid && driverForm.get('phoneNbr')?.touched">
                     Please enter a valid phone number.
                   </small>
                 </div>
