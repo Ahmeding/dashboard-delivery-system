@@ -41,28 +41,29 @@ export class NewDriverComponent  implements OnInit {
   }
 
 
-  private initForm() {
-    this.driverForm = new FormGroup({
-      id: new FormControl(null),
-      firstname: new FormControl(this.driverValue?.firstname || '', [Validators.required]),
-      lastname: new FormControl(this.driverValue?.lastname || '', [Validators.required]),
-      email: new FormControl(this.driverValue?.email || '', [Validators.required, Validators.email]),
-      password: new FormControl(this.driverValue?.password || 'password'),
-      phoneNum: new FormControl(this.driverValue?.phoneNbr || '', [Validators.required, Validators.pattern('^[0-9]*$')]),
-      dateOfBirth: new FormControl(this.driverValue?.birthDate || '', [Validators.required]),
-      drivinglicenseNbr: new FormControl(this.driverValue?.drivinglicenseNbr || '', [Validators.required, Validators.pattern(/^\d{12}$/)]),
-      drivingLicenseType: new FormControl(this.driverValue?.drivinglicenseType || '', [Validators.required]),
-      rib: new FormControl(this.driverValue?.rib || '', [Validators.required, Validators.pattern(/^[A-Z]{2}\d{2}\d{5}\d{5}\d{11}\d{2}$/)]),
-      numSecu: new FormControl(this.driverValue?.secuNbr || '', [Validators.required, Validators.pattern(/^\d{13}$/)]),
-      address: new FormGroup({
-        adresse1: new FormControl(this.driverValue.address?.street || '', [Validators.required]),
-        adresse2: new FormControl(this.driverValue.address?.additionalInfo || ''),
-        codepostal: new FormControl(this.driverValue.address?.postalCode || '', [Validators.required, Validators.pattern('^[0-9]{5}$')]),
-        pays: new FormControl(this.driverValue.address?.country || '', [Validators.required]),
-        ville: new FormControl(this.driverValue.address?.city || '', [Validators.required])
+    private initForm() {
+      this.driverForm = new FormGroup({
+        id: new FormControl(null),
+        firstname: new FormControl(this.driverValue?.firstname || '', [Validators.required]),
+        lastname: new FormControl(this.driverValue?.lastname || '', [Validators.required]),
+        email: new FormControl(this.driverValue?.email || '', [Validators.required, Validators.email]),
+        password: new FormControl(this.driverValue?.password || 'password'),
+        phoneNum: new FormControl(this.driverValue?.phoneNbr || '', [Validators.required, Validators.pattern('^[0-9]*$')]),
+        dateOfBirth: new FormControl(this.driverValue?.birthDate || '', [Validators.required]),
+        drivinglicenseNbr: new FormControl(this.driverValue?.drivinglicenseNbr || '', [Validators.required, Validators.pattern(/^\d{12}$/)]),
+        drivingLicenseType: new FormControl(this.driverValue?.drivinglicenseType || '', [Validators.required]),
+        rib: new FormControl(this.driverValue?.rib || '', [Validators.required, Validators.pattern(/^[A-Z]{2}\d{2}\d{5}\d{5}\d{11}\d{2}$/)]),
+        numSecu: new FormControl(this.driverValue?.secuNbr || '', [Validators.required, Validators.pattern(/^\d{13}$/)]),
+        address: new FormGroup({
+
+          adresse1: new FormControl(this.driverValue?.address?.street || '', [Validators.required]),
+          adresse2: new FormControl(this.driverValue?.address?.additionalInfo || ''),
+          codepostal: new FormControl(this.driverValue?.address?.postalCode || '', [Validators.required, Validators.pattern('^[0-9]{5}$')]),
+          pays: new FormControl(this.driverValue?.address?.country || '', [Validators.required]),
+          ville: new FormControl(this.driverValue?.address?.city || '', [Validators.required])
+        })
       })
-    })
-  }
+    }
 
   private loadDriverToEditing(vId: number) {
     this.isNewDriver = false;
